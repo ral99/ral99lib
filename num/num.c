@@ -2,8 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "util/int/int.h"
-#include "util/mem/mem.h"
+#include "num/num.h"
+#include "util/util.h"
+
+int double_gt(double a, double b) {
+    return (a - b > TOL) ? 1 : 0;
+}
+
+int double_equals(double a, double b) {
+    return (double_gt(a, b) == 0 && double_gt(b, a) == 0) ? 1 : 0;
+}
 
 void *int_to_pointer(int x) {
     return (void *) ((long) x);

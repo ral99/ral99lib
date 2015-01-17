@@ -5,6 +5,7 @@
 
 #include "net/address/address.h"
 #include "util/util.h"
+#include "num/num.h"
 #include "adt/adt.h"
 
 Address address_new(char *ip, int port) {

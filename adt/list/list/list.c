@@ -6,6 +6,7 @@
 #include "adt/list/list_item/list_item.h"
 #include "adt/str/str.h"
 #include "util/util.h"
+#include "num/num.h"
 
 List list_new() {
     List list = memalloc(sizeof(*list));

@@ -1,8 +1,8 @@
 #ifndef __UTIL__
 #define __UTIL__
 
-#include "util/mem/mem.h"
-#include "util/int/int.h"
+/* Allocate size bytes and return a pointer to the allocated memory. */
+void *memalloc(int size);
 
 #endif
 
