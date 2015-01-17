@@ -13,6 +13,16 @@ static void test_double_gt_1() {
     g_assert_cmpint(double_gt(b, a), ==, 0);
 }
 
+static void test_double_lt_1() {
+    double a = 1.0000001;
+    double b = 1.0000000;
+    
+    g_assert_cmpint(double_lt(a, a), ==, 0);
+    g_assert_cmpint(double_lt(b, b), ==, 0);
+    g_assert_cmpint(double_lt(a, b), ==, 0);
+    g_assert_cmpint(double_lt(b, a), ==, 1);
+}
+
 static void test_double_equals_1() {
     double a = 1.0000001;
     double b = 1.0000000;
@@ -148,6 +158,7 @@ static void test_int_from_str_3() {
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/double/gt", test_double_gt_1);
+    g_test_add_func("/double/lt", test_double_lt_1);
     g_test_add_func("/double/equals", test_double_equals_1);
     g_test_add_func("/int/to_pointer", test_int_to_pointer_1);
     g_test_add_func("/int/to_pointer", test_int_to_pointer_2);
