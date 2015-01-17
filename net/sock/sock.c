@@ -29,11 +29,15 @@ Sock sock_nonblocking(int fd) {
 
 Sock sock_listen(int port) {
     int reuse = 1;
+    int set = 1;
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     Sock sock = sock_nonblocking(fd);
     Address address = address_new("127.0.0.1", port);
     struct sockaddr *sockaddr = address_sockaddr(address);
     if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0 ||
+        #ifdef __APPLE__
+        setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &set, sizeof(set)) < 0 ||
+        #endif
         bind(fd, sockaddr, sizeof(*sockaddr)) < 0 ||
         listen(fd, 50) < 0)
         sock_turn_off(sock);
@@ -101,7 +105,11 @@ void sock_turn_off(Sock sock) {
 
 int sock_send(Sock sock, char *text) {
     int nbytes = strlen(text);
+    #ifdef __APPLE__
+    int status = send(sock->fd, text, nbytes, 0);
+    #else
     int status = send(sock->fd, text, nbytes, MSG_NOSIGNAL);
+    #endif
     if (status == nbytes)
         return 1;
     else if (status < 0 && errno != EINTR && errno != EAGAIN)
