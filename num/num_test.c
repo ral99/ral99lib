@@ -33,6 +33,28 @@ static void test_double_equals_1() {
     g_assert_cmpint(double_equals(b, a), ==, 0);
 }
 
+static void test_double_to_str_1() {
+    char *str = double_to_str(0, 1);
+    g_assert_cmpstr(str, ==, "0.0");
+    free(str);
+}
+
+static void test_double_to_str_2() {
+    char *str = double_to_str(1.001, 3);
+    g_assert_cmpstr(str, ==, "1.001");
+    free(str);
+}
+
+static void test_double_from_str_1() {
+    double x = double_from_str("0.0");
+    g_assert_cmpint(double_equals(x, 0), ==, 1);
+}
+
+static void test_double_from_str_2() {
+    double x = double_from_str("1.001");
+    g_assert_cmpint(double_equals(x, 1.001), ==, 1);
+}
+
 static void test_int_to_pointer_1() {
     int value = -2147483647;
     g_assert(int_to_pointer(value) == (void *) ((long) value));
@@ -160,6 +182,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/double/gt", test_double_gt_1);
     g_test_add_func("/double/lt", test_double_lt_1);
     g_test_add_func("/double/equals", test_double_equals_1);
+    g_test_add_func("/double/to_str", test_double_to_str_1);
+    g_test_add_func("/double/to_str", test_double_to_str_2);
+    g_test_add_func("/double/from_str", test_double_from_str_1);
+    g_test_add_func("/double/from_str", test_double_from_str_2);
     g_test_add_func("/int/to_pointer", test_int_to_pointer_1);
     g_test_add_func("/int/to_pointer", test_int_to_pointer_2);
     g_test_add_func("/int/to_pointer", test_int_to_pointer_3);

@@ -12,6 +12,13 @@ int double_lt(double a, double b);
 /* Return 1 if a is equal to b. 0, otherwise. */
 int double_equals(double a, double b);
 
+/* Return the string representation of double with the specified number of
+ * decimal positions. */
+char *double_to_str(double x, int decimal_positions);
+
+/* Return the double from its string representation. */
+double double_from_str(char *str);
+
 /* Return the pointer cast of int. */
 void *int_to_pointer(int x);
 
