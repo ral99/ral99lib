@@ -64,10 +64,12 @@ TESTS		= $(UTIL_PATH)_test \
 			  $(CLIENT_PATH)_test \
 			  $(NETWORK_PATH)_test \
 
-all: test
+all: test clean
 
 test: $(TESTS)
 	gtester $(TESTS) --keep-going
+
+clean:
 	rm $(TESTS)
 
 $(UTIL_PATH)_test: $(UTIL_PATH)_test.c $(FILES) $(HEADERS)
