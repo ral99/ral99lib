@@ -28,8 +28,10 @@ Sock sock_nonblocking(int fd) {
 }
 
 Sock sock_listen(int port) {
-    int reuse = 1;
+    #ifdef __APPLE__
     int set = 1;
+    #endif
+    int reuse = 1;
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     Sock sock = sock_nonblocking(fd);
     Address address = address_new("127.0.0.1", port);
