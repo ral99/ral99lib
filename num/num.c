@@ -43,6 +43,16 @@ int int_random(int start, int end) {
     return (rand() % (end - start + 1) + start);
 }
 
+int int_gcd(int a, int b) {
+    return b ? int_gcd(b, a % b) : abs(a);
+}
+
+uint64_t uint64_lcm(int a, int b) {
+    if (a && b)
+        return abs(a) / int_gcd(a, b) * (uint64_t) abs(b);
+    return (uint64_t) abs(a | b);
+}
+
 char *int_to_str(int x) {
     char buf[32];
     sprintf(buf, "%d", x);

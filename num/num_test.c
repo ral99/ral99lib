@@ -147,6 +147,20 @@ static void test_int_random_6() {
     g_assert(x >= start && x <= end);
 }
 
+static void test_int_gcd_1() {
+    g_assert_cmpint(int_gcd(5, 0), ==, 5);
+    g_assert_cmpint(int_gcd(5, 5), ==, 5);
+    g_assert_cmpint(int_gcd(10, 15), ==, 5);
+    g_assert_cmpint(int_gcd(3, 5), ==, 1);
+}
+
+static void test_uint64_lcm_1() {
+    g_assert(uint64_lcm(5, 0) == (uint64_t) 5);
+    g_assert(uint64_lcm(5, 5) == (uint64_t) 5);
+    g_assert(uint64_lcm(10, 15) == (uint64_t) 30);
+    g_assert(uint64_lcm(3, 5) == (uint64_t) 15);
+}
+
 static void test_int_to_str_1() {
     char *str = int_to_str(0);
     g_assert_cmpstr(str, ==, "0");
@@ -202,6 +216,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/int/random", test_int_random_4);
     g_test_add_func("/int/random", test_int_random_5);
     g_test_add_func("/int/random", test_int_random_6);
+    g_test_add_func("/int/gcd", test_int_gcd_1);
+    g_test_add_func("/uint64/lcm", test_uint64_lcm_1);
     g_test_add_func("/int/to_str", test_int_to_str_1);
     g_test_add_func("/int/to_str", test_int_to_str_2);
     g_test_add_func("/int/to_str", test_int_to_str_3);

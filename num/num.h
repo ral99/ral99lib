@@ -28,6 +28,12 @@ int int_from_pointer(void *x);
 /* Return a random integer in the range [start, end]. */
 int int_random(int start, int end);
 
+/* Return the greatest common divisor of a and b. */
+int int_gcd(int a, int b);
+
+/* Return the least common multiple of a and b. */
+uint64_t uint64_lcm(int a, int b);
+
 /* Return the string representation of int. */
 char *int_to_str(int x);
 
