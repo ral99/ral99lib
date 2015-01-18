@@ -1,11 +1,9 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "net/client/client_connection/client_connection.h"
-#include "net/address/address.h"
-#include "net/connection/connection.h"
-#include "net/sock/sock.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "str/str.h"
 
 #define POLL_TIMEOUT 500
 

@@ -1,7 +1,7 @@
 #ifndef __NET__SOCK__
 #define __NET__SOCK__
 
-#include "net/address/address.h"
+#include "net/net.h"
 
 typedef struct Sock *Sock;
 struct Sock {

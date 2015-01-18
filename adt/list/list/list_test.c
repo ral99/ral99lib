@@ -3,9 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "adt/list/list.h"
-#include "adt/list/list_item/list_item.h"
-#include "adt/str/str.h"
+#include "adt/adt.h"
+#include "str/str.h"
 
 static void test_list_new_1() {
     List list = list_new();

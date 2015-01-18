@@ -1,8 +1,7 @@
 #ifndef __NET__CONNECTION__
 #define __NET__CONNECTION__
 
-#include "net/address/address.h"
-#include "net/sock/sock.h"
+#include "net/net.h"
 #include "adt/adt.h"
 
 typedef struct Connection *Connection;

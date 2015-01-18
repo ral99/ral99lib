@@ -2,8 +2,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "net/sock/sock.h"
-#include "net/address/address.h"
+#include "net/net.h"
 
 #define POLL_TIMEOUT 500
 

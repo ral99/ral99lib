@@ -1,8 +1,8 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "adt/list/list_item/list_item.h"
-#include "adt/str/str.h"
+#include "adt/adt.h"
+#include "str/str.h"
 
 static void test_list_item_new_1() {
     char *value = "Sport Club Corinthians Paulista";

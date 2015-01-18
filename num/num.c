@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "num/num.h"
-#include "util/util.h"
+#include "mem/mem.h"
 
 int double_gt(double a, double b) {
     return (a - b > TOL) ? 1 : 0;

@@ -1,9 +1,7 @@
 #ifndef __NET__NETWORK__
 #define __NET__NETWORK__
 
-#include "net/address/address.h"
-#include "net/client/client.h"
-#include "net/server/server.h"
+#include "net/net.h"
 
 typedef struct Network *Network;
 struct Network {

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "adt/list/list_item/list_item.h"
-#include "util/util.h"
+#include "adt/adt.h"
+#include "mem/mem.h"
 
 ListItem list_item_new(void *value, ListItem prev, ListItem next) {
     ListItem item = memalloc(sizeof(*item));

@@ -2,8 +2,9 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 
-#include "net/address/address.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "str/str.h"
 
 static void test_address_new_1() {
     Address address = address_new("127.0.0.1", 8000);

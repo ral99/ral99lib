@@ -1,7 +1,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "util/util.h"
+#include "mem/mem.h"
 
 static void test_memalloc_1() {
     void *p = memalloc(32);
@@ -11,7 +11,7 @@ static void test_memalloc_1() {
 
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
-    g_test_add_func("/util/memalloc", test_memalloc_1);
+    g_test_add_func("/mem/alloc", test_memalloc_1);
     return g_test_run();
 }
 

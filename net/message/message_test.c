@@ -1,8 +1,9 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "net/message/message.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "str/str.h"
 
 static void test_message_new_1() {
     Message message = message_new("123", "abc");

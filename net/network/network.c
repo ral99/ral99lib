@@ -1,11 +1,8 @@
 #include <stdlib.h>
 
-#include "net/network/network.h"
-#include "net/address/address.h"
-#include "net/client/client.h"
-#include "net/server/server.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
 
 Network network_new(int port, int connection_life, int client_poll_timeout,
                     int server_poll_timeout) {

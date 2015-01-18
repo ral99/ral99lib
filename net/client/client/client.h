@@ -1,8 +1,7 @@
 #ifndef __NET__CLIENT__CLIENT__
 #define __NET__CLIENT__CLIENT__
 
-#include "net/client/client_connection/client_connection.h"
-#include "net/address/address.h"
+#include "net/net.h"
 #include "adt/adt.h"
 
 typedef struct Client *Client;

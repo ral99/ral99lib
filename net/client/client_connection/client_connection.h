@@ -3,8 +3,7 @@
 
 #include <time.h>
 
-#include "net/address/address.h"
-#include "net/connection/connection.h"
+#include "net/net.h"
 #include "adt/adt.h"
 
 typedef struct ClientConnection *ClientConnection;

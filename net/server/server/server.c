@@ -1,11 +1,8 @@
 #include <stdlib.h>
 
-#include "net/server/server/server.h"
-#include "net/server/server_connection/server_connection.h"
-#include "net/message/message.h"
-#include "net/sock/sock.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
 
 Server server_listen(int port, int poll_timeout) {
     Server server = memalloc(sizeof(*server));

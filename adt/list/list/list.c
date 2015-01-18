@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "adt/list/list.h"
-#include "adt/list/list_item/list_item.h"
-#include "adt/str/str.h"
-#include "util/util.h"
+#include "adt/adt.h"
+#include "mem/mem.h"
 #include "num/num.h"
+#include "str/str.h"
 
 List list_new() {
     List list = memalloc(sizeof(*list));

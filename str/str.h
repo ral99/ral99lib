@@ -1,7 +1,7 @@
-#ifndef __ADT__STR__
-#define __ADT__STR__
+#ifndef __STR__
+#define __STR__
 
-#include "adt/list/list.h"
+#include "adt/adt.h"
 
 /* Return 1 if strings are equal. 0, otherwise. */
 int str_equals(char *str1, char *str2);

@@ -1,8 +1,7 @@
 #ifndef __NET__SERVER__SERVER__
 #define __NET__SERVER__SERVER__
 
-#include "net/sock/sock.h"
-#include "net/message/message.h"
+#include "net/net.h"
 #include "adt/adt.h"
 
 typedef struct Server *Server;

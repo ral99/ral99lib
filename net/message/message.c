@@ -1,8 +1,9 @@
 #include <stdlib.h>
 
-#include "net/message/message.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
+#include "str/str.h"
 
 Message message_new(char *id, char *text) {
     Message message = memalloc(sizeof(*message));

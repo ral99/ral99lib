@@ -7,10 +7,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "net/sock/sock.h"
-#include "net/address/address.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
+#include "str/str.h"
 
 Sock sock_new(int fd, int on) {
     Sock sock = memalloc(sizeof(*sock));

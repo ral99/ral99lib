@@ -1,10 +1,8 @@
 #include <stdlib.h>
 
-#include "net/client/client/client.h"
-#include "net/client/client_connection/client_connection.h"
-#include "net/address/address.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
 
 Client client_new(int connection_life, int poll_timeout) {
     Client client = memalloc(sizeof(*client));

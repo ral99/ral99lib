@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "util/util.h"
+#include "mem/mem.h"
 
 void *memalloc(int size) {
     void *buffer = malloc(size);

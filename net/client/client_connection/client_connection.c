@@ -1,11 +1,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "net/client/client_connection/client_connection.h"
-#include "net/address/address.h"
-#include "net/connection/connection.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
 
 ClientConnection connect_client_connection(Address address, int life) {
     ClientConnection client_connection = memalloc(sizeof(*client_connection));

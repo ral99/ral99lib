@@ -4,11 +4,11 @@ CFLAGS		= -Wall -ansi -pedantic -I. -std=c99
 GLIB_FLAGS	= `pkg-config --cflags glib-2.0`
 GLIB_LIB	= `pkg-config --libs glib-2.0`
 
-UTIL_PATH							= util/util
+MEM_PATH							= mem/mem
 NUM_PATH							= num/num
 LIST_ITEM_PATH						= adt/list/list_item/list_item
 LIST_PATH							= adt/list/list/list
-STR_PATH							= adt/str/str
+STR_PATH							= str/str
 ADDRESS_PATH						= net/address/address
 MESSAGE_PATH						= net/message/message
 SOCK_PATH							= net/sock/sock
@@ -19,7 +19,7 @@ CLIENT_CONNECTION_PATH				= net/client/client_connection/client_connection
 CLIENT_PATH							= net/client/client/client
 NETWORK_PATH						= net/network/network
 
-HEADERS		= $(UTIL_PATH).h \
+HEADERS		= $(MEM_PATH).h \
 			  $(NUM_PATH).h \
 			  $(LIST_ITEM_PATH).h \
 			  $(LIST_PATH).h \
@@ -34,7 +34,7 @@ HEADERS		= $(UTIL_PATH).h \
 			  $(CLIENT_PATH).h \
 			  $(NETWORK_PATH).h \
 
-FILES		= $(UTIL_PATH).c \
+FILES		= $(MEM_PATH).c \
 			  $(NUM_PATH).c \
 			  $(LIST_ITEM_PATH).c \
 			  $(LIST_PATH).c \
@@ -49,7 +49,7 @@ FILES		= $(UTIL_PATH).c \
 			  $(CLIENT_PATH).c \
 			  $(NETWORK_PATH).c \
 
-TESTS		= $(UTIL_PATH)_test \
+TESTS		= $(MEM_PATH)_test \
 			  $(NUM_PATH)_test \
 			  $(LIST_ITEM_PATH)_test \
 			  $(LIST_PATH)_test \
@@ -72,7 +72,7 @@ test: $(TESTS)
 clean:
 	rm $(TESTS)
 
-$(UTIL_PATH)_test: $(UTIL_PATH)_test.c $(FILES) $(HEADERS)
+$(MEM_PATH)_test: $(MEM_PATH)_test.c $(FILES) $(HEADERS)
 	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
 
 $(NUM_PATH)_test: $(NUM_PATH)_test.c $(FILES) $(HEADERS)

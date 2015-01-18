@@ -1,7 +1,7 @@
 #ifndef __NET__SERVER__SERVER_CONNECTION__
 #define __NET__SERVER__SERVER_CONNECTION__
 
-#include "net/connection/connection.h"
+#include "net/net.h"
 #include "adt/adt.h"
 
 #define SERVER_CONNECTION_ID_LENGTH 32

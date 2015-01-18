@@ -1,10 +1,9 @@
 #include <stdlib.h>
 
-#include "net/connection/connection.h"
-#include "net/address/address.h"
-#include "net/sock/sock.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
+#include "str/str.h"
 
 Connection connection_connect(Address address) {
     Connection connection = memalloc(sizeof(*connection));

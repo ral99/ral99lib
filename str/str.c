@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "adt/str/str.h"
-#include "adt/list/list.h"
-#include "util/util.h"
+#include "str/str.h"
+#include "adt/adt.h"
+#include "mem/mem.h"
 
 int str_equals(char *str1, char *str2) {
     return (strcmp(str1, str2) == 0) ? 1 : 0;

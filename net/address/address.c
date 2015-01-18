@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "net/address/address.h"
-#include "util/util.h"
-#include "num/num.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
+#include "num/num.h"
+#include "str/str.h"
 
 Address address_new(char *ip, int port) {
     Address address = memalloc(sizeof(*address));

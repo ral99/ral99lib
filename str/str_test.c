@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "adt/str/str.h"
-#include "adt/list/list.h"
+#include "str/str.h"
+#include "adt/adt.h"
 
 static void test_str_equals_1() {
     g_assert_cmpint(str_equals("", ""), ==, 1);

@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "net/server/server_connection/server_connection.h"
-#include "net/connection/connection.h"
-#include "util/util.h"
+#include "net/net.h"
 #include "adt/adt.h"
+#include "mem/mem.h"
+#include "str/str.h"
 
 ServerConnection accept_server_connection(Sock server_sock) {
     ServerConnection server_connection = memalloc(sizeof(*server_connection));

@@ -1,11 +1,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#include "net/client/client/client.h"
-#include "net/client/client_connection/client_connection.h"
-#include "net/address/address.h"
-#include "net/connection/connection.h"
-#include "net/sock/sock.h"
+#include "net/net.h"
 #include "adt/adt.h"
 
 #define CONNECTION_LIFE 300
