@@ -19,6 +19,7 @@ SERVER_PATH							= net/server/server/server
 CLIENT_CONNECTION_PATH				= net/client/client_connection/client_connection
 CLIENT_PATH							= net/client/client/client
 NETWORK_PATH						= net/network/network
+CG_PATH								= cg/cg
 
 HEADERS		= $(MEM_PATH).h \
 			  $(NUM_PATH).h \
@@ -34,6 +35,7 @@ HEADERS		= $(MEM_PATH).h \
 			  $(CLIENT_CONNECTION_PATH).h \
 			  $(CLIENT_PATH).h \
 			  $(NETWORK_PATH).h \
+			  $(CG_PATH).h \
 
 FILES		= $(MEM_PATH).c \
 			  $(NUM_PATH).c \
@@ -49,6 +51,7 @@ FILES		= $(MEM_PATH).c \
 			  $(CLIENT_CONNECTION_PATH).c \
 			  $(CLIENT_PATH).c \
 			  $(NETWORK_PATH).c \
+			  $(CG_PATH).c \
 
 TESTS		= $(MEM_PATH)_test \
 			  $(NUM_PATH)_test \
@@ -64,6 +67,7 @@ TESTS		= $(MEM_PATH)_test \
 			  $(CLIENT_CONNECTION_PATH)_test \
 			  $(CLIENT_PATH)_test \
 			  $(NETWORK_PATH)_test \
+			  $(CG_PATH)_test \
 
 all: test clean
 
@@ -113,4 +117,7 @@ $(CLIENT_PATH)_test: $(CLIENT_PATH)_test.c $(FILES) $(HEADERS)
 	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(NETWORK_PATH)_test: $(NETWORK_PATH)_test.c $(FILES) $(HEADERS)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
+
+$(CG_PATH)_test: $(CG_PATH)_test.c $(FILES) $(HEADERS)
 	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
