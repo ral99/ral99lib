@@ -3,6 +3,7 @@
 CFLAGS		= -Wall -ansi -pedantic -I. -std=c99
 GLIB_FLAGS	= `pkg-config --cflags glib-2.0`
 GLIB_LIB	= `pkg-config --libs glib-2.0`
+MATH_LIB	= -lm
 
 MEM_PATH							= mem/mem
 NUM_PATH							= num/num
@@ -73,43 +74,43 @@ clean:
 	rm $(TESTS)
 
 $(MEM_PATH)_test: $(MEM_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(NUM_PATH)_test: $(NUM_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(LIST_ITEM_PATH)_test: $(LIST_ITEM_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(LIST_PATH)_test: $(LIST_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(STR_PATH)_test: $(STR_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(ADDRESS_PATH)_test: $(ADDRESS_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(MESSAGE_PATH)_test: $(MESSAGE_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(SOCK_PATH)_test: $(SOCK_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(CONNECTION_PATH)_test: $(CONNECTION_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(SERVER_CONNECTION_PATH)_test: $(SERVER_CONNECTION_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(SERVER_PATH)_test: $(SERVER_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(CLIENT_CONNECTION_PATH)_test: $(CLIENT_CONNECTION_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(CLIENT_PATH)_test: $(CLIENT_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
 
 $(NETWORK_PATH)_test: $(NETWORK_PATH)_test.c $(FILES) $(HEADERS)
-	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB)
+	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)
