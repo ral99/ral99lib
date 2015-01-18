@@ -1,6 +1,8 @@
 #ifndef __NUM__
 #define __NUM__
 
+#include <stdint.h>
+
 #define TOL 1e-7
 
 /* Return 1 if a is greater than b. 0, otherwise. */
