@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,6 +42,18 @@ int int_from_pointer(void *x) {
 
 int int_random(int start, int end) {
     return (rand() % (end - start + 1) + start);
+}
+
+int int_is_prime(int x) {
+    if (x < 0)
+        return int_is_prime(-x);
+    if (x < 5 || x % 2 == 0 || x % 3 == 0)
+        return (x == 2 || x == 3) ? 1 : 0;
+    int max_div = sqrt(x) + 2;
+    for (int i = 5; i < max_div; i += 6)
+        if (x % i == 0 || x % (i + 2) == 0)
+            return 0;
+    return 1;
 }
 
 int int_gcd(int a, int b) {

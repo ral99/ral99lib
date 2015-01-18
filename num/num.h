@@ -28,6 +28,9 @@ int int_from_pointer(void *x);
 /* Return a random integer in the range [start, end]. */
 int int_random(int start, int end);
 
+/* Return 1 if the number is prime. 0, otherwise. */
+int int_is_prime(int x);
+
 /* Return the greatest common divisor of a and b. */
 int int_gcd(int a, int b);
 

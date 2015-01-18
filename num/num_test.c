@@ -147,6 +147,30 @@ static void test_int_random_6() {
     g_assert(x >= start && x <= end);
 }
 
+static void test_int_is_prime_1() {
+    g_assert_cmpint(int_is_prime(1), ==, 0);
+    g_assert_cmpint(int_is_prime(2), ==, 1);
+    g_assert_cmpint(int_is_prime(3), ==, 1);
+    g_assert_cmpint(int_is_prime(4), ==, 0);
+    g_assert_cmpint(int_is_prime(5), ==, 1);
+    g_assert_cmpint(int_is_prime(9967), ==, 1);
+    g_assert_cmpint(int_is_prime(9969), ==, 0);
+    g_assert_cmpint(int_is_prime(9971), ==, 0);
+    g_assert_cmpint(int_is_prime(9973), ==, 1);
+}
+
+static void test_int_is_prime_2() {
+    g_assert_cmpint(int_is_prime(-1), ==, 0);
+    g_assert_cmpint(int_is_prime(-2), ==, 1);
+    g_assert_cmpint(int_is_prime(-3), ==, 1);
+    g_assert_cmpint(int_is_prime(-4), ==, 0);
+    g_assert_cmpint(int_is_prime(-5), ==, 1);
+    g_assert_cmpint(int_is_prime(-9967), ==, 1);
+    g_assert_cmpint(int_is_prime(-9969), ==, 0);
+    g_assert_cmpint(int_is_prime(-9971), ==, 0);
+    g_assert_cmpint(int_is_prime(-9973), ==, 1);
+}
+
 static void test_int_gcd_1() {
     g_assert_cmpint(int_gcd(5, 0), ==, 5);
     g_assert_cmpint(int_gcd(5, 5), ==, 5);
@@ -216,6 +240,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/int/random", test_int_random_4);
     g_test_add_func("/int/random", test_int_random_5);
     g_test_add_func("/int/random", test_int_random_6);
+    g_test_add_func("/int/is_prime", test_int_is_prime_1);
+    g_test_add_func("/int/is_prime", test_int_is_prime_2);
     g_test_add_func("/int/gcd", test_int_gcd_1);
     g_test_add_func("/uint64/lcm", test_uint64_lcm_1);
     g_test_add_func("/int/to_str", test_int_to_str_1);
