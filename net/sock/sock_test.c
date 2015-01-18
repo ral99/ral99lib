@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <glib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "net/net.h"
 
@@ -32,8 +33,11 @@ static void test_sock_nonblocking_2() {
 static void test_sock_listen_accept_connect_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     Sock accepted = sock_accept(server);
+    sleep(1);
     g_assert_cmpint(server->fd, >=, 0);
     g_assert_cmpint(server->on, ==, 1);
     g_assert_cmpint(fcntl(server->fd, F_GETFL) & O_NONBLOCK, >, 0);
@@ -136,9 +140,13 @@ static void test_sock_turn_off_2() {
 static void test_sock_send_recv_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     Sock accepted = sock_accept(server);
+    sleep(1);
     sock_send(connected, "Sport Club Corinthians Paulista");
+    sleep(1);
     char *text = sock_recv(accepted);
     g_assert_cmpstr(text, ==, "Sport Club Corinthians Paulista");
     free(text);
@@ -151,7 +159,9 @@ static void test_sock_send_recv_1() {
 static void test_sock_list_poll_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     int nfds = 2;
     int pollin[nfds], pollout[nfds];
     Sock socks[nfds];
@@ -169,7 +179,9 @@ static void test_sock_list_poll_1() {
 static void test_sock_list_poll_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     int nfds = 2;
     int pollin[nfds], pollout[nfds];
     Sock socks[nfds];
@@ -187,8 +199,11 @@ static void test_sock_list_poll_2() {
 static void test_sock_list_poll_3() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     Sock accepted = sock_accept(server);
+    sleep(1);
     int nfds = 3;
     int pollin[nfds], pollout[nfds];
     Sock socks[nfds];
@@ -209,8 +224,11 @@ static void test_sock_list_poll_3() {
 static void test_sock_list_poll_4() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     Sock accepted = sock_accept(server);
+    sleep(1);
     int nfds = 3;
     int pollin[nfds], pollout[nfds];
     Sock socks[nfds];
@@ -231,8 +249,11 @@ static void test_sock_list_poll_4() {
 static void test_sock_list_poll_5() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Sock connected = sock_connect(address);
+    sleep(1);
     Sock accepted = sock_accept(server);
+    sleep(1);
     int nfds = 3;
     int pollin[nfds], pollout[nfds];
     Sock socks[nfds];

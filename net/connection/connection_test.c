@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "net/net.h"
 #include "adt/adt.h"
@@ -10,8 +11,11 @@
 static void test_connection_connect_accept_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     g_assert_cmpint(sock_is_on(connected->sock), ==, 1);
     g_assert_cmpint(list_size(connected->in), ==, 0);
     g_assert_cmpint(list_size(connected->out), ==, 0);
@@ -189,11 +193,16 @@ static void test_connection_pop_1() {
 static void test_connection_send_recv_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     list_append(connected->out, str_dup("Sport Club Corinthians Paulista"));
     connection_send(connected);
+    sleep(1);
     connection_recv(accepted);
+    sleep(1);
     g_assert_cmpint(list_size(connected->out), ==, 0);
     g_assert_cmpint(list_size(accepted->in), ==, 1);
     g_assert_cmpstr(list_at(accepted->in, 0), ==, "Sport Club Corinthians Paulista");
@@ -206,11 +215,16 @@ static void test_connection_send_recv_1() {
 static void test_connection_loop_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     list_append(connected->out, str_dup("Sport Club Corinthians Paulista"));
     connection_loop(connected);
+    sleep(1);
     connection_loop(accepted);
+    sleep(1);
     g_assert_cmpint(list_size(connected->out), ==, 0);
     g_assert_cmpint(list_size(accepted->in), ==, 1);
     g_assert_cmpstr(list_at(accepted->in, 0), ==, "Sport Club Corinthians Paulista");
@@ -223,8 +237,11 @@ static void test_connection_loop_1() {
 static void test_connection_list_poll_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     List connections = list_new();
     list_append(connections, connected);
     list_append(connections, accepted);
@@ -239,8 +256,11 @@ static void test_connection_list_poll_1() {
 static void test_connection_list_poll_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     List connections = list_new();
     list_append(connections, connected);
     list_append(connections, accepted);

@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "net/net.h"
 #include "adt/adt.h"
@@ -119,7 +120,9 @@ static void test_server_poll_timeout_is_2() {
 static void test_server_accept_1() {
     Address address = address_new("127.0.0.1", 5000);
     Server server = server_listen(5000, POLL_TIMEOUT);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     server_accept(server);
     g_assert_cmpint(list_size(server->connections), ==, 1);
     connection_release(connected);
@@ -130,7 +133,9 @@ static void test_server_accept_1() {
 static void test_server_push_1() {
     Address address = address_new("127.0.0.1", 5000);
     Server server = server_listen(5000, POLL_TIMEOUT);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection accepted = accept_server_connection(server->sock);
     char *id = server_connection_id(accepted);
     list_append(server->connections, accepted);
@@ -158,12 +163,19 @@ static void test_server_pop_1() {
 static void test_server_loop_1() {
     Address address = address_new("127.0.0.1", 5000);
     Server server = server_listen(5000, POLL_TIMEOUT);
+    sleep(1);
     Connection connected1 = connection_connect(address);
+    sleep(1);
     ServerConnection accepted1 = accept_server_connection(server->sock);
+    sleep(1);
     Connection connected2 = connection_connect(address);
+    sleep(1);
     ServerConnection accepted2 = accept_server_connection(server->sock);
+    sleep(1);
     Connection connected3 = connection_connect(address);
+    sleep(1);
     server_loop(server);
+    sleep(1);
     list_append(server->connections, accepted1);
     list_append(server->connections, accepted2);
     g_assert_cmpint(list_size(server->connections), ==, 3);
@@ -177,6 +189,7 @@ static void test_server_loop_1() {
         connection_loop(connected2);
         connection_loop(connected3);
         server_loop(server);
+        sleep(1);
     }
     char *text = connection_pop(connected2);
     g_assert_cmpint(list_size(server->connections), ==, 2);

@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "net/net.h"
 #include "adt/adt.h"
@@ -126,19 +127,24 @@ static void test_network_server_poll_timeout_is_2() {
 static void test_network_reply_1() {
     Network network = network_new(5000, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                   SERVER_POLL_TIMEOUT);
+    sleep(1);
     Address address = address_new("127.0.0.1", 5000);
     Connection connection = connection_connect(address);
+    sleep(1);
     connection_push(connection, "Sport Club Corinthians Paulista");
     for (int i = 0; i < 2; i++) {
         server_loop(network->server);
         connection_loop(connection);
+        sleep(1);
     }
     Message message = server_pop(network->server);
     char *id = message_id(message);
     network_reply(network, id, "Republica Federativa do Brasil");
+    sleep(1);
     for (int i = 0; i < 2; i++) {
         server_loop(network->server);
         connection_loop(connection);
+        sleep(1);
     }
     char *text = connection_pop(connection);
     g_assert_cmpstr(text, ==, "Republica Federativa do Brasil");
@@ -153,8 +159,10 @@ static void test_network_reply_1() {
 static void test_network_send_1() {
     Network network = network_new(5000, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                   SERVER_POLL_TIMEOUT);
+    sleep(1);
     Address address = address_new("127.0.0.1", 5000);
     network_send(network, address, "Sport Club Corinthians Paulista");
+    sleep(1);
     List out = client_connection_out(client_get_connection(network->client,
                                                            address));
     g_assert_cmpint(list_size(out), ==, 1);
@@ -167,12 +175,15 @@ static void test_network_send_1() {
 static void test_network_recv_1() {
     Network network = network_new(5000, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                   SERVER_POLL_TIMEOUT);
+    sleep(1);
     Address address = address_new("127.0.0.1", 5000);
     Connection connection = connection_connect(address);
+    sleep(1);
     connection_push(connection, "Sport Club Corinthians Paulista");
     for (int i = 0; i < 2; i++) {
         server_loop(network->server);
         connection_loop(connection);
+        sleep(1);
     }
     Message message = network_recv(network);
     char *text = message_text(message);
@@ -189,6 +200,7 @@ static void test_network_loop_1() {
                                    SERVER_POLL_TIMEOUT);
     Network network2 = network_new(5001, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                    SERVER_POLL_TIMEOUT);
+    sleep(1);
     Address address1 = address_new("127.0.0.1", 5000);
     Address address2 = address_new("127.0.0.1", 5001);
     client_push(network1->client, address2, "Sport Club Corinthians Paulista");
@@ -196,6 +208,7 @@ static void test_network_loop_1() {
     for (int i = 0; i < 2; i++) {
         network_loop(network1);
         network_loop(network2);
+        sleep(1);
     }
     Message message1 = server_pop(network1->server);
     Message message2 = server_pop(network2->server);

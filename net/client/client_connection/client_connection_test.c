@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "net/net.h"
 #include "adt/adt.h"
@@ -236,11 +237,17 @@ static void test_client_connection_push_1() {
 static void test_client_connection_loop_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     ClientConnection client_connection1 = connect_client_connection(address, 60);
+    sleep(1);
     Connection accepted1 = connection_accept(server);
+    sleep(1);
     ClientConnection client_connection2 = connect_client_connection(address, 60);
+    sleep(1);
     Connection accepted2 = connection_accept(server);
+    sleep(1);
     ClientConnection client_connection3 = connect_client_connection(address, 60);
+    sleep(1);
     Connection accepted3 = connection_accept(server);
     connection_push(client_connection1->connection, "Repubblica Italiana");
     connection_push(client_connection2->connection,
@@ -249,7 +256,9 @@ static void test_client_connection_loop_1() {
                     "Republica Federativa do Brasil");
     connection_turn_off(client_connection3->connection);
     client_connection_loop(client_connection3);
+    sleep(1);
     Connection accepted4 = connection_accept(server);
+    sleep(1);
     connection_push(accepted1, "Sport Club Corinthians Paulista");
     connection_push(accepted2, "Republica Federativa do Brasil");
     connection_push(accepted4, "Repubblica Italiana");
@@ -260,6 +269,7 @@ static void test_client_connection_loop_1() {
         client_connection_loop(client_connection1);
         client_connection_loop(client_connection2);
         client_connection_loop(client_connection3);
+        sleep(1);
     }
     g_assert(connection_pop(client_connection1->connection) == NULL);
     g_assert(connection_pop(client_connection2->connection) == NULL);
@@ -290,8 +300,11 @@ static void test_client_connection_loop_1() {
 static void test_client_connection_list_poll_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     ClientConnection client_connection = connect_client_connection(address, 5);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     List client_connections = list_new();
     list_append(client_connections, client_connection);
     g_assert_cmpint(client_connection_list_poll(client_connections, POLL_TIMEOUT),
@@ -306,8 +319,11 @@ static void test_client_connection_list_poll_1() {
 static void test_client_connection_list_poll_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     ClientConnection client_connection = connect_client_connection(address, 5);
+    sleep(1);
     Connection accepted = connection_accept(server);
+    sleep(1);
     List client_connections = list_new();
     list_append(client_connections, client_connection);
     connection_push(client_connection->connection,

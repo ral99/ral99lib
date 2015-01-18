@@ -1,5 +1,6 @@
 #include <glib.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "net/net.h"
 #include "adt/adt.h"
@@ -161,17 +162,21 @@ static void test_client_push_1() {
 static void test_client_loop_1() {
     Client client = client_new(CONNECTION_LIFE, POLL_TIMEOUT);
     Sock server = sock_listen(5000);
+    sleep(1);
     Address address1 = address_new("127.0.0.1", 5000);
     Address address2 = address_new("127.0.0.1", 5001);
     Address address3 = address_new("127.0.0.1", 5002);
     ClientConnection client_connection1 = connect_client_connection(address1,
                                                               CONNECTION_LIFE);
+    sleep(1);
     Connection accepted1 = connection_accept(server);
     ClientConnection client_connection2 = connect_client_connection(address2,
                                                               CONNECTION_LIFE);
+    sleep(1);
     Connection accepted2 = connection_accept(server);
     ClientConnection client_connection3 = connect_client_connection(address3,
                                                               CONNECTION_LIFE);
+    sleep(1);
     Connection accepted3 = connection_accept(server);
     client_connection_push(client_connection1, "Sport Club Corinthians Paulista");
     connection_push(accepted2, "Republica Federativa do Brasil");
@@ -183,6 +188,7 @@ static void test_client_loop_1() {
         connection_loop(accepted1);
         connection_loop(accepted2);
         connection_loop(accepted3);
+        sleep(1);
     }
     List out1 = client_connection_out(client_connection1);
     List out2 = client_connection_out(client_connection2);

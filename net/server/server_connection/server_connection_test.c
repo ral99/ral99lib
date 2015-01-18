@@ -1,6 +1,7 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "net/net.h"
 #include "adt/adt.h"
@@ -11,7 +12,9 @@
 static void test_accept_server_connection_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(strlen(server_connection->id), ==, SERVER_CONNECTION_ID_LENGTH);
     g_assert_cmpint(connection_is_on(server_connection->connection), ==, 1);
@@ -24,7 +27,9 @@ static void test_accept_server_connection_1() {
 static void test_server_connection_release_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     server_connection_release(server_connection);
     connection_release(connected);
@@ -35,7 +40,9 @@ static void test_server_connection_release_1() {
 static void test_server_connection_get_id_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     g_assert(server_connection_get_id(server_connection) == server_connection->id);
     server_connection_release(server_connection);
@@ -47,7 +54,9 @@ static void test_server_connection_get_id_1() {
 static void test_server_connection_set_id_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     char *id = str_random(SERVER_CONNECTION_ID_LENGTH);
     free(server_connection->id);
@@ -62,7 +71,9 @@ static void test_server_connection_set_id_1() {
 static void test_server_connection_get_connection_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     g_assert(server_connection_get_connection(server_connection) ==
              server_connection->connection);
@@ -75,10 +86,15 @@ static void test_server_connection_get_connection_1() {
 static void test_server_connection_set_connection_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected1 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
+    sleep(1);
     Connection connected2 = connection_connect(address);
+    sleep(1);
     Connection connection = connection_accept(server);
+    sleep(1);
     connection_release(server_connection->connection);
     server_connection_set_connection(server_connection, connection);
     g_assert(server_connection->connection == connection);
@@ -92,7 +108,9 @@ static void test_server_connection_set_connection_1() {
 static void test_server_connection_id_is_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(server_connection_id_is(server_connection, "abc"), ==, 0);
     server_connection_release(server_connection);
@@ -104,8 +122,11 @@ static void test_server_connection_id_is_1() {
 static void test_server_connection_id_is_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
+    sleep(1);
     char *id = str_dup(server_connection->id);
     g_assert_cmpint(server_connection_id_is(server_connection, id), ==, 1);
     free(id);
@@ -118,7 +139,9 @@ static void test_server_connection_id_is_2() {
 static void test_server_connection_id_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     char *id = server_connection_id(server_connection);
     g_assert_cmpstr(id, ==, server_connection->id);
@@ -132,7 +155,9 @@ static void test_server_connection_id_1() {
 static void test_server_connection_is_on_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(server_connection_is_on(server_connection), ==, 1);
     server_connection_release(server_connection);
@@ -144,7 +169,9 @@ static void test_server_connection_is_on_1() {
 static void test_server_connection_is_on_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     connection_turn_off(server_connection->connection);
     g_assert_cmpint(server_connection_is_on(server_connection), ==, 0);
@@ -157,7 +184,9 @@ static void test_server_connection_is_on_2() {
 static void test_server_connection_is_off_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(server_connection_is_off(server_connection), ==, 0);
     server_connection_release(server_connection);
@@ -169,7 +198,9 @@ static void test_server_connection_is_off_1() {
 static void test_server_connection_is_off_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     connection_turn_off(server_connection->connection);
     g_assert_cmpint(server_connection_is_off(server_connection), ==, 1);
@@ -182,7 +213,9 @@ static void test_server_connection_is_off_2() {
 static void test_server_connection_turn_off_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     server_connection_turn_off(server_connection);
     g_assert_cmpint(connection_is_off(server_connection->connection), ==, 1);
@@ -195,7 +228,9 @@ static void test_server_connection_turn_off_1() {
 static void test_server_connection_out_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     connection_push(server_connection->connection,
                     "Sport Club Corinthians Paulista");
@@ -215,7 +250,9 @@ static void test_server_connection_out_1() {
 static void test_server_connection_push_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     server_connection_push(server_connection, "Sport Club Corinthians Paulista");
     List out = connection_out(server_connection->connection);
@@ -231,11 +268,15 @@ static void test_server_connection_push_1() {
 static void test_server_connection_pop_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection = accept_server_connection(server);
     connection_push(connected, "Sport Club Corinthians Paulista");
     connection_loop(connected);
+    sleep(1);
     connection_loop(server_connection->connection);
+    sleep(1);
     char *text = server_connection_pop(server_connection);
     g_assert_cmpstr(text, ==, "Sport Club Corinthians Paulista");
     g_assert(server_connection_pop(server_connection) == NULL);
@@ -249,11 +290,17 @@ static void test_server_connection_pop_1() {
 static void test_server_connection_loop_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected1 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection1 = accept_server_connection(server);
+    sleep(1);
     Connection connected2 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection2 = accept_server_connection(server);
+    sleep(1);
     Connection connected3 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection3 = accept_server_connection(server);
     connection_push(connected1, "Sport Club Corinthians Paulista");
     connection_push(connected2, "Republica Federativa do Brasil");
@@ -270,6 +317,7 @@ static void test_server_connection_loop_1() {
         server_connection_loop(server_connection1);
         server_connection_loop(server_connection2);
         server_connection_loop(server_connection3);
+        sleep(1);
     }
     List out1 = connection_out(server_connection1->connection);
     List out2 = connection_out(server_connection2->connection);
@@ -317,9 +365,13 @@ static void test_server_connection_loop_1() {
 static void test_server_connection_list_poll_1() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected1 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection1 = accept_server_connection(server);
+    sleep(1);
     Connection connected2 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection2 = accept_server_connection(server);
     List server_connections = list_new();
     list_append(server_connections, server_connection1);
@@ -338,9 +390,13 @@ static void test_server_connection_list_poll_1() {
 static void test_server_connection_list_poll_2() {
     Address address = address_new("127.0.0.1", 5000);
     Sock server = sock_listen(5000);
+    sleep(1);
     Connection connected1 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection1 = accept_server_connection(server);
+    sleep(1);
     Connection connected2 = connection_connect(address);
+    sleep(1);
     ServerConnection server_connection2 = accept_server_connection(server);
     List server_connections = list_new();
     list_append(server_connections, server_connection1);
