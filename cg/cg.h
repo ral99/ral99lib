@@ -7,9 +7,12 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-/* Homogeneous coordinates */
+typedef struct Line *Line;
+struct Line {
+    double w, x, y;
+};
+
 typedef struct Point *Point;
-typedef struct Point *Line;
 struct Point {
     double w, x, y;
 };
