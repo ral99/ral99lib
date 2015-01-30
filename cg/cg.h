@@ -7,6 +7,11 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+typedef struct Vector *Vector;
+struct Vector {
+    double x, y;
+};
+
 typedef struct Line *Line;
 struct Line {
     double w, x, y;
@@ -24,6 +29,28 @@ struct Triangle {
 
 /* Converts an angle specified in degrees to radians. */
 double deg_to_rad(double deg);
+
+/* Return a new vector. */
+Vector vector_new(double x, double y);
+
+/* Free the memory used by vector. */
+void vector_release(Vector vector);
+
+/* Return 1 if the vectors are equal. 0, otherwise. */
+int vector_equals(Vector vector1, Vector vector2);
+
+/* Return the duplicated vector. */
+Vector vector_dup(Vector vector);
+
+/* Return the string representation of the vector with the specified number of
+ * decimal positions. */
+char *vector_to_str(Vector vector, int decimal_positions);
+
+/* Return vector from its string representation. */
+Vector vector_from_str(char *string);
+
+/* Rotate the vector by the specified degrees in counter-clockwise orientation. */
+void vector_rotate(Vector vector, double deg);
 
 /* Return a new point. */
 Point point_new(double x, double y);

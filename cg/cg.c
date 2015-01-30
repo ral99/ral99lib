@@ -13,6 +13,62 @@ double deg_to_rad(double deg) {
     return (deg * M_PI) / 180;
 }
 
+Vector vector_new(double x, double y) {
+    Vector vector = memalloc(sizeof(*vector));
+    vector->x = x;
+    vector->y = y;
+    return vector;
+}
+
+void vector_release(Vector vector) {
+    free(vector);
+}
+
+int vector_equals(Vector vector1, Vector vector2) {
+    return (double_equals(vector1->x, vector2->x) &&
+            double_equals(vector1->y, vector2->y));
+}
+
+Vector vector_dup(Vector vector) {
+    Vector dup = memalloc(sizeof(*dup));
+    dup->x = vector->x;
+    dup->y = vector->y;
+    return dup;
+}
+
+char *vector_to_str(Vector vector, int decimal_positions) {
+    List str_list = list_new();
+    list_append(str_list, str_dup("<"));
+    list_append(str_list, double_to_str(vector->x, decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(vector->y, decimal_positions));
+    list_append(str_list, str_dup(">"));
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
+}
+
+Vector vector_from_str(char *string) {
+    List str_list = str_split(string, ", ");
+    char *str_x = str_substr(list_at(str_list, 0), 1,
+                             strlen(list_at(str_list, 0)) - 1);
+    char *str_y = str_substr(list_at(str_list, 1), 0,
+                             strlen(list_at(str_list, 1)) - 1);
+    Vector vector = vector_new(atof(str_x), atof(str_y));
+    list_full_release(str_list, free);
+    free(str_x);
+    free(str_y);
+    return vector;
+}
+
+void vector_rotate(Vector vector, double deg) {
+    double rad = deg_to_rad(deg);
+    double vector_x = vector->x;
+    double vector_y = vector->y;
+    vector->x = vector_x * cos(rad) - vector_y * sin(rad);
+    vector->y = vector_x * sin(rad) + vector_y * cos(rad);
+}
+
 Point point_new(double x, double y) {
     Point point = memalloc(sizeof(*point));
     point->w = 1;
@@ -47,13 +103,17 @@ char *point_to_str(Point point, int decimal_positions) {
     list_append(str_list,
                 double_to_str(point->y / point->w, decimal_positions));
     list_append(str_list, str_dup(")"));
-    return str_join(str_list, "");
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
 }
 
 Point point_from_str(char *string) {
     List str_list = str_split(string, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 1, strlen(list_at(str_list, 0)) - 1);
-    char *str_y = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 1);
+    char *str_x = str_substr(list_at(str_list, 0), 1,
+                             strlen(list_at(str_list, 0)) - 1);
+    char *str_y = str_substr(list_at(str_list, 1), 0,
+                             strlen(list_at(str_list, 1)) - 1);
     Point point = point_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -121,21 +181,25 @@ Line line_dup(Line line) {
 
 char *line_to_str(Line line, int decimal_positions) {
     List str_list = list_new();
-    list_append(str_list, str_dup("<"));
+    list_append(str_list, str_dup("<<"));
     list_append(str_list, double_to_str(line->w, decimal_positions));
     list_append(str_list, str_dup(", "));
     list_append(str_list, double_to_str(line->x, decimal_positions));
     list_append(str_list, str_dup(", "));
     list_append(str_list, double_to_str(line->y, decimal_positions));
-    list_append(str_list, str_dup(">"));
-    return str_join(str_list, "");
+    list_append(str_list, str_dup(">>"));
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
 }
 
 Line line_from_str(char *string) {
     List str_list = str_split(string, ", ");
-    char *str_w = str_substr(list_at(str_list, 0), 1, strlen(list_at(str_list, 0)) - 1);
+    char *str_w = str_substr(list_at(str_list, 0), 2,
+                             strlen(list_at(str_list, 0)) - 2);
     char *str_x = str_dup(list_at(str_list, 1));
-    char *str_y = str_substr(list_at(str_list, 2), 0, strlen(list_at(str_list, 2)) - 1);
+    char *str_y = str_substr(list_at(str_list, 2), 0,
+                             strlen(list_at(str_list, 2)) - 2);
     Line line = memalloc(sizeof(*line));
     line->w = atof(str_w);
     line->x = atof(str_x);

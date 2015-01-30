@@ -15,6 +15,93 @@ static void test_deg_to_rad_1() {
     g_assert(double_equals(deg_to_rad(540), M_PI));
 }
 
+static void test_vector_new_1() {
+    Vector vector = vector_new(2, 3);
+    g_assert(vector != NULL);
+    g_assert(double_equals(vector->x, 2));
+    g_assert(double_equals(vector->y, 3));
+    vector_release(vector);
+}
+
+static void test_vector_release_1() {
+    Vector vector = vector_new(2, 3);
+    vector_release(vector);
+}
+
+static void test_vector_equals_1() {
+    Vector vector1 = vector_new(1, 1);
+    Vector vector2 = vector_new(1, 1);
+    g_assert_cmpint(vector_equals(vector1, vector2), ==, 1);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_equals_2() {
+    Vector vector1 = vector_new(1, 1);
+    Vector vector2 = vector_new(2, 2);
+    g_assert_cmpint(vector_equals(vector1, vector2), ==, 0);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_dup_1() {
+    Vector vector1 = vector_new(2, 3);
+    Vector vector2 = vector_dup(vector1);
+    g_assert(vector1 != vector2);
+    g_assert(double_equals(vector1->x, vector2->x));
+    g_assert(double_equals(vector1->y, vector2->y));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_to_str_1() {
+    Vector vector = vector_new(1.25, 2);
+    char *str = vector_to_str(vector, 2);
+    g_assert_cmpstr(str, ==, "<1.25, 2.00>");
+    free(str);
+    vector_release(vector);
+}
+
+static void test_vector_from_str_1() {
+    Vector vector1 = vector_from_str("<1.25, 2.00>");
+    Vector vector2 = vector_new(1.25, 2.00);
+    g_assert(vector_equals(vector1, vector2));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_rotate_1() {
+    Vector vector = vector_new(1, 0);
+    vector_rotate(vector, 90);
+    g_assert(double_equals(vector->x, 0));
+    g_assert(double_equals(vector->y, 1));
+    vector_release(vector);
+}
+
+static void test_vector_rotate_2() {
+    Vector vector = vector_new(0, 1);
+    vector_rotate(vector, 90);
+    g_assert(double_equals(vector->x, -1));
+    g_assert(double_equals(vector->y, 0));
+    vector_release(vector);
+}
+
+static void test_vector_rotate_3() {
+    Vector vector = vector_new(-1, 0);
+    vector_rotate(vector, 90);
+    g_assert(double_equals(vector->x, 0));
+    g_assert(double_equals(vector->y, -1));
+    vector_release(vector);
+}
+
+static void test_vector_rotate_4() {
+    Vector vector = vector_new(0, -1);
+    vector_rotate(vector, 90);
+    g_assert(double_equals(vector->x, 1));
+    g_assert(double_equals(vector->y, 0));
+    vector_release(vector);
+}
+
 static void test_point_new_1() {
     Point point = point_new(2, 3);
     g_assert(point != NULL);
@@ -32,7 +119,7 @@ static void test_point_release_1() {
 static void test_point_equals_1() {
     Point point1 = point_new(1, 1);
     Point point2 = point_new(1, 1);
-    g_assert(point_equals(point1, point2));
+    g_assert_cmpint(point_equals(point1, point2), ==, 1);
     point_release(point1);
     point_release(point2);
 }
@@ -40,7 +127,7 @@ static void test_point_equals_1() {
 static void test_point_equals_2() {
     Point point1 = point_new(1, 1);
     Point point2 = point_new(2, 2);
-    g_assert_false(point_equals(point1, point2));
+    g_assert_cmpint(point_equals(point1, point2), ==, 0);
     point_release(point1);
     point_release(point2);
 }
@@ -50,7 +137,7 @@ static void test_point_equals_3() {
     Point point2 = point_new(2, 2);
     point1->w = 1;
     point2->w = 2;
-    g_assert(point_equals(point1, point2));
+    g_assert_cmpint(point_equals(point1, point2), ==, 1);
     point_release(point1);
     point_release(point2);
 }
@@ -266,7 +353,7 @@ static void test_line_to_str_1() {
     Point point2 = point_new(1, 1);
     Line line = line_new(point1, point2);
     char *str = line_to_str(line, 2);
-    g_assert_cmpstr(str, ==, "<0.00, -1.00, 1.00>");
+    g_assert_cmpstr(str, ==, "<<0.00, -1.00, 1.00>>");
     free(str);
     point_release(point1);
     point_release(point2);
@@ -277,7 +364,7 @@ static void test_line_from_str_1() {
     Point point1 = point_new(0, 0);
     Point point2 = point_new(1, 1);
     Line line1 = line_new(point1, point2);
-    Line line2 = line_from_str("<0.00, -1.00, 1.00>");
+    Line line2 = line_from_str("<<0.00, -1.00, 1.00>>");
     g_assert(line_equals(line1, line2));
     point_release(point1);
     point_release(point2);
@@ -632,6 +719,17 @@ static void test_point_is_in_triangle_4() {
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
+    g_test_add_func("/gc/vector_new", test_vector_new_1);
+    g_test_add_func("/gc/vector_release", test_vector_release_1);
+    g_test_add_func("/gc/vector_equals", test_vector_equals_1);
+    g_test_add_func("/gc/vector_equals", test_vector_equals_2);
+    g_test_add_func("/gc/vector_dup", test_vector_dup_1);
+    g_test_add_func("/gc/vector_to_str", test_vector_to_str_1);
+    g_test_add_func("/gc/vector_from_str", test_vector_from_str_1);
+    g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
+    g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
+    g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);
+    g_test_add_func("/gc/vector_rotate", test_vector_rotate_4);
     g_test_add_func("/gc/point_new", test_point_new_1);
     g_test_add_func("/gc/point_release", test_point_release_1);
     g_test_add_func("/gc/point_equals", test_point_equals_1);
