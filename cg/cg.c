@@ -38,11 +38,11 @@ Vector vector_dup(Vector vector) {
 
 char *vector_to_str(Vector vector, int decimal_positions) {
     List str_list = list_new();
-    list_append(str_list, str_dup("<"));
+    list_append(str_list, str_dup("<< Vector: "));
     list_append(str_list, double_to_str(vector->x, decimal_positions));
     list_append(str_list, str_dup(", "));
     list_append(str_list, double_to_str(vector->y, decimal_positions));
-    list_append(str_list, str_dup(">"));
+    list_append(str_list, str_dup(" >>"));
     char *str = str_join(str_list, "");
     list_full_release(str_list, free);
     return str;
@@ -50,10 +50,10 @@ char *vector_to_str(Vector vector, int decimal_positions) {
 
 Vector vector_from_str(char *string) {
     List str_list = str_split(string, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 1,
-                             strlen(list_at(str_list, 0)) - 1);
+    char *str_x = str_substr(list_at(str_list, 0), 11,
+                             strlen(list_at(str_list, 0)) - 11);
     char *str_y = str_substr(list_at(str_list, 1), 0,
-                             strlen(list_at(str_list, 1)) - 1);
+                             strlen(list_at(str_list, 1)) - 3);
     Vector vector = vector_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -104,13 +104,13 @@ Point point_dup(Point point) {
 
 char *point_to_str(Point point, int decimal_positions) {
     List str_list = list_new();
-    list_append(str_list, str_dup("("));
+    list_append(str_list, str_dup("<< Point: "));
     list_append(str_list,
                 double_to_str(point->x / point->w, decimal_positions));
     list_append(str_list, str_dup(", "));
     list_append(str_list,
                 double_to_str(point->y / point->w, decimal_positions));
-    list_append(str_list, str_dup(")"));
+    list_append(str_list, str_dup(" >>"));
     char *str = str_join(str_list, "");
     list_full_release(str_list, free);
     return str;
@@ -118,10 +118,10 @@ char *point_to_str(Point point, int decimal_positions) {
 
 Point point_from_str(char *string) {
     List str_list = str_split(string, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 1,
-                             strlen(list_at(str_list, 0)) - 1);
+    char *str_x = str_substr(list_at(str_list, 0), 10,
+                             strlen(list_at(str_list, 0)) - 10);
     char *str_y = str_substr(list_at(str_list, 1), 0,
-                             strlen(list_at(str_list, 1)) - 1);
+                             strlen(list_at(str_list, 1)) - 3);
     Point point = point_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -197,13 +197,13 @@ Line line_dup(Line line) {
 
 char *line_to_str(Line line, int decimal_positions) {
     List str_list = list_new();
-    list_append(str_list, str_dup("<<"));
+    list_append(str_list, str_dup("<< Line: "));
     list_append(str_list, double_to_str(line->w, decimal_positions));
     list_append(str_list, str_dup(", "));
     list_append(str_list, double_to_str(line->x, decimal_positions));
     list_append(str_list, str_dup(", "));
     list_append(str_list, double_to_str(line->y, decimal_positions));
-    list_append(str_list, str_dup(">>"));
+    list_append(str_list, str_dup(" >>"));
     char *str = str_join(str_list, "");
     list_full_release(str_list, free);
     return str;
@@ -211,11 +211,11 @@ char *line_to_str(Line line, int decimal_positions) {
 
 Line line_from_str(char *string) {
     List str_list = str_split(string, ", ");
-    char *str_w = str_substr(list_at(str_list, 0), 2,
-                             strlen(list_at(str_list, 0)) - 2);
+    char *str_w = str_substr(list_at(str_list, 0), 9,
+                             strlen(list_at(str_list, 0)) - 9);
     char *str_x = str_dup(list_at(str_list, 1));
     char *str_y = str_substr(list_at(str_list, 2), 0,
-                             strlen(list_at(str_list, 2)) - 2);
+                             strlen(list_at(str_list, 2)) - 3);
     Line line = memalloc(sizeof(*line));
     line->w = atof(str_w);
     line->x = atof(str_x);

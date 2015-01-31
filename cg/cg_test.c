@@ -57,13 +57,13 @@ static void test_vector_dup_1() {
 static void test_vector_to_str_1() {
     Vector vector = vector_new(1.25, 2);
     char *str = vector_to_str(vector, 2);
-    g_assert_cmpstr(str, ==, "<1.25, 2.00>");
+    g_assert_cmpstr(str, ==, "<< Vector: 1.25, 2.00 >>");
     free(str);
     vector_release(vector);
 }
 
 static void test_vector_from_str_1() {
-    Vector vector1 = vector_from_str("<1.25, 2.00>");
+    Vector vector1 = vector_from_str("<< Vector: 1.25, 2.00 >>");
     Vector vector2 = vector_new(1.25, 2.00);
     g_assert(vector_equals(vector1, vector2));
     vector_release(vector1);
@@ -168,13 +168,13 @@ static void test_point_dup_1() {
 static void test_point_to_str_1() {
     Point point = point_new(1.25, 2);
     char *str = point_to_str(point, 2);
-    g_assert_cmpstr(str, ==, "(1.25, 2.00)");
+    g_assert_cmpstr(str, ==, "<< Point: 1.25, 2.00 >>");
     free(str);
     point_release(point);
 }
 
 static void test_point_from_str_1() {
-    Point point1 = point_from_str("(1.25, 2.00)");
+    Point point1 = point_from_str("<< Point: 1.25, 2.00 >>");
     Point point2 = point_new(1.25, 2.00);
     g_assert(point_equals(point1, point2));
     point_release(point1);
@@ -406,7 +406,7 @@ static void test_line_to_str_1() {
     Point point2 = point_new(1, 1);
     Line line = line_new(point1, point2);
     char *str = line_to_str(line, 2);
-    g_assert_cmpstr(str, ==, "<<0.00, -1.00, 1.00>>");
+    g_assert_cmpstr(str, ==, "<< Line: 0.00, -1.00, 1.00 >>");
     free(str);
     point_release(point1);
     point_release(point2);
@@ -417,7 +417,7 @@ static void test_line_from_str_1() {
     Point point1 = point_new(0, 0);
     Point point2 = point_new(1, 1);
     Line line1 = line_new(point1, point2);
-    Line line2 = line_from_str("<<0.00, -1.00, 1.00>>");
+    Line line2 = line_from_str("<< Line: 0.00, -1.00, 1.00 >>");
     g_assert(line_equals(line1, line2));
     point_release(point1);
     point_release(point2);
@@ -695,6 +695,7 @@ static void test_circle_center_1() {
     Point center1 = circle_center(circle);
     Point center2 = point_new(1, 1);
     g_assert(point_equals(center1, center2));
+    g_assert(center1 != center2);
     point_release(center1);
     point_release(center2);
     circle_release(circle);
