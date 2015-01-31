@@ -61,6 +61,14 @@ Vector vector_from_str(char *string) {
     return vector;
 }
 
+double vector_x(Vector vector) {
+    return vector->x;
+}
+
+double vector_y(Vector vector) {
+    return vector->y;
+}
+
 void vector_rotate(Vector vector, double deg) {
     double rad = deg_to_rad(deg);
     double vector_x = vector->x;
@@ -119,6 +127,14 @@ Point point_from_str(char *string) {
     free(str_x);
     free(str_y);
     return point;
+}
+
+double point_x(Point point) {
+    return point->x / point->w;
+}
+
+double point_y(Point point) {
+    return point->y / point->w;
 }
 
 void point_translate(Point point, double x, double y) {
@@ -321,6 +337,22 @@ Circle circle_from_str(char *string) {
     free(str_y);
     free(str_radius);
     return circle;
+}
+
+Point circle_center(Circle circle) {
+    return point_dup(circle->center);
+}
+
+double circle_center_x(Circle circle) {
+    return circle->center->x / circle->center->w;
+}
+
+double circle_center_y(Circle circle) {
+    return circle->center->y / circle->center->w;
+}
+
+double circle_radius(Circle circle) {
+    return circle->radius;
 }
 
 void circle_translate(Circle circle, double x, double y) {

@@ -70,6 +70,18 @@ static void test_vector_from_str_1() {
     vector_release(vector2);
 }
 
+static void test_vector_x_1() {
+    Vector vector = vector_new(1, 2);
+    g_assert(double_equals(vector_x(vector), 1));
+    vector_release(vector);
+}
+
+static void test_vector_y_1() {
+    Vector vector = vector_new(1, 2);
+    g_assert(double_equals(vector_y(vector), 2));
+    vector_release(vector);
+}
+
 static void test_vector_rotate_1() {
     Vector vector = vector_new(1, 0);
     vector_rotate(vector, 90);
@@ -167,6 +179,34 @@ static void test_point_from_str_1() {
     g_assert(point_equals(point1, point2));
     point_release(point1);
     point_release(point2);
+}
+
+static void test_point_x_1() {
+    Point point = point_new(1, 2);
+    g_assert(double_equals(point_x(point), 1));
+    point_release(point);
+}
+
+static void test_point_x_2() {
+    Point point = point_new(1, 2);
+    point->w *= 2;
+    point->x *= 2;
+    g_assert(double_equals(point_x(point), 1));
+    point_release(point);
+}
+
+static void test_point_y_1() {
+    Point point = point_new(1, 2);
+    g_assert(double_equals(point_y(point), 2));
+    point_release(point);
+}
+
+static void test_point_y_2() {
+    Point point = point_new(1, 2);
+    point->w *= 2;
+    point->y *= 2;
+    g_assert(double_equals(point_y(point), 2));
+    point_release(point);
 }
 
 static void test_point_translate_1() {
@@ -650,6 +690,34 @@ static void test_circle_from_str_1() {
     circle_release(circle2);
 }
 
+static void test_circle_center_1() {
+    Circle circle = circle_new(1, 1, 1);
+    Point center1 = circle_center(circle);
+    Point center2 = point_new(1, 1);
+    g_assert(point_equals(center1, center2));
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle);
+}
+
+static void test_circle_center_x_1() {
+    Circle circle = circle_new(1, 2, 3);
+    g_assert(double_equals(circle_center_x(circle), 1));
+    circle_release(circle);
+}
+
+static void test_circle_center_y_1() {
+    Circle circle = circle_new(1, 2, 3);
+    g_assert(double_equals(circle_center_y(circle), 2));
+    circle_release(circle);
+}
+
+static void test_circle_radius_1() {
+    Circle circle = circle_new(1, 2, 3);
+    g_assert(double_equals(circle_radius(circle), 3));
+    circle_release(circle);
+}
+
 static void test_circle_translate_1() {
     Circle circle = circle_new(1, 1, 1);
     Point center = point_new(2, 2);
@@ -846,6 +914,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_dup", test_vector_dup_1);
     g_test_add_func("/gc/vector_to_str", test_vector_to_str_1);
     g_test_add_func("/gc/vector_from_str", test_vector_from_str_1);
+    g_test_add_func("/gc/vector_x", test_vector_x_1);
+    g_test_add_func("/gc/vector_y", test_vector_y_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);
@@ -858,6 +928,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_dup", test_point_dup_1);
     g_test_add_func("/gc/point_to_str", test_point_to_str_1);
     g_test_add_func("/gc/point_from_str", test_point_from_str_1);
+    g_test_add_func("/gc/point_x", test_point_x_1);
+    g_test_add_func("/gc/point_x", test_point_x_2);
+    g_test_add_func("/gc/point_y", test_point_y_1);
+    g_test_add_func("/gc/point_y", test_point_y_2);
     g_test_add_func("/gc/point_translate", test_point_translate_1);
     g_test_add_func("/gc/point_translate", test_point_translate_2);
     g_test_add_func("/gc/point_rotate", test_point_rotate_1);
@@ -904,6 +978,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_dup", test_circle_dup_1);
     g_test_add_func("/gc/circle_to_str", test_circle_to_str_1);
     g_test_add_func("/gc/circle_from_str", test_circle_from_str_1);
+    g_test_add_func("/gc/circle_center", test_circle_center_1);
+    g_test_add_func("/gc/circle_center_x", test_circle_center_x_1);
+    g_test_add_func("/gc/circle_center_y", test_circle_center_y_1);
+    g_test_add_func("/gc/circle_radius", test_circle_radius_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_2);

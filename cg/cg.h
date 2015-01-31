@@ -55,6 +55,12 @@ char *vector_to_str(Vector vector, int decimal_positions);
 /* Return vector from its string representation. */
 Vector vector_from_str(char *string);
 
+/* Return vector x component. */
+double vector_x(Vector vector);
+
+/* Return vector y component. */
+double vector_y(Vector vector);
+
 /* Rotate the vector by the specified degrees in counter-clockwise orientation. */
 void vector_rotate(Vector vector, double deg);
 
@@ -76,6 +82,12 @@ char *point_to_str(Point point, int decimal_positions);
 
 /* Return point from its string representation. */
 Point point_from_str(char *string);
+
+/* Return point x component. */
+double point_x(Point point);
+
+/* Return point y component. */
+double point_y(Point point);
 
 /* Translate the point by the vector specified by x and y. */
 void point_translate(Point point, double x, double y);
@@ -147,6 +159,18 @@ char *circle_to_str(Circle circle, int decimal_positions);
 
 /* Return circle from its string representation. */
 Circle circle_from_str(char *string);
+
+/* Return circle center point. */
+Point circle_center(Circle circle);
+
+/* Return circle center point x component. */
+double circle_center_x(Circle circle);
+
+/* Return circle center point y component. */
+double circle_center_y(Circle circle);
+
+/* Return circle radius. */
+double circle_radius(Circle circle);
 
 /* Translate the point by the vector specified by x and y. */
 void circle_translate(Circle circle, double x, double y);
