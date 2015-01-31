@@ -224,6 +224,19 @@ static void test_point_rotate_4() {
     point_release(point);
 }
 
+static void test_point_rotate_5() {
+    Point point1 = point_new(1, 0);
+    Point point2 = point_new(1, 0);
+    point2->w *= 2;
+    point2->x *= 2;
+    point2->y *= 2;
+    point_rotate(point1, 90);
+    point_rotate(point2, 90);
+    g_assert(point_equals(point1, point2));
+    point_release(point1);
+    point_release(point2);
+}
+
 static void test_midpoint_between_points_1() {
     Point point1 = point_new(0, 0);
     Point point2= point_new(2, 2);
@@ -744,6 +757,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_rotate", test_point_rotate_2);
     g_test_add_func("/gc/point_rotate", test_point_rotate_3);
     g_test_add_func("/gc/point_rotate", test_point_rotate_4);
+    g_test_add_func("/gc/point_rotate", test_point_rotate_5);
     g_test_add_func("/gc/midpoint_between_points", test_midpoint_between_points_1);
     g_test_add_func("/gc/point_is_infinite", test_point_is_infinite_1);
     g_test_add_func("/gc/point_is_infinite", test_point_is_infinite_2);
