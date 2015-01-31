@@ -12,14 +12,20 @@ struct Vector {
     double x, y;
 };
 
+typedef struct Point *Point;
+struct Point {
+    double w, x, y;
+};
+
 typedef struct Line *Line;
 struct Line {
     double w, x, y;
 };
 
-typedef struct Point *Point;
-struct Point {
-    double w, x, y;
+typedef struct Circle *Circle;
+struct Circle {
+    Point center;
+    double radius;
 };
 
 typedef struct Triangle *Triangle;
@@ -122,6 +128,32 @@ double point_distance_to_line(Point point, Line line);
 
 /* Return the angle in radians between two lines. */
 double angle_between_lines(Line line1, Line line2);
+
+/* Return a new circle defined by its center point and radius. */
+Circle circle_new(double x, double y, double radius);
+
+/* Free the memory used by circle. */
+void circle_release(Circle circle);
+
+/* Return 1 if the circles are equal. 0, otherwise. */
+int circle_equals(Circle circle1, Circle circle2);
+
+/* Return the duplicated circle. */
+Circle circle_dup(Circle circle);
+
+/* Return the string representation of the circle with the specified number of
+ * decimal positions. */
+char *circle_to_str(Circle circle, int decimal_positions);
+
+/* Return circle from its string representation. */
+Circle circle_from_str(char *string);
+
+/* Translate the point by the vector specified by x and y. */
+void circle_translate(Circle circle, double x, double y);
+
+/* Return 1 if the point is inside the circle. 2, if on its frontier.
+ * 0, otherwise. */
+int point_is_in_circle(Point point, Circle circle);
 
 /* Return a new triangle defined by 3 points. */
 Triangle triangle_new(Point a, Point b, Point c);

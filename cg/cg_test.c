@@ -577,6 +577,113 @@ static void test_angle_between_lines_5() {
     point_release(point4);
 }
 
+static void test_circle_new_1() {
+    Circle circle = circle_new(1, 1, 1);
+    Point center = point_new(1, 1);
+    g_assert(point_equals(circle->center, center));
+    g_assert(double_equals(circle->radius, 1));
+    point_release(center);
+    circle_release(circle);
+}
+
+static void test_circle_release_1() {
+    Circle circle = circle_new(1, 1, 1);
+    circle_release(circle);
+}
+
+static void test_circle_equals_1() {
+    Circle circle1 = circle_new(1, 1, 1);
+    Circle circle2 = circle_new(1, 1, 1);
+    g_assert_cmpint(circle_equals(circle1, circle2), ==, 1);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_equals_2() {
+    Circle circle1 = circle_new(1, 1, 1);
+    Circle circle2 = circle_new(1, 1, 2);
+    g_assert_cmpint(circle_equals(circle1, circle2), ==, 0);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_equals_3() {
+    Circle circle1 = circle_new(1, 1, 1);
+    Circle circle2 = circle_new(1, 2, 1);
+    g_assert_cmpint(circle_equals(circle1, circle2), ==, 0);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_equals_4() {
+    Circle circle1 = circle_new(1, 1, 1);
+    Circle circle2 = circle_new(2, 1, 1);
+    g_assert_cmpint(circle_equals(circle1, circle2), ==, 0);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_dup_1() {
+    Circle circle1 = circle_new(1, 1, 1);
+    Circle circle2 = circle_dup(circle1);
+    Point center = point_new(1, 1);
+    g_assert(point_equals(circle2->center, center));
+    g_assert(double_equals(circle2->radius, 1));
+    point_release(center);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_to_str_1() {
+    Circle circle = circle_new(1, 2, 3);
+    char *str = circle_to_str(circle, 2);
+    g_assert_cmpstr(str, ==, "<< Circle: 1.00, 2.00, 3.00 >>");
+    free(str);
+    circle_release(circle);
+}
+
+static void test_circle_from_str_1() {
+    Circle circle1 = circle_new(1, 2, 3);
+    Circle circle2 = circle_from_str("<< Circle: 1.00, 2.00, 3.00 >>");
+    g_assert(circle_equals(circle1, circle2));
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_translate_1() {
+    Circle circle = circle_new(1, 1, 1);
+    Point center = point_new(2, 2);
+    circle_translate(circle, 1, 1);
+    g_assert(point_equals(circle->center, center));
+    g_assert(double_equals(circle->radius, 1));
+    point_release(center);
+    circle_release(circle);
+}
+
+static void test_point_is_in_circle_1() {
+    Circle circle = circle_new(1, 1, 1);
+    Point point = point_new(2, 2);
+    g_assert_cmpint(point_is_in_circle(point, circle), ==, 0);
+    point_release(point);
+    circle_release(circle);
+}
+
+static void test_point_is_in_circle_2() {
+    Circle circle = circle_new(1, 1, 1);
+    Point point = point_new(1, 1);
+    g_assert_cmpint(point_is_in_circle(point, circle), ==, 1);
+    point_release(point);
+    circle_release(circle);
+}
+
+static void test_point_is_in_circle_3() {
+    Circle circle = circle_new(1, 1, 1);
+    Point point = point_new(0, 1);
+    g_assert_cmpint(point_is_in_circle(point, circle), ==, 2);
+    point_release(point);
+    circle_release(circle);
+}
+
 static void test_triangle_new_1() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 0);
@@ -788,6 +895,19 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_3);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_4);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_5);
+    g_test_add_func("/gc/circle_new", test_circle_new_1);
+    g_test_add_func("/gc/circle_release", test_circle_release_1);
+    g_test_add_func("/gc/circle_equals", test_circle_equals_1);
+    g_test_add_func("/gc/circle_equals", test_circle_equals_2);
+    g_test_add_func("/gc/circle_equals", test_circle_equals_3);
+    g_test_add_func("/gc/circle_equals", test_circle_equals_4);
+    g_test_add_func("/gc/circle_dup", test_circle_dup_1);
+    g_test_add_func("/gc/circle_to_str", test_circle_to_str_1);
+    g_test_add_func("/gc/circle_from_str", test_circle_from_str_1);
+    g_test_add_func("/gc/circle_translate", test_circle_translate_1);
+    g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
+    g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_2);
+    g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_3);
     g_test_add_func("/gc/triangle_new", test_triangle_new_1);
     g_test_add_func("/gc/triangle_release", test_triangle_release_1);
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);

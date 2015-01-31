@@ -264,6 +264,85 @@ double angle_between_lines(Line line1, Line line2) {
     return acos(cos);
 }
 
+Circle circle_new(double x, double y, double radius) {
+    Circle circle = memalloc(sizeof(*circle));
+    circle->center = point_new(x, y);
+    circle->radius = radius;
+    return circle;
+}
+
+void circle_release(Circle circle) {
+    point_release(circle->center);
+    free(circle);
+}
+
+int circle_equals(Circle circle1, Circle circle2) {
+    if (point_equals(circle1->center, circle2->center) &&
+        double_equals(circle1->radius, circle2->radius))
+        return 1;
+    return 0;
+}
+
+Circle circle_dup(Circle circle) {
+    Circle dup = memalloc(sizeof(*dup));
+    dup->center = point_dup(circle->center);
+    dup->radius = circle->radius;
+    return dup;
+}
+
+char *circle_to_str(Circle circle, int decimal_positions) {
+    List str_list = list_new();
+    list_append(str_list, str_dup("<< Circle: "));
+    list_append(str_list,
+                double_to_str(circle->center->x / circle->center->w,
+                              decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list,
+                double_to_str(circle->center->y / circle->center->w,
+                              decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(circle->radius, decimal_positions));
+    list_append(str_list, str_dup(" >>"));
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
+}
+
+Circle circle_from_str(char *string) {
+    List str_list = str_split(string, ", ");
+    char *str_x = str_substr(list_at(str_list, 0), 11,
+                             strlen(list_at(str_list, 0)) - 11);
+    char *str_y = str_dup(list_at(str_list, 1));
+    char *str_radius = str_substr(list_at(str_list, 2), 0,
+                                  strlen(list_at(str_list, 1)) - 3);
+    Circle circle = circle_new(atof(str_x), atof(str_y), atof(str_radius));
+    list_full_release(str_list, free);
+    free(str_x);
+    free(str_y);
+    free(str_radius);
+    return circle;
+}
+
+void circle_translate(Circle circle, double x, double y) {
+    point_translate(circle->center, x, y);
+}
+
+int point_is_in_circle(Point point, Circle circle) {
+    double point_x = point->x / point->w;
+    double point_y = point->y / point->w;
+    double circle_center_x = circle->center->x / circle->center->w;
+    double circle_center_y = circle->center->y / circle->center->w;
+    double squared_dist = (point_x - circle_center_x) *
+                          (point_x - circle_center_x) +
+                          (point_y - circle_center_y) *
+                          (point_y - circle_center_y);
+    if (double_lt(squared_dist, circle->radius * circle->radius))
+        return 1;
+    if (double_equals(squared_dist, circle->radius * circle->radius))
+        return 2;
+    return 0;
+}
+
 Triangle triangle_new(Point a, Point b, Point c) {
     Triangle triangle = memalloc(sizeof(*triangle));
     triangle->a = point_dup(a);
