@@ -245,6 +245,17 @@ static void test_point_translate_2() {
     point_release(point);
 }
 
+static void test_point_translate_3() {
+    Vector vector = vector_new(0, 0);
+    Point point = point_new(1, 1);
+    point_translate(point, vector);
+    g_assert(double_equals(point->w, 1));
+    g_assert(double_equals(point->x, 1));
+    g_assert(double_equals(point->y, 1));
+    vector_release(vector);
+    point_release(point);
+}
+
 static void test_point_rotate_around_1() {
     Point point = point_new(1, 0);
     Point center = point_new(0, 0);
@@ -838,6 +849,20 @@ static void test_circle_translate_1() {
     circle_release(circle);
 }
 
+static void test_circle_translate_2() {
+    Point center = point_new(1, 1);
+    Point new_center = point_new(1, 1);
+    Vector vector = vector_new(0, 0);
+    Circle circle = circle_new(center, 1);
+    circle_translate(circle, vector);
+    g_assert(point_equals(circle->center, new_center));
+    g_assert(double_equals(circle->radius, 1));
+    point_release(center);
+    point_release(new_center);
+    vector_release(vector);
+    circle_release(circle);
+}
+
 static void test_point_is_in_circle_1() {
     Point point = point_new(2, 2);
     Point center = point_new(1, 1);
@@ -949,6 +974,26 @@ static void test_triangle_translate_1() {
     g_assert(double_equals(point_y(b) + 1, point_y(triangle->b)));
     g_assert(double_equals(point_x(c) + 1, point_x(triangle->c)));
     g_assert(double_equals(point_y(c) + 1, point_y(triangle->c)));
+    vector_release(vector);
+    triangle_release(triangle);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_triangle_translate_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 0);
+    Point c = point_new(0, 1);
+    Triangle triangle = triangle_new(a, b, c);
+    Vector vector = vector_new(0, 0);
+    triangle_translate(triangle, vector);
+    g_assert(double_equals(point_x(a), point_x(triangle->a)));
+    g_assert(double_equals(point_y(a), point_y(triangle->a)));
+    g_assert(double_equals(point_x(b), point_x(triangle->b)));
+    g_assert(double_equals(point_y(b), point_y(triangle->b)));
+    g_assert(double_equals(point_x(c), point_x(triangle->c)));
+    g_assert(double_equals(point_y(c), point_y(triangle->c)));
     vector_release(vector);
     triangle_release(triangle);
     point_release(a);
@@ -1274,6 +1319,21 @@ static void test_polygon_translate_1() {
     point_release(lower_left2);
 }
 
+static void test_polygon_translate_2() {
+    Point lower_left1 = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left1, 1);
+    Point lower_left2 = point_new(0, 0);
+    Polygon polygon2 = polygon_new_square(lower_left2, 1);
+    Vector vector = vector_new(0, 0);
+    polygon_translate(polygon1, vector);
+    g_assert(polygon_equals(polygon1, polygon2));
+    vector_release(vector);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+    point_release(lower_left1);
+    point_release(lower_left2);
+}
+
 static void test_polygon_rotate_around_1() {
     Point center = point_new(1, 1);
     Point lower_left1 = point_new(0, 0);
@@ -1438,6 +1498,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_y", test_point_y_2);
     g_test_add_func("/gc/point_translate", test_point_translate_1);
     g_test_add_func("/gc/point_translate", test_point_translate_2);
+    g_test_add_func("/gc/point_translate", test_point_translate_3);
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_1);
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_2);
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_3);
@@ -1491,6 +1552,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_center_y", test_circle_center_y_1);
     g_test_add_func("/gc/circle_radius", test_circle_radius_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
+    g_test_add_func("/gc/circle_translate", test_circle_translate_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_3);
@@ -1499,6 +1561,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);
     g_test_add_func("/gc/triangle_points", test_triangle_points_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_1);
+    g_test_add_func("/gc/triangle_translate", test_triangle_translate_2);
     g_test_add_func("/gc/triangle_rotate_around", test_triangle_rotate_around_1);
     g_test_add_func("/gc/triangle_rotate_around", test_triangle_rotate_around_2);
     g_test_add_func("/gc/triangle_rotate_around", test_triangle_rotate_around_3);
@@ -1521,6 +1584,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_dup", test_polygon_dup_1);
     g_test_add_func("/gc/polygon_points", test_polygon_points_1);
     g_test_add_func("/gc/polygon_translate", test_polygon_translate_1);
+    g_test_add_func("/gc/polygon_translate", test_polygon_translate_2);
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_1);
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_2);
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_3);
