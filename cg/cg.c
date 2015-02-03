@@ -335,6 +335,117 @@ double angle_between_lines(Line line1, Line line2) {
     return double_gt(rad, M_PI / 2) ? M_PI - rad : rad;
 }
 
+Segment segment_new(Point a, Point b) {
+    Segment segment = memalloc(sizeof(*segment));
+    segment->a = point_dup(a);
+    segment->b = point_dup(b);
+    return segment;
+}
+
+void segment_release(Segment segment) {
+    point_release(segment->a);
+    point_release(segment->b);
+    free(segment);
+}
+
+int segment_equals(Segment segment1, Segment segment2) {
+    return (point_equals(segment1->a, segment2->a) &&
+            point_equals(segment1->b, segment2->b)) ? 1 : 0;
+}
+
+Segment segment_dup(Segment segment) {
+    return segment_new(segment->a, segment->b);
+}
+
+char *segment_to_str(Segment segment, int decimal_positions) {
+    List str_list = list_new();
+    list_append(str_list, str_dup("<< Segment: ("));
+    list_append(str_list, double_to_str(point_x(segment->a), decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(point_y(segment->a), decimal_positions));
+    list_append(str_list, str_dup("); ("));
+    list_append(str_list, double_to_str(point_x(segment->b), decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(point_y(segment->b), decimal_positions));
+    list_append(str_list, str_dup(") >>"));
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
+}
+
+Segment segment_from_str(char *string) {
+    List str_list = str_split(string, "; ");
+    char *point_a = str_substr(list_at(str_list, 0), 12,
+                               strlen(list_at(str_list, 0)) - 12);
+    char *point_b = str_substr(list_at(str_list, 1), 0,
+                               strlen(list_at(str_list, 1)) - 3);
+    List a_list = str_split(point_a, ", ");
+    List b_list = str_split(point_b, ", ");
+    char *a_x = str_substr(list_at(a_list, 0), 1, strlen(list_at(a_list, 0)) - 1);
+    char *a_y = str_substr(list_at(a_list, 1), 0, strlen(list_at(a_list, 1)) - 1);
+    char *b_x = str_substr(list_at(b_list, 0), 1, strlen(list_at(b_list, 0)) - 1);
+    char *b_y = str_substr(list_at(b_list, 1), 0, strlen(list_at(b_list, 1)) - 1);
+    Point a = point_new(atof(a_x), atof(a_y));
+    Point b = point_new(atof(b_x), atof(b_y));
+    Segment segment = segment_new(a, b);
+    point_release(a);
+    point_release(b);
+    list_full_release(str_list, free);
+    free(point_a);
+    free(point_b);
+    list_full_release(a_list, free);
+    list_full_release(b_list, free);
+    free(a_x);
+    free(a_y);
+    free(b_x);
+    free(b_y);
+    return segment;
+}
+
+List segment_points(Segment segment) {
+    List points = list_new();
+    list_append(points, point_dup(segment->a));
+    list_append(points, point_dup(segment->b));
+    return points;
+}
+
+Vector segment_vector(Segment segment) {
+    return vector_from_point_to_point(segment->a, segment->b);
+}
+
+double segment_length(Segment segment) {
+    double x_dist = point_x(segment->a) - point_x(segment->b);
+    double y_dist = point_y(segment->a) - point_y(segment->b);
+    return sqrt(x_dist * x_dist + y_dist * y_dist);
+}
+
+void segment_translate(Segment segment, Vector vector) {
+    point_translate(segment->a, vector);
+    point_translate(segment->b, vector);
+}
+
+void segment_rotate_around(Segment segment, Point center, double deg) {
+    point_rotate_around(segment->a, center, deg);
+    point_rotate_around(segment->b, center, deg);
+}
+
+int point_is_in_segment(Point point, Segment segment) {
+    int ret = 0;
+    Line line = line_new(segment->a, segment->b);
+    double min_x = (double_lt(point_x(segment->a), point_x(segment->b))) ?
+                   point_x(segment->a) : point_x(segment->b);
+    double max_x = (double_gt(point_x(segment->a), point_x(segment->b))) ? 
+                   point_x(segment->a) : point_x(segment->b);
+    if (point_is_in_line(point, line) &&
+        (double_gt(point_x(point), min_x) ||
+         double_equals(point_x(point), min_x)) &&
+        (double_lt(point_x(point), max_x) ||
+         double_equals(point_x(point), max_x)))
+        ret = 1;
+    line_release(line);
+    return ret;
+}
+
 Circle circle_new(Point center, double radius) {
     Circle circle = memalloc(sizeof(*circle));
     circle->center = point_dup(center);

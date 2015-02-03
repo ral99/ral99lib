@@ -23,6 +23,11 @@ struct Line {
     double w, x, y;
 };
 
+typedef struct Segment *Segment;
+struct Segment {
+    Point a, b;
+};
+
 typedef struct Circle *Circle;
 struct Circle {
     Point center;
@@ -175,6 +180,44 @@ double point_distance_to_line(Point point, Line line);
 /* Return the angle in radians between two lines in range [0, PI / 2]. */
 double angle_between_lines(Line line1, Line line2);
 
+/* Return a segment defined by two points. */
+Segment segment_new(Point a, Point b);
+
+/* Free the memory used by segment. */
+void segment_release(Segment segment);
+
+/* Return 1 if the segments are equal. 0, otherwise. */
+int segment_equals(Segment segment1, Segment segment2);
+
+/* Return the duplicated segment. */
+Segment segment_dup(Segment segment);
+
+/* Return the string representation of the segment with the specified number of
+ * decimal positions. */
+char *segment_to_str(Segment segment, int decimal_positions);
+
+/* Return segment from its string representation. */
+Segment segment_from_str(char *string);
+
+/* Return a list of two points that defines the segment. */
+List segment_points(Segment segment);
+
+/* Return the vector from segment point a to b. */
+Vector segment_vector(Segment segment);
+
+/* Return the segment length. */
+double segment_length(Segment segment);
+
+/* Translate the segment by the vector. */
+void segment_translate(Segment segment, Vector vector);
+
+/* Rotate the segment by the specified degrees in counter-clockwise
+ * orientation around a center point. */
+void segment_rotate_around(Segment segment, Point center, double deg);
+
+/* Return 1 if the point is in the segment. 0, otherwise. */
+int point_is_in_segment(Point point, Segment segment);
+
 /* Return a new circle defined by its center point and radius. */
 Circle circle_new(Point center, double radius);
 
@@ -206,7 +249,7 @@ double circle_center_y(Circle circle);
 /* Return circle radius. */
 double circle_radius(Circle circle);
 
-/* Translate the point by the vector specified by x and y. */
+/* Translate the point by the vector. */
 void circle_translate(Circle circle, Vector vector);
 
 /* Return 1 if the point is inside the circle. 0, otherwise. */

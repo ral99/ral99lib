@@ -920,6 +920,245 @@ static void test_angle_between_lines_7() {
     line_release(line2);
 }
 
+static void test_segment_new_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    g_assert(segment->a != a);
+    g_assert(segment->b != b);
+    g_assert(point_equals(segment->a, a));
+    g_assert(point_equals(segment->b, b));
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_release_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_equals_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point c = point_new(2, 2);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(a, b);
+    Segment segment3 = segment_new(b, a);
+    Segment segment4 = segment_new(a, c);
+    g_assert_cmpint(segment_equals(segment1, segment1), ==, 1);
+    g_assert_cmpint(segment_equals(segment1, segment2), ==, 1);
+    g_assert_cmpint(segment_equals(segment1, segment3), ==, 0);
+    g_assert_cmpint(segment_equals(segment1, segment4), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    segment_release(segment1);
+    segment_release(segment2);
+    segment_release(segment3);
+    segment_release(segment4);
+}
+
+static void test_segment_dup_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_dup(segment1);
+    g_assert(segment1 != segment2);
+    g_assert(point_equals(segment1->a, segment2->a));
+    g_assert(point_equals(segment1->b, segment2->b));
+    point_release(a);
+    point_release(b);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_to_str_1() {
+    Point a = point_new(1, 2);
+    Point b = point_new(3, 4);
+    Segment segment = segment_new(a, b);
+    char *str = segment_to_str(segment, 2);
+    g_assert_cmpstr(str, ==, "<< Segment: (1.00, 2.00); (3.00, 4.00) >>");
+    free(str);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_from_str_1() {
+    Point a = point_new(1, 2);
+    Point b = point_new(3, 4);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_from_str(
+            "<< Segment: (1.00, 2.00); (3.00, 4.00) >>"
+    );
+    g_assert(segment_equals(segment1, segment2));
+    point_release(a);
+    point_release(b);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_points_1() {
+    Point a = point_new(1, 2);
+    Point b = point_new(3, 4);
+    Segment segment = segment_new(a, b);
+    List points = segment_points(segment);
+    g_assert_cmpint(list_size(points), ==, 2);
+    g_assert(point_equals(list_at(points, 0), a));
+    g_assert(point_equals(list_at(points, 1), b));
+    list_full_release(points, (void (*)(void *)) point_release);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_vector_1() {
+    Point a = point_new(1, 2);
+    Point b = point_new(3, 4);
+    Segment segment = segment_new(a, b);
+    Vector vector1 = segment_vector(segment);
+    Vector vector2 = vector_from_point_to_point(a, b);
+    g_assert(vector_equals(vector1, vector2));
+    vector_release(vector1);
+    vector_release(vector2);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_length_1() {
+    Point a = point_new(3, 0);
+    Point b = point_new(0, 4);
+    Segment segment = segment_new(a, b);
+    g_assert(double_equals(segment_length(segment), 5));
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_translate_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point c = point_new(2, 2);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(b, c);
+    Vector vector = vector_new(1, 1);
+    segment_translate(segment1, vector);
+    g_assert(segment_equals(segment1, segment2));
+    vector_release(vector);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_translate_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(a, b);
+    Vector vector = vector_new(0, 0);
+    segment_translate(segment1, vector);
+    g_assert(segment_equals(segment1, segment2));
+    vector_release(vector);
+    point_release(a);
+    point_release(b);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_rotate_around_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point center = point_new(0.5, 0.5);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(a, b);
+    segment_rotate_around(segment1, center, 0);
+    g_assert(segment_equals(segment1, segment2));
+    point_release(a);
+    point_release(b);
+    point_release(center);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_rotate_around_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point c = point_new(1, 0);
+    Point d = point_new(0, 1);
+    Point center = point_new(0.5, 0.5);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(c, d);
+    segment_rotate_around(segment1, center, 90);
+    g_assert(segment_equals(segment1, segment2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(center);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_rotate_around_3() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point center = point_new(0.5, 0.5);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(b, a);
+    segment_rotate_around(segment1, center, 180);
+    g_assert(segment_equals(segment1, segment2));
+    point_release(a);
+    point_release(b);
+    point_release(center);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_rotate_around_4() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point c = point_new(2, 2);
+    Point center = point_new(1, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(c, b);
+    segment_rotate_around(segment1, center, 180);
+    g_assert(segment_equals(segment1, segment2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(center);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_point_is_in_segment_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Point c = point_new(0, 1);
+    Point d = point_new(0.5, 0.5);
+    Point e = point_new(2, 2);
+    Segment segment = segment_new(a, b);
+    g_assert_cmpint(point_is_in_segment(a, segment), ==, 1);
+    g_assert_cmpint(point_is_in_segment(b, segment), ==, 1);
+    g_assert_cmpint(point_is_in_segment(c, segment), ==, 0);
+    g_assert_cmpint(point_is_in_segment(d, segment), ==, 1);
+    g_assert_cmpint(point_is_in_segment(e, segment), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    segment_release(segment);
+}
+
 static void test_circle_new_1() {
     Point center = point_new(1, 1);
     Circle circle = circle_new(center, 1);
@@ -1814,6 +2053,22 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_5);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_6);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_7);
+    g_test_add_func("/gc/segment_new", test_segment_new_1);
+    g_test_add_func("/gc/segment_release", test_segment_release_1);
+    g_test_add_func("/gc/segment_equals", test_segment_equals_1);
+    g_test_add_func("/gc/segment_dup", test_segment_dup_1);
+    g_test_add_func("/gc/segment_to_str", test_segment_to_str_1);
+    g_test_add_func("/gc/segment_from_str", test_segment_from_str_1);
+    g_test_add_func("/gc/segment_points", test_segment_points_1);
+    g_test_add_func("/gc/segment_vector", test_segment_vector_1);
+    g_test_add_func("/gc/segment_length", test_segment_length_1);
+    g_test_add_func("/gc/segment_translate", test_segment_translate_1);
+    g_test_add_func("/gc/segment_translate", test_segment_translate_2);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_1);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_2);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_3);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_4);
+    g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_1);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
     g_test_add_func("/gc/circle_release", test_circle_release_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_1);
