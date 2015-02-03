@@ -506,6 +506,34 @@ Polygon polygon_new(List points) {
     return polygon;
 }
 
+Polygon polygon_new_rectangle(Point lower_left, double width, double height) {
+    List points = list_new();
+    list_append(points, point_dup(lower_left));
+    list_append(points, point_new(point_x(lower_left) + width,
+                                  point_y(lower_left)));
+    list_append(points, point_new(point_x(lower_left) + width,
+                                  point_y(lower_left) + height));
+    list_append(points, point_new(point_x(lower_left),
+                                  point_y(lower_left) + height));
+    Polygon polygon = polygon_new(points);
+    list_full_release(points, (void (*)(void *)) point_release);
+    return polygon;
+}
+
+Polygon polygon_new_square(Point lower_left, double side) {
+    List points = list_new();
+    list_append(points, point_dup(lower_left));
+    list_append(points, point_new(point_x(lower_left) + side,
+                                  point_y(lower_left)));
+    list_append(points, point_new(point_x(lower_left) + side,
+                                  point_y(lower_left) + side));
+    list_append(points, point_new(point_x(lower_left),
+                                  point_y(lower_left) + side));
+    Polygon polygon = polygon_new(points);
+    list_full_release(points, (void (*)(void *)) point_release);
+    return polygon;
+}
+
 void polygon_release(Polygon polygon) {
     list_full_release(polygon->points, (void (*)(void *)) point_release);
     free(polygon);

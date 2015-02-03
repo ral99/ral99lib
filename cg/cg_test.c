@@ -1122,6 +1122,38 @@ static void test_polygon_new_2() {
     point_release(point4);
 }
 
+static void test_polygon_new_rectangle_1() {
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_rectangle(lower_left, 1, 2);
+    g_assert_cmpint(list_size(polygon->points), ==, 4);
+    g_assert(double_equals(point_x(list_at(polygon->points, 0)), 0));
+    g_assert(double_equals(point_y(list_at(polygon->points, 0)), 0));
+    g_assert(double_equals(point_x(list_at(polygon->points, 1)), 1));
+    g_assert(double_equals(point_y(list_at(polygon->points, 1)), 0));
+    g_assert(double_equals(point_x(list_at(polygon->points, 2)), 1));
+    g_assert(double_equals(point_y(list_at(polygon->points, 2)), 2));
+    g_assert(double_equals(point_x(list_at(polygon->points, 3)), 0));
+    g_assert(double_equals(point_y(list_at(polygon->points, 3)), 2));
+    polygon_release(polygon);
+    point_release(lower_left);
+}
+
+static void test_polygon_new_square_1() {
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
+    g_assert_cmpint(list_size(polygon->points), ==, 4);
+    g_assert(double_equals(point_x(list_at(polygon->points, 0)), 0));
+    g_assert(double_equals(point_y(list_at(polygon->points, 0)), 0));
+    g_assert(double_equals(point_x(list_at(polygon->points, 1)), 1));
+    g_assert(double_equals(point_y(list_at(polygon->points, 1)), 0));
+    g_assert(double_equals(point_x(list_at(polygon->points, 2)), 1));
+    g_assert(double_equals(point_y(list_at(polygon->points, 2)), 1));
+    g_assert(double_equals(point_x(list_at(polygon->points, 3)), 0));
+    g_assert(double_equals(point_y(list_at(polygon->points, 3)), 1));
+    polygon_release(polygon);
+    point_release(lower_left);
+}
+
 static void test_polygon_release_1() {
     List points = list_new();
     Point point1 = point_new(0, 0);
@@ -1593,6 +1625,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_4);
     g_test_add_func("/gc/polygon_new", test_polygon_new_1);
     g_test_add_func("/gc/polygon_new", test_polygon_new_2);
+    g_test_add_func("/gc/polygon_new_rectangle", test_polygon_new_rectangle_1);
+    g_test_add_func("/gc/polygon_new_square", test_polygon_new_square_1);
     g_test_add_func("/gc/polygon_release", test_polygon_release_1);
     g_test_add_func("/gc/polygon_equals", test_polygon_equals_1);
     g_test_add_func("/gc/polygon_equals", test_polygon_equals_2);
