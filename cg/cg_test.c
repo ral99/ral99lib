@@ -82,6 +82,18 @@ static void test_vector_y_1() {
     vector_release(vector);
 }
 
+static void test_vector_magnitude_1() {
+    Vector vector = vector_new(0, 0);
+    g_assert(double_equals(vector_magnitude(vector), 0));
+    vector_release(vector);
+}
+
+static void test_vector_magnitude_2() {
+    Vector vector = vector_new(3, 4);
+    g_assert(double_equals(vector_magnitude(vector), 5));
+    vector_release(vector);
+}
+
 static void test_vector_rotate_1() {
     Vector vector = vector_new(1, 0);
     vector_rotate(vector, 90);
@@ -1490,6 +1502,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_from_str", test_vector_from_str_1);
     g_test_add_func("/gc/vector_x", test_vector_x_1);
     g_test_add_func("/gc/vector_y", test_vector_y_1);
+    g_test_add_func("/gc/vector_magnitude", test_vector_magnitude_1);
+    g_test_add_func("/gc/vector_magnitude", test_vector_magnitude_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);

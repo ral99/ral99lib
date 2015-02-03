@@ -69,6 +69,10 @@ double vector_y(Vector vector) {
     return vector->y;
 }
 
+double vector_magnitude(Vector vector) {
+    return sqrt(vector->x * vector->x + vector->y * vector->y);
+}
+
 void vector_rotate(Vector vector, double deg) {
     double rad = deg_to_rad(deg);
     double vector_x = vector->x;

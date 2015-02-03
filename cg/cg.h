@@ -67,6 +67,9 @@ double vector_x(Vector vector);
 /* Return vector y component. */
 double vector_y(Vector vector);
 
+/* Return vector magnitude. */
+double vector_magnitude(Vector vector);
+
 /* Rotate the vector by the specified degrees in counter-clockwise orientation. */
 void vector_rotate(Vector vector, double deg);
 
