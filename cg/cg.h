@@ -70,6 +70,9 @@ double vector_y(Vector vector);
 /* Return vector magnitude. */
 double vector_magnitude(Vector vector);
 
+/* Return the dot product between two vectors. */
+double vector_dot(Vector vector1, Vector vector2);
+
 /* Rotate the vector by the specified degrees in counter-clockwise orientation. */
 void vector_rotate(Vector vector, double deg);
 

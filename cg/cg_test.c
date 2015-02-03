@@ -94,6 +94,50 @@ static void test_vector_magnitude_2() {
     vector_release(vector);
 }
 
+static void test_vector_dot_1() {
+    Vector vector = vector_new(0, 1);
+    g_assert(double_equals(vector_dot(vector, vector), 1));
+    vector_release(vector);
+}
+
+static void test_vector_dot_2() {
+    Vector vector1 = vector_new(0, 1);
+    Vector vector2 = vector_new(0, -1);
+    g_assert(double_equals(vector_dot(vector1, vector2), -1));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_dot_3() {
+    Vector vector1 = vector_new(0, 1);
+    Vector vector2 = vector_new(1, 0);
+    g_assert(double_equals(vector_dot(vector1, vector2), 0));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_dot_4() {
+    Vector vector1 = vector_new(-1, 1);
+    Vector vector2 = vector_new(1, 0);
+    double magnitude1 = vector_magnitude(vector1);
+    double magnitude2 = vector_magnitude(vector2);
+    double dot = magnitude1 * magnitude2 * cos(deg_to_rad(135));
+    g_assert(double_equals(vector_dot(vector1, vector2), dot));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_dot_5() {
+    Vector vector1 = vector_new(1, 1);
+    Vector vector2 = vector_new(1, 0);
+    double magnitude1 = vector_magnitude(vector1);
+    double magnitude2 = vector_magnitude(vector2);
+    double dot = magnitude1 * magnitude2 * cos(deg_to_rad(45));
+    g_assert(double_equals(vector_dot(vector1, vector2), dot));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
 static void test_vector_rotate_1() {
     Vector vector = vector_new(1, 0);
     vector_rotate(vector, 90);
@@ -1478,6 +1522,11 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_y", test_vector_y_1);
     g_test_add_func("/gc/vector_magnitude", test_vector_magnitude_1);
     g_test_add_func("/gc/vector_magnitude", test_vector_magnitude_2);
+    g_test_add_func("/gc/vector_dot", test_vector_dot_1);
+    g_test_add_func("/gc/vector_dot", test_vector_dot_2);
+    g_test_add_func("/gc/vector_dot", test_vector_dot_3);
+    g_test_add_func("/gc/vector_dot", test_vector_dot_4);
+    g_test_add_func("/gc/vector_dot", test_vector_dot_5);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);
