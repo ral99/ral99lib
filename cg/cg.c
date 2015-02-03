@@ -287,7 +287,8 @@ double angle_between_lines(Line line1, Line line2) {
                  normalized_line1->y * normalized_line2->y;
     line_release(normalized_line1);
     line_release(normalized_line2);
-    return acos(cos);
+    double rad = acos(cos);
+    return double_gt(rad, M_PI / 2) ? M_PI - rad : rad;
 }
 
 Circle circle_new(Point center, double radius) {

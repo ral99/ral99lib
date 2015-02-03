@@ -1,7 +1,6 @@
 #include <glib.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "cg/cg.h"
 #include "mem/mem.h"
@@ -706,6 +705,20 @@ static void test_angle_between_lines_6() {
     point_release(point1);
     point_release(point2);
     point_release(point3);
+}
+
+static void test_angle_between_lines_7() {
+    Line line1 = memalloc(sizeof(*line1));
+    line1->w = 1;
+    line1->x = -1;
+    line1->y = 1;
+    Line line2 = memalloc(sizeof(*line2));
+    line2->w = 1;
+    line2->x = 1;
+    line2->y = 0.5;
+    g_assert(double_equals(angle_between_lines(line1, line2), atan2(3, 1)));
+    line_release(line1);
+    line_release(line2);
 }
 
 static void test_circle_new_1() {
@@ -1523,6 +1536,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_4);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_5);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_6);
+    g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_7);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
     g_test_add_func("/gc/circle_release", test_circle_release_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_1);

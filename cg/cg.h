@@ -148,7 +148,7 @@ int point_is_in_line(Point point, Line line);
 /* Return the distance from the point to the line. */
 double point_distance_to_line(Point point, Line line);
 
-/* Return the angle in radians between two lines. */
+/* Return the least angle in radians between two lines. */
 double angle_between_lines(Line line1, Line line2);
 
 /* Return a new circle defined by its center point and radius. */
