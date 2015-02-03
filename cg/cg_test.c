@@ -1167,14 +1167,10 @@ static void test_point_is_in_triangle_4() {
 
 static void test_polygon_new_1() {
     List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(1, 1));
+    list_append(points, point_new(0, 1));
     Polygon polygon = polygon_new(points);
     g_assert(polygon->points != points);
     g_assert(list_equals_cmp(polygon->points, points,
@@ -1186,28 +1182,20 @@ static void test_polygon_new_1() {
 static void test_polygon_new_2() {
     List points1 = list_new();
     List points2 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points1, point2);
-    list_append(points1, point3);
-    list_append(points1, point4);
-    list_append(points2, point2);
-    list_append(points2, point3);
-    list_append(points2, point1);
-    list_append(points2, point4);
+    list_append(points1, point_new(0, 0));
+    list_append(points1, point_new(1, 0));
+    list_append(points1, point_new(1, 1));
+    list_append(points1, point_new(0, 1));
+    list_append(points2, point_new(1, 1));
+    list_append(points2, point_new(1, 0));
+    list_append(points2, point_new(0, 0));
+    list_append(points2, point_new(0, 1));
     Polygon polygon = polygon_new(points2);
     g_assert(list_equals_cmp(polygon->points, points1,
                              (int (*)(void *, void *)) point_equals));
     polygon_release(polygon);
-    list_release(points1);
-    list_release(points2);
-    point_release(point1);
-    point_release(point2);
-    point_release(point3);
-    point_release(point4);
+    list_full_release(points1, (void (*)(void *)) point_release);
+    list_full_release(points2, (void (*)(void *)) point_release);
 }
 
 static void test_polygon_new_rectangle_1() {
@@ -1409,12 +1397,9 @@ static void test_polygon_area_1() {
 
 static void test_polygon_area_2() {
     List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(1, 1));
     Polygon polygon = polygon_new(points);
     g_assert(double_equals(polygon_area(polygon), 0.5));
     polygon_release(polygon);
