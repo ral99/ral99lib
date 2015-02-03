@@ -476,45 +476,40 @@ int point_is_in_triangle(Point point, Triangle triangle) {
 }
 
 Polygon polygon_new(List points) {
-    List points_dup = list_dup(points);
     Polygon polygon = memalloc(sizeof(*polygon));
     polygon->points = list_new();
-    Point base_point = list_value(list_head(points_dup));
-    for (ListItem it = list_next(list_head(points_dup)); it;
-         it = list_next(it)) {
+    points = list_dup(points);
+    Point base_point = NULL;
+    for (ListItem it = list_head(points); it; it = list_next(it)) {
         Point point = list_value(it);
-        if (double_lt(point_y(point), point_y(base_point)) ||
+        if (!base_point ||
+            double_lt(point_y(point), point_y(base_point)) ||
             (double_equals(point_y(point), point_y(base_point)) &&
              double_lt(point_x(point), point_x(base_point))))
             base_point = point;
     }
     list_append(polygon->points, point_dup(base_point));
-    list_remove(points_dup, base_point);
-    Point horizontal_line_point = point_new(point_x(base_point) + 1,
-                                            point_y(base_point));
-    Line horizontal = line_new(base_point, horizontal_line_point);
-    point_release(horizontal_line_point);
-    while (list_size(points_dup)) {
-        Point next_point = list_value(list_head(points_dup));
-        Line next_line = line_new(base_point, next_point);
-        double least_angle = angle_between_lines(horizontal, next_line);
-        line_release(next_line);
-        for (ListItem it = list_next(list_head(points_dup)); it;
-             it = list_next(it)) {
+    list_remove(points, base_point);
+    Vector base_vector = vector_new(1, 0);
+    while (list_size(points)) {
+        Point next_point = NULL;
+        double next_angle;
+        for (ListItem it = list_head(points); it; it = list_next(it)) {
             Point point = list_value(it);
-            Line line = line_new(base_point, point);
-            double angle = angle_between_lines(horizontal, line);
-            line_release(line);
-            if (double_lt(angle, least_angle)) {
-                least_angle = angle;
+            Vector vector = vector_new(point_x(point) - point_x(base_point),
+                                       point_y(point) - point_y(base_point));
+            double angle = angle_between_vectors(base_vector, vector);
+            if (!next_point || double_lt(angle, next_angle)) {
+                next_angle = angle;
                 next_point = point;
             }
+            vector_release(vector);
         }
         list_append(polygon->points, point_dup(next_point));
-        list_remove(points_dup, next_point);
+        list_remove(points, next_point);
     }
-    list_release(points_dup);
-    line_release(horizontal);
+    vector_release(base_vector);
+    list_release(points);
     return polygon;
 }
 

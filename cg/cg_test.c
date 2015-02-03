@@ -1281,11 +1281,15 @@ static void test_polygon_new_2() {
     list_append(points1, point_new(0, 0));
     list_append(points1, point_new(1, 0));
     list_append(points1, point_new(1, 1));
+    list_append(points1, point_new(0.5, 2));
     list_append(points1, point_new(0, 1));
-    list_append(points2, point_new(1, 1));
-    list_append(points2, point_new(1, 0));
-    list_append(points2, point_new(0, 0));
+    list_append(points1, point_new(-0.5, 0.1));
     list_append(points2, point_new(0, 1));
+    list_append(points2, point_new(1, 1));
+    list_append(points2, point_new(0, 0));
+    list_append(points2, point_new(-0.5, 0.1));
+    list_append(points2, point_new(1, 0));
+    list_append(points2, point_new(0.5, 2));
     Polygon polygon = polygon_new(points2);
     g_assert(list_equals_cmp(polygon->points, points1,
                              (int (*)(void *, void *)) point_equals));
