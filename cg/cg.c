@@ -546,6 +546,16 @@ Polygon polygon_new(List points) {
     return polygon;
 }
 
+Polygon polygon_new_triangle(Point a, Point b, Point c) {
+    List points = list_new();
+    list_append(points, a);
+    list_append(points, b);
+    list_append(points, c);
+    Polygon polygon = polygon_new(points);
+    list_release(points);
+    return polygon;
+}
+
 Polygon polygon_new_rectangle(Point lower_left, double width, double height) {
     List points = list_new();
     list_append(points, point_dup(lower_left));

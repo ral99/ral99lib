@@ -1414,6 +1414,24 @@ static void test_polygon_new_2() {
     list_full_release(points2, (void (*)(void *)) point_release);
 }
 
+static void test_polygon_new_triangle_1() {
+    Point a = point_new(1, 0);
+    Point b = point_new(0, 0);
+    Point c = point_new(0, 1);
+    Polygon polygon = polygon_new_triangle(a, b, c);
+    g_assert_cmpint(list_size(polygon->points), ==, 3);
+    g_assert(double_equals(point_x(list_at(polygon->points, 0)), 0));
+    g_assert(double_equals(point_y(list_at(polygon->points, 0)), 0));
+    g_assert(double_equals(point_x(list_at(polygon->points, 1)), 1));
+    g_assert(double_equals(point_y(list_at(polygon->points, 1)), 0));
+    g_assert(double_equals(point_x(list_at(polygon->points, 2)), 0));
+    g_assert(double_equals(point_y(list_at(polygon->points, 2)), 1));
+    polygon_release(polygon);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
 static void test_polygon_new_rectangle_1() {
     Point lower_left = point_new(0, 0);
     Polygon polygon = polygon_new_rectangle(lower_left, 1, 2);
@@ -1833,6 +1851,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_4);
     g_test_add_func("/gc/polygon_new", test_polygon_new_1);
     g_test_add_func("/gc/polygon_new", test_polygon_new_2);
+    g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_1);
     g_test_add_func("/gc/polygon_new_rectangle", test_polygon_new_rectangle_1);
     g_test_add_func("/gc/polygon_new_square", test_polygon_new_square_1);
     g_test_add_func("/gc/polygon_release", test_polygon_release_1);

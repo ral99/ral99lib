@@ -244,6 +244,9 @@ int point_is_in_triangle(Point point, Triangle triangle);
 /* Return a new polygon defined by a list of points. */
 Polygon polygon_new(List points);
 
+/* Return a new polygon defined by a triangle specification. */
+Polygon polygon_new_triangle(Point a, Point b, Point c);
+
 /* Return a new polygon defined by a rectangle specification. */
 Polygon polygon_new_rectangle(Point lower_left, double width, double height);
 
