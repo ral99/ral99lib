@@ -1,6 +1,7 @@
 #include <glib.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "cg/cg.h"
 #include "mem/mem.h"
@@ -310,6 +311,28 @@ static void test_point_rotate_around_6() {
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 2));
     g_assert(double_equals(point->y, 0));
+    point_release(center);
+    point_release(point);
+}
+
+static void test_point_rotate_around_7() {
+    Point point = point_new(1, 1);
+    Point center = point_new(1, 1);
+    point_rotate_around(point, center, 90);
+    g_assert(double_equals(point->w, 1));
+    g_assert(double_equals(point->x, 1));
+    g_assert(double_equals(point->y, 1));
+    point_release(center);
+    point_release(point);
+}
+
+static void test_point_rotate_around_8() {
+    Point point = point_new(1, 1);
+    Point center = point_new(0, 0);
+    point_rotate_around(point, center, 0);
+    g_assert(double_equals(point->w, 1));
+    g_assert(double_equals(point->x, 1));
+    g_assert(double_equals(point->y, 1));
     point_release(center);
     point_release(point);
 }
@@ -1296,6 +1319,26 @@ static void test_polygon_rotate_around_3() {
     point_release(lower_left2);
 }
 
+static void test_polygon_rotate_around_4() {
+    Point center = point_new(0, 0);
+    Point lower_left1 = point_new(-0.5, -0.5);
+    Polygon polygon1 = polygon_new_square(lower_left1, 1);
+    List points = list_new();
+    double sqrt_2 = sqrt(2);
+    list_append(points, point_new(0, -sqrt_2 / 2));
+    list_append(points, point_new(0, sqrt_2 / 2));
+    list_append(points, point_new(-sqrt_2 / 2, 0));
+    list_append(points, point_new(sqrt_2 / 2, 0));
+    Polygon polygon2 = polygon_new(points);
+    polygon_rotate_around(polygon1, center, 45);
+    g_assert(polygon_equals(polygon1, polygon2));
+    point_release(center);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+    point_release(lower_left1);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
 static void test_polygon_area_1() {
     Point lower_left = point_new(0, 0);
     Polygon polygon = polygon_new_square(lower_left, 1);
@@ -1401,6 +1444,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_4);
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_5);
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_6);
+    g_test_add_func("/gc/point_rotate", test_point_rotate_around_7);
+    g_test_add_func("/gc/point_rotate", test_point_rotate_around_8);
     g_test_add_func("/gc/midpoint_between_points", test_midpoint_between_points_1);
     g_test_add_func("/gc/point_is_infinite", test_point_is_infinite_1);
     g_test_add_func("/gc/point_is_infinite", test_point_is_infinite_2);
@@ -1479,6 +1524,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_1);
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_2);
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_3);
+    g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_4);
     g_test_add_func("/gc/polygon_area", test_polygon_area_1);
     g_test_add_func("/gc/polygon_area", test_polygon_area_2);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_1);
