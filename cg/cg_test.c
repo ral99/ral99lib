@@ -138,6 +138,45 @@ static void test_vector_dot_5() {
     vector_release(vector2);
 }
 
+static void test_angle_between_vectors_1() {
+    Vector vector = vector_new(1, 1);
+    g_assert(double_equals(angle_between_vectors(vector, vector), 0));
+    vector_release(vector);
+}
+
+static void test_angle_between_vectors_2() {
+    Vector vector1 = vector_new(0, 1);
+    Vector vector2 = vector_new(1, 0);
+    g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI / 2));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_between_vectors_3() {
+    Vector vector1 = vector_new(1, 0);
+    Vector vector2 = vector_new(-1, 0);
+    g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_between_vectors_4() {
+    Vector vector1 = vector_new(0, 1);
+    Vector vector2 = vector_new(1, 1);
+    g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI / 4));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_between_vectors_5() {
+    Vector vector1 = vector_new(1, 0);
+    Vector vector2 = vector_new(-1, 1);
+    g_assert(double_equals(angle_between_vectors(vector1, vector2),
+                           deg_to_rad(135)));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
 static void test_vector_rotate_1() {
     Vector vector = vector_new(1, 0);
     vector_rotate(vector, 90);
@@ -1527,6 +1566,11 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_dot", test_vector_dot_3);
     g_test_add_func("/gc/vector_dot", test_vector_dot_4);
     g_test_add_func("/gc/vector_dot", test_vector_dot_5);
+    g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_1);
+    g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_2);
+    g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_3);
+    g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_4);
+    g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_5);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);

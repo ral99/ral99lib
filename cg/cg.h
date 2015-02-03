@@ -73,6 +73,9 @@ double vector_magnitude(Vector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(Vector vector1, Vector vector2);
 
+/* Return the angle in radians between two vectors in range [0, PI]. */
+double angle_between_vectors(Vector vector1, Vector vector2);
+
 /* Rotate the vector by the specified degrees in counter-clockwise orientation. */
 void vector_rotate(Vector vector, double deg);
 
@@ -151,7 +154,7 @@ int point_is_in_line(Point point, Line line);
 /* Return the distance from the point to the line. */
 double point_distance_to_line(Point point, Line line);
 
-/* Return the least angle in radians between two lines. */
+/* Return the angle in radians between two lines in range [0, PI / 2]. */
 double angle_between_lines(Line line1, Line line2);
 
 /* Return a new circle defined by its center point and radius. */

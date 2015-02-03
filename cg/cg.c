@@ -77,6 +77,13 @@ double vector_dot(Vector vector1, Vector vector2) {
     return vector1->x * vector2->x + vector1->y * vector2->y;
 }
 
+double angle_between_vectors(Vector vector1, Vector vector2) {
+    double dot = vector_dot(vector1, vector2);
+    double magnitude1 = vector_magnitude(vector1);
+    double magnitude2 = vector_magnitude(vector2);
+    return acos(dot / (magnitude1 * magnitude2));
+}
+
 void vector_rotate(Vector vector, double deg) {
     double rad = deg_to_rad(deg);
     double vector_x = vector->x;
