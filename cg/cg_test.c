@@ -589,6 +589,7 @@ static void test_angle_between_lines_1() {
     Line line1 = line_new(point1, point2);
     Line line2 = line_new(point1, point3);
     g_assert(double_equals(angle_between_lines(line1, line2), M_PI / 2));
+    g_assert(double_equals(angle_between_lines(line2, line1), M_PI / 2));
     line_release(line1);
     line_release(line2);
     point_release(point1);
@@ -603,6 +604,7 @@ static void test_angle_between_lines_2() {
     Line line1 = line_new(point1, point2);
     Line line2 = line_new(point1, point3);
     g_assert(double_equals(angle_between_lines(line1, line2), M_PI / 2));
+    g_assert(double_equals(angle_between_lines(line2, line1), M_PI / 2));
     line_release(line1);
     line_release(line2);
     point_release(point1);
@@ -617,6 +619,7 @@ static void test_angle_between_lines_3() {
     Line line1 = line_new(point1, point2);
     Line line2 = line_new(point1, point3);
     g_assert(double_equals(angle_between_lines(line1, line2), M_PI / 4));
+    g_assert(double_equals(angle_between_lines(line2, line1), M_PI / 4));
     line_release(line1);
     line_release(line2);
     point_release(point1);
@@ -631,6 +634,7 @@ static void test_angle_between_lines_4() {
     Line line1 = line_new(point1, point2);
     Line line2 = line_new(point1, point3);
     g_assert(double_equals(angle_between_lines(line1, line2), 0));
+    g_assert(double_equals(angle_between_lines(line2, line1), 0));
     line_release(line1);
     line_release(line2);
     point_release(point1);
@@ -646,12 +650,28 @@ static void test_angle_between_lines_5() {
     Line line1 = line_new(point1, point2);
     Line line2 = line_new(point3, point4);
     g_assert(double_equals(angle_between_lines(line1, line2), 0));
+    g_assert(double_equals(angle_between_lines(line2, line1), 0));
     line_release(line1);
     line_release(line2);
     point_release(point1);
     point_release(point2);
     point_release(point3);
     point_release(point4);
+}
+
+static void test_angle_between_lines_6() {
+    Point point1 = point_new(0, 0);
+    Point point2 = point_new(1, 0);
+    Point point3 = point_new(1, 0.5);
+    Line line1 = line_new(point1, point2);
+    Line line2 = line_new(point1, point3);
+    g_assert(double_lt(angle_between_lines(line1, line2), M_PI / 4));
+    g_assert(double_lt(angle_between_lines(line2, line1), M_PI / 4));
+    line_release(line1);
+    line_release(line2);
+    point_release(point1);
+    point_release(point2);
+    point_release(point3);
 }
 
 static void test_circle_new_1() {
@@ -1411,6 +1431,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_3);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_4);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_5);
+    g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_6);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
     g_test_add_func("/gc/circle_release", test_circle_release_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_1);
