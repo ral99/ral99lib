@@ -1155,284 +1155,133 @@ static void test_polygon_new_square_1() {
 }
 
 static void test_polygon_release_1() {
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon = polygon_new(points);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
     polygon_release(polygon);
-    list_full_release(points, (void (*)(void *)) point_release);
+    point_release(lower_left);
 }
 
 static void test_polygon_equals_1() {
-    List points1 = list_new();
-    List points2 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    Point point5 = point_new(0, 0.5);
-    list_append(points1, point1);
-    list_append(points2, point1);
-    list_append(points1, point2);
-    list_append(points2, point2);
-    list_append(points1, point3);
-    list_append(points2, point3);
-    list_append(points1, point4);
-    list_append(points2, point5);
-    Polygon polygon1 = polygon_new(points1);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left, 1);
+    Polygon polygon2 = polygon_new_square(lower_left, 2);
     g_assert_cmpint(polygon_equals(polygon1, polygon2), ==, 0);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_release(points1);
-    list_release(points2);
-    point_release(point1);
-    point_release(point2);
-    point_release(point3);
-    point_release(point4);
-    point_release(point5);
+    point_release(lower_left);
 }
 
 static void test_polygon_equals_2() {
-    List points1 = list_new();
-    List points2 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points2, point1);
-    list_append(points1, point2);
-    list_append(points2, point2);
-    list_append(points1, point3);
-    list_append(points2, point3);
-    list_append(points1, point4);
-    list_append(points2, point4);
-    Polygon polygon1 = polygon_new(points1);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left, 1);
+    Polygon polygon2 = polygon_new_square(lower_left, 1);
     g_assert_cmpint(polygon_equals(polygon1, polygon2), ==, 1);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_release(points1);
-    list_release(points2);
-    point_release(point1);
-    point_release(point2);
-    point_release(point3);
-    point_release(point4);
+    point_release(lower_left);
 }
 
 static void test_polygon_equals_3() {
-    List points1 = list_new();
-    List points2 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points2, point4);
-    list_append(points1, point2);
-    list_append(points2, point3);
-    list_append(points1, point3);
-    list_append(points2, point2);
-    list_append(points1, point4);
-    list_append(points2, point1);
-    Polygon polygon1 = polygon_new(points1);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left, 1);
+    Polygon polygon2 = polygon_new_square(lower_left, 1);
+    list_reverse(polygon1->points);
     g_assert_cmpint(polygon_equals(polygon1, polygon2), ==, 1);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_release(points1);
-    list_release(points2);
-    point_release(point1);
-    point_release(point2);
-    point_release(point3);
-    point_release(point4);
+    point_release(lower_left);
 }
 
 static void test_polygon_dup_1() {
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon1 = polygon_new(points);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left, 1);
     Polygon polygon2 = polygon_dup(polygon1);
     g_assert(polygon1->points != polygon2->points);
     g_assert(list_equals_cmp(polygon1->points, polygon2->points,
                              (int (*)(void *, void *)) point_equals));
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_full_release(points, (void (*)(void *)) point_release);
+    point_release(lower_left);
 }
 
 static void test_polygon_points_1() {
-    List points1 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points1, point2);
-    list_append(points1, point3);
-    list_append(points1, point4);
-    Polygon polygon = polygon_new(points1);
-    List points2 = polygon_points(polygon);
-    g_assert(points2 != polygon->points);
-    g_assert(list_equals_cmp(polygon->points, points2,
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
+    List points = polygon_points(polygon);
+    g_assert(polygon->points != points);
+    g_assert(list_equals_cmp(polygon->points, points,
                              (int (*)(void *, void *)) point_equals));
     polygon_release(polygon);
-    list_full_release(points1, (void (*)(void *)) point_release);
-    list_full_release(points2, (void (*)(void *)) point_release);
+    point_release(lower_left);
+    list_full_release(points, (void (*)(void *)) point_release);
 }
 
 static void test_polygon_translate_1() {
-    List points1 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points1, point2);
-    list_append(points1, point3);
-    list_append(points1, point4);
-    Polygon polygon1 = polygon_new(points1);
-    List points2 = list_new();
-    Point point5 = point_new(1, 1);
-    Point point6 = point_new(2, 1);
-    Point point7 = point_new(2, 2);
-    Point point8 = point_new(1, 2);
-    list_append(points2, point5);
-    list_append(points2, point6);
-    list_append(points2, point7);
-    list_append(points2, point8);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left1 = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left1, 1);
+    Point lower_left2 = point_new(1, 1);
+    Polygon polygon2 = polygon_new_square(lower_left2, 1);
     Vector vector = vector_new(1, 1);
     polygon_translate(polygon1, vector);
     g_assert(polygon_equals(polygon1, polygon2));
     vector_release(vector);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_full_release(points1, (void (*)(void *)) point_release);
-    list_full_release(points2, (void (*)(void *)) point_release);
+    point_release(lower_left1);
+    point_release(lower_left2);
 }
 
 static void test_polygon_rotate_around_1() {
     Point center = point_new(1, 1);
-    List points1 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points1, point2);
-    list_append(points1, point3);
-    list_append(points1, point4);
-    Polygon polygon1 = polygon_new(points1);
-    List points2 = list_new();
-    Point point5 = point_new(0, 0);
-    Point point6 = point_new(1, 0);
-    Point point7 = point_new(1, 1);
-    Point point8 = point_new(0, 1);
-    list_append(points2, point5);
-    list_append(points2, point6);
-    list_append(points2, point7);
-    list_append(points2, point8);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left1 = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left1, 1);
+    Point lower_left2 = point_new(0, 0);
+    Polygon polygon2 = polygon_new_square(lower_left2, 1);
     polygon_rotate_around(polygon1, center, 0);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_full_release(points1, (void (*)(void *)) point_release);
-    list_full_release(points2, (void (*)(void *)) point_release);
+    point_release(lower_left1);
+    point_release(lower_left2);
 }
 
 static void test_polygon_rotate_around_2() {
     Point center = point_new(0.5, 0.5);
-    List points1 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points1, point2);
-    list_append(points1, point3);
-    list_append(points1, point4);
-    Polygon polygon1 = polygon_new(points1);
-    List points2 = list_new();
-    Point point5 = point_new(0, 0);
-    Point point6 = point_new(1, 0);
-    Point point7 = point_new(1, 1);
-    Point point8 = point_new(0, 1);
-    list_append(points2, point5);
-    list_append(points2, point6);
-    list_append(points2, point7);
-    list_append(points2, point8);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left1 = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left1, 1);
+    Point lower_left2 = point_new(0, 0);
+    Polygon polygon2 = polygon_new_square(lower_left2, 1);
     polygon_rotate_around(polygon1, center, 90);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_full_release(points1, (void (*)(void *)) point_release);
-    list_full_release(points2, (void (*)(void *)) point_release);
+    point_release(lower_left1);
+    point_release(lower_left2);
 }
 
 static void test_polygon_rotate_around_3() {
     Point center = point_new(1, 1);
-    List points1 = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points1, point1);
-    list_append(points1, point2);
-    list_append(points1, point3);
-    list_append(points1, point4);
-    Polygon polygon1 = polygon_new(points1);
-    List points2 = list_new();
-    Point point5 = point_new(1, 1);
-    Point point6 = point_new(2, 1);
-    Point point7 = point_new(2, 2);
-    Point point8 = point_new(1, 2);
-    list_append(points2, point5);
-    list_append(points2, point6);
-    list_append(points2, point7);
-    list_append(points2, point8);
-    Polygon polygon2 = polygon_new(points2);
+    Point lower_left1 = point_new(0, 0);
+    Polygon polygon1 = polygon_new_square(lower_left1, 1);
+    Point lower_left2 = point_new(1, 1);
+    Polygon polygon2 = polygon_new_square(lower_left2, 1);
     polygon_rotate_around(polygon1, center, 180);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
-    list_full_release(points1, (void (*)(void *)) point_release);
-    list_full_release(points2, (void (*)(void *)) point_release);
+    point_release(lower_left1);
+    point_release(lower_left2);
 }
 
 static void test_polygon_area_1() {
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon = polygon_new(points);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
     g_assert(double_equals(polygon_area(polygon), 1));
     polygon_release(polygon);
-    list_full_release(points, (void (*)(void *)) point_release);
+    point_release(lower_left);
 }
 
 static void test_polygon_area_2() {
@@ -1450,76 +1299,48 @@ static void test_polygon_area_2() {
 }
 
 static void test_point_is_in_polygon_1() {
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon = polygon_new(points);
-    g_assert_cmpint(point_is_in_polygon(polygon, point1), ==, 0);
-    g_assert_cmpint(point_is_in_polygon(polygon, point2), ==, 0);
-    g_assert_cmpint(point_is_in_polygon(polygon, point3), ==, 0);
-    g_assert_cmpint(point_is_in_polygon(polygon, point4), ==, 0);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
+    g_assert_cmpint(point_is_in_polygon(polygon, list_at(polygon->points, 0)),
+                    ==, 0);
+    g_assert_cmpint(point_is_in_polygon(polygon, list_at(polygon->points, 1)),
+                    ==, 0);
+    g_assert_cmpint(point_is_in_polygon(polygon, list_at(polygon->points, 2)),
+                    ==, 0);
+    g_assert_cmpint(point_is_in_polygon(polygon, list_at(polygon->points, 3)),
+                    ==, 0);
     polygon_release(polygon);
-    list_full_release(points, (void (*)(void *)) point_release);
+    point_release(lower_left);
 }
 
 static void test_point_is_in_polygon_2() {
     Point point = point_new(2, 2);
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon = polygon_new(points);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
     g_assert_cmpint(point_is_in_polygon(polygon, point), ==, 0);
-    polygon_release(polygon);
     point_release(point);
-    list_full_release(points, (void (*)(void *)) point_release);
+    polygon_release(polygon);
+    point_release(lower_left);
 }
 
 static void test_point_is_in_polygon_3() {
     Point point = point_new(0.5, 0.5);
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon = polygon_new(points);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
     g_assert_cmpint(point_is_in_polygon(polygon, point), ==, 1);
-    polygon_release(polygon);
     point_release(point);
-    list_full_release(points, (void (*)(void *)) point_release);
+    polygon_release(polygon);
+    point_release(lower_left);
 }
 
 static void test_point_is_in_polygon_4() {
     Point point = point_new(0.5, 0);
-    List points = list_new();
-    Point point1 = point_new(0, 0);
-    Point point2 = point_new(1, 0);
-    Point point3 = point_new(1, 1);
-    Point point4 = point_new(0, 1);
-    list_append(points, point1);
-    list_append(points, point2);
-    list_append(points, point3);
-    list_append(points, point4);
-    Polygon polygon = polygon_new(points);
+    Point lower_left = point_new(0, 0);
+    Polygon polygon = polygon_new_square(lower_left, 1);
     g_assert_cmpint(point_is_in_polygon(polygon, point), ==, 0);
     polygon_release(polygon);
     point_release(point);
-    list_full_release(points, (void (*)(void *)) point_release);
+    point_release(lower_left);
 }
 
 int main(int argc, char *argv[]) {
