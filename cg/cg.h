@@ -2,6 +2,7 @@
 #define __CG__
 
 #include <math.h>
+#include "adt/adt.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -31,6 +32,11 @@ struct Circle {
 typedef struct Triangle *Triangle;
 struct Triangle {
     Point a, b, c;
+};
+
+typedef struct Polygon *Polygon;
+struct Polygon {
+    List points;
 };
 
 /* Converts an angle specified in degrees to radians. */
@@ -89,11 +95,12 @@ double point_x(Point point);
 /* Return point y component. */
 double point_y(Point point);
 
-/* Translate the point by the vector specified by x and y. */
-void point_translate(Point point, double x, double y);
+/* Translate the point by the vector. */
+void point_translate(Point point, Vector vector);
 
-/* Rotate the point by the specified degrees in counter-clockwise orientation. */
-void point_rotate(Point point, double deg);
+/* Rotate the point by the specified degrees in counter-clockwise orientation
+ * around a center point. */
+void point_rotate_around(Point point, Point center, double deg);
 
 /* Return the midpoint between 2 points. */
 Point midpoint_between_points(Point point1, Point point2);
@@ -142,7 +149,7 @@ double point_distance_to_line(Point point, Line line);
 double angle_between_lines(Line line1, Line line2);
 
 /* Return a new circle defined by its center point and radius. */
-Circle circle_new(double x, double y, double radius);
+Circle circle_new(Point center, double radius);
 
 /* Free the memory used by circle. */
 void circle_release(Circle circle);
@@ -173,10 +180,9 @@ double circle_center_y(Circle circle);
 double circle_radius(Circle circle);
 
 /* Translate the point by the vector specified by x and y. */
-void circle_translate(Circle circle, double x, double y);
+void circle_translate(Circle circle, Vector vector);
 
-/* Return 1 if the point is inside the circle. 2, if on its frontier.
- * 0, otherwise. */
+/* Return 1 if the point is inside the circle. 0, otherwise. */
 int point_is_in_circle(Point point, Circle circle);
 
 /* Return a new triangle defined by 3 points. */
@@ -188,15 +194,53 @@ void triangle_release(Triangle triangle);
 /* Return the duplicated triangle. */
 Triangle triangle_dup(Triangle triangle);
 
-/* Return -1 if clockwise; 1 if counter-clockwise; 0 if the points are collinear. */
+/* Return a list of triangle points. */
+List triangle_points(Triangle triangle);
+
+/* Translate the triangle by the vector. */
+void triangle_translate(Triangle triangle, Vector vector);
+
+/* Rotate the triangle by the specified degrees in counter-clockwise
+ * orientation around a center point. */
+void triangle_rotate_around(Triangle triangle, Point center, double deg);
+
+/* Return -1 if clockwise; 1 if counter-clockwise; 0 if the points are
+ * collinear. */
 int triangle_orientation(Triangle triangle);
 
 /* Return the area of triangle. */
 double triangle_area(Triangle triangle);
 
-/* Return 1 if the point is inside the triangle. 2, if on its frontier.
- * 0, otherwise. */
+/* Return 1 if the point is inside the triangle. 0, otherwise. */
 int point_is_in_triangle(Point point, Triangle triangle);
+
+/* Return a new polygon defined by a list of points. */
+Polygon polygon_new(List points);
+
+/* Free the memory used by polygon. */
+void polygon_release(Polygon polygon);
+
+/* Return 1 if the polygons are equal. 0, otherwise. */
+int polygon_equals(Polygon polygon1, Polygon polygon2);
+
+/* Return the duplicated polygon. */
+Polygon polygon_dup(Polygon polygon);
+
+/* Return a list of polygon points. */
+List polygon_points(Polygon polygon);
+
+/* Translate the polygon by the vector. */
+void polygon_translate(Polygon polygon, Vector vector);
+
+/* Rotate the polygon by the specified degrees in counter-clockwise
+ * orientation around a center point. */
+void polygon_rotate_around(Polygon polygon, Point center, double deg);
+
+/* Return the area of polygon. */
+double polygon_area(Polygon polygon);
+
+/* Return 1 if the point is inside the polygon. 0, otherwise. */
+int point_is_in_polygon(Polygon polygon, Point point);
 
 #endif
 

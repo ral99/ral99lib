@@ -137,19 +137,25 @@ double point_y(Point point) {
     return point->y / point->w;
 }
 
-void point_translate(Point point, double x, double y) {
+void point_translate(Point point, Vector vector) {
     double point_x = point->x;
     double point_y = point->y;
-    point->x = point_x + point->w * x;
-    point->y = point_y + point->w * y;
+    point->x = point_x + point->w * vector->x;
+    point->y = point_y + point->w * vector->y;
 }
 
-void point_rotate(Point point, double deg) {
+void point_rotate_around(Point point, Point center, double deg) {
     double rad = deg_to_rad(deg);
+    Vector vector1 = vector_new(-point_x(center), -point_y(center));
+    Vector vector2 = vector_new(point_x(center), point_y(center));
+    point_translate(point, vector1);
     double point_x = point->x;
     double point_y = point->y;
     point->x = point_x * cos(rad) - point_y * sin(rad);
     point->y = point_x * sin(rad) + point_y * cos(rad);
+    point_translate(point, vector2);
+    vector_release(vector1);
+    vector_release(vector2);
 }
 
 Point midpoint_between_points(Point point1, Point point2) {
@@ -280,9 +286,9 @@ double angle_between_lines(Line line1, Line line2) {
     return acos(cos);
 }
 
-Circle circle_new(double x, double y, double radius) {
+Circle circle_new(Point center, double radius) {
     Circle circle = memalloc(sizeof(*circle));
-    circle->center = point_new(x, y);
+    circle->center = point_dup(center);
     circle->radius = radius;
     return circle;
 }
@@ -331,7 +337,9 @@ Circle circle_from_str(char *string) {
     char *str_y = str_dup(list_at(str_list, 1));
     char *str_radius = str_substr(list_at(str_list, 2), 0,
                                   strlen(list_at(str_list, 1)) - 3);
-    Circle circle = circle_new(atof(str_x), atof(str_y), atof(str_radius));
+    Point center = point_new(atof(str_x), atof(str_y));
+    Circle circle = circle_new(center, atof(str_radius));
+    point_release(center);
     list_full_release(str_list, free);
     free(str_x);
     free(str_y);
@@ -355,8 +363,8 @@ double circle_radius(Circle circle) {
     return circle->radius;
 }
 
-void circle_translate(Circle circle, double x, double y) {
-    point_translate(circle->center, x, y);
+void circle_translate(Circle circle, Vector vector) {
+    point_translate(circle->center, vector);
 }
 
 int point_is_in_circle(Point point, Circle circle) {
@@ -370,8 +378,6 @@ int point_is_in_circle(Point point, Circle circle) {
                           (point_y - circle_center_y);
     if (double_lt(squared_dist, circle->radius * circle->radius))
         return 1;
-    if (double_equals(squared_dist, circle->radius * circle->radius))
-        return 2;
     return 0;
 }
 
@@ -392,6 +398,26 @@ void triangle_release(Triangle triangle) {
 
 Triangle triangle_dup(Triangle triangle) {
     return triangle_new(triangle->a, triangle->b, triangle->c);
+}
+
+List triangle_points(Triangle triangle) {
+    List points = list_new();
+    list_append(points, point_dup(triangle->a));
+    list_append(points, point_dup(triangle->b));
+    list_append(points, point_dup(triangle->c));
+    return points;
+}
+
+void triangle_translate(Triangle triangle, Vector vector) {
+    point_translate(triangle->a, vector);
+    point_translate(triangle->b, vector);
+    point_translate(triangle->c, vector);
+}
+
+void triangle_rotate_around(Triangle triangle, Point center, double deg) {
+    point_rotate_around(triangle->a, center, deg);
+    point_rotate_around(triangle->b, center, deg);
+    point_rotate_around(triangle->c, center, deg);
 }
 
 int triangle_orientation(Triangle triangle) {
@@ -418,9 +444,6 @@ int point_is_in_triangle(Point point, Triangle triangle) {
     Triangle triangle1 = triangle_new(triangle->a, point, triangle->b);
     Triangle triangle2 = triangle_new(triangle->b, point, triangle->c);
     Triangle triangle3 = triangle_new(triangle->c, point, triangle->a);
-    Line line1 = line_new(triangle->a, triangle->b);
-    Line line2 = line_new(triangle->b, triangle->c);
-    Line line3 = line_new(triangle->c, triangle->a);
     if ((triangle_orientation(triangle1) == 1 &&
          triangle_orientation(triangle2) == 1 &&
          triangle_orientation(triangle3) == 1) ||
@@ -428,17 +451,129 @@ int point_is_in_triangle(Point point, Triangle triangle) {
          triangle_orientation(triangle2) == -1 &&
          triangle_orientation(triangle3) == -1))
         ret = 1;
-    else if (point_is_in_line(point, line1) || point_is_in_line(point, line2) ||
-             point_is_in_line(point, line3))
-        ret = 2;
     else
         ret = 0;
-    line_release(line1);
-    line_release(line2);
-    line_release(line3);
     triangle_release(triangle1);
     triangle_release(triangle2);
     triangle_release(triangle3);
     return ret;
+}
+
+Polygon polygon_new(List points) {
+    List points_dup = list_dup(points);
+    Polygon polygon = memalloc(sizeof(*polygon));
+    polygon->points = list_new();
+    Point base_point = list_value(list_head(points_dup));
+    for (ListItem it = list_next(list_head(points_dup)); it;
+         it = list_next(it)) {
+        Point point = list_value(it);
+        if (double_lt(point_y(point), point_y(base_point)) ||
+            (double_equals(point_y(point), point_y(base_point)) &&
+             double_lt(point_x(point), point_x(base_point))))
+            base_point = point;
+    }
+    list_append(polygon->points, point_dup(base_point));
+    list_remove(points_dup, base_point);
+    Point horizontal_line_point = point_new(point_x(base_point) + 1,
+                                            point_y(base_point));
+    Line horizontal = line_new(base_point, horizontal_line_point);
+    point_release(horizontal_line_point);
+    while (list_size(points_dup)) {
+        Point next_point = list_value(list_head(points_dup));
+        Line next_line = line_new(base_point, next_point);
+        double least_angle = angle_between_lines(horizontal, next_line);
+        line_release(next_line);
+        for (ListItem it = list_next(list_head(points_dup)); it;
+             it = list_next(it)) {
+            Point point = list_value(it);
+            Line line = line_new(base_point, point);
+            double angle = angle_between_lines(horizontal, line);
+            line_release(line);
+            if (double_lt(angle, least_angle)) {
+                least_angle = angle;
+                next_point = point;
+            }
+        }
+        list_append(polygon->points, point_dup(next_point));
+        list_remove(points_dup, next_point);
+    }
+    list_release(points_dup);
+    line_release(horizontal);
+    return polygon;
+}
+
+void polygon_release(Polygon polygon) {
+    list_full_release(polygon->points, (void (*)(void *)) point_release);
+    free(polygon);
+}
+
+int polygon_equals(Polygon polygon1, Polygon polygon2) {
+    if (list_size(polygon1->points) != list_size(polygon2->points))
+        return 0;
+    for (ListItem it = list_head(polygon1->points); it; it = list_next(it)) {
+        Point point = list_value(it);
+        if (list_find_cmp(polygon2->points,
+                          (int (*)(void *, void *)) point_equals,
+                          point) == NULL)
+            return 0;
+    }
+    return 1;
+}
+
+Polygon polygon_dup(Polygon polygon) {
+    Polygon dup = memalloc(sizeof(*dup));
+    dup->points = list_new();
+    for (ListItem it = list_head(polygon->points); it; it = list_next(it))
+        list_append(dup->points, point_dup(list_value(it)));
+    return dup;
+}
+
+List polygon_points(Polygon polygon) {
+    List points = list_new();
+    for (ListItem it = list_head(polygon->points); it; it = list_next(it))
+        list_append(points, point_dup(list_value(it)));
+    return points;
+}
+
+void polygon_translate(Polygon polygon, Vector vector) {
+    for (ListItem it = list_head(polygon->points); it; it = list_next(it)) {
+        Point point = list_value(it);
+        point_translate(point, vector);
+    }
+}
+
+void polygon_rotate_around(Polygon polygon, Point center, double deg) {
+    for (ListItem it = list_head(polygon->points); it; it = list_next(it)) {
+        Point point = list_value(it);
+        point_rotate_around(point, center, deg);
+    }
+}
+
+double polygon_area(Polygon polygon) {
+    double double_area = 0;
+    int n = list_size(polygon->points);
+    for (int i = 0; i < n; i++) {
+        Point a = list_at(polygon->points, i);
+        Point b = list_at(polygon->points, (i + 1) % n);
+        double_area += point_x(a) * point_y(b) - point_x(b) * point_y(a);
+    }
+    return fabs(double_area) / 2;
+}
+
+int point_is_in_polygon(Polygon polygon, Point point) {
+    int n = list_size(polygon->points);
+    int point_is_in = 1;
+    int orientation;
+    for (int i = 0; i < n && point_is_in; i++) {
+        Point a = list_at(polygon->points, i);
+        Point c = list_at(polygon->points, (i + 1) % n);
+        Triangle triangle = triangle_new(a, point, c);
+        if (i == 0)
+            orientation = triangle_orientation(triangle);
+        else if (orientation != triangle_orientation(triangle))
+            point_is_in = 0;
+        triangle_release(triangle);
+    }
+    return point_is_in;
 }
 
