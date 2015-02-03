@@ -45,6 +45,9 @@ double deg_to_rad(double deg);
 /* Return a new vector. */
 Vector vector_new(double x, double y);
 
+/* Return a new vector from point a to point b. */
+Vector vector_from_point_to_point(Point a, Point b);
+
 /* Free the memory used by vector. */
 void vector_release(Vector vector);
 
@@ -66,6 +69,18 @@ double vector_x(Vector vector);
 
 /* Return vector y component. */
 double vector_y(Vector vector);
+
+/* Normalize vector. */
+void vector_normalize(Vector vector);
+
+/* Sum vector b to vector a. */
+void vector_sum(Vector a, Vector b);
+
+/* Subtract vector b from vector a. */
+void vector_subtract(Vector a, Vector b);
+
+/* Multiply vector by a scalar factor. */
+void vector_multiply(Vector vector, double k);
 
 /* Return vector magnitude. */
 double vector_magnitude(Vector vector);
@@ -150,6 +165,9 @@ void line_normalize(Line line);
 
 /* Return 1 if the point is in line. 0, otherwise. */
 int point_is_in_line(Point point, Line line);
+
+/* Return the distance between two points. */
+double point_distance_to_point(Point point1, Point point2);
 
 /* Return the distance from the point to the line. */
 double point_distance_to_line(Point point, Line line);
@@ -256,6 +274,18 @@ double polygon_area(Polygon polygon);
 
 /* Return 1 if the point is inside the polygon. 0, otherwise. */
 int point_is_in_polygon(Polygon polygon, Point point);
+
+/* Return a minimum translation vector. */
+/*Vector segment_segment_intersection();
+Vector segment_triangle_intersection();
+Vector segment_polygon_intersection();
+Vector segment_circle_intersection();
+Vector triangle_triangle_intersection();
+Vector triangle_polygon_intersection();
+Vector triangle_circle_intersection();
+Vector polygon_polygon_intersection();
+Vector polygon_circle_intersection();*/
+Vector circle_circle_intersection(Circle a, Circle b);
 
 #endif
 

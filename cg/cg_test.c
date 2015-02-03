@@ -23,6 +23,21 @@ static void test_vector_new_1() {
     vector_release(vector);
 }
 
+static void test_vector_from_point_to_point_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Vector vector1 = vector_from_point_to_point(a, b);
+    Vector vector2 = vector_from_point_to_point(b, a);
+    g_assert(double_equals(vector1->x, 1));
+    g_assert(double_equals(vector1->y, 1));
+    g_assert(double_equals(vector2->x, -1));
+    g_assert(double_equals(vector2->y, -1));
+    vector_release(vector1);
+    vector_release(vector2);
+    point_release(a);
+    point_release(b);
+}
+
 static void test_vector_release_1() {
     Vector vector = vector_new(2, 3);
     vector_release(vector);
@@ -79,6 +94,86 @@ static void test_vector_x_1() {
 static void test_vector_y_1() {
     Vector vector = vector_new(1, 2);
     g_assert(double_equals(vector_y(vector), 2));
+    vector_release(vector);
+}
+
+static void test_vector_normalize_1() {
+    Vector vector = vector_new(2, 0);
+    vector_normalize(vector);
+    g_assert(double_equals(vector->x, 1));
+    g_assert(double_equals(vector->y, 0));
+    vector_release(vector);
+}
+
+static void test_vector_sum_1() {
+    Vector a = vector_new(1, 1);
+    Vector b = vector_new(0, 0);
+    vector_sum(a, b);
+    g_assert(double_equals(a->x, 1));
+    g_assert(double_equals(a->y, 1));
+    g_assert(double_equals(b->x, 0));
+    g_assert(double_equals(b->y, 0));
+    vector_release(a);
+    vector_release(b);
+}
+
+static void test_vector_sum_2() {
+    Vector a = vector_new(0, 0);
+    Vector b = vector_new(1, 1);
+    vector_sum(a, b);
+    g_assert(double_equals(a->x, 1));
+    g_assert(double_equals(a->y, 1));
+    g_assert(double_equals(b->x, 1));
+    g_assert(double_equals(b->y, 1));
+    vector_release(a);
+    vector_release(b);
+}
+
+static void test_vector_subtract_1() {
+    Vector a = vector_new(1, 1);
+    Vector b = vector_new(0, 0);
+    vector_subtract(a, b);
+    g_assert(double_equals(a->x, 1));
+    g_assert(double_equals(a->y, 1));
+    g_assert(double_equals(b->x, 0));
+    g_assert(double_equals(b->y, 0));
+    vector_release(a);
+    vector_release(b);
+}
+
+static void test_vector_subtract_2() {
+    Vector a = vector_new(0, 0);
+    Vector b = vector_new(1, 1);
+    vector_subtract(a, b);
+    g_assert(double_equals(a->x, -1));
+    g_assert(double_equals(a->y, -1));
+    g_assert(double_equals(b->x, 1));
+    g_assert(double_equals(b->y, 1));
+    vector_release(a);
+    vector_release(b);
+}
+
+static void test_vector_multiply_1() {
+    Vector vector = vector_new(1, 1);
+    vector_multiply(vector, 0);
+    g_assert(double_equals(vector->x, 0));
+    g_assert(double_equals(vector->y, 0));
+    vector_release(vector);
+}
+
+static void test_vector_multiply_2() {
+    Vector vector = vector_new(1, 1);
+    vector_multiply(vector, 2);
+    g_assert(double_equals(vector->x, 2));
+    g_assert(double_equals(vector->y, 2));
+    vector_release(vector);
+}
+
+static void test_vector_normalize_2() {
+    Vector vector = vector_new(1, 1);
+    vector_normalize(vector);
+    g_assert(double_equals(vector->x, 1 / sqrt(2)));
+    g_assert(double_equals(vector->y, 1 / sqrt(2)));
     vector_release(vector);
 }
 
@@ -696,6 +791,27 @@ static void test_point_distance_to_line_3() {
     point_release(point2);
     point_release(point3);
     line_release(line);
+}
+
+static void test_point_distance_to_point_1() {
+    Point point1 = point_new(0, 0);
+    Point point2 = point_new(1, 0);
+    Point point3 = point_new(0, 1);
+    Point point4 = point_new(1, 1);
+    g_assert(double_equals(point_distance_to_point(point1, point1), 0));
+    g_assert(double_equals(point_distance_to_point(point1, point2), 1));
+    g_assert(double_equals(point_distance_to_point(point1, point3), 1));
+    g_assert(double_equals(point_distance_to_point(point1, point4), sqrt(2)));
+    g_assert(double_equals(point_distance_to_point(point2, point2), 0));
+    g_assert(double_equals(point_distance_to_point(point2, point3), sqrt(2)));
+    g_assert(double_equals(point_distance_to_point(point2, point4), 1));
+    g_assert(double_equals(point_distance_to_point(point3, point3), 0));
+    g_assert(double_equals(point_distance_to_point(point3, point4), 1));
+    g_assert(double_equals(point_distance_to_point(point4, point4), 0));
+    point_release(point1);
+    point_release(point2);
+    point_release(point3);
+    point_release(point4);
 }
 
 static void test_angle_between_lines_1() {
@@ -1551,10 +1667,46 @@ static void test_point_is_in_polygon_4() {
     point_release(lower_left);
 }
 
+static void test_circle_circle_intersection_1() {
+    Point center_a = point_new(0, 0);
+    Point center_b = point_new(2, 0);
+    Circle a = circle_new(center_a, 1);
+    Circle b = circle_new(center_b, 1);
+    Vector mtv = circle_circle_intersection(a, b);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    circle_release(a);
+    circle_release(b);
+    point_release(center_a);
+    point_release(center_b);
+}
+
+static void test_circle_circle_intersection_2() {
+    Point center_a = point_new(0, 0);
+    Point center_b = point_new(1, 0);
+    Circle a = circle_new(center_a, 1);
+    Circle b = circle_new(center_b, 1);
+    Vector mtv1 = circle_circle_intersection(a, b);
+    g_assert(double_equals(mtv1->x, 1));
+    g_assert(double_equals(mtv1->y, 0));
+    Vector mtv2 = circle_circle_intersection(b, a);
+    g_assert(double_equals(mtv2->x, -1));
+    g_assert(double_equals(mtv2->y, 0));
+    vector_release(mtv1);
+    vector_release(mtv2);
+    circle_release(a);
+    circle_release(b);
+    point_release(center_a);
+    point_release(center_b);
+}
+
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);
+    g_test_add_func("/gc/vector_from_point_to_point",
+                    test_vector_from_point_to_point_1);
     g_test_add_func("/gc/vector_release", test_vector_release_1);
     g_test_add_func("/gc/vector_equals", test_vector_equals_1);
     g_test_add_func("/gc/vector_equals", test_vector_equals_2);
@@ -1563,6 +1715,14 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_from_str", test_vector_from_str_1);
     g_test_add_func("/gc/vector_x", test_vector_x_1);
     g_test_add_func("/gc/vector_y", test_vector_y_1);
+    g_test_add_func("/gc/vector_normalize", test_vector_normalize_1);
+    g_test_add_func("/gc/vector_normalize", test_vector_normalize_2);
+    g_test_add_func("/gc/vector_sum", test_vector_sum_1);
+    g_test_add_func("/gc/vector_sum", test_vector_sum_2);
+    g_test_add_func("/gc/vector_subtract", test_vector_subtract_1);
+    g_test_add_func("/gc/vector_subtract", test_vector_subtract_2);
+    g_test_add_func("/gc/vector_multiply", test_vector_multiply_1);
+    g_test_add_func("/gc/vector_multiply", test_vector_multiply_2);
     g_test_add_func("/gc/vector_magnitude", test_vector_magnitude_1);
     g_test_add_func("/gc/vector_magnitude", test_vector_magnitude_2);
     g_test_add_func("/gc/vector_dot", test_vector_dot_1);
@@ -1627,6 +1787,8 @@ int main(int argc, char *argv[]) {
                     test_point_distance_to_line_2);
     g_test_add_func("/gc/point_distance_to_line",
                     test_point_distance_to_line_3);
+    g_test_add_func("/gc/point_distance_to_point",
+                    test_point_distance_to_point_1);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_1);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_2);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_3);
@@ -1691,6 +1853,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_2);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_3);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_4);
+    g_test_add_func("/gc/circle_circle_intersection", test_circle_circle_intersection_1);
+    g_test_add_func("/gc/circle_circle_intersection", test_circle_circle_intersection_2);
     return g_test_run();
 }
 

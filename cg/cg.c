@@ -20,6 +20,12 @@ Vector vector_new(double x, double y) {
     return vector;
 }
 
+Vector vector_from_point_to_point(Point a, Point b) {
+    double x = point_x(b) - point_x(a);
+    double y = point_y(b) - point_y(a);
+    return vector_new(x, y);
+}
+
 void vector_release(Vector vector) {
     free(vector);
 }
@@ -67,6 +73,27 @@ double vector_x(Vector vector) {
 
 double vector_y(Vector vector) {
     return vector->y;
+}
+
+void vector_normalize(Vector vector) {
+    double magnitude = vector_magnitude(vector);
+    vector->x /= magnitude;
+    vector->y /= magnitude;
+}
+
+void vector_sum(Vector a, Vector b) {
+    a->x += b->x;
+    a->y += b->y;
+}
+
+void vector_subtract(Vector a, Vector b) {
+    a->x -= b->x;
+    a->y -= b->y;
+}
+
+void vector_multiply(Vector vector, double k) {
+    vector->x *= k;
+    vector->y *= k;
 }
 
 double vector_magnitude(Vector vector) {
@@ -287,6 +314,12 @@ double point_distance_to_line(Point point, Line line) {
     line_release(normalized_line);
     point_release(normalized_point);
     return dist;
+}
+
+double point_distance_to_point(Point point1, Point point2) {
+    double x_dist = point_x(point1) - point_x(point2);
+    double y_dist = point_y(point1) - point_y(point2);
+    return sqrt(x_dist * x_dist + y_dist * y_dist);
 }
 
 double angle_between_lines(Line line1, Line line2) {
@@ -614,5 +647,19 @@ int point_is_in_polygon(Polygon polygon, Point point) {
         triangle_release(triangle);
     }
     return point_is_in;
+}
+
+Vector circle_circle_intersection(Circle a, Circle b) {
+    Vector vector = vector_from_point_to_point(a->center, b->center);
+    double center_dist = vector_magnitude(vector);
+    if (double_lt(center_dist, a->radius + b->radius)) {
+        vector_normalize(vector);
+        vector_multiply(vector, a->radius + b->radius - center_dist);
+    }
+    else {
+        vector_release(vector);
+        vector = vector_new(0, 0);
+    }
+    return vector;
 }
 
