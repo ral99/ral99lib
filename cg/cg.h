@@ -281,6 +281,9 @@ double circle_radius(Circle circle);
 /* Translate the point by the vector. */
 void circle_translate(Circle circle, Vector vector);
 
+/* Return circle projection on axis. */
+ShapeProjectionOnAxis circle_projection_on_axis(Circle circle, Vector axis);
+
 /* Return 1 if the point is inside the circle. 0, otherwise. */
 int point_is_in_circle(Point point, Circle circle);
 

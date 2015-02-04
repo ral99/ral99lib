@@ -573,6 +573,12 @@ void circle_translate(Circle circle, Vector vector) {
     point_translate(circle->center, vector);
 }
 
+ShapeProjectionOnAxis circle_projection_on_axis(Circle circle, Vector axis) {
+    double magnitude = point_projection_magnitude_on_axis(circle->center, axis);
+    return shape_projection_on_axis_new(magnitude - circle->radius,
+                                        magnitude + circle->radius);
+}
+
 int point_is_in_circle(Point point, Circle circle) {
     double point_x = point->x / point->w;
     double point_y = point->y / point->w;

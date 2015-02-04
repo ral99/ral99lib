@@ -1,6 +1,7 @@
 #include <glib.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "cg/cg.h"
 #include "mem/mem.h"
@@ -1261,6 +1262,21 @@ static void test_segment_projection_on_axis_2() {
     Point a = point_new(1, 1);
     Point b = point_new(5, 1);
     Segment segment = segment_new(a, b);
+    Vector axis = vector_new(-1, 0);
+    ShapeProjectionOnAxis spoa = segment_projection_on_axis(segment, axis);
+    g_assert(double_equals(spoa->min, -5));
+    g_assert(double_equals(spoa->max, -1));
+    shape_projection_on_axis_release(spoa);
+    segment_release(segment);
+    vector_release(axis);
+    point_release(a);
+    point_release(b);
+}
+
+static void test_segment_projection_on_axis_3() {
+    Point a = point_new(1, 1);
+    Point b = point_new(5, 1);
+    Segment segment = segment_new(a, b);
     Vector axis = vector_new(0, 1);
     ShapeProjectionOnAxis spoa = segment_projection_on_axis(segment, axis);
     g_assert(double_equals(spoa->min, 1));
@@ -1272,7 +1288,7 @@ static void test_segment_projection_on_axis_2() {
     point_release(b);
 }
 
-static void test_segment_projection_on_axis_3() {
+static void test_segment_projection_on_axis_4() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 1);
     Segment segment = segment_new(a, b);
@@ -1287,7 +1303,7 @@ static void test_segment_projection_on_axis_3() {
     point_release(b);
 }
 
-static void test_segment_projection_on_axis_4() {
+static void test_segment_projection_on_axis_5() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 1);
     Segment segment = segment_new(a, b);
@@ -1540,6 +1556,45 @@ static void test_circle_translate_2() {
     point_release(center);
     point_release(new_center);
     vector_release(vector);
+    circle_release(circle);
+}
+
+static void test_circle_projection_on_axis_1() {
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector axis = vector_new(1, 0);
+    ShapeProjectionOnAxis spoa = circle_projection_on_axis(circle, axis);
+    g_assert(double_equals(spoa->min, 0));
+    g_assert(double_equals(spoa->max, 2));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    point_release(center);
+    circle_release(circle);
+}
+
+static void test_circle_projection_on_axis_2() {
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector axis = vector_new(-1, 0);
+    ShapeProjectionOnAxis spoa = circle_projection_on_axis(circle, axis);
+    g_assert(double_equals(spoa->min, -2));
+    g_assert(double_equals(spoa->max, 0));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    point_release(center);
+    circle_release(circle);
+}
+
+static void test_circle_projection_on_axis_3() {
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector axis = vector_new(1, 1);
+    ShapeProjectionOnAxis spoa = circle_projection_on_axis(circle, axis);
+    g_assert(double_equals(spoa->min, sqrt(2) - 1));
+    g_assert(double_equals(spoa->max, sqrt(2) + 1));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    point_release(center);
     circle_release(circle);
 }
 
@@ -2495,6 +2550,8 @@ int main(int argc, char *argv[]) {
                     test_segment_projection_on_axis_3);
     g_test_add_func("/gc/segment_projection_on_axis",
                     test_segment_projection_on_axis_4);
+    g_test_add_func("/gc/segment_projection_on_axis",
+                    test_segment_projection_on_axis_5);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_1);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_2);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_3);
@@ -2515,6 +2572,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_radius", test_circle_radius_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_2);
+    g_test_add_func("/gc/circle_projection_on_axis",
+                    test_circle_projection_on_axis_1);
+    g_test_add_func("/gc/circle_projection_on_axis",
+                    test_circle_projection_on_axis_2);
+    g_test_add_func("/gc/circle_projection_on_axis",
+                    test_circle_projection_on_axis_3);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_3);
