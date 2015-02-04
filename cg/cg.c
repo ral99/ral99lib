@@ -196,6 +196,15 @@ Vector point_vector_from_origin(Point point) {
     return vector_new(point_x(point), point_y(point));
 }
 
+Vector point_projection_on_axis(Point point, Vector axis) {
+    Vector vector = point_vector_from_origin(point);
+    Vector projection = vector_dup(axis);
+    vector_normalize(projection);
+    double projection_magnitude = vector_dot(vector, projection);
+    vector_multiply(projection, projection_magnitude);
+    return projection;
+}
+
 void point_translate(Point point, Vector vector) {
     double point_x = point->x;
     double point_y = point->y;

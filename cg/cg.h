@@ -136,6 +136,9 @@ double point_y(Point point);
 /* Return point vector from origin. */
 Vector point_vector_from_origin(Point point);
 
+/* Return point projection on axis. */
+Vector point_projection_on_axis(Point point, Vector axis);
+
 /* Translate the point by the vector. */
 void point_translate(Point point, Vector vector);
 
