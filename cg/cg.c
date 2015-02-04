@@ -413,6 +413,10 @@ Vector segment_vector(Segment segment) {
     return vector_from_point_to_point(segment->a, segment->b);
 }
 
+Line segment_line(Segment segment) {
+    return line_new(segment->a, segment->b);
+}
+
 double segment_length(Segment segment) {
     double x_dist = point_x(segment->a) - point_x(segment->b);
     double y_dist = point_y(segment->a) - point_y(segment->b);

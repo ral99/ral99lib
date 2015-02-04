@@ -205,6 +205,9 @@ List segment_points(Segment segment);
 /* Return the vector from segment point a to b. */
 Vector segment_vector(Segment segment);
 
+/* Return the segment line. */
+Line segment_line(Segment segment);
+
 /* Return the segment length. */
 double segment_length(Segment segment);
 

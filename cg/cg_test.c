@@ -1031,6 +1031,20 @@ static void test_segment_vector_1() {
     segment_release(segment);
 }
 
+static void test_segment_line_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    Line line1 = line_new(a, b);
+    Line line2 = segment_line(segment);
+    g_assert(line_equals(line1, line2));
+    line_release(line1);
+    line_release(line2);
+    segment_release(segment);
+    point_release(a);
+    point_release(b);
+}
+
 static void test_segment_length_1() {
     Point a = point_new(3, 0);
     Point b = point_new(0, 4);
@@ -2061,6 +2075,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_from_str", test_segment_from_str_1);
     g_test_add_func("/gc/segment_points", test_segment_points_1);
     g_test_add_func("/gc/segment_vector", test_segment_vector_1);
+    g_test_add_func("/gc/segment_line", test_segment_line_1);
     g_test_add_func("/gc/segment_length", test_segment_length_1);
     g_test_add_func("/gc/segment_translate", test_segment_translate_1);
     g_test_add_func("/gc/segment_translate", test_segment_translate_2);
