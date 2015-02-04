@@ -425,6 +425,15 @@ static void test_point_y_2() {
     point_release(point);
 }
 
+static void test_point_vector_from_origin_1() {
+    Point point = point_new(1, 2);
+    Vector vector = point_vector_from_origin(point);
+    g_assert(double_equals(vector->x, 1));
+    g_assert(double_equals(vector->y, 2));
+    point_release(point);
+    vector_release(vector);
+}
+
 static void test_point_translate_1() {
     Vector vector = vector_new(2, 2);
     Point point = point_new(2, 4);
@@ -2136,6 +2145,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_x", test_point_x_2);
     g_test_add_func("/gc/point_y", test_point_y_1);
     g_test_add_func("/gc/point_y", test_point_y_2);
+    g_test_add_func("/gc/point_vector_from_origin",
+                    test_point_vector_from_origin_1);
     g_test_add_func("/gc/point_translate", test_point_translate_1);
     g_test_add_func("/gc/point_translate", test_point_translate_2);
     g_test_add_func("/gc/point_translate", test_point_translate_3);

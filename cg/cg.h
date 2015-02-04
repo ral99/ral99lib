@@ -133,6 +133,9 @@ double point_x(Point point);
 /* Return point y component. */
 double point_y(Point point);
 
+/* Return point vector from origin. */
+Vector point_vector_from_origin(Point point);
+
 /* Translate the point by the vector. */
 void point_translate(Point point, Vector vector);
 
@@ -334,7 +337,7 @@ double polygon_area(Polygon polygon);
 int point_is_in_polygon(Polygon polygon, Point point);
 
 /* Return a minimum translation vector. */
-/*Vector segment_segment_intersection();
+/*
 Vector segment_triangle_intersection();
 Vector segment_polygon_intersection();
 Vector segment_circle_intersection();
@@ -342,7 +345,8 @@ Vector triangle_triangle_intersection();
 Vector triangle_polygon_intersection();
 Vector triangle_circle_intersection();
 Vector polygon_polygon_intersection();
-Vector polygon_circle_intersection();*/
+Vector polygon_circle_intersection();
+*/
 Vector segment_segment_intersection(Segment segment1, Segment segment2);
 Vector circle_circle_intersection(Circle circle1, Circle circle2);
 

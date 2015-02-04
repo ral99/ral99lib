@@ -192,6 +192,10 @@ double point_y(Point point) {
     return point->y / point->w;
 }
 
+Vector point_vector_from_origin(Point point) {
+    return vector_new(point_x(point), point_y(point));
+}
+
 void point_translate(Point point, Vector vector) {
     double point_x = point->x;
     double point_y = point->y;
