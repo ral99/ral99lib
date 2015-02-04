@@ -141,11 +141,11 @@ double point_y(Point point);
 /* Return point vector from origin. */
 Vector point_vector_from_origin(Point point);
 
-/* Return point projection magnitude on axis defined by direction. */
-double point_projection_magnitude_on_axis(Point point, Vector direction);
+/* Return point projection magnitude on axis. */
+double point_projection_magnitude_on_axis(Point point, Vector axis);
 
-/* Return point projection on axis defined by direction. */
-Vector point_projection_on_axis(Point point, Vector direction);
+/* Return point projection on axis. */
+Vector point_projection_on_axis(Point point, Vector axis);
 
 /* Translate the point by the vector. */
 void point_translate(Point point, Vector vector);
@@ -240,6 +240,9 @@ void segment_translate(Segment segment, Vector vector);
 /* Rotate the segment by the specified degrees in counter-clockwise
  * orientation around a center point. */
 void segment_rotate_around(Segment segment, Point center, double deg);
+
+/* Return segment projection on axis. */
+ShapeProjectionOnAxis segment_projection_on_axis(Segment segment, Vector axis);
 
 /* Return 1 if the point is in the segment. 0, otherwise. */
 int point_is_in_segment(Point point, Segment segment);

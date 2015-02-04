@@ -196,17 +196,18 @@ Vector point_vector_from_origin(Point point) {
     return vector_new(point_x(point), point_y(point));
 }
 
-double point_projection_magnitude_on_axis(Point point, Vector direction) {
-    Vector projection = vector_dup(direction);
+double point_projection_magnitude_on_axis(Point point, Vector axis) {
+    Vector projection = vector_dup(axis);
     vector_normalize(projection);
     Vector vector = point_vector_from_origin(point);
     double projection_magnitude = vector_dot(vector, projection);
     vector_release(vector);
+    vector_release(projection);
     return projection_magnitude;
 }
 
-Vector point_projection_on_axis(Point point, Vector direction) {
-    Vector projection = vector_dup(direction);
+Vector point_projection_on_axis(Point point, Vector axis) {
+    Vector projection = vector_dup(axis);
     vector_normalize(projection);
     Vector vector = point_vector_from_origin(point);
     double projection_magnitude = vector_dot(vector, projection);
@@ -457,6 +458,14 @@ double segment_length(Segment segment) {
     double x_dist = point_x(segment->a) - point_x(segment->b);
     double y_dist = point_y(segment->a) - point_y(segment->b);
     return sqrt(x_dist * x_dist + y_dist * y_dist);
+}
+
+ShapeProjectionOnAxis segment_projection_on_axis(Segment segment, Vector axis) {
+    double magnitude1 = point_projection_magnitude_on_axis(segment->a, axis);
+    double magnitude2 = point_projection_magnitude_on_axis(segment->b, axis);
+    double min = (double_lte(magnitude1, magnitude2)) ? magnitude1 : magnitude2;
+    double max = (double_gte(magnitude1, magnitude2)) ? magnitude1 : magnitude2;
+    return shape_projection_on_axis_new(min, max);
 }
 
 void segment_translate(Segment segment, Vector vector) {
@@ -846,60 +855,33 @@ double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
 }
 
 Vector segment_segment_intersection(Segment segment1, Segment segment2) {
-    Line line1 = segment_line(segment1);
-    Line line2 = segment_line(segment2);
-    Point intersection = line_intersection(line1, line2);
+    double mtv_magnitude = 1;
     Vector mtv;
-    if (point_is_infinite(intersection) ||
-        !point_is_in_segment(intersection, segment1) ||
-        !point_is_in_segment(intersection, segment2))
-        mtv = vector_new(0, 0);
-    else {
-        Vector vector1 = segment_vector(segment1);
-        Vector vector2 = segment_vector(segment2);
-        Vector perpendicular1 = vector_right_perpendicular(vector1);
-        Vector perpendicular2 = vector_right_perpendicular(vector2);
-        vector_normalize(perpendicular1);
-        vector_normalize(perpendicular2);
-        Vector a1 = vector_from_point_to_point(segment1->a, intersection);
-        double a1_projection = vector_dot(a1, perpendicular2);
-        Vector b1 = vector_from_point_to_point(segment1->b, intersection);
-        double b1_projection = vector_dot(b1, perpendicular2);
-        Vector a2 = vector_from_point_to_point(segment2->a, intersection);
-        double a2_projection = vector_dot(a2, perpendicular1);
-        Vector b2 = vector_from_point_to_point(segment2->b, intersection);
-        double b2_projection = vector_dot(b2, perpendicular1);
-        if (double_lt(fabs(a1_projection), fabs(b1_projection)) &&
-            double_lt(fabs(a1_projection), fabs(a2_projection)) &&
-            double_lt(fabs(a1_projection), fabs(b2_projection))) {
-            mtv = vector_dup(perpendicular2);
-            vector_multiply(mtv, -a1_projection);
+    Vector vector1 = segment_vector(segment1);
+    Vector vector2 = segment_vector(segment2);
+    List axes = list_new();
+    list_append(axes, vector_right_perpendicular(vector1));
+    list_append(axes, vector_right_perpendicular(vector2));
+    for (ListItem it = list_head(axes); it && mtv_magnitude != 0;
+         it = list_next(it)) {
+        Vector axis = list_value(it);
+        vector_normalize(axis);
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment1, axis);
+        ShapeProjectionOnAxis spoa2 = segment_projection_on_axis(segment2, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) ||
+            double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
+            mtv = axis;
         }
-        else if (double_lt(fabs(b1_projection), fabs(a2_projection)) &&
-                 double_lt(fabs(b1_projection), fabs(b2_projection))) {
-            mtv = vector_dup(perpendicular2);
-            vector_multiply(mtv, -b1_projection);
-        }
-        else if (double_lt(fabs(a2_projection), fabs(b2_projection))) {
-            mtv = vector_dup(perpendicular1);
-            vector_multiply(mtv, a2_projection);
-        }
-        else {
-            mtv = vector_dup(perpendicular1);
-            vector_multiply(mtv, b2_projection);
-        }
-        vector_release(vector1);
-        vector_release(vector2);
-        vector_release(perpendicular1);
-        vector_release(perpendicular2);
-        vector_release(a1);
-        vector_release(b1);
-        vector_release(a2);
-        vector_release(b2);
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
     }
-    point_release(intersection);
-    line_release(line1);
-    line_release(line2);
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_magnitude);
+    list_full_release(axes, (void (*)(void *)) vector_release);
+    vector_release(vector1);
+    vector_release(vector2);
     return mtv;
 }
 
