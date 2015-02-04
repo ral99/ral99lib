@@ -381,7 +381,6 @@ double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
 /*
 Vector segment_triangle_intersection();
 Vector segment_polygon_intersection();
-Vector segment_circle_intersection();
 Vector triangle_triangle_intersection();
 Vector triangle_polygon_intersection();
 Vector triangle_circle_intersection();
@@ -390,6 +389,7 @@ Vector polygon_circle_intersection();
 */
 Vector segment_segment_intersection(Segment segment1, Segment segment2);
 Vector circle_circle_intersection(Circle circle1, Circle circle2);
+Vector segment_circle_intersection(Segment segment, Circle circle);
 
 #endif
 

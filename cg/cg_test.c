@@ -438,6 +438,7 @@ static void test_point_vector_from_origin_1() {
 static void test_point_projection_magnitude_on_axis_1() {
     Point point = point_new(1, 1);
     Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
     double magnitude = point_projection_magnitude_on_axis(point, axis);
     g_assert(double_equals(magnitude, 1));
     vector_release(axis);
@@ -447,6 +448,7 @@ static void test_point_projection_magnitude_on_axis_1() {
 static void test_point_projection_magnitude_on_axis_2() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
     double magnitude = point_projection_magnitude_on_axis(point, axis);
     g_assert(double_equals(magnitude, 5));
     vector_release(axis);
@@ -456,6 +458,7 @@ static void test_point_projection_magnitude_on_axis_2() {
 static void test_point_projection_magnitude_on_axis_3() {
     Point point = point_new(1, 1);
     Vector axis = vector_new(0, 1);
+    vector_normalize(axis);
     double magnitude = point_projection_magnitude_on_axis(point, axis);
     g_assert(double_equals(magnitude, 1));
     vector_release(axis);
@@ -465,6 +468,7 @@ static void test_point_projection_magnitude_on_axis_3() {
 static void test_point_projection_magnitude_on_axis_4() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(0, 1);
+    vector_normalize(axis);
     double magnitude = point_projection_magnitude_on_axis(point, axis);
     g_assert(double_equals(magnitude, 5));
     vector_release(axis);
@@ -474,6 +478,7 @@ static void test_point_projection_magnitude_on_axis_4() {
 static void test_point_projection_magnitude_on_axis_5() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(0, 2);
+    vector_normalize(axis);
     double magnitude = point_projection_magnitude_on_axis(point, axis);
     g_assert(double_equals(magnitude, 5));
     vector_release(axis);
@@ -483,6 +488,7 @@ static void test_point_projection_magnitude_on_axis_5() {
 static void test_point_projection_magnitude_on_axis_6() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(1, 1);
+    vector_normalize(axis);
     double magnitude = point_projection_magnitude_on_axis(point, axis);
     g_assert(double_equals(magnitude, sqrt(50)));
     vector_release(axis);
@@ -492,6 +498,7 @@ static void test_point_projection_magnitude_on_axis_6() {
 static void test_point_projection_on_axis_1() {
     Point point = point_new(1, 1);
     Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
     Vector vector = point_projection_on_axis(point, axis);
     g_assert(double_equals(vector->x, 1));
     g_assert(double_equals(vector->y, 0));
@@ -503,6 +510,7 @@ static void test_point_projection_on_axis_1() {
 static void test_point_projection_on_axis_2() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
     Vector vector = point_projection_on_axis(point, axis);
     g_assert(double_equals(vector->x, 5));
     g_assert(double_equals(vector->y, 0));
@@ -514,6 +522,7 @@ static void test_point_projection_on_axis_2() {
 static void test_point_projection_on_axis_3() {
     Point point = point_new(1, 1);
     Vector axis = vector_new(0, 1);
+    vector_normalize(axis);
     Vector vector = point_projection_on_axis(point, axis);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 1));
@@ -525,6 +534,7 @@ static void test_point_projection_on_axis_3() {
 static void test_point_projection_on_axis_4() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(0, 1);
+    vector_normalize(axis);
     Vector vector = point_projection_on_axis(point, axis);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 5));
@@ -536,6 +546,7 @@ static void test_point_projection_on_axis_4() {
 static void test_point_projection_on_axis_5() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(0, 2);
+    vector_normalize(axis);
     Vector vector = point_projection_on_axis(point, axis);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 5));
@@ -547,6 +558,7 @@ static void test_point_projection_on_axis_5() {
 static void test_point_projection_on_axis_6() {
     Point point = point_new(5, 5);
     Vector axis = vector_new(1, 1);
+    vector_normalize(axis);
     Vector vector = point_projection_on_axis(point, axis);
     g_assert(double_equals(vector->x, 5));
     g_assert(double_equals(vector->y, 5));
@@ -1248,6 +1260,7 @@ static void test_segment_projection_on_axis_1() {
     Point b = point_new(5, 1);
     Segment segment = segment_new(a, b);
     Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa = segment_projection_on_axis(segment, axis);
     g_assert(double_equals(spoa->min, 1));
     g_assert(double_equals(spoa->max, 5));
@@ -1263,6 +1276,7 @@ static void test_segment_projection_on_axis_2() {
     Point b = point_new(5, 1);
     Segment segment = segment_new(a, b);
     Vector axis = vector_new(-1, 0);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa = segment_projection_on_axis(segment, axis);
     g_assert(double_equals(spoa->min, -5));
     g_assert(double_equals(spoa->max, -1));
@@ -1278,6 +1292,7 @@ static void test_segment_projection_on_axis_3() {
     Point b = point_new(5, 1);
     Segment segment = segment_new(a, b);
     Vector axis = vector_new(0, 1);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa = segment_projection_on_axis(segment, axis);
     g_assert(double_equals(spoa->min, 1));
     g_assert(double_equals(spoa->max, 1));
@@ -1563,6 +1578,7 @@ static void test_circle_projection_on_axis_1() {
     Point center = point_new(1, 1);
     Circle circle = circle_new(center, 1);
     Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa = circle_projection_on_axis(circle, axis);
     g_assert(double_equals(spoa->min, 0));
     g_assert(double_equals(spoa->max, 2));
@@ -1576,6 +1592,7 @@ static void test_circle_projection_on_axis_2() {
     Point center = point_new(1, 1);
     Circle circle = circle_new(center, 1);
     Vector axis = vector_new(-1, 0);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa = circle_projection_on_axis(circle, axis);
     g_assert(double_equals(spoa->min, -2));
     g_assert(double_equals(spoa->max, 0));
@@ -1589,6 +1606,7 @@ static void test_circle_projection_on_axis_3() {
     Point center = point_new(1, 1);
     Circle circle = circle_new(center, 1);
     Vector axis = vector_new(1, 1);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa = circle_projection_on_axis(circle, axis);
     g_assert(double_equals(spoa->min, sqrt(2) - 1));
     g_assert(double_equals(spoa->max, sqrt(2) + 1));
@@ -2404,6 +2422,57 @@ static void test_circle_circle_intersection_2() {
     point_release(center2);
 }
 
+static void test_segment_circle_intersection_1() {
+    Point a = point_new(0, 3);
+    Point b = point_new(1, 3);
+    Segment segment = segment_new(a, b);
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector mtv = segment_circle_intersection(segment, circle);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    point_release(center);
+    circle_release(circle);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_circle_intersection_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector mtv = segment_circle_intersection(segment, circle);
+    g_assert(double_equals(mtv->x, sqrt(2) / 2));
+    g_assert(double_equals(mtv->y, sqrt(2) / 2));
+    vector_release(mtv);
+    point_release(center);
+    circle_release(circle);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_circle_intersection_3() {
+    Point a = point_new(0, 1);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 0.9);
+    Vector mtv = segment_circle_intersection(segment, circle);
+    g_assert(double_equals(mtv->x, 0.9));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    point_release(center);
+    circle_release(circle);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
@@ -2647,6 +2716,12 @@ int main(int argc, char *argv[]) {
                     test_circle_circle_intersection_1);
     g_test_add_func("/gc/circle_circle_intersection",
                     test_circle_circle_intersection_2);
+    g_test_add_func("/gc/segment_circle_intersection",
+                    test_segment_circle_intersection_1);
+    g_test_add_func("/gc/segment_circle_intersection",
+                    test_segment_circle_intersection_2);
+    g_test_add_func("/gc/segment_circle_intersection",
+                    test_segment_circle_intersection_3);
     return g_test_run();
 }
 

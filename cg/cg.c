@@ -198,7 +198,6 @@ Vector point_vector_from_origin(Point point) {
 
 double point_projection_magnitude_on_axis(Point point, Vector axis) {
     Vector projection = vector_dup(axis);
-    vector_normalize(projection);
     Vector vector = point_vector_from_origin(point);
     double projection_magnitude = vector_dot(vector, projection);
     vector_release(vector);
@@ -208,7 +207,6 @@ double point_projection_magnitude_on_axis(Point point, Vector axis) {
 
 Vector point_projection_on_axis(Point point, Vector axis) {
     Vector projection = vector_dup(axis);
-    vector_normalize(projection);
     Vector vector = point_vector_from_origin(point);
     double projection_magnitude = vector_dot(vector, projection);
     vector_multiply(projection, projection_magnitude);
@@ -868,7 +866,7 @@ Vector segment_segment_intersection(Segment segment1, Segment segment2) {
     List axes = list_new();
     list_append(axes, vector_right_perpendicular(vector1));
     list_append(axes, vector_right_perpendicular(vector2));
-    for (ListItem it = list_head(axes); it && mtv_magnitude != 0;
+    for (ListItem it = list_head(axes); it && !double_equals(mtv_magnitude, 0);
          it = list_next(it)) {
         Vector axis = list_value(it);
         vector_normalize(axis);
@@ -892,15 +890,41 @@ Vector segment_segment_intersection(Segment segment1, Segment segment2) {
 }
 
 Vector circle_circle_intersection(Circle circle1, Circle circle2) {
-    Vector axis = vector_from_point_to_point(circle_center(circle1),
-                                             circle_center(circle2));
+    Vector axis = vector_from_point_to_point(circle1->center, circle2->center);
+    vector_normalize(axis);
     ShapeProjectionOnAxis spoa1 = circle_projection_on_axis(circle1, axis);
     ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle2, axis);
     double mtv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
-    vector_normalize(axis);
     vector_multiply(axis, mtv_magnitude);
     shape_projection_on_axis_release(spoa1);
     shape_projection_on_axis_release(spoa2);
     return axis;
+}
+
+Vector segment_circle_intersection(Segment segment, Circle circle) {
+    double mtv_magnitude = 1;
+    Vector mtv;
+    List axes = list_new();
+    list_append(axes, vector_from_point_to_point(segment->a, circle->center));
+    list_append(axes, vector_from_point_to_point(segment->b, circle->center));
+    for (ListItem it = list_head(axes); it && !double_equals(mtv_magnitude, 0);
+         it = list_next(it)) {
+        Vector axis = list_value(it);
+        vector_normalize(axis);
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
+        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) ||
+            double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_magnitude);
+    list_full_release(axes, (void (*)(void *)) vector_release);
+    return mtv;
 }
 
