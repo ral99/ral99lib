@@ -892,16 +892,15 @@ Vector segment_segment_intersection(Segment segment1, Segment segment2) {
 }
 
 Vector circle_circle_intersection(Circle circle1, Circle circle2) {
-    Vector vector = vector_from_point_to_point(circle1->center, circle2->center);
-    double center_dist = vector_magnitude(vector);
-    if (double_lt(center_dist, circle1->radius + circle2->radius)) {
-        vector_normalize(vector);
-        vector_multiply(vector, circle1->radius + circle2->radius - center_dist);
-    }
-    else {
-        vector_release(vector);
-        vector = vector_new(0, 0);
-    }
-    return vector;
+    Vector axis = vector_from_point_to_point(circle_center(circle1),
+                                             circle_center(circle2));
+    ShapeProjectionOnAxis spoa1 = circle_projection_on_axis(circle1, axis);
+    ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle2, axis);
+    double mtv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+    vector_normalize(axis);
+    vector_multiply(axis, mtv_magnitude);
+    shape_projection_on_axis_release(spoa1);
+    shape_projection_on_axis_release(spoa2);
+    return axis;
 }
 
