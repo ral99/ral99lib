@@ -196,12 +196,22 @@ Vector point_vector_from_origin(Point point) {
     return vector_new(point_x(point), point_y(point));
 }
 
-Vector point_projection_on_axis(Point point, Vector axis) {
-    Vector vector = point_vector_from_origin(point);
-    Vector projection = vector_dup(axis);
+double point_projection_magnitude_on_axis(Point point, Vector direction) {
+    Vector projection = vector_dup(direction);
     vector_normalize(projection);
+    Vector vector = point_vector_from_origin(point);
+    double projection_magnitude = vector_dot(vector, projection);
+    vector_release(vector);
+    return projection_magnitude;
+}
+
+Vector point_projection_on_axis(Point point, Vector direction) {
+    Vector projection = vector_dup(direction);
+    vector_normalize(projection);
+    Vector vector = point_vector_from_origin(point);
     double projection_magnitude = vector_dot(vector, projection);
     vector_multiply(projection, projection_magnitude);
+    vector_release(vector);
     return projection;
 }
 
@@ -795,6 +805,44 @@ int point_is_in_polygon(Polygon polygon, Point point) {
         triangle_release(triangle);
     }
     return point_is_in;
+}
+
+ShapeProjectionOnAxis shape_projection_on_axis_new(double min, double max) {
+    ShapeProjectionOnAxis spoa = memalloc(sizeof(*spoa));
+    spoa->min = min;
+    spoa->max = max;
+    return spoa;
+}
+
+void shape_projection_on_axis_release(ShapeProjectionOnAxis spoa) {
+    free(spoa);
+}
+
+int shape_projection_on_axis_equals(ShapeProjectionOnAxis spoa1,
+                                    ShapeProjectionOnAxis spoa2) {
+    return (double_equals(spoa1->min, spoa2->min) &&
+            double_equals(spoa1->max, spoa2->max)) ? 1 : 0;
+}
+
+ShapeProjectionOnAxis shape_projection_on_axis_dup(ShapeProjectionOnAxis spoa) {
+    return shape_projection_on_axis_new(spoa->min, spoa->max);
+}
+
+double shape_projection_on_axis_min(ShapeProjectionOnAxis spoa) {
+    return spoa->min;
+}
+
+double shape_projection_on_axis_max(ShapeProjectionOnAxis spoa) {
+    return spoa->max;
+}
+
+double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
+                                   ShapeProjectionOnAxis spoa2) {
+    if (double_gte(spoa1->min, spoa2->max) || double_gte(spoa2->min, spoa1->max))
+        return 0;
+    if (double_lte(spoa1->max - spoa2->min, spoa2->max - spoa1->min))
+        return spoa1->max - spoa2->min;
+    return spoa1->min - spoa2->max;
 }
 
 Vector segment_segment_intersection(Segment segment1, Segment segment2) {

@@ -434,63 +434,123 @@ static void test_point_vector_from_origin_1() {
     vector_release(vector);
 }
 
+static void test_point_projection_magnitude_on_axis_1() {
+    Point point = point_new(1, 1);
+    Vector direction = vector_new(1, 0);
+    double magnitude = point_projection_magnitude_on_axis(point, direction);
+    g_assert(double_equals(magnitude, 1));
+    vector_release(direction);
+    point_release(point);
+}
+
+static void test_point_projection_magnitude_on_axis_2() {
+    Point point = point_new(5, 5);
+    Vector direction = vector_new(1, 0);
+    double magnitude = point_projection_magnitude_on_axis(point, direction);
+    g_assert(double_equals(magnitude, 5));
+    vector_release(direction);
+    point_release(point);
+}
+
+static void test_point_projection_magnitude_on_axis_3() {
+    Point point = point_new(1, 1);
+    Vector direction = vector_new(0, 1);
+    double magnitude = point_projection_magnitude_on_axis(point, direction);
+    g_assert(double_equals(magnitude, 1));
+    vector_release(direction);
+    point_release(point);
+}
+
+static void test_point_projection_magnitude_on_axis_4() {
+    Point point = point_new(5, 5);
+    Vector direction = vector_new(0, 1);
+    double magnitude = point_projection_magnitude_on_axis(point, direction);
+    g_assert(double_equals(magnitude, 5));
+    vector_release(direction);
+    point_release(point);
+}
+
+static void test_point_projection_magnitude_on_axis_5() {
+    Point point = point_new(5, 5);
+    Vector direction = vector_new(0, 2);
+    double magnitude = point_projection_magnitude_on_axis(point, direction);
+    g_assert(double_equals(magnitude, 5));
+    vector_release(direction);
+    point_release(point);
+}
+
+static void test_point_projection_magnitude_on_axis_6() {
+    Point point = point_new(5, 5);
+    Vector direction = vector_new(1, 1);
+    double magnitude = point_projection_magnitude_on_axis(point, direction);
+    g_assert(double_equals(magnitude, sqrt(50)));
+    vector_release(direction);
+    point_release(point);
+}
+
 static void test_point_projection_on_axis_1() {
     Point point = point_new(1, 1);
-    Vector axis = vector_new(1, 0);
-    Vector vector = point_projection_on_axis(point, axis);
+    Vector direction = vector_new(1, 0);
+    Vector vector = point_projection_on_axis(point, direction);
     g_assert(double_equals(vector->x, 1));
     g_assert(double_equals(vector->y, 0));
-    vector_release(axis);
+    vector_release(vector);
+    vector_release(direction);
     point_release(point);
 }
 
 static void test_point_projection_on_axis_2() {
     Point point = point_new(5, 5);
-    Vector axis = vector_new(1, 0);
-    Vector vector = point_projection_on_axis(point, axis);
+    Vector direction = vector_new(1, 0);
+    Vector vector = point_projection_on_axis(point, direction);
     g_assert(double_equals(vector->x, 5));
     g_assert(double_equals(vector->y, 0));
-    vector_release(axis);
+    vector_release(vector);
+    vector_release(direction);
     point_release(point);
 }
 
 static void test_point_projection_on_axis_3() {
     Point point = point_new(1, 1);
-    Vector axis = vector_new(0, 1);
-    Vector vector = point_projection_on_axis(point, axis);
+    Vector direction = vector_new(0, 1);
+    Vector vector = point_projection_on_axis(point, direction);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 1));
-    vector_release(axis);
+    vector_release(vector);
+    vector_release(direction);
     point_release(point);
 }
 
 static void test_point_projection_on_axis_4() {
     Point point = point_new(5, 5);
-    Vector axis = vector_new(0, 1);
-    Vector vector = point_projection_on_axis(point, axis);
+    Vector direction = vector_new(0, 1);
+    Vector vector = point_projection_on_axis(point, direction);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 5));
-    vector_release(axis);
+    vector_release(vector);
+    vector_release(direction);
     point_release(point);
 }
 
 static void test_point_projection_on_axis_5() {
     Point point = point_new(5, 5);
-    Vector axis = vector_new(0, 2);
-    Vector vector = point_projection_on_axis(point, axis);
+    Vector direction = vector_new(0, 2);
+    Vector vector = point_projection_on_axis(point, direction);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 5));
-    vector_release(axis);
+    vector_release(vector);
+    vector_release(direction);
     point_release(point);
 }
 
 static void test_point_projection_on_axis_6() {
     Point point = point_new(5, 5);
-    Vector axis = vector_new(1, 1);
-    Vector vector = point_projection_on_axis(point, axis);
+    Vector direction = vector_new(1, 1);
+    Vector vector = point_projection_on_axis(point, direction);
     g_assert(double_equals(vector->x, 5));
     g_assert(double_equals(vector->y, 5));
-    vector_release(axis);
+    vector_release(vector);
+    vector_release(direction);
     point_release(point);
 }
 
@@ -2033,6 +2093,85 @@ static void test_point_is_in_polygon_4() {
     point_release(lower_left);
 }
 
+static void test_shape_projection_on_axis_new_1() {
+    ShapeProjectionOnAxis spoa = shape_projection_on_axis_new(0, 10);
+    g_assert(double_equals(spoa->min, 0));
+    g_assert(double_equals(spoa->max, 10));
+    shape_projection_on_axis_release(spoa);
+}
+
+static void test_shape_projection_on_axis_release_1() {
+    ShapeProjectionOnAxis spoa = shape_projection_on_axis_new(0, 10);
+    shape_projection_on_axis_release(spoa);
+}
+
+static void test_shape_projection_on_axis_equals_1() {
+    ShapeProjectionOnAxis spoa1 = shape_projection_on_axis_new(0, 10);
+    ShapeProjectionOnAxis spoa2 = shape_projection_on_axis_new(0, 10);
+    ShapeProjectionOnAxis spoa3 = shape_projection_on_axis_new(0, 11);
+    ShapeProjectionOnAxis spoa4 = shape_projection_on_axis_new(1, 10);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa1, spoa1), ==, 1);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa2, spoa2), ==, 1);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa3, spoa3), ==, 1);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa4, spoa4), ==, 1);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa1, spoa2), ==, 1);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa1, spoa3), ==, 0);
+    g_assert_cmpint(shape_projection_on_axis_equals(spoa1, spoa4), ==, 0);
+    shape_projection_on_axis_release(spoa1);
+    shape_projection_on_axis_release(spoa2);
+    shape_projection_on_axis_release(spoa3);
+    shape_projection_on_axis_release(spoa4);
+}
+
+static void test_shape_projection_on_axis_dup_1() {
+    ShapeProjectionOnAxis spoa1 = shape_projection_on_axis_new(0, 10);
+    ShapeProjectionOnAxis spoa2 = shape_projection_on_axis_dup(spoa1);
+    g_assert(spoa1 != spoa2);
+    g_assert(shape_projection_on_axis_equals(spoa1, spoa2));
+    shape_projection_on_axis_release(spoa1);
+    shape_projection_on_axis_release(spoa2);
+}
+
+static void test_shape_projection_on_axis_min_1() {
+    ShapeProjectionOnAxis spoa = shape_projection_on_axis_new(0, 10);
+    g_assert(double_equals(shape_projection_on_axis_min(spoa), 0));
+    shape_projection_on_axis_release(spoa);
+}
+
+static void test_shape_projection_on_axis_max_1() {
+    ShapeProjectionOnAxis spoa = shape_projection_on_axis_new(0, 10);
+    g_assert(double_equals(shape_projection_on_axis_max(spoa), 10));
+    shape_projection_on_axis_release(spoa);
+}
+
+static void test_shape_projection_on_axis_tv_1() {
+    ShapeProjectionOnAxis spoa1 = shape_projection_on_axis_new(3, 6);
+    ShapeProjectionOnAxis spoa2 = shape_projection_on_axis_new(6, 9);
+    ShapeProjectionOnAxis spoa3 = shape_projection_on_axis_new(9, 12);
+    ShapeProjectionOnAxis spoa4 = shape_projection_on_axis_new(1, 13);
+    ShapeProjectionOnAxis spoa5 = shape_projection_on_axis_new(5, 10);
+    g_assert(double_equals(abs(shape_projection_on_axis_tv(spoa1, spoa1)), 3));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa1, spoa2), 0));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa1, spoa3), 0));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa1, spoa4), 5));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa1, spoa5), 1));
+    g_assert(double_equals(abs(shape_projection_on_axis_tv(spoa2, spoa2)), 3));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa2, spoa3), 0));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa2, spoa4), -7));
+    g_assert(double_equals(abs(shape_projection_on_axis_tv(spoa2, spoa5)), 4));
+    g_assert(double_equals(abs(shape_projection_on_axis_tv(spoa3, spoa3)), 3));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa3, spoa4), -4));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa3, spoa5), -1));
+    g_assert(double_equals(abs(shape_projection_on_axis_tv(spoa4, spoa4)), 12));
+    g_assert(double_equals(shape_projection_on_axis_tv(spoa4, spoa5), 8));
+    g_assert(double_equals(abs(shape_projection_on_axis_tv(spoa5, spoa5)), 5));
+    shape_projection_on_axis_release(spoa1);
+    shape_projection_on_axis_release(spoa2);
+    shape_projection_on_axis_release(spoa3);
+    shape_projection_on_axis_release(spoa4);
+    shape_projection_on_axis_release(spoa5);
+}
+
 static void test_segment_segment_intersection_1() {
     Point a = point_new(0, 0);
     Point b = point_new(0, 1);
@@ -2219,6 +2358,18 @@ int main(int argc, char *argv[]) {
                     test_point_projection_on_axis_5);
     g_test_add_func("/gc/point_projection_on_axis",
                     test_point_projection_on_axis_6);
+    g_test_add_func("/gc/point_projection_magnitude_on_axis",
+                    test_point_projection_magnitude_on_axis_1);
+    g_test_add_func("/gc/point_projection_magnitude_on_axis",
+                    test_point_projection_magnitude_on_axis_2);
+    g_test_add_func("/gc/point_projection_magnitude_on_axis",
+                    test_point_projection_magnitude_on_axis_3);
+    g_test_add_func("/gc/point_projection_magnitude_on_axis",
+                    test_point_projection_magnitude_on_axis_4);
+    g_test_add_func("/gc/point_projection_magnitude_on_axis",
+                    test_point_projection_magnitude_on_axis_5);
+    g_test_add_func("/gc/point_projection_magnitude_on_axis",
+                    test_point_projection_magnitude_on_axis_6);
     g_test_add_func("/gc/point_translate", test_point_translate_1);
     g_test_add_func("/gc/point_translate", test_point_translate_2);
     g_test_add_func("/gc/point_translate", test_point_translate_3);
@@ -2339,6 +2490,20 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_2);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_3);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_4);
+    g_test_add_func("/gc/shape_projection_on_axis_new",
+                    test_shape_projection_on_axis_new_1);
+    g_test_add_func("/gc/shape_projection_on_axis_release",
+                    test_shape_projection_on_axis_release_1);
+    g_test_add_func("/gc/shape_projection_on_axis_equals",
+                    test_shape_projection_on_axis_equals_1);
+    g_test_add_func("/gc/shape_projection_on_axis_dup",
+                    test_shape_projection_on_axis_dup_1);
+    g_test_add_func("/gc/shape_projection_on_axis_min",
+                    test_shape_projection_on_axis_min_1);
+    g_test_add_func("/gc/shape_projection_on_axis_max",
+                    test_shape_projection_on_axis_max_1);
+    g_test_add_func("/gc/shape_projection_on_axis_tv",
+                    test_shape_projection_on_axis_tv_1);
     g_test_add_func("/gc/segment_segment_intersection",
                     test_segment_segment_intersection_1);
     g_test_add_func("/gc/segment_segment_intersection",

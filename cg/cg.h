@@ -44,6 +44,11 @@ struct Polygon {
     List points;
 };
 
+typedef struct ShapeProjectionOnAxis *ShapeProjectionOnAxis;
+struct ShapeProjectionOnAxis {
+    double min, max;
+};
+
 /* Converts an angle specified in degrees to radians. */
 double deg_to_rad(double deg);
 
@@ -136,8 +141,11 @@ double point_y(Point point);
 /* Return point vector from origin. */
 Vector point_vector_from_origin(Point point);
 
-/* Return point projection on axis. */
-Vector point_projection_on_axis(Point point, Vector axis);
+/* Return point projection magnitude on axis defined by direction. */
+double point_projection_magnitude_on_axis(Point point, Vector direction);
+
+/* Return point projection on axis defined by direction. */
+Vector point_projection_on_axis(Point point, Vector direction);
 
 /* Translate the point by the vector. */
 void point_translate(Point point, Vector vector);
@@ -338,6 +346,30 @@ double polygon_area(Polygon polygon);
 
 /* Return 1 if the point is inside the polygon. 0, otherwise. */
 int point_is_in_polygon(Polygon polygon, Point point);
+
+/* Return a new SPOA defined by a range. */
+ShapeProjectionOnAxis shape_projection_on_axis_new(double min, double max);
+
+/* Free the memory used by SPOA. */
+void shape_projection_on_axis_release(ShapeProjectionOnAxis spoa);
+
+/* Return 1 if the SPOAs are equal. 0, otherwise. */
+int shape_projection_on_axis_equals(ShapeProjectionOnAxis spoa1,
+                                    ShapeProjectionOnAxis spoa2);
+
+/* Return the duplicated SPOA. */
+ShapeProjectionOnAxis shape_projection_on_axis_dup(ShapeProjectionOnAxis spoa);
+
+/* Return SPOA minimum value. */
+double shape_projection_on_axis_min(ShapeProjectionOnAxis spoa);
+
+/* Return SPOA maximum value. */
+double shape_projection_on_axis_max(ShapeProjectionOnAxis spoa);
+
+/* Return the minimum magnitude translation vector that applied to spoa2
+ * separates it from spoa1. */
+double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
+                                   ShapeProjectionOnAxis spoa2);
 
 /* Return a minimum translation vector. */
 /*
