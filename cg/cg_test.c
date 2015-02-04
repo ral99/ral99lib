@@ -123,6 +123,22 @@ static void test_vector_normalize_1() {
     vector_release(vector);
 }
 
+static void test_vector_normalize_2() {
+    Vector vector = vector_new(1, 1);
+    vector_normalize(vector);
+    g_assert(double_equals(vector->x, 1 / sqrt(2)));
+    g_assert(double_equals(vector->y, 1 / sqrt(2)));
+    vector_release(vector);
+}
+
+static void test_vector_reverse_1() {
+    Vector vector = vector_new(2, -3);
+    vector_reverse(vector);
+    g_assert(double_equals(vector->x, -2));
+    g_assert(double_equals(vector->y, 3));
+    vector_release(vector);
+}
+
 static void test_vector_sum_1() {
     Vector a = vector_new(1, 1);
     Vector b = vector_new(0, 0);
@@ -184,14 +200,6 @@ static void test_vector_multiply_2() {
     vector_multiply(vector, 2);
     g_assert(double_equals(vector->x, 2));
     g_assert(double_equals(vector->y, 2));
-    vector_release(vector);
-}
-
-static void test_vector_normalize_2() {
-    Vector vector = vector_new(1, 1);
-    vector_normalize(vector);
-    g_assert(double_equals(vector->x, 1 / sqrt(2)));
-    g_assert(double_equals(vector->y, 1 / sqrt(2)));
     vector_release(vector);
 }
 
@@ -2093,6 +2101,7 @@ int main(int argc, char *argv[]) {
                     test_vector_left_perpendicular_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_2);
+    g_test_add_func("/gc/vector_reverse", test_vector_reverse_1);
     g_test_add_func("/gc/vector_sum", test_vector_sum_1);
     g_test_add_func("/gc/vector_sum", test_vector_sum_2);
     g_test_add_func("/gc/vector_subtract", test_vector_subtract_1);

@@ -89,6 +89,11 @@ void vector_normalize(Vector vector) {
     vector->y /= magnitude;
 }
 
+void vector_reverse(Vector vector) {
+    vector->x = -vector->x;
+    vector->y = -vector->y;
+}
+
 void vector_sum(Vector a, Vector b) {
     a->x += b->x;
     a->y += b->y;

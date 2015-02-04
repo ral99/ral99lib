@@ -84,6 +84,9 @@ Vector vector_left_perpendicular(Vector vector);
 /* Normalize vector. */
 void vector_normalize(Vector vector);
 
+/* Reverse vector. */
+void vector_reverse(Vector vector);
+
 /* Sum vector b to vector a. */
 void vector_sum(Vector a, Vector b);
 
