@@ -97,6 +97,24 @@ static void test_vector_y_1() {
     vector_release(vector);
 }
 
+static void test_vector_right_perpendicular_1() {
+    Vector vector = vector_new(1, 2);
+    Vector perpendicular = vector_right_perpendicular(vector);
+    g_assert(double_equals(perpendicular->x, vector->y));
+    g_assert(double_equals(perpendicular->y, -vector->x));
+    vector_release(vector);
+    vector_release(perpendicular);
+}
+
+static void test_vector_left_perpendicular_1() {
+    Vector vector = vector_new(1, 2);
+    Vector perpendicular = vector_left_perpendicular(vector);
+    g_assert(double_equals(perpendicular->x, -vector->y));
+    g_assert(double_equals(perpendicular->y, vector->x));
+    vector_release(vector);
+    vector_release(perpendicular);
+}
+
 static void test_vector_normalize_1() {
     Vector vector = vector_new(2, 0);
     vector_normalize(vector);
@@ -1986,6 +2004,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_from_str", test_vector_from_str_1);
     g_test_add_func("/gc/vector_x", test_vector_x_1);
     g_test_add_func("/gc/vector_y", test_vector_y_1);
+    g_test_add_func("/gc/vector_right_perpendicular",
+                    test_vector_right_perpendicular_1);
+    g_test_add_func("/gc/vector_left_perpendicular",
+                    test_vector_left_perpendicular_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_2);
     g_test_add_func("/gc/vector_sum", test_vector_sum_1);

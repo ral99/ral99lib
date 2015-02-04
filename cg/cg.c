@@ -75,6 +75,14 @@ double vector_y(Vector vector) {
     return vector->y;
 }
 
+Vector vector_right_perpendicular(Vector vector) {
+    return vector_new(vector->y, -vector->x);
+}
+
+Vector vector_left_perpendicular(Vector vector) {
+    return vector_new(-vector->y, vector->x);
+}
+
 void vector_normalize(Vector vector) {
     double magnitude = vector_magnitude(vector);
     vector->x /= magnitude;

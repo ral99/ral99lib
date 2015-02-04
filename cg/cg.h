@@ -75,6 +75,12 @@ double vector_x(Vector vector);
 /* Return vector y component. */
 double vector_y(Vector vector);
 
+/* Return perpendicular vector using right hand rule. */
+Vector vector_right_perpendicular(Vector vector);
+
+/* Return perpendicular vector using left hand rule. */
+Vector vector_left_perpendicular(Vector vector);
+
 /* Normalize vector. */
 void vector_normalize(Vector vector);
 
