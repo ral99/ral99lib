@@ -649,6 +649,21 @@ double triangle_area(Triangle triangle) {
                 triangle->a->x * triangle->b->w * triangle->c->y) / 2;
 }
 
+ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle,
+                                                  Vector axis) {
+    double min, max;
+    double magnitude1 = point_projection_magnitude_on_axis(triangle->a, axis);
+    min = magnitude1;
+    max = magnitude1;
+    double magnitude2 = point_projection_magnitude_on_axis(triangle->b, axis);
+    min = (double_lte(magnitude2, min)) ? magnitude2 : min;
+    max = (double_gte(magnitude2, max)) ? magnitude2 : max;
+    double magnitude3 = point_projection_magnitude_on_axis(triangle->c, axis);
+    min = (double_lte(magnitude3, min)) ? magnitude3 : min;
+    max = (double_gte(magnitude3, max)) ? magnitude3 : max;
+    return shape_projection_on_axis_new(min, max);
+}
+
 int point_is_in_triangle(Point point, Triangle triangle) {
     int ret;
     Triangle triangle1 = triangle_new(triangle->a, point, triangle->b);
@@ -886,6 +901,51 @@ Vector segment_segment_intersection(Segment segment1, Segment segment2) {
     list_full_release(axes, (void (*)(void *)) vector_release);
     vector_release(vector1);
     vector_release(vector2);
+    return mtv;
+}
+
+Vector triangle_triangle_intersection(Triangle triangle1, Triangle triangle2) {
+    Vector mtv;
+    double mtv_magnitude = 1;
+    List axes = list_new();
+    List points1 = triangle_points(triangle1);
+    List points2 = triangle_points(triangle2);
+    for (int i = 0; i < list_size(points1); i++) {
+        Point point1 = list_at(points1, i);
+        Point point2 = list_at(points1, (i + 1) % list_size(points1));
+        Vector vector = vector_from_point_to_point(point1, point2);
+        list_append(axes, vector_right_perpendicular(vector));
+        vector_release(vector);
+    }
+    for (int i = 0; i < list_size(points2); i++) {
+        Point point1 = list_at(points2, i);
+        Point point2 = list_at(points2, (i + 1) % list_size(points2));
+        Vector vector = vector_from_point_to_point(point1, point2);
+        list_append(axes, vector_right_perpendicular(vector));
+        vector_release(vector);
+    }
+    for (ListItem it = list_head(axes); it && !double_equals(mtv_magnitude, 0);
+         it = list_next(it)) {
+        Vector axis = list_value(it);
+        vector_normalize(axis);
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle1,
+                                                                  axis);
+        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(triangle2,
+                                                                  axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) ||
+            double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_magnitude);
+    list_full_release(axes, (void (*)(void *)) vector_release);
+    list_full_release(points1, (void (*)(void *)) point_release);
+    list_full_release(points2, (void (*)(void *)) point_release);
     return mtv;
 }
 

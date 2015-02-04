@@ -313,6 +313,10 @@ int triangle_orientation(Triangle triangle);
 /* Return the area of triangle. */
 double triangle_area(Triangle triangle);
 
+/* Return triangle projection on axis. */
+ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle,
+                                                  Vector axis);
+
 /* Return 1 if the point is inside the triangle. 0, otherwise. */
 int point_is_in_triangle(Point point, Triangle triangle);
 
@@ -381,13 +385,13 @@ double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
 /*
 Vector segment_triangle_intersection();
 Vector segment_polygon_intersection();
-Vector triangle_triangle_intersection();
 Vector triangle_polygon_intersection();
 Vector triangle_circle_intersection();
 Vector polygon_polygon_intersection();
 Vector polygon_circle_intersection();
 */
 Vector segment_segment_intersection(Segment segment1, Segment segment2);
+Vector triangle_triangle_intersection();
 Vector circle_circle_intersection(Circle circle1, Circle circle2);
 Vector segment_circle_intersection(Segment segment, Circle circle);
 

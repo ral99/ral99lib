@@ -1,7 +1,6 @@
 #include <glib.h>
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "cg/cg.h"
 #include "mem/mem.h"
@@ -1862,6 +1861,60 @@ static void test_triangle_area_1() {
     triangle_release(triangle);
 }
 
+static void test_triangle_projection_on_axis_1() {
+    Point a = point_new(0, 1);
+    Point b = point_new(0, 2);
+    Point c = point_new(1, 2);
+    Triangle triangle = triangle_new(a, b, c);
+    Vector axis = vector_new(1, 0);
+    vector_normalize(axis);
+    ShapeProjectionOnAxis spoa = triangle_projection_on_axis(triangle, axis);
+    g_assert(double_equals(spoa->min, 0));
+    g_assert(double_equals(spoa->max, 1));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
+static void test_triangle_projection_on_axis_2() {
+    Point a = point_new(0, 1);
+    Point b = point_new(0, 2);
+    Point c = point_new(1, 2);
+    Triangle triangle = triangle_new(a, b, c);
+    Vector axis = vector_new(0, 1);
+    vector_normalize(axis);
+    ShapeProjectionOnAxis spoa = triangle_projection_on_axis(triangle, axis);
+    g_assert(double_equals(spoa->min, 1));
+    g_assert(double_equals(spoa->max, 2));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
+static void test_triangle_projection_on_axis_3() {
+    Point a = point_new(0, 1);
+    Point b = point_new(0, 2);
+    Point c = point_new(1, 2);
+    Triangle triangle = triangle_new(a, b, c);
+    Vector axis = vector_new(1, 1);
+    vector_normalize(axis);
+    ShapeProjectionOnAxis spoa = triangle_projection_on_axis(triangle, axis);
+    g_assert(double_equals(spoa->min, sqrt(2) / 2));
+    g_assert(double_equals(spoa->max, 3 * sqrt(2) / 2));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
 static void test_point_is_in_triangle_1() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 0);
@@ -2388,6 +2441,56 @@ static void test_segment_segment_intersection_4() {
     point_release(d);
 }
 
+static void test_triangle_triangle_intersection_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 0);
+    Point c = point_new(1, 1);
+    Point d = point_new(1, 0);
+    Point e = point_new(2, 0);
+    Point f = point_new(1, 1);
+    Triangle triangle1 = triangle_new(a, b, c);
+    Triangle triangle2 = triangle_new(d, e, f);
+    Vector vector = triangle_triangle_intersection(triangle1, triangle2);
+    g_assert(double_equals(vector->x, 0));
+    g_assert(double_equals(vector->y, 0));
+    vector_release(vector);
+    triangle_release(triangle1);
+    triangle_release(triangle2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+}
+
+static void test_triangle_triangle_intersection_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 0);
+    Point c = point_new(0, 1);
+    Point d = point_new(0, 0);
+    Point e = point_new(1, 0);
+    Point f = point_new(1, 1);
+    Triangle triangle1 = triangle_new(a, b, c);
+    Triangle triangle2 = triangle_new(d, e, f);
+    Vector vector1 = triangle_triangle_intersection(triangle1, triangle2);
+    g_assert(double_equals(vector1->x, 0.5));
+    g_assert(double_equals(vector1->y, 0.5));
+    Vector vector2 = triangle_triangle_intersection(triangle2, triangle1);
+    g_assert(double_equals(vector2->x, -0.5));
+    g_assert(double_equals(vector2->y, 0.5));
+    vector_release(vector1);
+    vector_release(vector2);
+    triangle_release(triangle1);
+    triangle_release(triangle2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+}
+
 static void test_circle_circle_intersection_1() {
     Point center1 = point_new(0, 0);
     Point center2 = point_new(2, 0);
@@ -2663,6 +2766,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_2);
     g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_3);
     g_test_add_func("/gc/triangle_area", test_triangle_area_1);
+    g_test_add_func("/gc/triangle_projection_on_axis",
+                    test_triangle_projection_on_axis_1);
+    g_test_add_func("/gc/triangle_projection_on_axis",
+                    test_triangle_projection_on_axis_2);
+    g_test_add_func("/gc/triangle_projection_on_axis",
+                    test_triangle_projection_on_axis_3);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_1);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_2);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_3);
@@ -2712,6 +2821,10 @@ int main(int argc, char *argv[]) {
                     test_segment_segment_intersection_3);
     g_test_add_func("/gc/segment_segment_intersection",
                     test_segment_segment_intersection_4);
+    g_test_add_func("/gc/triangle_triangle_intersection",
+                    test_triangle_triangle_intersection_1);
+    g_test_add_func("/gc/triangle_triangle_intersection",
+                    test_triangle_triangle_intersection_2);
     g_test_add_func("/gc/circle_circle_intersection",
                     test_circle_circle_intersection_1);
     g_test_add_func("/gc/circle_circle_intersection",
