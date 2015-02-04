@@ -453,11 +453,8 @@ int point_is_in_segment(Point point, Segment segment) {
                    point_x(segment->a) : point_x(segment->b);
     double max_x = (double_gt(point_x(segment->a), point_x(segment->b))) ? 
                    point_x(segment->a) : point_x(segment->b);
-    if (point_is_in_line(point, line) &&
-        (double_gt(point_x(point), min_x) ||
-         double_equals(point_x(point), min_x)) &&
-        (double_lt(point_x(point), max_x) ||
-         double_equals(point_x(point), max_x)))
+    if (point_is_in_line(point, line) && double_gte(point_x(point), min_x) &&
+        double_lte(point_x(point), max_x))
         ret = 1;
     line_release(line);
     return ret;
