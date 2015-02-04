@@ -340,7 +340,8 @@ Vector triangle_polygon_intersection();
 Vector triangle_circle_intersection();
 Vector polygon_polygon_intersection();
 Vector polygon_circle_intersection();*/
-Vector circle_circle_intersection(Circle a, Circle b);
+Vector segment_segment_intersection(Segment segment1, Segment segment2);
+Vector circle_circle_intersection(Circle circle1, Circle circle2);
 
 #endif
 

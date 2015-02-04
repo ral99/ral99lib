@@ -782,12 +782,70 @@ int point_is_in_polygon(Polygon polygon, Point point) {
     return point_is_in;
 }
 
-Vector circle_circle_intersection(Circle a, Circle b) {
-    Vector vector = vector_from_point_to_point(a->center, b->center);
+Vector segment_segment_intersection(Segment segment1, Segment segment2) {
+    Line line1 = segment_line(segment1);
+    Line line2 = segment_line(segment2);
+    Point intersection = line_intersection(line1, line2);
+    Vector mtv;
+    if (point_is_infinite(intersection) ||
+        !point_is_in_segment(intersection, segment1) ||
+        !point_is_in_segment(intersection, segment2))
+        mtv = vector_new(0, 0);
+    else {
+        Vector vector1 = segment_vector(segment1);
+        Vector vector2 = segment_vector(segment2);
+        Vector perpendicular1 = vector_right_perpendicular(vector1);
+        Vector perpendicular2 = vector_right_perpendicular(vector2);
+        vector_normalize(perpendicular1);
+        vector_normalize(perpendicular2);
+        Vector a1 = vector_from_point_to_point(segment1->a, intersection);
+        double a1_projection = vector_dot(a1, perpendicular2);
+        Vector b1 = vector_from_point_to_point(segment1->b, intersection);
+        double b1_projection = vector_dot(b1, perpendicular2);
+        Vector a2 = vector_from_point_to_point(segment2->a, intersection);
+        double a2_projection = vector_dot(a2, perpendicular1);
+        Vector b2 = vector_from_point_to_point(segment2->b, intersection);
+        double b2_projection = vector_dot(b2, perpendicular1);
+        if (double_lt(fabs(a1_projection), fabs(b1_projection)) &&
+            double_lt(fabs(a1_projection), fabs(a2_projection)) &&
+            double_lt(fabs(a1_projection), fabs(b2_projection))) {
+            mtv = vector_dup(perpendicular2);
+            vector_multiply(mtv, -a1_projection);
+        }
+        else if (double_lt(fabs(b1_projection), fabs(a2_projection)) &&
+                 double_lt(fabs(b1_projection), fabs(b2_projection))) {
+            mtv = vector_dup(perpendicular2);
+            vector_multiply(mtv, -b1_projection);
+        }
+        else if (double_lt(fabs(a2_projection), fabs(b2_projection))) {
+            mtv = vector_dup(perpendicular1);
+            vector_multiply(mtv, a2_projection);
+        }
+        else {
+            mtv = vector_dup(perpendicular1);
+            vector_multiply(mtv, b2_projection);
+        }
+        vector_release(vector1);
+        vector_release(vector2);
+        vector_release(perpendicular1);
+        vector_release(perpendicular2);
+        vector_release(a1);
+        vector_release(b1);
+        vector_release(a2);
+        vector_release(b2);
+    }
+    point_release(intersection);
+    line_release(line1);
+    line_release(line2);
+    return mtv;
+}
+
+Vector circle_circle_intersection(Circle circle1, Circle circle2) {
+    Vector vector = vector_from_point_to_point(circle1->center, circle2->center);
     double center_dist = vector_magnitude(vector);
-    if (double_lt(center_dist, a->radius + b->radius)) {
+    if (double_lt(center_dist, circle1->radius + circle2->radius)) {
         vector_normalize(vector);
-        vector_multiply(vector, a->radius + b->radius - center_dist);
+        vector_multiply(vector, circle1->radius + circle2->radius - center_dist);
     }
     else {
         vector_release(vector);

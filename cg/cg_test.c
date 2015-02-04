@@ -1956,38 +1956,121 @@ static void test_point_is_in_polygon_4() {
     point_release(lower_left);
 }
 
-static void test_circle_circle_intersection_1() {
-    Point center_a = point_new(0, 0);
-    Point center_b = point_new(2, 0);
-    Circle a = circle_new(center_a, 1);
-    Circle b = circle_new(center_b, 1);
-    Vector mtv = circle_circle_intersection(a, b);
+static void test_segment_segment_intersection_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Point d = point_new(1, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(c, d);
+    Vector mtv = segment_segment_intersection(segment1, segment2);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    segment_release(segment1);
+    segment_release(segment2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
+static void test_segment_segment_intersection_2() {
+    Point a = point_new(1, 0.5);
+    Point b = point_new(1, 2);
+    Point c = point_new(0, 1);
+    Point d = point_new(1.5, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(c, d);
+    Vector mtv1 = segment_segment_intersection(segment1, segment2);
+    g_assert(double_equals(mtv1->x, -0.5));
+    g_assert(double_equals(mtv1->y, 0));
+    Vector mtv2 = segment_segment_intersection(segment2, segment1);
+    g_assert(double_equals(mtv2->x, 0));
+    g_assert(double_equals(mtv2->y, 0.5));
+    vector_release(mtv1);
+    vector_release(mtv2);
+    segment_release(segment1);
+    segment_release(segment2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
+static void test_segment_segment_intersection_3() {
+    Point a = point_new(0, 1);
+    Point b = point_new(1, 0);
+    Point c = point_new(0.49, 0.49);
+    Point d = point_new(1, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(c, d);
+    Vector mtv1 = segment_segment_intersection(segment1, segment2);
+    g_assert(double_equals(mtv1->x, 0.01));
+    g_assert(double_equals(mtv1->y, 0.01));
+    Vector mtv2 = segment_segment_intersection(segment2, segment1);
+    g_assert(double_equals(mtv2->x, -0.01));
+    g_assert(double_equals(mtv2->y, -0.01));
+    vector_release(mtv1);
+    vector_release(mtv2);
+    segment_release(segment1);
+    segment_release(segment2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
+static void test_segment_segment_intersection_4() {
+    Point a = point_new(0, 1);
+    Point b = point_new(1, 1);
+    Point c = point_new(2, 1);
+    Point d = point_new(3, 1);
+    Segment segment1 = segment_new(a, b);
+    Segment segment2 = segment_new(c, d);
+    Vector mtv = segment_segment_intersection(segment1, segment2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
-    circle_release(a);
-    circle_release(b);
-    point_release(center_a);
-    point_release(center_b);
+    segment_release(segment1);
+    segment_release(segment2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
+static void test_circle_circle_intersection_1() {
+    Point center1 = point_new(0, 0);
+    Point center2 = point_new(2, 0);
+    Circle circle1 = circle_new(center1, 1);
+    Circle circle2 = circle_new(center2, 1);
+    Vector mtv = circle_circle_intersection(circle1, circle2);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    circle_release(circle1);
+    circle_release(circle2);
+    point_release(center1);
+    point_release(center2);
 }
 
 static void test_circle_circle_intersection_2() {
-    Point center_a = point_new(0, 0);
-    Point center_b = point_new(1, 0);
-    Circle a = circle_new(center_a, 1);
-    Circle b = circle_new(center_b, 1);
-    Vector mtv1 = circle_circle_intersection(a, b);
+    Point center1 = point_new(0, 0);
+    Point center2 = point_new(1, 0);
+    Circle circle1 = circle_new(center1, 1);
+    Circle circle2 = circle_new(center2, 1);
+    Vector mtv1 = circle_circle_intersection(circle1, circle2);
     g_assert(double_equals(mtv1->x, 1));
     g_assert(double_equals(mtv1->y, 0));
-    Vector mtv2 = circle_circle_intersection(b, a);
+    Vector mtv2 = circle_circle_intersection(circle2, circle1);
     g_assert(double_equals(mtv2->x, -1));
     g_assert(double_equals(mtv2->y, 0));
     vector_release(mtv1);
     vector_release(mtv2);
-    circle_release(a);
-    circle_release(b);
-    point_release(center_a);
-    point_release(center_b);
+    circle_release(circle1);
+    circle_release(circle2);
+    point_release(center1);
+    point_release(center2);
 }
 
 int main(int argc, char *argv[]) {
@@ -2164,8 +2247,18 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_2);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_3);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_4);
-    g_test_add_func("/gc/circle_circle_intersection", test_circle_circle_intersection_1);
-    g_test_add_func("/gc/circle_circle_intersection", test_circle_circle_intersection_2);
+    g_test_add_func("/gc/segment_segment_intersection",
+                    test_segment_segment_intersection_1);
+    g_test_add_func("/gc/segment_segment_intersection",
+                    test_segment_segment_intersection_2);
+    g_test_add_func("/gc/segment_segment_intersection",
+                    test_segment_segment_intersection_3);
+    g_test_add_func("/gc/segment_segment_intersection",
+                    test_segment_segment_intersection_4);
+    g_test_add_func("/gc/circle_circle_intersection",
+                    test_circle_circle_intersection_1);
+    g_test_add_func("/gc/circle_circle_intersection",
+                    test_circle_circle_intersection_2);
     return g_test_run();
 }
 
