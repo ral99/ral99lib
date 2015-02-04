@@ -14,6 +14,16 @@ static void test_double_gt_1() {
     g_assert_cmpint(double_gt(b, a), ==, 0);
 }
 
+static void test_double_gte_1() {
+    double a = 1.0000001;
+    double b = 1.0000000;
+    
+    g_assert_cmpint(double_gte(a, a), ==, 1);
+    g_assert_cmpint(double_gte(b, b), ==, 1);
+    g_assert_cmpint(double_gte(a, b), ==, 1);
+    g_assert_cmpint(double_gte(b, a), ==, 0);
+}
+
 static void test_double_lt_1() {
     double a = 1.0000001;
     double b = 1.0000000;
@@ -22,6 +32,16 @@ static void test_double_lt_1() {
     g_assert_cmpint(double_lt(b, b), ==, 0);
     g_assert_cmpint(double_lt(a, b), ==, 0);
     g_assert_cmpint(double_lt(b, a), ==, 1);
+}
+
+static void test_double_lte_1() {
+    double a = 1.0000001;
+    double b = 1.0000000;
+    
+    g_assert_cmpint(double_lte(a, a), ==, 1);
+    g_assert_cmpint(double_lte(b, b), ==, 1);
+    g_assert_cmpint(double_lte(a, b), ==, 0);
+    g_assert_cmpint(double_lte(b, a), ==, 1);
 }
 
 static void test_double_equals_1() {
@@ -219,7 +239,9 @@ static void test_int_from_str_3() {
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/double/gt", test_double_gt_1);
+    g_test_add_func("/double/gte", test_double_gte_1);
     g_test_add_func("/double/lt", test_double_lt_1);
+    g_test_add_func("/double/lte", test_double_lte_1);
     g_test_add_func("/double/equals", test_double_equals_1);
     g_test_add_func("/double/to_str", test_double_to_str_1);
     g_test_add_func("/double/to_str", test_double_to_str_2);

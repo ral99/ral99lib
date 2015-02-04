@@ -11,8 +11,16 @@ int double_gt(double a, double b) {
     return (a - b > TOL) ? 1 : 0;
 }
 
+int double_gte(double a, double b) {
+    return (a - b > TOL || (a - b < TOL && b - a < TOL)) ? 1 : 0;
+}
+
 int double_lt(double a, double b) {
     return (b - a > TOL) ? 1 : 0;
+}
+
+int double_lte(double a, double b) {
+    return (b - a > TOL || (a - b < TOL && b - a < TOL)) ? 1 : 0;
 }
 
 int double_equals(double a, double b) {

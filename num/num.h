@@ -8,8 +8,14 @@
 /* Return 1 if a is greater than b. 0, otherwise. */
 int double_gt(double a, double b);
 
+/* Return 1 if a is greater than or equal to b. 0, otherwise. */
+int double_gte(double a, double b);
+
 /* Return 1 if a is lower than b. 0, otherwise. */
 int double_lt(double a, double b);
+
+/* Return 1 if a is lower than or equal to b. 0, otherwise. */
+int double_lte(double a, double b);
 
 /* Return 1 if a is equal to b. 0, otherwise. */
 int double_equals(double a, double b);
