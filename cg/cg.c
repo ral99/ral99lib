@@ -966,18 +966,18 @@ Vector segment_segment_intersection(Segment seg1, Segment seg2) {
     return mtv;
 }
 
-Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2) {
+Vector segment_triangle_intersection(Segment seg, Triangle tri) {
     Vector mtv;
     double mtv_mag;
     List axes = list_new();
-    List axes1 = triangle_collision_axes(tri1);
-    List axes2 = triangle_collision_axes(tri2);
+    List axes1 = segment_collision_axes(seg);
+    List axes2 = triangle_collision_axes(tri);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri1, axis);
-        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(tri2, axis);
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(seg, axis);
+        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(tri, axis);
         double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
         if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
             mtv_mag = tv_mag;
@@ -994,30 +994,18 @@ Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2) {
     return mtv;
 }
 
-Vector circle_circle_intersection(Circle cir1, Circle cir2) {
-    Vector axis = vector_from_point_to_point(cir1->center, cir2->center);
-    vector_normalize(axis);
-    ShapeProjectionOnAxis spoa1 = circle_projection_on_axis(cir1, axis);
-    ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir2, axis);
-    double mtv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-    vector_multiply(axis, mtv_mag);
-    shape_projection_on_axis_release(spoa1);
-    shape_projection_on_axis_release(spoa2);
-    return axis;
-}
-
-Vector segment_triangle_intersection(Segment seg, Triangle tri) {
+Vector segment_polygon_intersection(Segment seg, Polygon poly) {
     Vector mtv;
     double mtv_mag;
     List axes = list_new();
     List axes1 = segment_collision_axes(seg);
-    List axes2 = triangle_collision_axes(tri);
+    List axes2 = polygon_collision_axes(poly);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
         ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(seg, axis);
-        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(tri, axis);
+        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(poly, axis);
         double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
         if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
             mtv_mag = tv_mag;
@@ -1064,6 +1052,62 @@ Vector segment_circle_intersection(Segment seg, Circle cir) {
     return mtv;
 }
 
+Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2) {
+    Vector mtv;
+    double mtv_mag;
+    List axes = list_new();
+    List axes1 = triangle_collision_axes(tri1);
+    List axes2 = triangle_collision_axes(tri2);
+    list_extend(axes, axes1);
+    list_extend(axes, axes2);
+    for (ListItem it = list_head(axes); it; it = list_next(it)) {
+        Vector axis = list_value(it);
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri1, axis);
+        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(tri2, axis);
+        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
+            mtv_mag = tv_mag;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_mag);
+    list_release(axes);
+    list_full_release(axes1, (void (*)(void *)) vector_release);
+    list_full_release(axes2, (void (*)(void *)) vector_release);
+    return mtv;
+}
+
+Vector triangle_polygon_intersection(Triangle tri, Polygon poly) {
+    Vector mtv;
+    double mtv_mag;
+    List axes = list_new();
+    List axes1 = triangle_collision_axes(tri);
+    List axes2 = polygon_collision_axes(poly);
+    list_extend(axes, axes1);
+    list_extend(axes, axes2);
+    for (ListItem it = list_head(axes); it; it = list_next(it)) {
+        Vector axis = list_value(it);
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri, axis);
+        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(poly, axis);
+        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
+            mtv_mag = tv_mag;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_mag);
+    list_release(axes);
+    list_full_release(axes1, (void (*)(void *)) vector_release);
+    list_full_release(axes2, (void (*)(void *)) vector_release);
+    return mtv;
+}
+
 Vector triangle_circle_intersection(Triangle tri, Circle cir) {
     Vector mtv;
     double mtv_mag;
@@ -1092,5 +1136,75 @@ Vector triangle_circle_intersection(Triangle tri, Circle cir) {
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
+}
+
+Vector polygon_polygon_intersection(Polygon poly1, Polygon poly2) {
+    Vector mtv;
+    double mtv_mag;
+    List axes = list_new();
+    List axes1 = polygon_collision_axes(poly1);
+    List axes2 = polygon_collision_axes(poly2);
+    list_extend(axes, axes1);
+    list_extend(axes, axes2);
+    for (ListItem it = list_head(axes); it; it = list_next(it)) {
+        Vector axis = list_value(it);
+        ShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(poly1, axis);
+        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(poly2, axis);
+        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
+            mtv_mag = tv_mag;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_mag);
+    list_release(axes);
+    list_full_release(axes1, (void (*)(void *)) vector_release);
+    list_full_release(axes2, (void (*)(void *)) vector_release);
+    return mtv;
+}
+
+Vector polygon_circle_intersection(Polygon poly, Circle cir) {
+    Vector mtv;
+    double mtv_mag;
+    List poly_points = polygon_points(poly);
+    List axes = list_new();
+    List axes1 = polygon_collision_axes(poly);
+    List axes2 = circle_collision_axes(cir, poly_points);
+    list_extend(axes, axes1);
+    list_extend(axes, axes2);
+    for (ListItem it = list_head(axes); it; it = list_next(it)) {
+        Vector axis = list_value(it);
+        ShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(poly, axis);
+        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir, axis);
+        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
+            mtv_mag = tv_mag;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_mag);
+    list_release(axes);
+    list_full_release(axes1, (void (*)(void *)) vector_release);
+    list_full_release(axes2, (void (*)(void *)) vector_release);
+    list_full_release(poly_points, (void (*)(void *)) point_release);
+    return mtv;
+}
+
+Vector circle_circle_intersection(Circle cir1, Circle cir2) {
+    Vector axis = vector_from_point_to_point(cir1->center, cir2->center);
+    vector_normalize(axis);
+    ShapeProjectionOnAxis spoa1 = circle_projection_on_axis(cir1, axis);
+    ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir2, axis);
+    double mtv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
+    vector_multiply(axis, mtv_mag);
+    shape_projection_on_axis_release(spoa1);
+    shape_projection_on_axis_release(spoa2);
+    return axis;
 }
 
