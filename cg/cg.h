@@ -363,6 +363,12 @@ void polygon_rotate_around(Polygon polygon, Point center, double deg);
 /* Return the area of polygon. */
 double polygon_area(Polygon polygon);
 
+/* Return polygon projection on axis. */
+ShapeProjectionOnAxis polygon_projection_on_axis(Polygon poly, Vector axis);
+
+/* Return a list of polygon collision detection axes. */
+List polygon_collision_axes(Polygon poly);
+
 /* Return 1 if the point is inside the polygon. 0, otherwise. */
 int point_is_in_polygon(Polygon polygon, Point point);
 

@@ -2307,6 +2307,66 @@ static void test_polygon_area_2() {
     list_full_release(points, (void (*)(void *)) point_release);
 }
 
+static void test_polygon_projection_on_axis_1() {
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(2, 0));
+    list_append(points, point_new(2, 3));
+    list_append(points, point_new(0, 3));
+    Polygon poly = polygon_new(points);
+    Vector axis = vector_new(1, 0);
+    ShapeProjectionOnAxis spoa = polygon_projection_on_axis(poly, axis);
+    g_assert(double_equals(spoa->min, 0));
+    g_assert(double_equals(spoa->max, 2));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    polygon_release(poly);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_projection_on_axis_2() {
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(2, 0));
+    list_append(points, point_new(2, 3));
+    list_append(points, point_new(0, 3));
+    Polygon poly = polygon_new(points);
+    Vector axis = vector_new(0, 1);
+    ShapeProjectionOnAxis spoa = polygon_projection_on_axis(poly, axis);
+    g_assert(double_equals(spoa->min, 0));
+    g_assert(double_equals(spoa->max, 3));
+    shape_projection_on_axis_release(spoa);
+    vector_release(axis);
+    polygon_release(poly);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_collision_axes_1() {
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(2, 0));
+    list_append(points, point_new(2, 3));
+    list_append(points, point_new(0, 3));
+    Polygon poly = polygon_new(points);
+    List collision_axes = polygon_collision_axes(poly);
+    g_assert_cmpint(list_size(collision_axes), ==, 4);
+    Vector axis = list_at(collision_axes, 0);
+    g_assert(double_equals(axis->x, 0));
+    g_assert(double_equals(axis->y, -1));
+    axis = list_at(collision_axes, 1);
+    g_assert(double_equals(axis->x, 1));
+    g_assert(double_equals(axis->y, 0));
+    axis = list_at(collision_axes, 2);
+    g_assert(double_equals(axis->x, 0));
+    g_assert(double_equals(axis->y, 1));
+    axis = list_at(collision_axes, 3);
+    g_assert(double_equals(axis->x, -1));
+    g_assert(double_equals(axis->y, 0));
+    polygon_release(poly);
+    list_full_release(points, (void (*)(void *)) point_release);
+    list_full_release(collision_axes, (void (*)(void *)) vector_release);
+}
+
 static void test_point_is_in_polygon_1() {
     Point lower_left = point_new(0, 0);
     Polygon polygon = polygon_new_square(lower_left, 1);
@@ -2948,6 +3008,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_4);
     g_test_add_func("/gc/polygon_area", test_polygon_area_1);
     g_test_add_func("/gc/polygon_area", test_polygon_area_2);
+    g_test_add_func("/gc/polygon_projection_on_axis",
+                    test_polygon_projection_on_axis_1);
+    g_test_add_func("/gc/polygon_projection_on_axis",
+                    test_polygon_projection_on_axis_2);
+    g_test_add_func("/gc/polygon_collision_axes",
+                    test_polygon_collision_axes_1);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_1);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_2);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_3);

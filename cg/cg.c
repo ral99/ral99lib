@@ -670,18 +670,16 @@ double triangle_area(Triangle triangle) {
                 triangle->a->x * triangle->b->w * triangle->c->y) / 2;
 }
 
-ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle,
-                                                  Vector axis) {
+ShapeProjectionOnAxis triangle_projection_on_axis(Triangle tri, Vector axis) {
     double min, max;
-    double magnitude1 = point_projection_magnitude_on_axis(triangle->a, axis);
-    min = magnitude1;
-    max = magnitude1;
-    double magnitude2 = point_projection_magnitude_on_axis(triangle->b, axis);
-    min = (double_lte(magnitude2, min)) ? magnitude2 : min;
-    max = (double_gte(magnitude2, max)) ? magnitude2 : max;
-    double magnitude3 = point_projection_magnitude_on_axis(triangle->c, axis);
-    min = (double_lte(magnitude3, min)) ? magnitude3 : min;
-    max = (double_gte(magnitude3, max)) ? magnitude3 : max;
+    List points = triangle_points(tri);
+    for (ListItem it = list_head(points); it; it = list_next(it)) {
+        Point p = list_value(it);
+        double mag = point_projection_magnitude_on_axis(p, axis);
+        min = (it == list_head(points) || double_lt(mag, min)) ? mag : min;
+        max = (it == list_head(points) || double_gt(mag, max)) ? mag : max;
+    }
+    list_full_release(points, (void (*)(void *)) point_release);
     return shape_projection_on_axis_new(min, max);
 }
 
@@ -853,6 +851,36 @@ double polygon_area(Polygon polygon) {
         double_area += point_x(a) * point_y(b) - point_x(b) * point_y(a);
     }
     return fabs(double_area) / 2;
+}
+
+ShapeProjectionOnAxis polygon_projection_on_axis(Polygon poly, Vector axis) {
+    double min, max;
+    List points = polygon_points(poly);
+    for (ListItem it = list_head(points); it; it = list_next(it)) {
+        Point p = list_value(it);
+        double mag = point_projection_magnitude_on_axis(p, axis);
+        min = (it == list_head(points) || double_lt(mag, min)) ? mag : min;
+        max = (it == list_head(points) || double_gt(mag, max)) ? mag : max;
+    }
+    list_full_release(points, (void (*)(void *)) point_release);
+    return shape_projection_on_axis_new(min, max);
+}
+
+List polygon_collision_axes(Polygon poly) {
+    List collision_axes = list_new();
+    List points = polygon_points(poly);
+    int n_points = list_size(points);
+    for (int i = 0; i < n_points; i++) {
+        Point p1 = list_at(points, i);
+        Point p2 = list_at(points, (i + 1) % n_points);
+        Vector side_vec = vector_from_point_to_point(p1, p2);
+        Vector axis = vector_right_perpendicular(side_vec);
+        vector_normalize(axis);
+        list_append(collision_axes, axis);
+        vector_release(side_vec);
+    }
+    list_full_release(points, (void (*)(void *)) point_release);
+    return collision_axes;
 }
 
 int point_is_in_polygon(Polygon polygon, Point point) {
