@@ -2689,6 +2689,40 @@ static void test_segment_circle_intersection_3() {
     segment_release(segment);
 }
 
+static void test_triangle_circle_intersection_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Circle cir = circle_from_str("<< Circle: 5.00, 5.00, 1.00 >>");
+    Vector mtv = triangle_circle_intersection(tri, cir);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    circle_release(cir);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_triangle_circle_intersection_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 5);
+    Point c = point_new(5, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Circle cir = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    Vector mtv = triangle_circle_intersection(tri, cir);
+    g_assert(double_equals(mtv->x, -2));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    circle_release(cir);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri);
+}
+
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
@@ -2958,6 +2992,10 @@ int main(int argc, char *argv[]) {
                     test_segment_circle_intersection_2);
     g_test_add_func("/gc/segment_circle_intersection",
                     test_segment_circle_intersection_3);
+    g_test_add_func("/gc/triangle_circle_intersection",
+                    test_triangle_circle_intersection_1);
+    g_test_add_func("/gc/triangle_circle_intersection",
+                    test_triangle_circle_intersection_2);
     return g_test_run();
 }
 

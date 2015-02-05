@@ -1036,3 +1036,33 @@ Vector segment_circle_intersection(Segment seg, Circle cir) {
     return mtv;
 }
 
+Vector triangle_circle_intersection(Triangle tri, Circle cir) {
+    Vector mtv;
+    double mtv_mag;
+    List tri_points = triangle_points(tri);
+    List axes = list_new();
+    List axes1 = triangle_collision_axes(tri);
+    List axes2 = circle_collision_axes(cir, tri_points);
+    list_extend(axes, axes1);
+    list_extend(axes, axes2);
+    for (ListItem it = list_head(axes); it; it = list_next(it)) {
+        Vector axis = list_value(it);
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri, axis);
+        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir, axis);
+        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
+            mtv_mag = tv_mag;
+            mtv = axis;
+        }
+        shape_projection_on_axis_release(spoa1);
+        shape_projection_on_axis_release(spoa2);
+    }
+    mtv = vector_dup(mtv);
+    vector_multiply(mtv, mtv_mag);
+    list_full_release(tri_points, (void (*)(void *)) point_release);
+    list_release(axes);
+    list_full_release(axes1, (void (*)(void *)) vector_release);
+    list_full_release(axes2, (void (*)(void *)) vector_release);
+    return mtv;
+}
+

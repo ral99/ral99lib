@@ -397,12 +397,12 @@ Vector segment_polygon_intersection();
 Vector triangle_polygon_intersection();
 Vector polygon_circle_intersection();
 */
-Vector segment_segment_intersection(Segment segment1, Segment segment2);
-Vector triangle_triangle_intersection(Triangle triangle1, Triangle triangle2);
-Vector circle_circle_intersection(Circle circle1, Circle circle2);
-Vector segment_triangle_intersection(Segment segment, Triangle triangle);
-Vector segment_circle_intersection(Segment segment, Circle circle);
-/*Vector triangle_circle_intersection(Triangle triangle, Circle circle);*/
+Vector segment_segment_intersection(Segment seg1, Segment seg2);
+Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2);
+Vector circle_circle_intersection(Circle cir1, Circle cir2);
+Vector segment_triangle_intersection(Segment seg, Triangle tri);
+Vector segment_circle_intersection(Segment seg, Circle cir);
+Vector triangle_circle_intersection(Triangle tri, Circle cir);
 
 #endif
 
