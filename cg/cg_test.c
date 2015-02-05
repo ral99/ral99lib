@@ -1398,6 +1398,28 @@ static void test_segment_rotate_around_4() {
     segment_release(segment2);
 }
 
+static void test_segment_collision_axes_1() {
+    Segment seg = segment_from_str("<< Segment: (0.00, 0.00); (5.00, 0.00) >>");
+    List collision_axes = segment_collision_axes(seg);
+    g_assert_cmpint(list_size(collision_axes), ==, 1);
+    Vector axis = list_at(collision_axes, 0);
+    g_assert(double_equals(axis->x, 0));
+    g_assert(double_equals(axis->y, -1));
+    list_full_release(collision_axes, (void (*)(void *)) vector_release);
+    segment_release(seg);
+}
+
+static void test_segment_collision_axes_2() {
+    Segment seg = segment_from_str("<< Segment: (0.00, 0.00); (0.00, 5.00) >>");
+    List collision_axes = segment_collision_axes(seg);
+    g_assert_cmpint(list_size(collision_axes), ==, 1);
+    Vector vec = list_at(collision_axes, 0);
+    g_assert(double_equals(vec->x, 1));
+    g_assert(double_equals(vec->y, 0));
+    list_full_release(collision_axes, (void (*)(void *)) vector_release);
+    segment_release(seg);
+}
+
 static void test_point_is_in_segment_1() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 1);
@@ -1612,6 +1634,34 @@ static void test_circle_projection_on_axis_3() {
     shape_projection_on_axis_release(spoa);
     vector_release(axis);
     point_release(center);
+    circle_release(circle);
+}
+
+static void test_circle_collision_axes_1() {
+    Circle circle = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    List points = list_new();
+    list_append(points, point_from_str("<< Point: 1.00, 5.00 >>"));
+    List collision_axes = circle_collision_axes(circle, points);
+    g_assert_cmpint(list_size(collision_axes), ==, 1);
+    Vector axis = list_at(collision_axes, 0);
+    g_assert(double_equals(axis->x, 0));
+    g_assert(double_equals(axis->y, 1));
+    list_full_release(points, (void (*)(void *)) point_release);
+    list_full_release(collision_axes, (void (*)(void *)) vector_release);
+    circle_release(circle);
+}
+
+static void test_circle_collision_axes_2() {
+    Circle circle = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    List points = list_new();
+    list_append(points, point_from_str("<< Point: 5.00, 1.00 >>"));
+    List collision_axes = circle_collision_axes(circle, points);
+    g_assert_cmpint(list_size(collision_axes), ==, 1);
+    Vector axis = list_at(collision_axes, 0);
+    g_assert(double_equals(axis->x, 1));
+    g_assert(double_equals(axis->y, 0));
+    list_full_release(points, (void (*)(void *)) point_release);
+    list_full_release(collision_axes, (void (*)(void *)) vector_release);
     circle_release(circle);
 }
 
@@ -1913,6 +1963,29 @@ static void test_triangle_projection_on_axis_3() {
     point_release(b);
     point_release(c);
     triangle_release(triangle);
+}
+
+static void test_triangle_collision_axes_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(5, 0);
+    Point c = point_new(0, 5);
+    Triangle tri = triangle_new(a, b, c);
+    List collision_axes = triangle_collision_axes(tri);
+    g_assert_cmpint(list_size(collision_axes), ==, 3);
+    Vector axis = list_at(collision_axes, 0);
+    g_assert(double_equals(axis->x, 0));
+    g_assert(double_equals(axis->y, -1));
+    axis = list_at(collision_axes, 1);
+    g_assert(double_equals(axis->x, sqrt(2) / 2));
+    g_assert(double_equals(axis->y, sqrt(2) / 2));
+    axis = list_at(collision_axes, 2);
+    g_assert(double_equals(axis->x, -1));
+    g_assert(double_equals(axis->y, 0));
+    list_full_release(collision_axes, (void (*)(void *)) vector_release);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
 }
 
 static void test_point_is_in_triangle_1() {
@@ -2525,6 +2598,46 @@ static void test_circle_circle_intersection_2() {
     point_release(center2);
 }
 
+static void test_segment_triangle_intersection_1() {
+    Segment seg1 = segment_from_str("<< Segment: (0.00, 1.00); (1.00, 1.00) >>");
+    Segment seg2 = segment_from_str("<< Segment: (1.00, 1.00); (1.00, 0.00) >>");
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Vector mtv1 = segment_triangle_intersection(seg1, tri);
+    g_assert(double_equals(mtv1->x, 0));
+    g_assert(double_equals(mtv1->y, 0));
+    Vector mtv2 = segment_triangle_intersection(seg2, tri);
+    g_assert(double_equals(mtv2->x, 0));
+    g_assert(double_equals(mtv2->y, 0));
+    vector_release(mtv1);
+    vector_release(mtv2);
+    segment_release(seg1);
+    segment_release(seg2);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_segment_triangle_intersection_2() {
+    Segment seg = segment_from_str("<< Segment: (0.10, 0.10); (1.00, 0.10) >>");
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Vector mtv = segment_triangle_intersection(seg, tri);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0.10));
+    vector_release(mtv);
+    segment_release(seg);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
 static void test_segment_circle_intersection_1() {
     Point a = point_new(0, 3);
     Point b = point_new(1, 3);
@@ -2550,7 +2663,7 @@ static void test_segment_circle_intersection_2() {
     Circle circle = circle_new(center, 1);
     Vector mtv = segment_circle_intersection(segment, circle);
     g_assert(double_equals(mtv->x, sqrt(2) / 2));
-    g_assert(double_equals(mtv->y, sqrt(2) / 2));
+    g_assert(double_equals(mtv->y, -sqrt(2) / 2));
     vector_release(mtv);
     point_release(center);
     circle_release(circle);
@@ -2566,8 +2679,8 @@ static void test_segment_circle_intersection_3() {
     Point center = point_new(1, 1);
     Circle circle = circle_new(center, 0.9);
     Vector mtv = segment_circle_intersection(segment, circle);
-    g_assert(double_equals(mtv->x, 0.9));
-    g_assert(double_equals(mtv->y, 0));
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, -0.9));
     vector_release(mtv);
     point_release(center);
     circle_release(circle);
@@ -2714,6 +2827,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_length", test_segment_length_1);
     g_test_add_func("/gc/segment_translate", test_segment_translate_1);
     g_test_add_func("/gc/segment_translate", test_segment_translate_2);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_1);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_2);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_3);
+    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_4);
     g_test_add_func("/gc/segment_projection_on_axis",
                     test_segment_projection_on_axis_1);
     g_test_add_func("/gc/segment_projection_on_axis",
@@ -2724,10 +2841,8 @@ int main(int argc, char *argv[]) {
                     test_segment_projection_on_axis_4);
     g_test_add_func("/gc/segment_projection_on_axis",
                     test_segment_projection_on_axis_5);
-    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_1);
-    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_2);
-    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_3);
-    g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_4);
+    g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_1);
+    g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_2);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_1);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
     g_test_add_func("/gc/circle_release", test_circle_release_1);
@@ -2750,6 +2865,8 @@ int main(int argc, char *argv[]) {
                     test_circle_projection_on_axis_2);
     g_test_add_func("/gc/circle_projection_on_axis",
                     test_circle_projection_on_axis_3);
+    g_test_add_func("/gc/circle_collision_axes", test_circle_collision_axes_1);
+    g_test_add_func("/gc/circle_collision_axes", test_circle_collision_axes_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_3);
@@ -2772,6 +2889,8 @@ int main(int argc, char *argv[]) {
                     test_triangle_projection_on_axis_2);
     g_test_add_func("/gc/triangle_projection_on_axis",
                     test_triangle_projection_on_axis_3);
+    g_test_add_func("/gc/triangle_collision_axes",
+                    test_triangle_collision_axes_1);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_1);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_2);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_3);
@@ -2829,6 +2948,10 @@ int main(int argc, char *argv[]) {
                     test_circle_circle_intersection_1);
     g_test_add_func("/gc/circle_circle_intersection",
                     test_circle_circle_intersection_2);
+    g_test_add_func("/gc/segment_triangle_intersection",
+                    test_segment_triangle_intersection_1);
+    g_test_add_func("/gc/segment_triangle_intersection",
+                    test_segment_triangle_intersection_2);
     g_test_add_func("/gc/segment_circle_intersection",
                     test_segment_circle_intersection_1);
     g_test_add_func("/gc/segment_circle_intersection",

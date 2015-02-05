@@ -244,6 +244,9 @@ void segment_rotate_around(Segment segment, Point center, double deg);
 /* Return segment projection on axis. */
 ShapeProjectionOnAxis segment_projection_on_axis(Segment segment, Vector axis);
 
+/* Return a list of segment collision detection axes. */
+List segment_collision_axes(Segment seg);
+
 /* Return 1 if the point is in the segment. 0, otherwise. */
 int point_is_in_segment(Point point, Segment segment);
 
@@ -284,6 +287,9 @@ void circle_translate(Circle circle, Vector vector);
 /* Return circle projection on axis. */
 ShapeProjectionOnAxis circle_projection_on_axis(Circle circle, Vector axis);
 
+/* Return a list of circle collision detection axes. */
+List circle_collision_axes(Circle circle, List points);
+
 /* Return 1 if the point is inside the circle. 0, otherwise. */
 int point_is_in_circle(Point point, Circle circle);
 
@@ -316,6 +322,9 @@ double triangle_area(Triangle triangle);
 /* Return triangle projection on axis. */
 ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle,
                                                   Vector axis);
+
+/* Return a list of triangle collision detection axes. */
+List triangle_collision_axes(Triangle tri);
 
 /* Return 1 if the point is inside the triangle. 0, otherwise. */
 int point_is_in_triangle(Point point, Triangle triangle);
@@ -383,17 +392,17 @@ double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
 
 /* Return a minimum translation vector. */
 /*
-Vector segment_triangle_intersection();
+Vector polygon_polygon_intersection();
 Vector segment_polygon_intersection();
 Vector triangle_polygon_intersection();
-Vector triangle_circle_intersection();
-Vector polygon_polygon_intersection();
 Vector polygon_circle_intersection();
 */
 Vector segment_segment_intersection(Segment segment1, Segment segment2);
-Vector triangle_triangle_intersection();
+Vector triangle_triangle_intersection(Triangle triangle1, Triangle triangle2);
 Vector circle_circle_intersection(Circle circle1, Circle circle2);
+Vector segment_triangle_intersection(Segment segment, Triangle triangle);
 Vector segment_circle_intersection(Segment segment, Circle circle);
+/*Vector triangle_circle_intersection(Triangle triangle, Circle circle);*/
 
 #endif
 
