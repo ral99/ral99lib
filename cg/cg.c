@@ -1052,6 +1052,12 @@ Vector segment_circle_intersection(Segment seg, Circle cir) {
     return mtv;
 }
 
+Vector triangle_segment_intersection(Triangle tri, Segment seg) {
+    Vector mtv = segment_triangle_intersection(seg, tri);
+    vector_reverse(mtv);
+    return mtv;
+}
+
 Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2) {
     Vector mtv;
     double mtv_mag;
@@ -1138,6 +1144,18 @@ Vector triangle_circle_intersection(Triangle tri, Circle cir) {
     return mtv;
 }
 
+Vector polygon_segment_intersection(Polygon poly, Segment seg) {
+    Vector mtv = segment_polygon_intersection(seg, poly);
+    vector_reverse(mtv);
+    return mtv;
+}
+
+Vector polygon_triangle_intersection(Polygon poly, Triangle tri) {
+    Vector mtv = triangle_polygon_intersection(tri, poly);
+    vector_reverse(mtv);
+    return mtv;
+}
+
 Vector polygon_polygon_intersection(Polygon poly1, Polygon poly2) {
     Vector mtv;
     double mtv_mag;
@@ -1193,6 +1211,24 @@ Vector polygon_circle_intersection(Polygon poly, Circle cir) {
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     list_full_release(poly_points, (void (*)(void *)) point_release);
+    return mtv;
+}
+
+Vector circle_segment_intersection(Circle cir, Segment seg) {
+    Vector mtv = segment_circle_intersection(seg, cir);
+    vector_reverse(mtv);
+    return mtv;
+}
+
+Vector circle_triangle_intersection(Circle cir, Triangle tri) {
+    Vector mtv = triangle_circle_intersection(tri, cir);
+    vector_reverse(mtv);
+    return mtv;
+}
+
+Vector circle_polygon_intersection(Circle cir, Polygon poly) {
+    Vector mtv = polygon_circle_intersection(poly, cir);
+    vector_reverse(mtv);
     return mtv;
 }
 

@@ -396,16 +396,23 @@ double shape_projection_on_axis_max(ShapeProjectionOnAxis spoa);
 double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
                                    ShapeProjectionOnAxis spoa2);
 
-/* Return a minimum translation vector. */
+/* Return a minimum translation vector to be applied on the second parameter
+ * to separate the shapes. */
 Vector segment_segment_intersection(Segment seg1, Segment seg2);
 Vector segment_triangle_intersection(Segment seg, Triangle tri);
 Vector segment_polygon_intersection(Segment seg, Polygon poly);
 Vector segment_circle_intersection(Segment seg, Circle cir);
+Vector triangle_segment_intersection(Triangle tri, Segment seg);
 Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2);
 Vector triangle_polygon_intersection(Triangle tri, Polygon poly);
 Vector triangle_circle_intersection(Triangle tri, Circle cir);
+Vector polygon_segment_intersection(Polygon poly, Segment seg);
+Vector polygon_triangle_intersection(Polygon poly, Triangle tri);
 Vector polygon_polygon_intersection(Polygon poly1, Polygon poly2);
 Vector polygon_circle_intersection(Polygon poly, Circle cir);
+Vector circle_segment_intersection(Circle cir, Segment seg);
+Vector circle_triangle_intersection(Circle cir, Triangle tri);
+Vector circle_polygon_intersection(Circle cir, Polygon poly);
 Vector circle_circle_intersection(Circle cir1, Circle cir2);
 
 #endif

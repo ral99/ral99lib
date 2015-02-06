@@ -2699,6 +2699,46 @@ static void test_segment_circle_intersection_3() {
     segment_release(segment);
 }
 
+static void test_triangle_segment_intersection_1() {
+    Segment seg1 = segment_from_str("<< Segment: (0.00, 1.00); (1.00, 1.00) >>");
+    Segment seg2 = segment_from_str("<< Segment: (1.00, 1.00); (1.00, 0.00) >>");
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Vector mtv1 = triangle_segment_intersection(tri, seg1);
+    g_assert(double_equals(mtv1->x, 0));
+    g_assert(double_equals(mtv1->y, 0));
+    Vector mtv2 = triangle_segment_intersection(tri, seg2);
+    g_assert(double_equals(mtv2->x, 0));
+    g_assert(double_equals(mtv2->y, 0));
+    vector_release(mtv1);
+    vector_release(mtv2);
+    segment_release(seg1);
+    segment_release(seg2);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_triangle_segment_intersection_2() {
+    Segment seg = segment_from_str("<< Segment: (0.10, 0.10); (1.00, 0.10) >>");
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Vector mtv = triangle_segment_intersection(tri, seg);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, -0.10));
+    vector_release(mtv);
+    segment_release(seg);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
 static void test_triangle_triangle_intersection_1() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 0);
@@ -2829,6 +2869,86 @@ static void test_triangle_circle_intersection_2() {
     triangle_release(tri);
 }
 
+static void test_polygon_segment_intersection_1() {
+    Segment seg = segment_from_str("<< Segment: (0.00, 0.00); (0.00, 1.00) >>");
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    Vector mtv = polygon_segment_intersection(poly, seg);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    polygon_release(poly);
+    segment_release(seg);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_segment_intersection_2() {
+    Segment seg = segment_from_str("<< Segment: (0.10, 0.10); (0.10, 1.00) >>");
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    Vector mtv = polygon_segment_intersection(poly, seg);
+    g_assert(double_equals(mtv->x, -0.10));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    polygon_release(poly);
+    segment_release(seg);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_triangle_intersection_1() {
+    Point a = point_new(1, 0);
+    Point b = point_new(1, 1);
+    Point c = point_new(2, 0);
+    Triangle tri = triangle_new(a, b, c);
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    Vector mtv = polygon_triangle_intersection(poly, tri);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    polygon_release(poly);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_triangle_intersection_2() {
+    Point a = point_new(1, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(0, 0);
+    Triangle tri = triangle_new(a, b, c);
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    Vector mtv = polygon_triangle_intersection(poly, tri);
+    g_assert(double_equals(mtv->x, -0.5));
+    g_assert(double_equals(mtv->y, -0.5));
+    vector_release(mtv);
+    polygon_release(poly);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
 static void test_polygon_polygon_intersection_1() {
     List points1 = list_new();
     list_append(points1, point_new(0, 0));
@@ -2902,6 +3022,125 @@ static void test_polygon_circle_intersection_2() {
     Circle cir = circle_from_str("<< Circle: 1.10, 1.00, 1.00 >>");
     Vector mtv = polygon_circle_intersection(poly, cir);
     g_assert(double_equals(mtv->x, 0.9));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    polygon_release(poly);
+    circle_release(cir);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_circle_segment_intersection_1() {
+    Point a = point_new(0, 3);
+    Point b = point_new(1, 3);
+    Segment segment = segment_new(a, b);
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector mtv = circle_segment_intersection(circle, segment);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    point_release(center);
+    circle_release(circle);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_circle_segment_intersection_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 1);
+    Vector mtv = circle_segment_intersection(circle, segment);
+    g_assert(double_equals(mtv->x, -sqrt(2) / 2));
+    g_assert(double_equals(mtv->y, sqrt(2) / 2));
+    vector_release(mtv);
+    point_release(center);
+    circle_release(circle);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_circle_segment_intersection_3() {
+    Point a = point_new(0, 1);
+    Point b = point_new(1, 1);
+    Segment segment = segment_new(a, b);
+    Point center = point_new(1, 1);
+    Circle circle = circle_new(center, 0.9);
+    Vector mtv = circle_segment_intersection(circle, segment);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0.9));
+    vector_release(mtv);
+    point_release(center);
+    circle_release(circle);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_circle_triangle_intersection_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 1);
+    Point c = point_new(1, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Circle cir = circle_from_str("<< Circle: 5.00, 5.00, 1.00 >>");
+    Vector mtv = circle_triangle_intersection(cir, tri);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    circle_release(cir);
+    triangle_release(tri);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_circle_triangle_intersection_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(0, 5);
+    Point c = point_new(5, 0);
+    Triangle tri = triangle_new(a, b, c);
+    Circle cir = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    Vector mtv = circle_triangle_intersection(cir, tri);
+    g_assert(double_equals(mtv->x, 2));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    circle_release(cir);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri);
+}
+
+static void test_circle_polygon_intersection_1() {
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    Circle cir = circle_from_str("<< Circle: 2.00, 1.00, 1.00 >>");
+    Vector mtv = circle_polygon_intersection(cir, poly);
+    g_assert(double_equals(mtv->x, 0));
+    g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
+    polygon_release(poly);
+    circle_release(cir);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_circle_polygon_intersection_2() {
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    Circle cir = circle_from_str("<< Circle: 1.10, 1.00, 1.00 >>");
+    Vector mtv = circle_polygon_intersection(cir, poly);
+    g_assert(double_equals(mtv->x, -0.9));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
     polygon_release(poly);
@@ -3214,6 +3453,10 @@ int main(int argc, char *argv[]) {
                     test_segment_circle_intersection_2);
     g_test_add_func("/gc/segment_circle_intersection",
                     test_segment_circle_intersection_3);
+    g_test_add_func("/gc/triangle_segment_intersection",
+                    test_triangle_segment_intersection_1);
+    g_test_add_func("/gc/triangle_segment_intersection",
+                    test_triangle_segment_intersection_2);
     g_test_add_func("/gc/triangle_triangle_intersection",
                     test_triangle_triangle_intersection_1);
     g_test_add_func("/gc/triangle_triangle_intersection",
@@ -3226,6 +3469,14 @@ int main(int argc, char *argv[]) {
                     test_triangle_circle_intersection_1);
     g_test_add_func("/gc/triangle_circle_intersection",
                     test_triangle_circle_intersection_2);
+    g_test_add_func("/gc/polygon_segment_intersection",
+                    test_polygon_segment_intersection_1);
+    g_test_add_func("/gc/polygon_segment_intersection",
+                    test_polygon_segment_intersection_2);
+    g_test_add_func("/gc/polygon_triangle_intersection",
+                    test_polygon_triangle_intersection_1);
+    g_test_add_func("/gc/polygon_triangle_intersection",
+                    test_polygon_triangle_intersection_2);
     g_test_add_func("/gc/polygon_polygon_intersection",
                     test_polygon_polygon_intersection_1);
     g_test_add_func("/gc/polygon_polygon_intersection",
@@ -3234,6 +3485,20 @@ int main(int argc, char *argv[]) {
                     test_polygon_circle_intersection_1);
     g_test_add_func("/gc/polygon_circle_intersection",
                     test_polygon_circle_intersection_2);
+    g_test_add_func("/gc/circle_segment_intersection",
+                    test_circle_segment_intersection_1);
+    g_test_add_func("/gc/circle_segment_intersection",
+                    test_circle_segment_intersection_2);
+    g_test_add_func("/gc/circle_segment_intersection",
+                    test_circle_segment_intersection_3);
+    g_test_add_func("/gc/circle_triangle_intersection",
+                    test_circle_triangle_intersection_1);
+    g_test_add_func("/gc/circle_triangle_intersection",
+                    test_circle_triangle_intersection_2);
+    g_test_add_func("/gc/circle_polygon_intersection",
+                    test_circle_polygon_intersection_1);
+    g_test_add_func("/gc/circle_polygon_intersection",
+                    test_circle_polygon_intersection_2);
     g_test_add_func("/gc/circle_circle_intersection",
                     test_circle_circle_intersection_1);
     g_test_add_func("/gc/circle_circle_intersection",
