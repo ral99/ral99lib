@@ -70,7 +70,7 @@ static void test_vector_dup_1() {
 }
 
 static void test_vector_to_str_1() {
-    char *vec_str = "<< Vector: 1.25, 2.00 >>";
+    char *vec_str = "<< Vector: (1.25, 2.00) >>";
     Vector vector = vector_new(1.25, 2);
     char *str = vector_to_str(vector, 2);
     g_assert_cmpstr(str, ==, vec_str);
@@ -79,7 +79,7 @@ static void test_vector_to_str_1() {
 }
 
 static void test_vector_from_str_1() {
-    char *vec_str = "<< Vector: 1.25, 2.00 >>";
+    char *vec_str = "<< Vector: (1.25, 2.00) >>";
     Vector vector1 = vector_from_str(vec_str);
     Vector vector2 = vector_new(1.25, 2.00);
     g_assert(vector_equals(vector1, vector2));
@@ -384,7 +384,7 @@ static void test_point_dup_1() {
 }
 
 static void test_point_to_str_1() {
-    char *p_str = "<< Point: 1.25, 2.00 >>";
+    char *p_str = "<< Point: (1.25, 2.00) >>";
     Point point = point_new(1.25, 2);
     char *str = point_to_str(point, 2);
     g_assert_cmpstr(str, ==, p_str);
@@ -393,7 +393,7 @@ static void test_point_to_str_1() {
 }
 
 static void test_point_from_str_1() {
-    char *p_str = "<< Point: 1.25, 2.00 >>";
+    char *p_str = "<< Point: (1.25, 2.00) >>";
     Point point1 = point_from_str(p_str);
     Point point2 = point_new(1.25, 2.00);
     g_assert(point_equals(point1, point2));
@@ -821,7 +821,7 @@ static void test_line_dup_1() {
 }
 
 static void test_line_to_str_1() {
-    char *line_str = "<< Line: 0.00, -1.00, 1.00 >>";
+    char *line_str = "<< Line: (0.00, -1.00, 1.00) >>";
     Point point1 = point_new(0, 0);
     Point point2 = point_new(1, 1);
     Line line = line_new(point1, point2);
@@ -834,7 +834,7 @@ static void test_line_to_str_1() {
 }
 
 static void test_line_from_str_1() {
-    char *line_str = "<< Line: 0.00, -1.00, 1.00 >>";
+    char *line_str = "<< Line: (0.00, -1.00, 1.00) >>";
     Point point1 = point_new(0, 0);
     Point point2 = point_new(1, 1);
     Line line1 = line_new(point1, point2);
@@ -1519,7 +1519,7 @@ static void test_circle_dup_1() {
 }
 
 static void test_circle_to_str_1() {
-    char *cir_str = "<< Circle: 1.00, 2.00, 3.00 >>";
+    char *cir_str = "<< Circle: (1.00, 2.00); 3.00 >>";
     Point center = point_new(1, 2);
     Circle circle = circle_new(center, 3);
     char *str = circle_to_str(circle, 2);
@@ -1530,7 +1530,7 @@ static void test_circle_to_str_1() {
 }
 
 static void test_circle_from_str_1() {
-    char *cir_str = "<< Circle: 1.00, 2.00, 3.00 >>";
+    char *cir_str = "<< Circle: (1.00, 2.00); 3.00 >>";
     Point center = point_new(1, 2);
     Circle circle1 = circle_new(center, 3);
     Circle circle2 = circle_from_str(cir_str);
@@ -1646,9 +1646,9 @@ static void test_circle_projection_on_axis_3() {
 }
 
 static void test_circle_collision_axes_1() {
-    Circle circle = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    Circle circle = circle_from_str("<< Circle: (1.00, 1.00); 1.00 >>");
     List points = list_new();
-    list_append(points, point_from_str("<< Point: 1.00, 5.00 >>"));
+    list_append(points, point_from_str("<< Point: (1.00, 5.00) >>"));
     List collision_axes = circle_collision_axes(circle, points);
     g_assert_cmpint(list_size(collision_axes), ==, 1);
     Vector axis = list_at(collision_axes, 0);
@@ -1660,9 +1660,9 @@ static void test_circle_collision_axes_1() {
 }
 
 static void test_circle_collision_axes_2() {
-    Circle circle = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    Circle circle = circle_from_str("<< Circle: (1.00, 1.00); 1.00 >>");
     List points = list_new();
-    list_append(points, point_from_str("<< Point: 5.00, 1.00 >>"));
+    list_append(points, point_from_str("<< Point: (5.00, 1.00) >>"));
     List collision_axes = circle_collision_axes(circle, points);
     g_assert_cmpint(list_size(collision_axes), ==, 1);
     Vector axis = list_at(collision_axes, 0);
@@ -2951,7 +2951,7 @@ static void test_triangle_circle_intersection_1() {
     Point b = point_new(0, 1);
     Point c = point_new(1, 0);
     Triangle tri = triangle_new(a, b, c);
-    Circle cir = circle_from_str("<< Circle: 5.00, 5.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (5.00, 5.00); 1.00 >>");
     Vector mtv = triangle_circle_intersection(tri, cir);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -2968,7 +2968,7 @@ static void test_triangle_circle_intersection_2() {
     Point b = point_new(0, 5);
     Point c = point_new(5, 0);
     Triangle tri = triangle_new(a, b, c);
-    Circle cir = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (1.00, 1.00); 1.00 >>");
     Vector mtv = triangle_circle_intersection(tri, cir);
     g_assert(double_equals(mtv->x, -2));
     g_assert(double_equals(mtv->y, 0));
@@ -3113,7 +3113,7 @@ static void test_polygon_circle_intersection_1() {
     list_append(points, point_new(0, 1));
     list_append(points, point_new(1, 1));
     Polygon poly = polygon_new(points);
-    Circle cir = circle_from_str("<< Circle: 2.00, 1.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (2.00, 1.00); 1.00 >>");
     Vector mtv = polygon_circle_intersection(poly, cir);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -3130,7 +3130,7 @@ static void test_polygon_circle_intersection_2() {
     list_append(points, point_new(0, 1));
     list_append(points, point_new(1, 1));
     Polygon poly = polygon_new(points);
-    Circle cir = circle_from_str("<< Circle: 1.10, 1.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (1.10, 1.00); 1.00 >>");
     Vector mtv = polygon_circle_intersection(poly, cir);
     g_assert(double_equals(mtv->x, 0.9));
     g_assert(double_equals(mtv->y, 0));
@@ -3196,7 +3196,7 @@ static void test_circle_triangle_intersection_1() {
     Point b = point_new(0, 1);
     Point c = point_new(1, 0);
     Triangle tri = triangle_new(a, b, c);
-    Circle cir = circle_from_str("<< Circle: 5.00, 5.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (5.00, 5.00); 1.00 >>");
     Vector mtv = circle_triangle_intersection(cir, tri);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -3213,7 +3213,7 @@ static void test_circle_triangle_intersection_2() {
     Point b = point_new(0, 5);
     Point c = point_new(5, 0);
     Triangle tri = triangle_new(a, b, c);
-    Circle cir = circle_from_str("<< Circle: 1.00, 1.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (1.00, 1.00); 1.00 >>");
     Vector mtv = circle_triangle_intersection(cir, tri);
     g_assert(double_equals(mtv->x, 2));
     g_assert(double_equals(mtv->y, 0));
@@ -3232,7 +3232,7 @@ static void test_circle_polygon_intersection_1() {
     list_append(points, point_new(0, 1));
     list_append(points, point_new(1, 1));
     Polygon poly = polygon_new(points);
-    Circle cir = circle_from_str("<< Circle: 2.00, 1.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (2.00, 1.00); 1.00 >>");
     Vector mtv = circle_polygon_intersection(cir, poly);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -3249,7 +3249,7 @@ static void test_circle_polygon_intersection_2() {
     list_append(points, point_new(0, 1));
     list_append(points, point_new(1, 1));
     Polygon poly = polygon_new(points);
-    Circle cir = circle_from_str("<< Circle: 1.10, 1.00, 1.00 >>");
+    Circle cir = circle_from_str("<< Circle: (1.10, 1.00); 1.00 >>");
     Vector mtv = circle_polygon_intersection(cir, poly);
     g_assert(double_equals(mtv->x, -0.9));
     g_assert(double_equals(mtv->y, 0));
