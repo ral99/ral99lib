@@ -627,8 +627,79 @@ void triangle_release(Triangle triangle) {
     free(triangle);
 }
 
+int triangle_equals(Triangle tri1, Triangle tri2) {
+    if ((point_equals(tri1->a, tri2->a) &&
+         point_equals(tri1->b, tri2->b) &&
+         point_equals(tri1->c, tri2->c)) ||
+        (point_equals(tri1->a, tri2->a) &&
+         point_equals(tri1->b, tri2->c) &&
+         point_equals(tri1->c, tri2->b)) ||
+        (point_equals(tri1->a, tri2->b) &&
+         point_equals(tri1->b, tri2->a) &&
+         point_equals(tri1->c, tri2->c)) ||
+        (point_equals(tri1->a, tri2->b) &&
+         point_equals(tri1->b, tri2->c) &&
+         point_equals(tri1->c, tri2->a)) ||
+        (point_equals(tri1->a, tri2->c) &&
+         point_equals(tri1->b, tri2->a) &&
+         point_equals(tri1->c, tri2->b)) ||
+        (point_equals(tri1->a, tri2->c) &&
+         point_equals(tri1->b, tri2->b) &&
+         point_equals(tri1->c, tri2->a)))
+        return 1;
+    return 0;
+}
+
 Triangle triangle_dup(Triangle triangle) {
     return triangle_new(triangle->a, triangle->b, triangle->c);
+}
+
+char *triangle_to_str(Triangle tri, int decimal_positions) {
+    List str_list = list_new();
+    list_append(str_list, str_dup("<< Triangle: ("));
+    list_append(str_list, double_to_str(point_x(tri->a), decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(point_y(tri->a), decimal_positions));
+    list_append(str_list, str_dup("); ("));
+    list_append(str_list, double_to_str(point_x(tri->b), decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(point_y(tri->b), decimal_positions));
+    list_append(str_list, str_dup("); ("));
+    list_append(str_list, double_to_str(point_x(tri->c), decimal_positions));
+    list_append(str_list, str_dup(", "));
+    list_append(str_list, double_to_str(point_y(tri->c), decimal_positions));
+    list_append(str_list, str_dup(") >>"));
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
+}
+
+Triangle triangle_from_str(char *str) {
+    List str_list = str_split(str, "; ");
+    char *str_a = str_substr(list_at(str_list, 0), 14,
+                             strlen(list_at(str_list, 0)) - 15);
+    List str_a_list = str_split(str_a, ", ");
+    Point a = point_new(atof(list_at(str_a_list, 0)), atof(list_at(str_a_list, 1)));
+    char *str_b = str_substr(list_at(str_list, 1), 1,
+                             strlen(list_at(str_list, 1)) - 2);
+    List str_b_list = str_split(str_b, ", ");
+    Point b = point_new(atof(list_at(str_b_list, 0)), atof(list_at(str_b_list, 1)));
+    char *str_c = str_substr(list_at(str_list, 2), 1,
+                             strlen(list_at(str_list, 2)) - 5);
+    List str_c_list = str_split(str_c, ", ");
+    Point c = point_new(atof(list_at(str_c_list, 0)), atof(list_at(str_c_list, 1)));
+    Triangle tri = triangle_new(a, b, c);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    free(str_a);
+    free(str_b);
+    free(str_c);
+    list_full_release(str_list, free);
+    list_full_release(str_a_list, free);
+    list_full_release(str_b_list, free);
+    list_full_release(str_c_list, free);
+    return tri;
 }
 
 List triangle_points(Triangle triangle) {

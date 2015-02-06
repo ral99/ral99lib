@@ -299,8 +299,18 @@ Triangle triangle_new(Point a, Point b, Point c);
 /* Free the memory used by triangle. */
 void triangle_release(Triangle triangle);
 
+/* Return 1 if the triangles are equal. 0, otherwise. */
+int triangle_equals(Triangle tri1, Triangle tri2);
+
 /* Return the duplicated triangle. */
 Triangle triangle_dup(Triangle triangle);
+
+/* Return the string representation of the triangle with the specified number of
+ * decimal positions. */
+char *triangle_to_str(Triangle tri, int decimal_positions);
+
+/* Return triangle from its string representation. */
+Triangle triangle_from_str(char *str);
 
 /* Return a list of triangle points. */
 List triangle_points(Triangle triangle);

@@ -1723,6 +1723,49 @@ static void test_triangle_release_1() {
     triangle_release(triangle);
 }
 
+static void test_triangle_equals_1() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 0);
+    Point c = point_new(0, 1);
+    Point d = point_new(1, 1);
+    Triangle tri1 = triangle_new(a, b, c);
+    Triangle tri2 = triangle_new(a, b, d);
+    g_assert_cmpint(triangle_equals(tri1, tri2), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    triangle_release(tri1);
+    triangle_release(tri2);
+}
+
+static void test_triangle_equals_2() {
+    Point a = point_new(0, 0);
+    Point b = point_new(1, 0);
+    Point c = point_new(0, 1);
+    Triangle tri1 = triangle_new(a, b, c);
+    Triangle tri2 = triangle_new(a, c, b);
+    Triangle tri3 = triangle_new(b, a, c);
+    Triangle tri4 = triangle_new(b, c, a);
+    Triangle tri5 = triangle_new(c, a, b);
+    Triangle tri6 = triangle_new(c, b, a);
+    g_assert_cmpint(triangle_equals(tri1, tri1), ==, 1);
+    g_assert_cmpint(triangle_equals(tri1, tri2), ==, 1);
+    g_assert_cmpint(triangle_equals(tri1, tri3), ==, 1);
+    g_assert_cmpint(triangle_equals(tri1, tri4), ==, 1);
+    g_assert_cmpint(triangle_equals(tri1, tri5), ==, 1);
+    g_assert_cmpint(triangle_equals(tri1, tri6), ==, 1);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri1);
+    triangle_release(tri2);
+    triangle_release(tri3);
+    triangle_release(tri4);
+    triangle_release(tri5);
+    triangle_release(tri6);
+}
+
 static void test_triangle_dup_1() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 0);
@@ -1741,6 +1784,36 @@ static void test_triangle_dup_1() {
     point_release(c);
     triangle_release(triangle1);
     triangle_release(triangle2);
+}
+
+static void test_triangle_to_str_1() {
+    char *tri_str = "<< Triangle: (1.0, 2.0); (4.0, 5.0); (7.0, 8.0) >>";
+    Point a = point_new(1, 2);
+    Point b = point_new(4, 5);
+    Point c = point_new(7, 8);
+    Triangle tri = triangle_new(a, b, c);
+    char *str = triangle_to_str(tri, 1);
+    g_assert_cmpstr(str, ==, tri_str);
+    free(str);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri);
+}
+
+static void test_triangle_from_str_1() {
+    char *tri_str = "<< Triangle: (1.0, 2.0); (4.0, 5.0); (7.0, 8.0) >>";
+    Point a = point_new(1, 2);
+    Point b = point_new(4, 5);
+    Point c = point_new(7, 8);
+    Triangle tri1 = triangle_new(a, b, c);
+    Triangle tri2 = triangle_from_str(tri_str);
+    g_assert(triangle_equals(tri1, tri2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(tri1);
+    triangle_release(tri2);
 }
 
 static void test_triangle_points_1() {
@@ -3365,7 +3438,11 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_3);
     g_test_add_func("/gc/triangle_new", test_triangle_new_1);
     g_test_add_func("/gc/triangle_release", test_triangle_release_1);
+    g_test_add_func("/gc/triangle_equals", test_triangle_equals_1);
+    g_test_add_func("/gc/triangle_equals", test_triangle_equals_2);
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);
+    g_test_add_func("/gc/triangle_to_str", test_triangle_to_str_1);
+    g_test_add_func("/gc/triangle_from_str", test_triangle_from_str_1);
     g_test_add_func("/gc/triangle_points", test_triangle_points_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_2);
