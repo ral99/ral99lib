@@ -360,6 +360,13 @@ int polygon_equals(Polygon polygon1, Polygon polygon2);
 /* Return the duplicated polygon. */
 Polygon polygon_dup(Polygon polygon);
 
+/* Return the string representation of the polygon with the specified number of
+ * decimal positions. */
+char *polygon_to_str(Polygon poly, int decimal_positions);
+
+/* Return polygon from its string representation. */
+Polygon polygon_from_str(char *str);
+
 /* Return a list of polygon points. */
 List polygon_points(Polygon polygon);
 

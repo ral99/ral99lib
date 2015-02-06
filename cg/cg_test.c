@@ -2254,6 +2254,36 @@ static void test_polygon_dup_1() {
     point_release(lower_left);
 }
 
+static void test_polygon_to_str_1() {
+    char *poly_str = "<< Polygon: (0.0, 0.0); (1.0, 0.0); (1.0, 1.0); (0.0, 1.0) >>";
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(1, 1));
+    Polygon poly = polygon_new(points);
+    char *str = polygon_to_str(poly, 1);
+    g_assert_cmpstr(str, ==, poly_str);
+    free(str);
+    polygon_release(poly);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_from_str_1() {
+    char *poly_str = "<< Polygon: (1.0, 0.0); (0.0, 0.0); (1.0, 1.0); (0.0, 1.0) >>";
+    List points = list_new();
+    list_append(points, point_new(0, 0));
+    list_append(points, point_new(0, 1));
+    list_append(points, point_new(1, 0));
+    list_append(points, point_new(1, 1));
+    Polygon poly1 = polygon_from_str(poly_str);
+    Polygon poly2 = polygon_new(points);
+    g_assert(polygon_equals(poly1, poly2));
+    polygon_release(poly1);
+    polygon_release(poly2);
+    list_full_release(points, (void (*)(void *)) point_release);
+}
+
 static void test_polygon_points_1() {
     Point lower_left = point_new(0, 0);
     Polygon polygon = polygon_new_square(lower_left, 1);
@@ -3475,6 +3505,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_equals", test_polygon_equals_2);
     g_test_add_func("/gc/polygon_equals", test_polygon_equals_3);
     g_test_add_func("/gc/polygon_dup", test_polygon_dup_1);
+    g_test_add_func("/gc/polygon_to_str", test_polygon_to_str_1);
+    g_test_add_func("/gc/polygon_from_str", test_polygon_from_str_1);
     g_test_add_func("/gc/polygon_points", test_polygon_points_1);
     g_test_add_func("/gc/polygon_translate", test_polygon_translate_1);
     g_test_add_func("/gc/polygon_translate", test_polygon_translate_2);

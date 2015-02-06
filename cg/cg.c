@@ -892,6 +892,63 @@ Polygon polygon_dup(Polygon polygon) {
     return dup;
 }
 
+char *polygon_to_str(Polygon poly, int decimal_positions) {
+    List str_list = list_new();
+    list_append(str_list, str_dup("<< Polygon: ("));
+    for (ListItem it = list_head(poly->points); it; it = list_next(it)) {
+        Point p = list_value(it);
+        list_append(str_list, double_to_str(point_x(p), decimal_positions));
+        list_append(str_list, str_dup(", "));
+        list_append(str_list, double_to_str(point_y(p), decimal_positions));
+        if (list_next(it))
+            list_append(str_list, str_dup("); ("));
+        else
+            list_append(str_list, str_dup(") >>"));
+    }
+    char *str = str_join(str_list, "");
+    list_full_release(str_list, free);
+    return str;
+}
+
+Polygon polygon_from_str(char *str) {
+    List str_list = str_split(str, "; ");
+    List points = list_new();
+    int n_points = list_size(str_list);
+    for (int i = 1; i < n_points - 1; i++) {
+        List p_list = str_split(list_at(str_list, i), ", ");
+        char *p_x = str_substr(list_at(p_list, 0), 1,
+                               strlen(list_at(p_list, 0)) - 1);
+        char *p_y = str_substr(list_at(p_list, 1), 0,
+                               strlen(list_at(p_list, 1)) - 1);
+        list_append(points, point_new(atof(p_x), atof(p_y)));
+        free(p_x);
+        free(p_y);
+        list_full_release(p_list, free);
+    }
+    List p0_list = str_split(list_at(str_list, 0), ", ");
+    List pn_list = str_split(list_at(str_list, n_points - 1), ", ");
+    char *p0_x = str_substr(list_at(p0_list, 0), 13,
+                            strlen(list_at(p0_list, 0)) - 13);
+    char *p0_y = str_substr(list_at(p0_list, 1), 0,
+                            strlen(list_at(p0_list, 1)) - 1);
+    char *pn_x = str_substr(list_at(pn_list, 0), 1,
+                            strlen(list_at(pn_list, 0)) - 1);
+    char *pn_y = str_substr(list_at(pn_list, 1), 0,
+                            strlen(list_at(pn_list, 1)) - 4);
+    list_append(points, point_new(atof(p0_x), atof(p0_y)));
+    list_append(points, point_new(atof(pn_x), atof(pn_y)));
+    Polygon poly = polygon_new(points);
+    list_full_release(str_list, free);
+    list_full_release(p0_list, free);
+    list_full_release(pn_list, free);
+    free(p0_x);
+    free(p0_y);
+    free(pn_x);
+    free(pn_y);
+    list_full_release(points, (void (*)(void *)) point_release);
+    return poly;
+}
+
 List polygon_points(Polygon polygon) {
     List points = list_new();
     for (ListItem it = list_head(polygon->points); it; it = list_next(it))
