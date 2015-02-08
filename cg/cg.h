@@ -67,12 +67,12 @@ int vector_equals(Vector vector1, Vector vector2);
 /* Return the duplicated vector. */
 Vector vector_dup(Vector vector);
 
-/* Return the string representation of the vector with the specified number of
- * decimal positions. */
+/* Return the string representation of the vector with the specified number of decimal
+ * positions. */
 char *vector_to_str(Vector vector, int decimal_positions);
 
 /* Return vector from its string representation. */
-Vector vector_from_str(char *string);
+Vector vector_from_str(char *str);
 
 /* Return vector x component. */
 double vector_x(Vector vector);
@@ -92,11 +92,11 @@ void vector_normalize(Vector vector);
 /* Reverse vector. */
 void vector_reverse(Vector vector);
 
-/* Sum vector b to vector a. */
-void vector_sum(Vector a, Vector b);
+/* Sum vector 2 to vector 1. */
+void vector_sum(Vector vector1, Vector vector2);
 
-/* Subtract vector b from vector a. */
-void vector_subtract(Vector a, Vector b);
+/* Subtract vector 2 from vector 1. */
+void vector_subtract(Vector vector1, Vector vector2);
 
 /* Multiply vector by a scalar factor. */
 void vector_multiply(Vector vector, double k);
@@ -125,12 +125,12 @@ int point_equals(Point point1, Point point2);
 /* Return the duplicated point. */
 Point point_dup(Point point);
 
-/* Return the string representation of the point with the specified number of
- * decimal positions. */
+/* Return the string representation of the point with the specified number of decimal
+ * positions. */
 char *point_to_str(Point point, int decimal_positions);
 
 /* Return point from its string representation. */
-Point point_from_str(char *string);
+Point point_from_str(char *str);
 
 /* Return point x component. */
 double point_x(Point point);
@@ -150,8 +150,8 @@ Vector point_projection_on_axis(Point point, Vector axis);
 /* Translate the point by the vector. */
 void point_translate(Point point, Vector vector);
 
-/* Rotate the point by the specified degrees in counter-clockwise orientation
- * around a center point. */
+/* Rotate the point by the specified degrees in counter-clockwise orientation around a center
+ * point. */
 void point_rotate_around(Point point, Point center, double deg);
 
 /* Return the midpoint between 2 points. */
@@ -163,8 +163,11 @@ int point_is_infinite(Point point);
 /* Normalize the point coordinates. */
 void point_normalize(Point point);
 
+/* Return the distance between two points. */
+double point_distance_to_point(Point point1, Point point2);
+
 /* Return a new line defined by 2 points. */
-Line line_new(Point point1, Point point2);
+Line line_new(Point a, Point b);
 
 /* Free the memory used by line. */
 void line_release(Line line);
@@ -175,12 +178,12 @@ int line_equals(Line line1, Line line2);
 /* Return the duplicated line. */
 Line line_dup(Line line);
 
-/* Return the string representation of the line with the specified number of
- * decimal positions. */
+/* Return the string representation of the line with the specified number of decimal
+ * positions. */
 char *line_to_str(Line line, int decimal_positions);
 
 /* Return line from its string representation. */
-Line line_from_str(char *string);
+Line line_from_str(char *str);
 
 /* Return the perpendicular line which contains point. */
 Line line_perpendicular(Line line, Point point);
@@ -193,9 +196,6 @@ void line_normalize(Line line);
 
 /* Return 1 if the point is in line. 0, otherwise. */
 int point_is_in_line(Point point, Line line);
-
-/* Return the distance between two points. */
-double point_distance_to_point(Point point1, Point point2);
 
 /* Return the distance from the point to the line. */
 double point_distance_to_line(Point point, Line line);
@@ -215,12 +215,12 @@ int segment_equals(Segment segment1, Segment segment2);
 /* Return the duplicated segment. */
 Segment segment_dup(Segment segment);
 
-/* Return the string representation of the segment with the specified number of
- * decimal positions. */
+/* Return the string representation of the segment with the specified number of decimal
+ * positions. */
 char *segment_to_str(Segment segment, int decimal_positions);
 
 /* Return segment from its string representation. */
-Segment segment_from_str(char *string);
+Segment segment_from_str(char *str);
 
 /* Return a list of two points that defines the segment. */
 List segment_points(Segment segment);
@@ -237,15 +237,15 @@ double segment_length(Segment segment);
 /* Translate the segment by the vector. */
 void segment_translate(Segment segment, Vector vector);
 
-/* Rotate the segment by the specified degrees in counter-clockwise
- * orientation around a center point. */
+/* Rotate the segment by the specified degrees in counter-clockwise orientation around a
+ * center point. */
 void segment_rotate_around(Segment segment, Point center, double deg);
 
 /* Return segment projection on axis. */
 ShapeProjectionOnAxis segment_projection_on_axis(Segment segment, Vector axis);
 
 /* Return a list of segment collision detection axes. */
-List segment_collision_axes(Segment seg);
+List segment_collision_axes(Segment segment);
 
 /* Return 1 if the point is in the segment. 0, otherwise. */
 int point_is_in_segment(Point point, Segment segment);
@@ -262,12 +262,12 @@ int circle_equals(Circle circle1, Circle circle2);
 /* Return the duplicated circle. */
 Circle circle_dup(Circle circle);
 
-/* Return the string representation of the circle with the specified number of
- * decimal positions. */
+/* Return the string representation of the circle with the specified number of decimal
+ * positions. */
 char *circle_to_str(Circle circle, int decimal_positions);
 
 /* Return circle from its string representation. */
-Circle circle_from_str(char *string);
+Circle circle_from_str(char *str);
 
 /* Return circle center point. */
 Point circle_center(Circle circle);
@@ -300,14 +300,14 @@ Triangle triangle_new(Point a, Point b, Point c);
 void triangle_release(Triangle triangle);
 
 /* Return 1 if the triangles are equal. 0, otherwise. */
-int triangle_equals(Triangle tri1, Triangle tri2);
+int triangle_equals(Triangle triangle1, Triangle triangle2);
 
 /* Return the duplicated triangle. */
 Triangle triangle_dup(Triangle triangle);
 
-/* Return the string representation of the triangle with the specified number of
- * decimal positions. */
-char *triangle_to_str(Triangle tri, int decimal_positions);
+/* Return the string representation of the triangle with the specified number of decimal
+ * positions. */
+char *triangle_to_str(Triangle triangle, int decimal_positions);
 
 /* Return triangle from its string representation. */
 Triangle triangle_from_str(char *str);
@@ -318,23 +318,21 @@ List triangle_points(Triangle triangle);
 /* Translate the triangle by the vector. */
 void triangle_translate(Triangle triangle, Vector vector);
 
-/* Rotate the triangle by the specified degrees in counter-clockwise
- * orientation around a center point. */
+/* Rotate the triangle by the specified degrees in counter-clockwise orientation around a
+ * center point. */
 void triangle_rotate_around(Triangle triangle, Point center, double deg);
 
-/* Return -1 if clockwise; 1 if counter-clockwise; 0 if the points are
- * collinear. */
+/* Return -1 if clockwise; 1 if counter-clockwise; 0 if the points are collinear. */
 int triangle_orientation(Triangle triangle);
 
 /* Return the area of triangle. */
 double triangle_area(Triangle triangle);
 
 /* Return triangle projection on axis. */
-ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle,
-                                                  Vector axis);
+ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle, Vector axis);
 
 /* Return a list of triangle collision detection axes. */
-List triangle_collision_axes(Triangle tri);
+List triangle_collision_axes(Triangle triangle);
 
 /* Return 1 if the point is inside the triangle. 0, otherwise. */
 int point_is_in_triangle(Point point, Triangle triangle);
@@ -360,9 +358,9 @@ int polygon_equals(Polygon polygon1, Polygon polygon2);
 /* Return the duplicated polygon. */
 Polygon polygon_dup(Polygon polygon);
 
-/* Return the string representation of the polygon with the specified number of
- * decimal positions. */
-char *polygon_to_str(Polygon poly, int decimal_positions);
+/* Return the string representation of the polygon with the specified number of decimal
+ * positions. */
+char *polygon_to_str(Polygon polygon, int decimal_positions);
 
 /* Return polygon from its string representation. */
 Polygon polygon_from_str(char *str);
@@ -373,21 +371,21 @@ List polygon_points(Polygon polygon);
 /* Translate the polygon by the vector. */
 void polygon_translate(Polygon polygon, Vector vector);
 
-/* Rotate the polygon by the specified degrees in counter-clockwise
- * orientation around a center point. */
+/* Rotate the polygon by the specified degrees in counter-clockwise orientation around a
+ * center point. */
 void polygon_rotate_around(Polygon polygon, Point center, double deg);
 
 /* Return the area of polygon. */
 double polygon_area(Polygon polygon);
 
 /* Return polygon projection on axis. */
-ShapeProjectionOnAxis polygon_projection_on_axis(Polygon poly, Vector axis);
+ShapeProjectionOnAxis polygon_projection_on_axis(Polygon polygon, Vector axis);
 
 /* Return a list of polygon collision detection axes. */
-List polygon_collision_axes(Polygon poly);
+List polygon_collision_axes(Polygon polygon);
 
 /* Return 1 if the point is inside the polygon. 0, otherwise. */
-int point_is_in_polygon(Polygon polygon, Point point);
+int point_is_in_polygon(Point point, Polygon polygon);
 
 /* Return a new SPOA defined by a range. */
 ShapeProjectionOnAxis shape_projection_on_axis_new(double min, double max);
@@ -396,8 +394,7 @@ ShapeProjectionOnAxis shape_projection_on_axis_new(double min, double max);
 void shape_projection_on_axis_release(ShapeProjectionOnAxis spoa);
 
 /* Return 1 if the SPOAs are equal. 0, otherwise. */
-int shape_projection_on_axis_equals(ShapeProjectionOnAxis spoa1,
-                                    ShapeProjectionOnAxis spoa2);
+int shape_projection_on_axis_equals(ShapeProjectionOnAxis spoa1, ShapeProjectionOnAxis spoa2);
 
 /* Return the duplicated SPOA. */
 ShapeProjectionOnAxis shape_projection_on_axis_dup(ShapeProjectionOnAxis spoa);
@@ -408,29 +405,28 @@ double shape_projection_on_axis_min(ShapeProjectionOnAxis spoa);
 /* Return SPOA maximum value. */
 double shape_projection_on_axis_max(ShapeProjectionOnAxis spoa);
 
-/* Return the minimum magnitude translation vector that applied to spoa2
- * separates it from spoa1. */
-double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
-                                   ShapeProjectionOnAxis spoa2);
+/* Return the minimum magnitude translation vector that applied to spoa2 separates it from
+ * spoa1. */
+double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1, ShapeProjectionOnAxis spoa2);
 
-/* Return a minimum translation vector to be applied on the second parameter
- * to separate the shapes. */
-Vector segment_segment_intersection(Segment seg1, Segment seg2);
-Vector segment_triangle_intersection(Segment seg, Triangle tri);
-Vector segment_polygon_intersection(Segment seg, Polygon poly);
-Vector segment_circle_intersection(Segment seg, Circle cir);
-Vector triangle_segment_intersection(Triangle tri, Segment seg);
-Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2);
-Vector triangle_polygon_intersection(Triangle tri, Polygon poly);
-Vector triangle_circle_intersection(Triangle tri, Circle cir);
-Vector polygon_segment_intersection(Polygon poly, Segment seg);
-Vector polygon_triangle_intersection(Polygon poly, Triangle tri);
-Vector polygon_polygon_intersection(Polygon poly1, Polygon poly2);
-Vector polygon_circle_intersection(Polygon poly, Circle cir);
-Vector circle_segment_intersection(Circle cir, Segment seg);
-Vector circle_triangle_intersection(Circle cir, Triangle tri);
-Vector circle_polygon_intersection(Circle cir, Polygon poly);
-Vector circle_circle_intersection(Circle cir1, Circle cir2);
+/* Return a minimum translation vector to be applied on the second parameter to separate the
+ * shapes. */
+Vector segment_segment_intersection(Segment segment1, Segment segment2);
+Vector segment_triangle_intersection(Segment segment, Triangle triangle);
+Vector segment_polygon_intersection(Segment segment, Polygon polygon);
+Vector segment_circle_intersection(Segment segment, Circle circle);
+Vector triangle_segment_intersection(Triangle triangle, Segment segment);
+Vector triangle_triangle_intersection(Triangle triangle1, Triangle triangle2);
+Vector triangle_polygon_intersection(Triangle triangle, Polygon polygon);
+Vector triangle_circle_intersection(Triangle triangle, Circle circle);
+Vector polygon_segment_intersection(Polygon polygon, Segment segment);
+Vector polygon_triangle_intersection(Polygon polygon, Triangle triangle);
+Vector polygon_polygon_intersection(Polygon polygon1, Polygon polygon2);
+Vector polygon_circle_intersection(Polygon polygon, Circle circle);
+Vector circle_segment_intersection(Circle circle, Segment segment);
+Vector circle_triangle_intersection(Circle circle, Triangle triangle);
+Vector circle_polygon_intersection(Circle circle, Polygon polygon);
+Vector circle_circle_intersection(Circle circle1, Circle circle2);
 
 #endif
 

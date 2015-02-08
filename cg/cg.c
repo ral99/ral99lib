@@ -31,8 +31,7 @@ void vector_release(Vector vector) {
 }
 
 int vector_equals(Vector vector1, Vector vector2) {
-    return (double_equals(vector1->x, vector2->x) &&
-            double_equals(vector1->y, vector2->y));
+    return (double_equals(vector1->x, vector2->x) && double_equals(vector1->y, vector2->y));
 }
 
 Vector vector_dup(Vector vector) {
@@ -54,12 +53,10 @@ char *vector_to_str(Vector vector, int decimal_positions) {
     return str;
 }
 
-Vector vector_from_str(char *string) {
-    List str_list = str_split(string, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 12,
-                             strlen(list_at(str_list, 0)) - 12);
-    char *str_y = str_substr(list_at(str_list, 1), 0,
-                             strlen(list_at(str_list, 1)) - 4);
+Vector vector_from_str(char *str) {
+    List str_list = str_split(str, ", ");
+    char *str_x = str_substr(list_at(str_list, 0), 12, strlen(list_at(str_list, 0)) - 12);
+    char *str_y = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 4);
     Vector vector = vector_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -94,14 +91,14 @@ void vector_reverse(Vector vector) {
     vector->y = -vector->y;
 }
 
-void vector_sum(Vector a, Vector b) {
-    a->x += b->x;
-    a->y += b->y;
+void vector_sum(Vector vector1, Vector vector2) {
+    vector1->x += vector2->x;
+    vector1->y += vector2->y;
 }
 
-void vector_subtract(Vector a, Vector b) {
-    a->x -= b->x;
-    a->y -= b->y;
+void vector_subtract(Vector vector1, Vector vector2) {
+    vector1->x -= vector2->x;
+    vector1->y -= vector2->y;
 }
 
 void vector_multiply(Vector vector, double k) {
@@ -160,23 +157,19 @@ Point point_dup(Point point) {
 char *point_to_str(Point point, int decimal_positions) {
     List str_list = list_new();
     list_append(str_list, str_dup("<< Point: ("));
-    list_append(str_list,
-                double_to_str(point->x / point->w, decimal_positions));
+    list_append(str_list, double_to_str(point_x(point), decimal_positions));
     list_append(str_list, str_dup(", "));
-    list_append(str_list,
-                double_to_str(point->y / point->w, decimal_positions));
+    list_append(str_list, double_to_str(point_y(point), decimal_positions));
     list_append(str_list, str_dup(") >>"));
     char *str = str_join(str_list, "");
     list_full_release(str_list, free);
     return str;
 }
 
-Point point_from_str(char *string) {
-    List str_list = str_split(string, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 11,
-                             strlen(list_at(str_list, 0)) - 11);
-    char *str_y = str_substr(list_at(str_list, 1), 0,
-                             strlen(list_at(str_list, 1)) - 4);
+Point point_from_str(char *str) {
+    List str_list = str_split(str, ", ");
+    char *str_x = str_substr(list_at(str_list, 0), 11, strlen(list_at(str_list, 0)) - 11);
+    char *str_y = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 4);
     Point point = point_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -253,11 +246,24 @@ void point_normalize(Point point) {
     point->w = 1;
 }
 
-Line line_new(Point point1, Point point2) {
+double point_distance_to_line(Point point, Line line) {
+    Point normalized_point = point_dup(point);
+    Line normalized_line = line_dup(line);
+    point_normalize(normalized_point);
+    line_normalize(normalized_line);
+    double dist = fabs(normalized_point->w * normalized_line->w +
+                       normalized_point->x * normalized_line->x +
+                       normalized_point->y * normalized_line->y);
+    line_release(normalized_line);
+    point_release(normalized_point);
+    return dist;
+}
+
+Line line_new(Point a, Point b) {
     Line line = memalloc(sizeof(*line));
-    line->w = point1->x * point2->y - point2->x * point1->y;
-    line->x = point2->w * point1->y - point1->w * point2->y;
-    line->y = point1->w * point2->x - point2->w * point1->x;
+    line->w = a->x * b->y - b->x * a->y;
+    line->x = b->w * a->y - a->w * b->y;
+    line->y = a->w * b->x - b->w * a->x;
     return line;
 }
 
@@ -292,13 +298,11 @@ char *line_to_str(Line line, int decimal_positions) {
     return str;
 }
 
-Line line_from_str(char *string) {
-    List str_list = str_split(string, ", ");
-    char *str_w = str_substr(list_at(str_list, 0), 10,
-                             strlen(list_at(str_list, 0)) - 10);
+Line line_from_str(char *str) {
+    List str_list = str_split(str, ", ");
+    char *str_w = str_substr(list_at(str_list, 0), 10, strlen(list_at(str_list, 0)) - 10);
     char *str_x = str_dup(list_at(str_list, 1));
-    char *str_y = str_substr(list_at(str_list, 2), 0,
-                             strlen(list_at(str_list, 2)) - 4);
+    char *str_y = str_substr(list_at(str_list, 2), 0, strlen(list_at(str_list, 2)) - 4);
     Line line = memalloc(sizeof(*line));
     line->w = atof(str_w);
     line->x = atof(str_x);
@@ -334,21 +338,7 @@ void line_normalize(Line line) {
 }
 
 int point_is_in_line(Point point, Line line) {
-    return double_equals(line->w * point->w + line->x * point->x +
-                         line->y * point->y, 0);
-}
-
-double point_distance_to_line(Point point, Line line) {
-    Point normalized_point = point_dup(point);
-    Line normalized_line = line_dup(line);
-    point_normalize(normalized_point);
-    line_normalize(normalized_line);
-    double dist = fabs(normalized_point->w * normalized_line->w +
-                       normalized_point->x * normalized_line->x +
-                       normalized_point->y * normalized_line->y);
-    line_release(normalized_line);
-    point_release(normalized_point);
-    return dist;
+    return double_equals(line->w * point->w + line->x * point->x + line->y * point->y, 0);
 }
 
 double point_distance_to_point(Point point1, Point point2) {
@@ -364,9 +354,9 @@ double angle_between_lines(Line line1, Line line2) {
     line_normalize(normalized_line2);
     double cos = normalized_line1->x * normalized_line2->x +
                  normalized_line1->y * normalized_line2->y;
+    double rad = acos(cos);
     line_release(normalized_line1);
     line_release(normalized_line2);
-    double rad = acos(cos);
     return double_gt(rad, M_PI / 2) ? M_PI - rad : rad;
 }
 
@@ -408,12 +398,10 @@ char *segment_to_str(Segment segment, int decimal_positions) {
     return str;
 }
 
-Segment segment_from_str(char *string) {
-    List str_list = str_split(string, "; ");
-    char *point_a = str_substr(list_at(str_list, 0), 12,
-                               strlen(list_at(str_list, 0)) - 12);
-    char *point_b = str_substr(list_at(str_list, 1), 0,
-                               strlen(list_at(str_list, 1)) - 3);
+Segment segment_from_str(char *str) {
+    List str_list = str_split(str, "; ");
+    char *point_a = str_substr(list_at(str_list, 0), 12, strlen(list_at(str_list, 0)) - 12);
+    char *point_b = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 3);
     List a_list = str_split(point_a, ", ");
     List b_list = str_split(point_b, ", ");
     char *a_x = str_substr(list_at(a_list, 0), 1, strlen(list_at(a_list, 0)) - 1);
@@ -466,9 +454,9 @@ ShapeProjectionOnAxis segment_projection_on_axis(Segment segment, Vector axis) {
     return shape_projection_on_axis_new(min, max);
 }
 
-List segment_collision_axes(Segment seg) {
+List segment_collision_axes(Segment segment) {
     List collision_axes = list_new();
-    Vector seg_vec = segment_vector(seg);
+    Vector seg_vec = segment_vector(segment);
     Vector axis = vector_right_perpendicular(seg_vec);
     vector_normalize(axis);
     list_append(collision_axes, axis);
@@ -487,7 +475,7 @@ void segment_rotate_around(Segment segment, Point center, double deg) {
 }
 
 int point_is_in_segment(Point point, Segment segment) {
-    int ret = 0;
+    int is_in = 0;
     Line line = line_new(segment->a, segment->b);
     double min_x = (double_lt(point_x(segment->a), point_x(segment->b))) ?
                    point_x(segment->a) : point_x(segment->b);
@@ -495,9 +483,9 @@ int point_is_in_segment(Point point, Segment segment) {
                    point_x(segment->a) : point_x(segment->b);
     if (point_is_in_line(point, line) && double_gte(point_x(point), min_x) &&
         double_lte(point_x(point), max_x))
-        ret = 1;
+        is_in = 1;
     line_release(line);
-    return ret;
+    return is_in;
 }
 
 Circle circle_new(Point center, double radius) {
@@ -529,13 +517,9 @@ Circle circle_dup(Circle circle) {
 char *circle_to_str(Circle circle, int decimal_positions) {
     List str_list = list_new();
     list_append(str_list, str_dup("<< Circle: ("));
-    list_append(str_list,
-                double_to_str(circle->center->x / circle->center->w,
-                              decimal_positions));
+    list_append(str_list, double_to_str(point_x(circle->center), decimal_positions));
     list_append(str_list, str_dup(", "));
-    list_append(str_list,
-                double_to_str(circle->center->y / circle->center->w,
-                              decimal_positions));
+    list_append(str_list, double_to_str(point_y(circle->center), decimal_positions));
     list_append(str_list, str_dup("); "));
     list_append(str_list, double_to_str(circle->radius, decimal_positions));
     list_append(str_list, str_dup(" >>"));
@@ -544,17 +528,13 @@ char *circle_to_str(Circle circle, int decimal_positions) {
     return str;
 }
 
-Circle circle_from_str(char *string) {
-    List str_list = str_split(string, "; ");
-    char *str_center = str_substr(list_at(str_list, 0), 11,
-                                  strlen(list_at(str_list, 0)) - 11);
-    char *str_radius = str_substr(list_at(str_list, 1), 0,
-                                  strlen(list_at(str_list, 1)) - 3);
+Circle circle_from_str(char *str) {
+    List str_list = str_split(str, "; ");
+    char *str_center = str_substr(list_at(str_list, 0), 11, strlen(list_at(str_list, 0)) - 11);
+    char *str_radius = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 3);
     List center_list = str_split(str_center, ", ");
-    char *str_x = str_substr(list_at(center_list, 0), 1,
-                             strlen(list_at(center_list, 0)) - 1);
-    char *str_y = str_substr(list_at(center_list, 1), 0,
-                             strlen(list_at(center_list, 1)) - 1);
+    char *str_x = str_substr(list_at(center_list, 0), 1, strlen(list_at(center_list, 0)) - 1);
+    char *str_y = str_substr(list_at(center_list, 1), 0, strlen(list_at(center_list, 1)) - 1);
     Point center = point_new(atof(str_x), atof(str_y));
     Circle circle = circle_new(center, atof(str_radius));
     point_release(center);
@@ -572,11 +552,11 @@ Point circle_center(Circle circle) {
 }
 
 double circle_center_x(Circle circle) {
-    return circle->center->x / circle->center->w;
+    return point_x(circle->center);
 }
 
 double circle_center_y(Circle circle) {
-    return circle->center->y / circle->center->w;
+    return point_y(circle->center);
 }
 
 double circle_radius(Circle circle) {
@@ -593,11 +573,11 @@ ShapeProjectionOnAxis circle_projection_on_axis(Circle circle, Vector axis) {
                                         magnitude + circle->radius);
 }
 
-List circle_collision_axes(Circle cir, List points) {
+List circle_collision_axes(Circle circle, List points) {
     List collision_axes = list_new();
     for (ListItem it = list_head(points); it; it = list_next(it)) {
-        Point p = list_value(it);
-        Vector axis = vector_from_point_to_point(cir->center, p);
+        Point point = list_value(it);
+        Vector axis = vector_from_point_to_point(circle->center, point);
         vector_normalize(axis);
         list_append(collision_axes, axis);
     }
@@ -605,17 +585,13 @@ List circle_collision_axes(Circle cir, List points) {
 }
 
 int point_is_in_circle(Point point, Circle circle) {
+    double circle_center_x = point_x(circle->center);
+    double circle_center_y = point_y(circle->center);
     double point_x = point->x / point->w;
     double point_y = point->y / point->w;
-    double circle_center_x = circle->center->x / circle->center->w;
-    double circle_center_y = circle->center->y / circle->center->w;
-    double squared_dist = (point_x - circle_center_x) *
-                          (point_x - circle_center_x) +
-                          (point_y - circle_center_y) *
-                          (point_y - circle_center_y);
-    if (double_lt(squared_dist, circle->radius * circle->radius))
-        return 1;
-    return 0;
+    double squared_dist = (point_x - circle_center_x) * (point_x - circle_center_x) +
+                          (point_y - circle_center_y) * (point_y - circle_center_y);
+    return (double_lt(squared_dist, circle->radius * circle->radius)) ? 1 : 0;
 }
 
 Triangle triangle_new(Point a, Point b, Point c) {
@@ -633,25 +609,25 @@ void triangle_release(Triangle triangle) {
     free(triangle);
 }
 
-int triangle_equals(Triangle tri1, Triangle tri2) {
-    if ((point_equals(tri1->a, tri2->a) &&
-         point_equals(tri1->b, tri2->b) &&
-         point_equals(tri1->c, tri2->c)) ||
-        (point_equals(tri1->a, tri2->a) &&
-         point_equals(tri1->b, tri2->c) &&
-         point_equals(tri1->c, tri2->b)) ||
-        (point_equals(tri1->a, tri2->b) &&
-         point_equals(tri1->b, tri2->a) &&
-         point_equals(tri1->c, tri2->c)) ||
-        (point_equals(tri1->a, tri2->b) &&
-         point_equals(tri1->b, tri2->c) &&
-         point_equals(tri1->c, tri2->a)) ||
-        (point_equals(tri1->a, tri2->c) &&
-         point_equals(tri1->b, tri2->a) &&
-         point_equals(tri1->c, tri2->b)) ||
-        (point_equals(tri1->a, tri2->c) &&
-         point_equals(tri1->b, tri2->b) &&
-         point_equals(tri1->c, tri2->a)))
+int triangle_equals(Triangle triangle1, Triangle triangle2) {
+    if ((point_equals(triangle1->a, triangle2->a) &&
+         point_equals(triangle1->b, triangle2->b) &&
+         point_equals(triangle1->c, triangle2->c)) ||
+        (point_equals(triangle1->a, triangle2->a) &&
+         point_equals(triangle1->b, triangle2->c) &&
+         point_equals(triangle1->c, triangle2->b)) ||
+        (point_equals(triangle1->a, triangle2->b) &&
+         point_equals(triangle1->b, triangle2->a) &&
+         point_equals(triangle1->c, triangle2->c)) ||
+        (point_equals(triangle1->a, triangle2->b) &&
+         point_equals(triangle1->b, triangle2->c) &&
+         point_equals(triangle1->c, triangle2->a)) ||
+        (point_equals(triangle1->a, triangle2->c) &&
+         point_equals(triangle1->b, triangle2->a) &&
+         point_equals(triangle1->c, triangle2->b)) ||
+        (point_equals(triangle1->a, triangle2->c) &&
+         point_equals(triangle1->b, triangle2->b) &&
+         point_equals(triangle1->c, triangle2->a)))
         return 1;
     return 0;
 }
@@ -660,20 +636,20 @@ Triangle triangle_dup(Triangle triangle) {
     return triangle_new(triangle->a, triangle->b, triangle->c);
 }
 
-char *triangle_to_str(Triangle tri, int decimal_positions) {
+char *triangle_to_str(Triangle triangle, int decimal_positions) {
     List str_list = list_new();
     list_append(str_list, str_dup("<< Triangle: ("));
-    list_append(str_list, double_to_str(point_x(tri->a), decimal_positions));
+    list_append(str_list, double_to_str(point_x(triangle->a), decimal_positions));
     list_append(str_list, str_dup(", "));
-    list_append(str_list, double_to_str(point_y(tri->a), decimal_positions));
+    list_append(str_list, double_to_str(point_y(triangle->a), decimal_positions));
     list_append(str_list, str_dup("); ("));
-    list_append(str_list, double_to_str(point_x(tri->b), decimal_positions));
+    list_append(str_list, double_to_str(point_x(triangle->b), decimal_positions));
     list_append(str_list, str_dup(", "));
-    list_append(str_list, double_to_str(point_y(tri->b), decimal_positions));
+    list_append(str_list, double_to_str(point_y(triangle->b), decimal_positions));
     list_append(str_list, str_dup("); ("));
-    list_append(str_list, double_to_str(point_x(tri->c), decimal_positions));
+    list_append(str_list, double_to_str(point_x(triangle->c), decimal_positions));
     list_append(str_list, str_dup(", "));
-    list_append(str_list, double_to_str(point_y(tri->c), decimal_positions));
+    list_append(str_list, double_to_str(point_y(triangle->c), decimal_positions));
     list_append(str_list, str_dup(") >>"));
     char *str = str_join(str_list, "");
     list_full_release(str_list, free);
@@ -682,19 +658,16 @@ char *triangle_to_str(Triangle tri, int decimal_positions) {
 
 Triangle triangle_from_str(char *str) {
     List str_list = str_split(str, "; ");
-    char *str_a = str_substr(list_at(str_list, 0), 14,
-                             strlen(list_at(str_list, 0)) - 15);
+    char *str_a = str_substr(list_at(str_list, 0), 14, strlen(list_at(str_list, 0)) - 15);
     List str_a_list = str_split(str_a, ", ");
     Point a = point_new(atof(list_at(str_a_list, 0)), atof(list_at(str_a_list, 1)));
-    char *str_b = str_substr(list_at(str_list, 1), 1,
-                             strlen(list_at(str_list, 1)) - 2);
+    char *str_b = str_substr(list_at(str_list, 1), 1, strlen(list_at(str_list, 1)) - 2);
     List str_b_list = str_split(str_b, ", ");
     Point b = point_new(atof(list_at(str_b_list, 0)), atof(list_at(str_b_list, 1)));
-    char *str_c = str_substr(list_at(str_list, 2), 1,
-                             strlen(list_at(str_list, 2)) - 5);
+    char *str_c = str_substr(list_at(str_list, 2), 1, strlen(list_at(str_list, 2)) - 5);
     List str_c_list = str_split(str_c, ", ");
     Point c = point_new(atof(list_at(str_c_list, 0)), atof(list_at(str_c_list, 1)));
-    Triangle tri = triangle_new(a, b, c);
+    Triangle triangle = triangle_new(a, b, c);
     point_release(a);
     point_release(b);
     point_release(c);
@@ -705,7 +678,7 @@ Triangle triangle_from_str(char *str) {
     list_full_release(str_a_list, free);
     list_full_release(str_b_list, free);
     list_full_release(str_c_list, free);
-    return tri;
+    return triangle;
 }
 
 List triangle_points(Triangle triangle) {
@@ -747,37 +720,37 @@ double triangle_area(Triangle triangle) {
                 triangle->a->x * triangle->b->w * triangle->c->y) / 2;
 }
 
-ShapeProjectionOnAxis triangle_projection_on_axis(Triangle tri, Vector axis) {
+ShapeProjectionOnAxis triangle_projection_on_axis(Triangle triangle, Vector axis) {
     double min, max;
-    List points = triangle_points(tri);
+    List points = triangle_points(triangle);
     for (ListItem it = list_head(points); it; it = list_next(it)) {
-        Point p = list_value(it);
-        double mag = point_projection_magnitude_on_axis(p, axis);
-        min = (it == list_head(points) || double_lt(mag, min)) ? mag : min;
-        max = (it == list_head(points) || double_gt(mag, max)) ? mag : max;
+        Point point = list_value(it);
+        double magnitude = point_projection_magnitude_on_axis(point, axis);
+        min = (it == list_head(points) || double_lt(magnitude, min)) ? magnitude : min;
+        max = (it == list_head(points) || double_gt(magnitude, max)) ? magnitude : max;
     }
     list_full_release(points, (void (*)(void *)) point_release);
     return shape_projection_on_axis_new(min, max);
 }
 
-List triangle_collision_axes(Triangle tri) {
+List triangle_collision_axes(Triangle triangle) {
     List collision_axes = list_new();
-    List points = triangle_points(tri);
+    List points = triangle_points(triangle);
     for (int i = 0; i < 3; i++) {
-        Point p1 = list_at(points, i);
-        Point p2 = list_at(points, (i + 1) % 3);
-        Vector vec = vector_from_point_to_point(p1, p2);
-        Vector axis = vector_right_perpendicular(vec);
+        Point point1 = list_at(points, i);
+        Point point2 = list_at(points, (i + 1) % 3);
+        Vector vector = vector_from_point_to_point(point1, point2);
+        Vector axis = vector_right_perpendicular(vector);
         vector_normalize(axis);
         list_append(collision_axes, axis);
-        vector_release(vec);
+        vector_release(vector);
     }
     list_full_release(points, (void (*)(void *)) point_release);
     return collision_axes;
 }
 
 int point_is_in_triangle(Point point, Triangle triangle) {
-    int ret;
+    int is_in = 0;
     Triangle triangle1 = triangle_new(triangle->a, point, triangle->b);
     Triangle triangle2 = triangle_new(triangle->b, point, triangle->c);
     Triangle triangle3 = triangle_new(triangle->c, point, triangle->a);
@@ -787,13 +760,11 @@ int point_is_in_triangle(Point point, Triangle triangle) {
         (triangle_orientation(triangle1) == -1 &&
          triangle_orientation(triangle2) == -1 &&
          triangle_orientation(triangle3) == -1))
-        ret = 1;
-    else
-        ret = 0;
+        is_in = 1;
     triangle_release(triangle1);
     triangle_release(triangle2);
     triangle_release(triangle3);
-    return ret;
+    return is_in;
 }
 
 Polygon polygon_new(List points) {
@@ -847,12 +818,9 @@ Polygon polygon_new_triangle(Point a, Point b, Point c) {
 Polygon polygon_new_rectangle(Point lower_left, double width, double height) {
     List points = list_new();
     list_append(points, point_dup(lower_left));
-    list_append(points, point_new(point_x(lower_left) + width,
-                                  point_y(lower_left)));
-    list_append(points, point_new(point_x(lower_left) + width,
-                                  point_y(lower_left) + height));
-    list_append(points, point_new(point_x(lower_left),
-                                  point_y(lower_left) + height));
+    list_append(points, point_new(point_x(lower_left) + width, point_y(lower_left)));
+    list_append(points, point_new(point_x(lower_left) + width, point_y(lower_left) + height));
+    list_append(points, point_new(point_x(lower_left), point_y(lower_left) + height));
     Polygon polygon = polygon_new(points);
     list_full_release(points, (void (*)(void *)) point_release);
     return polygon;
@@ -861,12 +829,9 @@ Polygon polygon_new_rectangle(Point lower_left, double width, double height) {
 Polygon polygon_new_square(Point lower_left, double side) {
     List points = list_new();
     list_append(points, point_dup(lower_left));
-    list_append(points, point_new(point_x(lower_left) + side,
-                                  point_y(lower_left)));
-    list_append(points, point_new(point_x(lower_left) + side,
-                                  point_y(lower_left) + side));
-    list_append(points, point_new(point_x(lower_left),
-                                  point_y(lower_left) + side));
+    list_append(points, point_new(point_x(lower_left) + side, point_y(lower_left)));
+    list_append(points, point_new(point_x(lower_left) + side, point_y(lower_left) + side));
+    list_append(points, point_new(point_x(lower_left), point_y(lower_left) + side));
     Polygon polygon = polygon_new(points);
     list_full_release(points, (void (*)(void *)) point_release);
     return polygon;
@@ -882,9 +847,7 @@ int polygon_equals(Polygon polygon1, Polygon polygon2) {
         return 0;
     for (ListItem it = list_head(polygon1->points); it; it = list_next(it)) {
         Point point = list_value(it);
-        if (list_find_cmp(polygon2->points,
-                          (int (*)(void *, void *)) point_equals,
-                          point) == NULL)
+        if (!list_find_cmp(polygon2->points, (int (*)(void *, void *)) point_equals, point))
             return 0;
     }
     return 1;
@@ -898,14 +861,14 @@ Polygon polygon_dup(Polygon polygon) {
     return dup;
 }
 
-char *polygon_to_str(Polygon poly, int decimal_positions) {
+char *polygon_to_str(Polygon polygon, int decimal_positions) {
     List str_list = list_new();
     list_append(str_list, str_dup("<< Polygon: ("));
-    for (ListItem it = list_head(poly->points); it; it = list_next(it)) {
-        Point p = list_value(it);
-        list_append(str_list, double_to_str(point_x(p), decimal_positions));
+    for (ListItem it = list_head(polygon->points); it; it = list_next(it)) {
+        Point point = list_value(it);
+        list_append(str_list, double_to_str(point_x(point), decimal_positions));
         list_append(str_list, str_dup(", "));
-        list_append(str_list, double_to_str(point_y(p), decimal_positions));
+        list_append(str_list, double_to_str(point_y(point), decimal_positions));
         if (list_next(it))
             list_append(str_list, str_dup("); ("));
         else
@@ -921,38 +884,38 @@ Polygon polygon_from_str(char *str) {
     List points = list_new();
     int n_points = list_size(str_list);
     for (int i = 1; i < n_points - 1; i++) {
-        List p_list = str_split(list_at(str_list, i), ", ");
-        char *p_x = str_substr(list_at(p_list, 0), 1,
-                               strlen(list_at(p_list, 0)) - 1);
-        char *p_y = str_substr(list_at(p_list, 1), 0,
-                               strlen(list_at(p_list, 1)) - 1);
-        list_append(points, point_new(atof(p_x), atof(p_y)));
-        free(p_x);
-        free(p_y);
-        list_full_release(p_list, free);
+        List point_list = str_split(list_at(str_list, i), ", ");
+        char *point_x = str_substr(list_at(point_list, 0), 1,
+                                   strlen(list_at(point_list, 0)) - 1);
+        char *point_y = str_substr(list_at(point_list, 1), 0,
+                                   strlen(list_at(point_list, 1)) - 1);
+        list_append(points, point_new(atof(point_x), atof(point_y)));
+        list_full_release(point_list, free);
+        free(point_x);
+        free(point_y);
     }
-    List p0_list = str_split(list_at(str_list, 0), ", ");
-    List pn_list = str_split(list_at(str_list, n_points - 1), ", ");
-    char *p0_x = str_substr(list_at(p0_list, 0), 13,
-                            strlen(list_at(p0_list, 0)) - 13);
-    char *p0_y = str_substr(list_at(p0_list, 1), 0,
-                            strlen(list_at(p0_list, 1)) - 1);
-    char *pn_x = str_substr(list_at(pn_list, 0), 1,
-                            strlen(list_at(pn_list, 0)) - 1);
-    char *pn_y = str_substr(list_at(pn_list, 1), 0,
-                            strlen(list_at(pn_list, 1)) - 4);
-    list_append(points, point_new(atof(p0_x), atof(p0_y)));
-    list_append(points, point_new(atof(pn_x), atof(pn_y)));
-    Polygon poly = polygon_new(points);
+    List point_0_list = str_split(list_at(str_list, 0), ", ");
+    List point_n_list = str_split(list_at(str_list, n_points - 1), ", ");
+    char *point_0_x = str_substr(list_at(point_0_list, 0), 13,
+                                 strlen(list_at(point_0_list, 0)) - 13);
+    char *point_0_y = str_substr(list_at(point_0_list, 1), 0,
+                                 strlen(list_at(point_0_list, 1)) - 1);
+    char *point_n_x = str_substr(list_at(point_n_list, 0), 1,
+                                 strlen(list_at(point_n_list, 0)) - 1);
+    char *point_n_y = str_substr(list_at(point_n_list, 1), 0,
+                                 strlen(list_at(point_n_list, 1)) - 4);
+    list_append(points, point_new(atof(point_0_x), atof(point_0_y)));
+    list_append(points, point_new(atof(point_n_x), atof(point_n_y)));
+    Polygon polygon = polygon_new(points);
     list_full_release(str_list, free);
-    list_full_release(p0_list, free);
-    list_full_release(pn_list, free);
-    free(p0_x);
-    free(p0_y);
-    free(pn_x);
-    free(pn_y);
+    list_full_release(point_0_list, free);
+    list_full_release(point_n_list, free);
+    free(point_0_x);
+    free(point_0_y);
+    free(point_n_x);
+    free(point_n_y);
     list_full_release(points, (void (*)(void *)) point_release);
-    return poly;
+    return polygon;
 }
 
 List polygon_points(Polygon polygon) {
@@ -980,34 +943,34 @@ double polygon_area(Polygon polygon) {
     double double_area = 0;
     int n = list_size(polygon->points);
     for (int i = 0; i < n; i++) {
-        Point a = list_at(polygon->points, i);
-        Point b = list_at(polygon->points, (i + 1) % n);
-        double_area += point_x(a) * point_y(b) - point_x(b) * point_y(a);
+        Point point1 = list_at(polygon->points, i);
+        Point point2 = list_at(polygon->points, (i + 1) % n);
+        double_area += point_x(point1) * point_y(point2) - point_x(point2) * point_y(point1);
     }
     return fabs(double_area) / 2;
 }
 
-ShapeProjectionOnAxis polygon_projection_on_axis(Polygon poly, Vector axis) {
+ShapeProjectionOnAxis polygon_projection_on_axis(Polygon polygon, Vector axis) {
     double min, max;
-    List points = polygon_points(poly);
+    List points = polygon_points(polygon);
     for (ListItem it = list_head(points); it; it = list_next(it)) {
-        Point p = list_value(it);
-        double mag = point_projection_magnitude_on_axis(p, axis);
-        min = (it == list_head(points) || double_lt(mag, min)) ? mag : min;
-        max = (it == list_head(points) || double_gt(mag, max)) ? mag : max;
+        Point point = list_value(it);
+        double magnitude = point_projection_magnitude_on_axis(point, axis);
+        min = (it == list_head(points) || double_lt(magnitude, min)) ? magnitude : min;
+        max = (it == list_head(points) || double_gt(magnitude, max)) ? magnitude : max;
     }
     list_full_release(points, (void (*)(void *)) point_release);
     return shape_projection_on_axis_new(min, max);
 }
 
-List polygon_collision_axes(Polygon poly) {
+List polygon_collision_axes(Polygon polygon) {
     List collision_axes = list_new();
-    List points = polygon_points(poly);
+    List points = polygon_points(polygon);
     int n_points = list_size(points);
     for (int i = 0; i < n_points; i++) {
-        Point p1 = list_at(points, i);
-        Point p2 = list_at(points, (i + 1) % n_points);
-        Vector side_vec = vector_from_point_to_point(p1, p2);
+        Point point1 = list_at(points, i);
+        Point point2 = list_at(points, (i + 1) % n_points);
+        Vector side_vec = vector_from_point_to_point(point1, point2);
         Vector axis = vector_right_perpendicular(side_vec);
         vector_normalize(axis);
         list_append(collision_axes, axis);
@@ -1017,14 +980,14 @@ List polygon_collision_axes(Polygon poly) {
     return collision_axes;
 }
 
-int point_is_in_polygon(Polygon polygon, Point point) {
-    int n = list_size(polygon->points);
+int point_is_in_polygon(Point point, Polygon polygon) {
     int point_is_in = 1;
+    int n = list_size(polygon->points);
     int orientation;
     for (int i = 0; i < n && point_is_in; i++) {
-        Point a = list_at(polygon->points, i);
-        Point c = list_at(polygon->points, (i + 1) % n);
-        Triangle triangle = triangle_new(a, point, c);
+        Point point1 = list_at(polygon->points, i);
+        Point point2 = list_at(polygon->points, (i + 1) % n);
+        Triangle triangle = triangle_new(point1, point, point2);
         if (i == 0)
             orientation = triangle_orientation(triangle);
         else if (orientation != triangle_orientation(triangle))
@@ -1045,8 +1008,7 @@ void shape_projection_on_axis_release(ShapeProjectionOnAxis spoa) {
     free(spoa);
 }
 
-int shape_projection_on_axis_equals(ShapeProjectionOnAxis spoa1,
-                                    ShapeProjectionOnAxis spoa2) {
+int shape_projection_on_axis_equals(ShapeProjectionOnAxis spoa1, ShapeProjectionOnAxis spoa2) {
     return (double_equals(spoa1->min, spoa2->min) &&
             double_equals(spoa1->max, spoa2->max)) ? 1 : 0;
 }
@@ -1063,8 +1025,7 @@ double shape_projection_on_axis_max(ShapeProjectionOnAxis spoa) {
     return spoa->max;
 }
 
-double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
-                                   ShapeProjectionOnAxis spoa2) {
+double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1, ShapeProjectionOnAxis spoa2) {
     if (double_gte(spoa1->min, spoa2->max) || double_gte(spoa2->min, spoa1->max))
         return 0;
     if (double_lte(spoa1->max - spoa2->min, spoa2->max - spoa1->min))
@@ -1072,113 +1033,113 @@ double shape_projection_on_axis_tv(ShapeProjectionOnAxis spoa1,
     return spoa1->min - spoa2->max;
 }
 
-Vector segment_segment_intersection(Segment seg1, Segment seg2) {
+Vector segment_segment_intersection(Segment segment1, Segment segment2) {
     Vector mtv;
-    double mtv_mag;
+    double mtv_magnitude;
     List axes = list_new();
-    List axes1 = segment_collision_axes(seg1);
-    List axes2 = segment_collision_axes(seg2);
+    List axes1 = segment_collision_axes(segment1);
+    List axes2 = segment_collision_axes(segment2);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(seg1, axis);
-        ShapeProjectionOnAxis spoa2 = segment_projection_on_axis(seg2, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment1, axis);
+        ShapeProjectionOnAxis spoa2 = segment_projection_on_axis(segment2, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
 }
 
-Vector segment_triangle_intersection(Segment seg, Triangle tri) {
+Vector segment_triangle_intersection(Segment segment, Triangle triangle) {
     Vector mtv;
-    double mtv_mag;
+    double mtv_magnitude;
     List axes = list_new();
-    List axes1 = segment_collision_axes(seg);
-    List axes2 = triangle_collision_axes(tri);
+    List axes1 = segment_collision_axes(segment);
+    List axes2 = triangle_collision_axes(triangle);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(seg, axis);
-        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(tri, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
+        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(triangle, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
 }
 
-Vector segment_polygon_intersection(Segment seg, Polygon poly) {
+Vector segment_polygon_intersection(Segment segment, Polygon polygon) {
     Vector mtv;
-    double mtv_mag;
+    double mtv_magnitude;
     List axes = list_new();
-    List axes1 = segment_collision_axes(seg);
-    List axes2 = polygon_collision_axes(poly);
+    List axes1 = segment_collision_axes(segment);
+    List axes2 = polygon_collision_axes(polygon);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(seg, axis);
-        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(poly, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
+        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(polygon, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
 }
 
-Vector segment_circle_intersection(Segment seg, Circle cir) {
+Vector segment_circle_intersection(Segment segment, Circle circle) {
     Vector mtv;
-    double mtv_mag;
-    List seg_points = segment_points(seg);
+    double mtv_magnitude;
+    List seg_points = segment_points(segment);
     List axes = list_new();
-    List axes1 = segment_collision_axes(seg);
-    List axes2 = circle_collision_axes(cir, seg_points);
+    List axes1 = segment_collision_axes(segment);
+    List axes2 = circle_collision_axes(circle, seg_points);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(seg, axis);
-        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
+        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_full_release(seg_points, (void (*)(void *)) point_release);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
@@ -1186,91 +1147,91 @@ Vector segment_circle_intersection(Segment seg, Circle cir) {
     return mtv;
 }
 
-Vector triangle_segment_intersection(Triangle tri, Segment seg) {
-    Vector mtv = segment_triangle_intersection(seg, tri);
+Vector triangle_segment_intersection(Triangle triangle, Segment segment) {
+    Vector mtv = segment_triangle_intersection(segment, triangle);
     vector_reverse(mtv);
     return mtv;
 }
 
-Vector triangle_triangle_intersection(Triangle tri1, Triangle tri2) {
+Vector triangle_triangle_intersection(Triangle triangle1, Triangle triangle2) {
     Vector mtv;
-    double mtv_mag;
+    double mtv_magnitude;
     List axes = list_new();
-    List axes1 = triangle_collision_axes(tri1);
-    List axes2 = triangle_collision_axes(tri2);
+    List axes1 = triangle_collision_axes(triangle1);
+    List axes2 = triangle_collision_axes(triangle2);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri1, axis);
-        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(tri2, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle1, axis);
+        ShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(triangle2, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
 }
 
-Vector triangle_polygon_intersection(Triangle tri, Polygon poly) {
+Vector triangle_polygon_intersection(Triangle triangle, Polygon polygon) {
     Vector mtv;
-    double mtv_mag;
+    double mtv_magnitude;
     List axes = list_new();
-    List axes1 = triangle_collision_axes(tri);
-    List axes2 = polygon_collision_axes(poly);
+    List axes1 = triangle_collision_axes(triangle);
+    List axes2 = polygon_collision_axes(polygon);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri, axis);
-        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(poly, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle, axis);
+        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(polygon, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
 }
 
-Vector triangle_circle_intersection(Triangle tri, Circle cir) {
+Vector triangle_circle_intersection(Triangle triangle, Circle circle) {
     Vector mtv;
-    double mtv_mag;
-    List tri_points = triangle_points(tri);
+    double mtv_magnitude;
+    List tri_points = triangle_points(triangle);
     List axes = list_new();
-    List axes1 = triangle_collision_axes(tri);
-    List axes2 = circle_collision_axes(cir, tri_points);
+    List axes1 = triangle_collision_axes(triangle);
+    List axes2 = circle_collision_axes(circle, tri_points);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(tri, axis);
-        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle, axis);
+        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_full_release(tri_points, (void (*)(void *)) point_release);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
@@ -1278,69 +1239,69 @@ Vector triangle_circle_intersection(Triangle tri, Circle cir) {
     return mtv;
 }
 
-Vector polygon_segment_intersection(Polygon poly, Segment seg) {
-    Vector mtv = segment_polygon_intersection(seg, poly);
+Vector polygon_segment_intersection(Polygon polygon, Segment segment) {
+    Vector mtv = segment_polygon_intersection(segment, polygon);
     vector_reverse(mtv);
     return mtv;
 }
 
-Vector polygon_triangle_intersection(Polygon poly, Triangle tri) {
-    Vector mtv = triangle_polygon_intersection(tri, poly);
+Vector polygon_triangle_intersection(Polygon polygon, Triangle triangle) {
+    Vector mtv = triangle_polygon_intersection(triangle, polygon);
     vector_reverse(mtv);
     return mtv;
 }
 
-Vector polygon_polygon_intersection(Polygon poly1, Polygon poly2) {
+Vector polygon_polygon_intersection(Polygon polygon1, Polygon polygon2) {
     Vector mtv;
-    double mtv_mag;
+    double mtv_magnitude;
     List axes = list_new();
-    List axes1 = polygon_collision_axes(poly1);
-    List axes2 = polygon_collision_axes(poly2);
+    List axes1 = polygon_collision_axes(polygon1);
+    List axes2 = polygon_collision_axes(polygon2);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(poly1, axis);
-        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(poly2, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(polygon1, axis);
+        ShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(polygon2, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
     return mtv;
 }
 
-Vector polygon_circle_intersection(Polygon poly, Circle cir) {
+Vector polygon_circle_intersection(Polygon polygon, Circle circle) {
     Vector mtv;
-    double mtv_mag;
-    List poly_points = polygon_points(poly);
+    double mtv_magnitude;
+    List poly_points = polygon_points(polygon);
     List axes = list_new();
-    List axes1 = polygon_collision_axes(poly);
-    List axes2 = circle_collision_axes(cir, poly_points);
+    List axes1 = polygon_collision_axes(polygon);
+    List axes2 = circle_collision_axes(circle, poly_points);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ListItem it = list_head(axes); it; it = list_next(it)) {
         Vector axis = list_value(it);
-        ShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(poly, axis);
-        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir, axis);
-        double tv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-        if (it == list_head(axes) || double_lt(fabs(tv_mag), fabs(mtv_mag))) {
-            mtv_mag = tv_mag;
+        ShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(polygon, axis);
+        ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
+        double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+        if (it == list_head(axes) || double_lt(fabs(tv_magnitude), fabs(mtv_magnitude))) {
+            mtv_magnitude = tv_magnitude;
             mtv = axis;
         }
         shape_projection_on_axis_release(spoa1);
         shape_projection_on_axis_release(spoa2);
     }
     mtv = vector_dup(mtv);
-    vector_multiply(mtv, mtv_mag);
+    vector_multiply(mtv, mtv_magnitude);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
@@ -1348,31 +1309,31 @@ Vector polygon_circle_intersection(Polygon poly, Circle cir) {
     return mtv;
 }
 
-Vector circle_segment_intersection(Circle cir, Segment seg) {
-    Vector mtv = segment_circle_intersection(seg, cir);
+Vector circle_segment_intersection(Circle circle, Segment segment) {
+    Vector mtv = segment_circle_intersection(segment, circle);
     vector_reverse(mtv);
     return mtv;
 }
 
-Vector circle_triangle_intersection(Circle cir, Triangle tri) {
-    Vector mtv = triangle_circle_intersection(tri, cir);
+Vector circle_triangle_intersection(Circle circle, Triangle triangle) {
+    Vector mtv = triangle_circle_intersection(triangle, circle);
     vector_reverse(mtv);
     return mtv;
 }
 
-Vector circle_polygon_intersection(Circle cir, Polygon poly) {
-    Vector mtv = polygon_circle_intersection(poly, cir);
+Vector circle_polygon_intersection(Circle circle, Polygon polygon) {
+    Vector mtv = polygon_circle_intersection(polygon, circle);
     vector_reverse(mtv);
     return mtv;
 }
 
-Vector circle_circle_intersection(Circle cir1, Circle cir2) {
-    Vector axis = vector_from_point_to_point(cir1->center, cir2->center);
+Vector circle_circle_intersection(Circle circle1, Circle circle2) {
+    Vector axis = vector_from_point_to_point(circle1->center, circle2->center);
     vector_normalize(axis);
-    ShapeProjectionOnAxis spoa1 = circle_projection_on_axis(cir1, axis);
-    ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(cir2, axis);
-    double mtv_mag = shape_projection_on_axis_tv(spoa1, spoa2);
-    vector_multiply(axis, mtv_mag);
+    ShapeProjectionOnAxis spoa1 = circle_projection_on_axis(circle1, axis);
+    ShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle2, axis);
+    double mtv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
+    vector_multiply(axis, mtv_magnitude);
     shape_projection_on_axis_release(spoa1);
     shape_projection_on_axis_release(spoa2);
     return axis;
