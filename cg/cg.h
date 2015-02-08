@@ -166,7 +166,7 @@ void point_normalize(Point point);
 /* Return the distance between two points. */
 double point_distance_to_point(Point point1, Point point2);
 
-/* Return a new line defined by 2 points. */
+/* Return a new line defined by 2 points or NULL if points are equal. */
 Line line_new(Point a, Point b);
 
 /* Free the memory used by line. */
@@ -203,7 +203,7 @@ double point_distance_to_line(Point point, Line line);
 /* Return the angle in radians between two lines in range [0, PI / 2]. */
 double angle_between_lines(Line line1, Line line2);
 
-/* Return a segment defined by two points. */
+/* Return a segment defined by two points or NULL if points are equal. */
 Segment segment_new(Point a, Point b);
 
 /* Free the memory used by segment. */
@@ -250,7 +250,8 @@ List segment_collision_axes(Segment segment);
 /* Return 1 if the point is in the segment. 0, otherwise. */
 int point_is_in_segment(Point point, Segment segment);
 
-/* Return a new circle defined by its center point and radius. */
+/* Return a new circle defined by its center point and radius or NULL if radius is less than
+ * or equal to 0. */
 Circle circle_new(Point center, double radius);
 
 /* Free the memory used by circle. */
@@ -293,7 +294,7 @@ List circle_collision_axes(Circle circle, List points);
 /* Return 1 if the point is inside the circle. 0, otherwise. */
 int point_is_in_circle(Point point, Circle circle);
 
-/* Return a new triangle defined by 3 points. */
+/* Return a new triangle defined by 3 points that can be collinear. */
 Triangle triangle_new(Point a, Point b, Point c);
 
 /* Free the memory used by triangle. */
@@ -337,7 +338,7 @@ List triangle_collision_axes(Triangle triangle);
 /* Return 1 if the point is inside the triangle. 0, otherwise. */
 int point_is_in_triangle(Point point, Triangle triangle);
 
-/* Return a new polygon defined by a list of points. */
+/* Return a new polygon defined by a list of points or NULL if points are collinear. */
 Polygon polygon_new(List points);
 
 /* Return a new polygon defined by a triangle specification. */

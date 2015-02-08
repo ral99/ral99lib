@@ -260,6 +260,8 @@ double point_distance_to_line(Point point, Line line) {
 }
 
 Line line_new(Point a, Point b) {
+    if (point_equals(a, b))
+        return NULL;
     Line line = memalloc(sizeof(*line));
     line->w = a->x * b->y - b->x * a->y;
     line->x = b->w * a->y - a->w * b->y;
@@ -361,6 +363,8 @@ double angle_between_lines(Line line1, Line line2) {
 }
 
 Segment segment_new(Point a, Point b) {
+    if (point_equals(a, b))
+        return NULL;
     Segment segment = memalloc(sizeof(*segment));
     segment->a = point_dup(a);
     segment->b = point_dup(b);
@@ -489,6 +493,8 @@ int point_is_in_segment(Point point, Segment segment) {
 }
 
 Circle circle_new(Point center, double radius) {
+    if (double_lte(radius, 0))
+        return NULL;
     Circle circle = memalloc(sizeof(*circle));
     circle->center = point_dup(center);
     circle->radius = radius;
@@ -768,6 +774,9 @@ int point_is_in_triangle(Point point, Triangle triangle) {
 }
 
 Polygon polygon_new(List points) {
+    int n = list_size(points);
+    if (n < 3)
+        return NULL;
     Polygon polygon = memalloc(sizeof(*polygon));
     polygon->points = list_new();
     points = list_dup(points);
@@ -802,6 +811,16 @@ Polygon polygon_new(List points) {
     }
     vector_release(base_vector);
     list_release(points);
+    double value = 0;
+    for (int i = 0; i < n; i++) {
+        Point point1 = list_at(polygon->points, i);
+        Point point2 = list_at(polygon->points, (i + 1) % n);
+        value += point_x(point1) * point_y(point2) - point_x(point2) * point_y(point1);
+    }
+    if (double_equals(value, 0)) {
+        polygon_release(polygon);
+        return NULL;
+    }
     return polygon;
 }
 

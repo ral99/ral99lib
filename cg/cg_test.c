@@ -789,6 +789,14 @@ static void test_line_new_3() {
     line_release(line);
 }
 
+static void test_line_new_4() {
+    Point a = point_new(1, 1);
+    Point b = point_new(1, 1);
+    g_assert(line_new(a, b) == NULL);
+    point_release(a);
+    point_release(b);
+}
+
 static void test_line_release_1() {
     Point a = point_new(0, 0);
     Point b = point_new(1, 1);
@@ -1106,6 +1114,14 @@ static void test_segment_new_1() {
     segment_release(segment);
 }
 
+static void test_segment_new_2() {
+    Point a = point_new(1, 1);
+    Point b = point_new(1, 1);
+    g_assert(segment_new(a, b) == NULL);
+    point_release(a);
+    point_release(b);
+}
+
 static void test_segment_release_1() {
     Segment segment = segment_from_str("<< Segment: (0, 0); (1, 1) >>");
     segment_release(segment);
@@ -1385,6 +1401,12 @@ static void test_circle_new_1() {
     g_assert(double_equals(circle->radius, 1));
     point_release(center);
     circle_release(circle);
+}
+
+static void test_circle_new_2() {
+    Point center = point_new(1, 1);
+    g_assert(circle_new(center, 0) == NULL);
+    point_release(center);
 }
 
 static void test_circle_release_1() {
@@ -1965,6 +1987,20 @@ static void test_polygon_new_2() {
     g_assert(list_equals_cmp(polygon->points, points1,
                              (int (*)(void *, void *)) point_equals));
     polygon_release(polygon);
+    list_full_release(points1, (void (*)(void *)) point_release);
+    list_full_release(points2, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_new_3() {
+    List points1 = list_new();
+    list_append(points1, point_new(1, 1));
+    list_append(points1, point_new(2, 2));
+    g_assert(polygon_new(points1) == NULL);
+    List points2 = list_new();
+    list_append(points2, point_new(1, 1));
+    list_append(points2, point_new(2, 2));
+    list_append(points2, point_new(3, 3));
+    g_assert(polygon_new(points2) == NULL);
     list_full_release(points1, (void (*)(void *)) point_release);
     list_full_release(points2, (void (*)(void *)) point_release);
 }
@@ -2851,6 +2887,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/line_new", test_line_new_1);
     g_test_add_func("/gc/line_new", test_line_new_2);
     g_test_add_func("/gc/line_new", test_line_new_3);
+    g_test_add_func("/gc/line_new", test_line_new_4);
     g_test_add_func("/gc/line_release", test_line_release_1);
     g_test_add_func("/gc/line_equals", test_line_equals_1);
     g_test_add_func("/gc/line_equals", test_line_equals_2);
@@ -2874,6 +2911,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_6);
     g_test_add_func("/gc/angle_between_lines", test_angle_between_lines_7);
     g_test_add_func("/gc/segment_new", test_segment_new_1);
+    g_test_add_func("/gc/segment_new", test_segment_new_2);
     g_test_add_func("/gc/segment_release", test_segment_release_1);
     g_test_add_func("/gc/segment_equals", test_segment_equals_1);
     g_test_add_func("/gc/segment_dup", test_segment_dup_1);
@@ -2898,6 +2936,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_2);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_1);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
+    g_test_add_func("/gc/circle_new", test_circle_new_2);
     g_test_add_func("/gc/circle_release", test_circle_release_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_2);
@@ -2947,6 +2986,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_4);
     g_test_add_func("/gc/polygon_new", test_polygon_new_1);
     g_test_add_func("/gc/polygon_new", test_polygon_new_2);
+    g_test_add_func("/gc/polygon_new", test_polygon_new_3);
     g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_1);
     g_test_add_func("/gc/polygon_new_rectangle", test_polygon_new_rectangle_1);
     g_test_add_func("/gc/polygon_new_square", test_polygon_new_square_1);
