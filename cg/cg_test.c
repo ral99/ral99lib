@@ -2378,6 +2378,7 @@ static void test_segment_segment_intersection_1() {
     Vector mtv = segment_segment_intersection(segment1, segment2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
+    vector_release(mtv);
     segment_release(segment1);
     segment_release(segment2);
 }
