@@ -212,6 +212,7 @@ static void test_client_loop_1() {
     connection_release(accepted2);
     connection_release(accepted3);
     client_release(client);
+    sock_release(server);
 }
 
 int main(int argc, char *argv[]) {
