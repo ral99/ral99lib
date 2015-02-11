@@ -3,68 +3,68 @@
 #include "adt/adt.h"
 #include "mem/mem.h"
 
-ListItem list_item_new(void *value, ListItem prev, ListItem next) {
-    ListItem item = memalloc(sizeof(*item));
+ADTListItem list_item_new(void *value, ADTListItem prev, ADTListItem next) {
+    ADTListItem item = memalloc(sizeof(*item));
     item->value = value;
     item->prev = prev;
     item->next = next;
     return item;
 }
 
-void list_item_release(ListItem item) {
+void list_item_release(ADTListItem item) {
     free(item);
 }
 
-void list_item_full_release(ListItem item, void (*release)(void *)) {
+void list_item_full_release(ADTListItem item, void (*release)(void *)) {
     release(item->value);
     list_item_release(item);
 }
 
-ListItem list_item_get_prev(ListItem item) {
+ADTListItem list_item_get_prev(ADTListItem item) {
     return item->prev;
 }
 
-void list_item_set_prev(ListItem item, ListItem prev) {
+void list_item_set_prev(ADTListItem item, ADTListItem prev) {
     item->prev = prev;
 }
 
-ListItem list_item_get_next(ListItem item) {
+ADTListItem list_item_get_next(ADTListItem item) {
     return item->next;
 }
 
-void list_item_set_next(ListItem item, ListItem next) {
+void list_item_set_next(ADTListItem item, ADTListItem next) {
     item->next = next;
 }
 
-void *list_item_get_value(ListItem item) {
+void *list_item_get_value(ADTListItem item) {
     return item->value;
 }
 
-void list_item_set_value(ListItem item, void *value) {
+void list_item_set_value(ADTListItem item, void *value) {
     item->value = value;
 }
 
-int list_item_prev_is(ListItem item, ListItem prev) {
+int list_item_prev_is(ADTListItem item, ADTListItem prev) {
     return (list_item_prev(item) == prev) ? 1 : 0;
 }
 
-int list_item_next_is(ListItem item, ListItem next) {
+int list_item_next_is(ADTListItem item, ADTListItem next) {
     return (list_item_next(item) == next) ? 1 : 0;
 }
 
-int list_item_value_is(ListItem item, void *value) {
+int list_item_value_is(ADTListItem item, void *value) {
     return (list_item_value(item) == value) ? 1 : 0;
 }
 
-ListItem list_item_prev(ListItem item) {
+ADTListItem list_item_prev(ADTListItem item) {
     return item->prev;
 }
 
-ListItem list_item_next(ListItem item) {
+ADTListItem list_item_next(ADTListItem item) {
     return item->next;
 }
 
-void *list_item_value(ListItem item) {
+void *list_item_value(ADTListItem item) {
     return item->value;
 }
 

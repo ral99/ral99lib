@@ -4,68 +4,68 @@
 #include "net/net.h"
 #include "adt/adt.h"
 
-typedef struct Server *Server;
-struct Server {
+typedef struct _NETServer *NETServer;
+struct _NETServer {
     int port;
     int poll_timeout;
-    Sock sock;
-    List connections;
-    List messages;
+    NETSock sock;
+    ADTList connections;
+    ADTList messages;
 };
 
 /* Return a server listening on port. */
-Server server_listen(int port, int poll_timeout);
+NETServer server_listen(int port, int poll_timeout);
 
 /* Free the memory used by server and release its resources. */
-void server_release(Server server);
+void server_release(NETServer server);
 
 /* Getter for port. */
-int server_get_port(Server server);
+int server_get_port(NETServer server);
 
 /* Setter for port. */
-void server_set_port(Server server, int port);
+void server_set_port(NETServer server, int port);
 
 /* Getter for poll timeout. */
-int server_get_poll_timeout(Server server);
+int server_get_poll_timeout(NETServer server);
 
 /* Setter for poll timeout. */
-void server_set_poll_timeout(Server server, int poll_timeout);
+void server_set_poll_timeout(NETServer server, int poll_timeout);
 
 /* Getter for sock. */
-Sock server_get_sock(Server server);
+NETSock server_get_sock(NETServer server);
 
 /* Setter for sock. */
-void server_set_sock(Server server, Sock sock);
+void server_set_sock(NETServer server, NETSock sock);
 
 /* Getter for connections. */
-List server_get_connections(Server server);
+ADTList server_get_connections(NETServer server);
 
 /* Setter for connections. */
-void server_set_connections(Server server, List connections);
+void server_set_connections(NETServer server, ADTList connections);
 
 /* Getter for messages. */
-List server_get_messages(Server server);
+ADTList server_get_messages(NETServer server);
 
 /* Setter for messages. */
-void server_set_messages(Server server, List messages);
+void server_set_messages(NETServer server, ADTList messages);
 
 /* Boolean method for port. */
-int server_port_is(Server server, int port);
+int server_port_is(NETServer server, int port);
 
 /* Boolean method for poll timeout. */
-int server_poll_timeout_is(Server server, int poll_timeout);
+int server_poll_timeout_is(NETServer server, int poll_timeout);
 
 /* Call accept on server socket and establish a new connection. */
-void server_accept(Server server);
+void server_accept(NETServer server);
 
 /* Push a message to be sent by connection identified by id. */
-void server_push(Server server, char *id, char *text);
+void server_push(NETServer server, char *id, char *text);
 
 /* Return a message received by server or NULL. */
-Message server_pop(Server server);
+NETMessage server_pop(NETServer server);
 
 /* Poll, receive, send and remove off connections. */
-void server_loop(Server server);
+void server_loop(NETServer server);
 
 #endif
 

@@ -8,14 +8,14 @@
 #define POLL_TIMEOUT 500
 
 static void test_sock_new_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock->fd, ==, 0);
     g_assert_cmpint(sock->on, ==, 1);
     sock_release(sock);
 }
 
 static void test_sock_nonblocking_1() {
-    Sock sock = sock_nonblocking(-1);
+    NETSock sock = sock_nonblocking(-1);
     g_assert_cmpint(sock->fd, ==, -1);
     g_assert_cmpint(sock->on, ==, 0);
     sock_release(sock);
@@ -23,7 +23,7 @@ static void test_sock_nonblocking_1() {
 
 static void test_sock_nonblocking_2() {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
-    Sock sock = sock_nonblocking(fd);
+    NETSock sock = sock_nonblocking(fd);
     g_assert_cmpint(sock->fd, ==, fd);
     g_assert_cmpint(sock->on, ==, 1);
     g_assert_cmpint(fcntl(sock->fd, F_GETFL) & O_NONBLOCK, >, 0);
@@ -31,12 +31,12 @@ static void test_sock_nonblocking_2() {
 }
 
 static void test_sock_listen_accept_connect_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
-    Sock accepted = sock_accept(server);
+    NETSock accepted = sock_accept(server);
     sleep(1);
     g_assert_cmpint(server->fd, >=, 0);
     g_assert_cmpint(server->on, ==, 1);
@@ -54,75 +54,75 @@ static void test_sock_listen_accept_connect_1() {
 }
 
 static void test_sock_release_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     sock_release(sock);
 }
 
 static void test_sock_get_fd_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock_get_fd(sock), ==, sock->fd);
     sock_release(sock);
 }
 
 static void test_sock_set_fd_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     sock_set_fd(sock, 1);
     g_assert_cmpint(sock->fd, ==, 1);
     sock_release(sock);
 }
 
 static void test_sock_get_on_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock_get_on(sock), ==, sock->on);
     sock_release(sock);
 }
 
 static void test_sock_set_on_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     sock_set_on(sock, 0);
     g_assert_cmpint(sock->on, ==, 0);
     sock_release(sock);
 }
 
 static void test_sock_fd_is_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock_fd_is(sock, 0), ==, 1);
     sock_release(sock);
 }
 
 static void test_sock_fd_is_2() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock_fd_is(sock, 1), ==, 0);
     sock_release(sock);
 }
 
 static void test_sock_is_on_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock_is_on(sock), ==, 1);
     sock_release(sock);
 }
 
 static void test_sock_is_on_2() {
-    Sock sock = sock_new(0, 0);
+    NETSock sock = sock_new(0, 0);
     g_assert_cmpint(sock_is_on(sock), ==, 0);
     sock_release(sock);
 }
 
 static void test_sock_is_off_1() {
-    Sock sock = sock_new(0, 1);
+    NETSock sock = sock_new(0, 1);
     g_assert_cmpint(sock_is_off(sock), ==, 0);
     sock_release(sock);
 }
 
 static void test_sock_is_off_2() {
-    Sock sock = sock_new(0, 0);
+    NETSock sock = sock_new(0, 0);
     g_assert_cmpint(sock_is_off(sock), ==, 1);
     sock_release(sock);
 }
 
 static void test_sock_turn_off_1() {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
-    Sock sock = sock_nonblocking(fd);
+    NETSock sock = sock_nonblocking(fd);
     sock_turn_off(sock);
     g_assert_cmpint(sock->fd, ==, -1);
     g_assert_cmpint(sock->on, ==, 0);
@@ -130,7 +130,7 @@ static void test_sock_turn_off_1() {
 }
 
 static void test_sock_turn_off_2() {
-    Sock sock = sock_nonblocking(-1);
+    NETSock sock = sock_nonblocking(-1);
     sock_turn_off(sock);
     g_assert_cmpint(sock->fd, ==, -1);
     g_assert_cmpint(sock->on, ==, 0);
@@ -138,12 +138,12 @@ static void test_sock_turn_off_2() {
 }
 
 static void test_sock_send_recv_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
-    Sock accepted = sock_accept(server);
+    NETSock accepted = sock_accept(server);
     sleep(1);
     sock_send(connected, "Sport Club Corinthians Paulista");
     sleep(1);
@@ -157,14 +157,14 @@ static void test_sock_send_recv_1() {
 }
 
 static void test_sock_list_poll_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
     int nfds = 2;
     int pollin[nfds], pollout[nfds];
-    Sock socks[nfds];
+    NETSock socks[nfds];
     socks[0] = server;
     socks[1] = connected;
     pollin[0] = pollout[0] = 0;
@@ -177,14 +177,14 @@ static void test_sock_list_poll_1() {
 }
 
 static void test_sock_list_poll_2() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
     int nfds = 2;
     int pollin[nfds], pollout[nfds];
-    Sock socks[nfds];
+    NETSock socks[nfds];
     socks[0] = server;
     socks[1] = connected;
     pollin[0] = pollout[0] = 1;
@@ -197,16 +197,16 @@ static void test_sock_list_poll_2() {
 }
 
 static void test_sock_list_poll_3() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
-    Sock accepted = sock_accept(server);
+    NETSock accepted = sock_accept(server);
     sleep(1);
     int nfds = 3;
     int pollin[nfds], pollout[nfds];
-    Sock socks[nfds];
+    NETSock socks[nfds];
     socks[0] = server;
     socks[1] = connected;
     socks[2] = accepted;
@@ -222,16 +222,16 @@ static void test_sock_list_poll_3() {
 }
 
 static void test_sock_list_poll_4() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
-    Sock accepted = sock_accept(server);
+    NETSock accepted = sock_accept(server);
     sleep(1);
     int nfds = 3;
     int pollin[nfds], pollout[nfds];
-    Sock socks[nfds];
+    NETSock socks[nfds];
     socks[0] = server;
     socks[1] = connected;
     socks[2] = accepted;
@@ -247,16 +247,16 @@ static void test_sock_list_poll_4() {
 }
 
 static void test_sock_list_poll_5() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Sock connected = sock_connect(address);
+    NETSock connected = sock_connect(address);
     sleep(1);
-    Sock accepted = sock_accept(server);
+    NETSock accepted = sock_accept(server);
     sleep(1);
     int nfds = 3;
     int pollin[nfds], pollout[nfds];
-    Sock socks[nfds];
+    NETSock socks[nfds];
     socks[0] = server;
     socks[1] = connected;
     socks[2] = accepted;

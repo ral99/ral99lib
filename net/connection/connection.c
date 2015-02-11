@@ -5,102 +5,102 @@
 #include "mem/mem.h"
 #include "str/str.h"
 
-Connection connection_connect(Address address) {
-    Connection connection = memalloc(sizeof(*connection));
+NETConnection connection_connect(NETAddress address) {
+    NETConnection connection = memalloc(sizeof(*connection));
     connection->in = list_new();
     connection->out = list_new();
     connection->sock = sock_connect(address);
     return connection;
 }
 
-Connection connection_accept(Sock server_sock) {
-    Connection connection = memalloc(sizeof(*connection));
+NETConnection connection_accept(NETSock server_sock) {
+    NETConnection connection = memalloc(sizeof(*connection));
     connection->in = list_new();
     connection->out = list_new();
     connection->sock = sock_accept(server_sock);
     return connection;
 }
 
-void connection_release(Connection connection) {
+void connection_release(NETConnection connection) {
     sock_release(connection->sock);
     list_full_release(connection->in, free);
     list_full_release(connection->out, free);
     free(connection);
 }
 
-Sock connection_get_sock(Connection connection) {
+NETSock connection_get_sock(NETConnection connection) {
     return connection->sock;
 }
 
-void connection_set_sock(Connection connection, Sock sock) {
+void connection_set_sock(NETConnection connection, NETSock sock) {
     connection->sock = sock;
 }
 
-List connection_get_in(Connection connection) {
+ADTList connection_get_in(NETConnection connection) {
     return connection->in;
 }
 
-void connection_set_in(Connection connection, List in) {
+void connection_set_in(NETConnection connection, ADTList in) {
     connection->in = in;
 }
 
-List connection_get_out(Connection connection) {
+ADTList connection_get_out(NETConnection connection) {
     return connection->out;
 }
 
-void connection_set_out(Connection connection, List out) {
+void connection_set_out(NETConnection connection, ADTList out) {
     connection->out = out;
 }
 
-int connection_is_on(Connection connection) {
+int connection_is_on(NETConnection connection) {
     return sock_is_on(connection->sock);
 }
 
-int connection_is_off(Connection connection) {
+int connection_is_off(NETConnection connection) {
     return sock_is_off(connection->sock);
 }
 
-void connection_turn_off(Connection connection) {
+void connection_turn_off(NETConnection connection) {
     sock_turn_off(connection->sock);
 }
 
-List connection_out(Connection connection) {
+ADTList connection_out(NETConnection connection) {
     return list_map(connection->out, (void *(*)(void *)) str_dup);
 }
 
-void connection_push(Connection connection, char *text) {
+void connection_push(NETConnection connection, char *text) {
     list_append(connection->out, str_dup(text));
 }
 
-char *connection_pop(Connection connection) {
+char *connection_pop(NETConnection connection) {
     return list_pop_front(connection->in);
 }
 
-void connection_send(Connection connection) {
+void connection_send(NETConnection connection) {
     char *text = list_at(connection->out, 0);
     if (text && sock_send(connection->sock, text))
         list_full_remove_at(connection->out, 0, free);
 }
 
-void connection_recv(Connection connection) {
+void connection_recv(NETConnection connection) {
     char *text = sock_recv(connection->sock);
     if (text)
         list_append(connection->in, text);
 }
 
-void connection_loop(Connection connection) {
+void connection_loop(NETConnection connection) {
     if (sock_is_on(connection->sock)) {
         connection_send(connection);
         connection_recv(connection);
     }
 }
 
-int connection_list_poll(List connections, int timeout) {
+int connection_list_poll(ADTList connections, int timeout) {
     int nfds = list_size(connections);
     int pollin[nfds], pollout[nfds];
-    Sock socks[nfds];
+    NETSock socks[nfds];
     for (int i = 0; i < nfds; i++) {
-        Connection connection = list_at(connections, i);
+        NETConnection connection = list_at(connections, i);
         socks[i] = connection->sock;
         pollin[i] = 1;
         pollout[i] = (list_head(connection->out)) ? 1 : 0;

@@ -1,9 +1,11 @@
-.PHONY : all test
+.PHONY : all test staticlib clean
 
 CFLAGS		= -Wall -ansi -pedantic -I. -std=c99
 GLIB_FLAGS	= `pkg-config --cflags glib-2.0`
 GLIB_LIB	= `pkg-config --libs glib-2.0`
 MATH_LIB	= -lm
+
+STATICLIB	= libcg.a
 
 MEM_PATH							= mem/mem
 NUM_PATH							= num/num
@@ -53,6 +55,22 @@ FILES		= $(MEM_PATH).c \
 			  $(NETWORK_PATH).c \
 			  $(CG_PATH).c \
 
+OBJECTS		= mem.o \
+			  num.o \
+			  list_item.o \
+			  list.o \
+			  str.o \
+			  address.o \
+			  message.o \
+			  sock.o \
+			  connection.o \
+			  server_connection.o \
+			  server.o \
+			  client_connection.o \
+			  client.o \
+			  network.o \
+			  cg.o \
+
 TESTS		= $(MEM_PATH)_test \
 			  $(NUM_PATH)_test \
 			  $(LIST_ITEM_PATH)_test \
@@ -69,13 +87,17 @@ TESTS		= $(MEM_PATH)_test \
 			  $(NETWORK_PATH)_test \
 			  $(CG_PATH)_test \
 
-all: test clean
+all: test staticlib clean
 
 test: $(TESTS)
 	gtester $(TESTS) --keep-going
 
+staticlib: $(FILES) $(HEADERS)
+	gcc $(CFLAGS) -c $(FILES)
+	ar -cq $(STATICLIB) $(OBJECTS)
+
 clean:
-	rm $(TESTS)
+	rm $(TESTS) $(OBJECTS)
 
 $(MEM_PATH)_test: $(MEM_PATH)_test.c $(FILES) $(HEADERS)
 	gcc $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(MATH_LIB)

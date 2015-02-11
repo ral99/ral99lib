@@ -5,103 +5,101 @@
 #include "adt/adt.h"
 #include "mem/mem.h"
 
-ClientConnection connect_client_connection(Address address, int life) {
-    ClientConnection client_connection = memalloc(sizeof(*client_connection));
+NETClientConnection connect_client_connection(NETAddress address, int life) {
+    NETClientConnection client_connection = memalloc(sizeof(*client_connection));
     client_connection->address = address_dup(address);
     client_connection->connection = connection_connect(address);
     client_connection->expires = time(NULL) + life;
     return client_connection;
 }
 
-void client_connection_release(ClientConnection client_connection) {
+void client_connection_release(NETClientConnection client_connection) {
     address_release(client_connection->address);
     connection_release(client_connection->connection);
     free(client_connection);
 }
 
-Address client_connection_get_address(ClientConnection client_connection) {
+NETAddress client_connection_get_address(NETClientConnection client_connection) {
     return client_connection->address;
 }
 
-void client_connection_set_address(ClientConnection client_connection,
-                                   Address address) {
+void client_connection_set_address(NETClientConnection client_connection,
+                                   NETAddress address) {
     client_connection->address = address;
 }
 
-Connection client_connection_get_connection(ClientConnection client_connection) {
+NETConnection client_connection_get_connection(NETClientConnection client_connection) {
     return client_connection->connection;
 }
 
-void client_connection_set_connection(ClientConnection client_connection,
-                                      Connection connection) {
+void client_connection_set_connection(NETClientConnection client_connection,
+                                      NETConnection connection) {
     client_connection->connection = connection;
 }
 
-time_t client_connection_get_expires(ClientConnection client_connection) {
+time_t client_connection_get_expires(NETClientConnection client_connection) {
     return client_connection->expires;
 }
 
-void client_connection_set_expires(ClientConnection client_connection,
-                                   time_t expires) {
+void client_connection_set_expires(NETClientConnection client_connection, time_t expires) {
     client_connection->expires = expires;
 }
 
-int client_connection_address_is(ClientConnection client_connection,
-                                 Address address) {
+int client_connection_address_is(NETClientConnection client_connection, NETAddress address) {
     return address_equals(client_connection->address, address);
 }
 
-int client_connection_is_alive(ClientConnection client_connection) {
+int client_connection_is_alive(NETClientConnection client_connection) {
     return (client_connection->expires > time(NULL)) ? 1 : 0;
 }
 
-int client_connection_is_dead(ClientConnection client_connection) {
+int client_connection_is_dead(NETClientConnection client_connection) {
     return (client_connection_is_alive(client_connection)) ? 0 : 1;
 }
 
-int client_connection_is_on(ClientConnection client_connection) {
+int client_connection_is_on(NETClientConnection client_connection) {
     return connection_is_on(client_connection->connection);
 }
 
-int client_connection_is_off(ClientConnection client_connection) {
+int client_connection_is_off(NETClientConnection client_connection) {
     return connection_is_off(client_connection->connection);
 }
 
-void client_connection_turn_on(ClientConnection client_connection) {
-    List out = connection_out(client_connection->connection);
-    Connection connection = connection_connect(client_connection->address);
-    for (ListItem it = list_head(out); it; it = it->next)
+void client_connection_turn_on(NETClientConnection client_connection) {
+    ADTList out = connection_out(client_connection->connection);
+    NETConnection connection = connection_connect(client_connection->address);
+    for (ADTListItem it = list_head(out); it; it = it->next)
         connection_push(connection, list_value(it));
     list_full_release(out, free);
     connection_release(client_connection->connection);
     client_connection->connection = connection;
 }
 
-void client_connection_turn_off(ClientConnection client_connection) {
+void client_connection_turn_off(NETClientConnection client_connection) {
     connection_turn_off(client_connection->connection);
 }
 
-void client_connection_lasts_for(ClientConnection client_connection, int life) {
+void client_connection_lasts_for(NETClientConnection client_connection, int life) {
     client_connection->expires = time(NULL) + life;
 }
 
-List client_connection_out(ClientConnection client_connection) {
+ADTList client_connection_out(NETClientConnection client_connection) {
     return connection_out(client_connection->connection);
 }
 
-void client_connection_push(ClientConnection client_connection, char *text) {
+void client_connection_push(NETClientConnection client_connection, char *text) {
     connection_push(client_connection->connection, text);
 }
 
-void client_connection_loop(ClientConnection client_connection) {
+void client_connection_loop(NETClientConnection client_connection) {
     connection_loop(client_connection->connection);
     free(connection_pop(client_connection->connection));
     if (connection_is_off(client_connection->connection))
         client_connection_turn_on(client_connection);
 }
 
-int client_connection_list_poll(List client_connections, int timeout) {
-    List connections = list_map(client_connections,
+int client_connection_list_poll(ADTList client_connections, int timeout) {
+    ADTList connections = list_map(client_connections,
                           (void *(*)(void *)) client_connection_get_connection);
     int result = connection_list_poll(connections, timeout);
     list_release(connections);

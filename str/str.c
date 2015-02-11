@@ -98,12 +98,12 @@ int str_find(char *str, char *pat) {
     return -1;
 }
 
-char *str_join(List strs, char *sep) {
+char *str_join(ADTList strs, char *sep) {
     int len = (list_max(strs, (int (*)(void *)) strlen) + strlen(sep)) *
               list_size(strs);
     char join[len + 1];
     join[0] = 0;
-    for (ListItem it = list_head(strs); it; it = list_next(it)) {
+    for (ADTListItem it = list_head(strs); it; it = list_next(it)) {
         strcat(join, list_value(it));
         if (list_next(it))
             strcat(join, sep);
@@ -111,12 +111,12 @@ char *str_join(List strs, char *sep) {
     return str_dup(join);
 }
 
-List str_split(char *str, char *sep) {
+ADTList str_split(char *str, char *sep) {
     int index;
     int start = 0;
     int len = strlen(str);
     int sep_len = strlen(sep);
-    List list = list_new();
+    ADTList list = list_new();
     while ((index = str_find(str + start, sep)) >= 0) {
         list_append(list, str_substr(str, start, index));
         start += index + sep_len;

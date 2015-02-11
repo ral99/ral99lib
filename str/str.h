@@ -31,10 +31,10 @@ char *str_unescape(char *str);
 int str_find(char *str, char *pat);
 
 /* Return the concatenation of strings separated by sep. */
-char *str_join(List strs, char *sep);
+char *str_join(ADTList strs, char *sep);
 
 /* Return the list of the strings separated by sep. */
-List str_split(char *str, char *sep);
+ADTList str_split(char *str, char *sep);
 
 #endif
 

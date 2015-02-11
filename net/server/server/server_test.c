@@ -8,7 +8,7 @@
 #define POLL_TIMEOUT 500
 
 static void test_server_listen_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server->port, ==, 5000);
     g_assert_cmpint(server->poll_timeout, ==, POLL_TIMEOUT);
     g_assert_cmpint(sock_is_on(server->sock), ==, 1);
@@ -18,45 +18,45 @@ static void test_server_listen_1() {
 }
 
 static void test_server_release_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     server_release(server);
 }
 
 static void test_server_get_port_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server_get_port(server), ==, server->port);
     server_release(server);
 }
 
 static void test_server_set_port_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     server_set_port(server, 5001);
     g_assert_cmpint(server->port, ==, 5001);
     server_release(server);
 }
 
 static void test_server_get_poll_timeout_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server_get_poll_timeout(server), ==, server->poll_timeout);
     server_release(server);
 }
 
 static void test_server_set_poll_timeout_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     server_set_poll_timeout(server, POLL_TIMEOUT + 1);
     g_assert_cmpint(server->poll_timeout, ==, POLL_TIMEOUT + 1);
     server_release(server);
 }
 
 static void test_server_get_sock_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert(server_get_sock(server) == server->sock);
     server_release(server);
 }
 
 static void test_server_set_sock_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
-    Sock sock = sock_new(0, 1);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
+    NETSock sock = sock_new(0, 1);
     sock_release(server->sock);
     server_set_sock(server, sock);
     g_assert(server->sock == sock);
@@ -64,14 +64,14 @@ static void test_server_set_sock_1() {
 }
 
 static void test_server_get_connections_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert(server_get_connections(server) == server->connections);
     server_release(server);
 }
 
 static void test_server_set_connections_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
-    List connections = list_new();
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
+    ADTList connections = list_new();
     list_release(server->connections);
     server_set_connections(server, connections);
     g_assert(server->connections == connections);
@@ -79,14 +79,14 @@ static void test_server_set_connections_1() {
 }
 
 static void test_server_get_messages_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert(server_get_messages(server) == server->messages);
     server_release(server);
 }
 
 static void test_server_set_messages_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
-    List messages = list_new();
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
+    ADTList messages = list_new();
     list_release(server->messages);
     server_set_messages(server, messages);
     g_assert(server->messages == messages);
@@ -94,34 +94,34 @@ static void test_server_set_messages_1() {
 }
 
 static void test_server_port_is_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server_port_is(server, 5000), ==, 1);
     server_release(server);
 }
 
 static void test_server_port_is_2() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server_port_is(server, 5001), ==, 0);
     server_release(server);
 }
 
 static void test_server_poll_timeout_is_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server_poll_timeout_is(server, POLL_TIMEOUT), ==, 1);
     server_release(server);
 }
 
 static void test_server_poll_timeout_is_2() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     g_assert_cmpint(server_poll_timeout_is(server, POLL_TIMEOUT + 1), ==, 0);
     server_release(server);
 }
 
 static void test_server_accept_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
     server_accept(server);
     g_assert_cmpint(list_size(server->connections), ==, 1);
@@ -131,16 +131,16 @@ static void test_server_accept_1() {
 }
 
 static void test_server_push_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection accepted = accept_server_connection(server->sock);
+    NETServerConnection accepted = accept_server_connection(server->sock);
     char *id = server_connection_id(accepted);
     list_append(server->connections, accepted);
     server_push(server, id, "Sport Club Corinthians Paulista");
-    List out = server_connection_out(accepted);
+    ADTList out = server_connection_out(accepted);
     g_assert_cmpint(list_size(out), ==, 1);
     g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
     list_full_release(out, free);
@@ -151,8 +151,8 @@ static void test_server_push_1() {
 }
 
 static void test_server_pop_1() {
-    Server server = server_listen(5000, POLL_TIMEOUT);
-    Message message = message_new("abc", "Sport Club Corinthians Paulista");
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
+    NETMessage message = message_new("abc", "Sport Club Corinthians Paulista");
     list_append(server->messages, message);
     g_assert(server_pop(server) == message);
     g_assert(server_pop(server) == NULL);
@@ -161,18 +161,18 @@ static void test_server_pop_1() {
 }
 
 static void test_server_loop_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Server server = server_listen(5000, POLL_TIMEOUT);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETServer server = server_listen(5000, POLL_TIMEOUT);
     sleep(1);
-    Connection connected1 = connection_connect(address);
+    NETConnection connected1 = connection_connect(address);
     sleep(1);
-    ServerConnection accepted1 = accept_server_connection(server->sock);
+    NETServerConnection accepted1 = accept_server_connection(server->sock);
     sleep(1);
-    Connection connected2 = connection_connect(address);
+    NETConnection connected2 = connection_connect(address);
     sleep(1);
-    ServerConnection accepted2 = accept_server_connection(server->sock);
+    NETServerConnection accepted2 = accept_server_connection(server->sock);
     sleep(1);
-    Connection connected3 = connection_connect(address);
+    NETConnection connected3 = connection_connect(address);
     sleep(1);
     server_loop(server);
     sleep(1);

@@ -12,29 +12,29 @@
 #include "mem/mem.h"
 #include "str/str.h"
 
-Sock sock_new(int fd, int on) {
-    Sock sock = memalloc(sizeof(*sock));
+NETSock sock_new(int fd, int on) {
+    NETSock sock = memalloc(sizeof(*sock));
     sock->fd = fd;
     sock->on = on;
     return sock;
 }
 
-Sock sock_nonblocking(int fd) {
-    Sock sock = sock_new(fd, 1);
+NETSock sock_nonblocking(int fd) {
+    NETSock sock = sock_new(fd, 1);
     int flags = fcntl(fd, F_GETFL);
     if (flags < 0 || fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
         sock_turn_off(sock);
     return sock;
 }
 
-Sock sock_listen(int port) {
+NETSock sock_listen(int port) {
     #ifdef __APPLE__
     int set = 1;
     #endif
     int reuse = 1;
     int fd = socket(AF_INET, SOCK_STREAM, 0);
-    Sock sock = sock_nonblocking(fd);
-    Address address = address_new("127.0.0.1", port);
+    NETSock sock = sock_nonblocking(fd);
+    NETAddress address = address_new("127.0.0.1", port);
     struct sockaddr *sockaddr = address_sockaddr(address);
     if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0 ||
         #ifdef __APPLE__
@@ -48,16 +48,16 @@ Sock sock_listen(int port) {
     return sock;
 }
 
-Sock sock_accept(Sock server_sock) {
+NETSock sock_accept(NETSock server_sock) {
     int fd = accept(server_sock->fd, NULL, NULL);
     if (fd < 0 && errno != EINTR && errno != EAGAIN)
         sock_turn_off(server_sock);
     return sock_nonblocking(fd);
 }
 
-Sock sock_connect(Address address) {
+NETSock sock_connect(NETAddress address) {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
-    Sock sock = sock_nonblocking(fd);
+    NETSock sock = sock_nonblocking(fd);
     struct sockaddr *sockaddr = address_sockaddr(address);
     if (connect(fd, sockaddr, sizeof(*sockaddr)) < 0 &&
         errno != EINTR && errno != EINPROGRESS)
@@ -66,46 +66,46 @@ Sock sock_connect(Address address) {
     return sock;
 }
 
-void sock_release(Sock sock) {
+void sock_release(NETSock sock) {
     sock_turn_off(sock);
     free(sock);
 }
 
-int sock_get_fd(Sock sock) {
+int sock_get_fd(NETSock sock) {
     return sock->fd;
 }
 
-void sock_set_fd(Sock sock, int fd) {
+void sock_set_fd(NETSock sock, int fd) {
     sock->fd = fd;
 }
 
-int sock_get_on(Sock sock) {
+int sock_get_on(NETSock sock) {
     return sock->on;
 }
 
-void sock_set_on(Sock sock, int on) {
+void sock_set_on(NETSock sock, int on) {
     sock->on = on;
 }
 
-int sock_fd_is(Sock sock, int fd) {
+int sock_fd_is(NETSock sock, int fd) {
     return (sock->fd == fd) ? 1 : 0;
 }
 
-int sock_is_on(Sock sock) {
+int sock_is_on(NETSock sock) {
     return sock->on;
 }
 
-int sock_is_off(Sock sock) {
+int sock_is_off(NETSock sock) {
     return (sock->on) ? 0 : 1;
 }
 
-void sock_turn_off(Sock sock) {
+void sock_turn_off(NETSock sock) {
     close(sock->fd);
     sock->fd = -1;
     sock->on = 0;
 }
 
-int sock_send(Sock sock, char *text) {
+int sock_send(NETSock sock, char *text) {
     int nbytes = strlen(text);
     #ifdef __APPLE__
     int status = send(sock->fd, text, nbytes, 0);
@@ -119,7 +119,7 @@ int sock_send(Sock sock, char *text) {
     return 0;
 }
 
-char *sock_recv(Sock sock) {
+char *sock_recv(NETSock sock) {
     char buffer[1024];
     int nbytes = recv(sock->fd, buffer, sizeof(buffer), 0);
     if (nbytes > 0) {
@@ -131,7 +131,7 @@ char *sock_recv(Sock sock) {
     return NULL;
 }
 
-int sock_list_poll(Sock socks[], int pollin[], int pollout[], int nfds,
+int sock_list_poll(NETSock socks[], int pollin[], int pollout[], int nfds,
                      int timeout) {
     struct pollfd fds[nfds];
     for (int i = 0; i < nfds; i++) {

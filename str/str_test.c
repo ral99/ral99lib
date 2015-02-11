@@ -170,7 +170,7 @@ static void test_str_find_6() {
 }
 
 static void test_str_join_1() {
-    List strs = list_new();
+    ADTList strs = list_new();
     char *join = str_join(strs, "");
     g_assert_cmpstr(join, ==, "");
     list_release(strs);
@@ -178,7 +178,7 @@ static void test_str_join_1() {
 }
 
 static void test_str_join_2() {
-    List strs = list_new();
+    ADTList strs = list_new();
     char *join = str_join(strs, "abc");
     g_assert_cmpstr(join, ==, "");
     list_release(strs);
@@ -186,7 +186,7 @@ static void test_str_join_2() {
 }
 
 static void test_str_join_3() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "");
     char *join = str_join(strs, "");
     g_assert_cmpstr(join, ==, "");
@@ -195,7 +195,7 @@ static void test_str_join_3() {
 }
 
 static void test_str_join_4() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "");
     char *join = str_join(strs, "abc");
     g_assert_cmpstr(join, ==, "");
@@ -204,7 +204,7 @@ static void test_str_join_4() {
 }
 
 static void test_str_join_5() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "");
     list_append(strs, "");
     char *join = str_join(strs, "abc");
@@ -214,7 +214,7 @@ static void test_str_join_5() {
 }
 
 static void test_str_join_6() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "Sport Club Corinthians Paulista");
     char *join = str_join(strs, "");
     g_assert_cmpstr(join, ==, "Sport Club Corinthians Paulista");
@@ -223,7 +223,7 @@ static void test_str_join_6() {
 }
 
 static void test_str_join_7() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "Sport Club Corinthians Paulista");
     char *join = str_join(strs, "abc");
     g_assert_cmpstr(join, ==, "Sport Club Corinthians Paulista");
@@ -232,7 +232,7 @@ static void test_str_join_7() {
 }
 
 static void test_str_join_8() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "Sport");
     list_append(strs, "Club");
     list_append(strs, "Corinthians");
@@ -244,7 +244,7 @@ static void test_str_join_8() {
 }
 
 static void test_str_join_9() {
-    List strs = list_new();
+    ADTList strs = list_new();
     list_append(strs, "Sport");
     list_append(strs, "Club");
     list_append(strs, "Corinthians");
@@ -256,8 +256,8 @@ static void test_str_join_9() {
 }
 
 static void test_str_split_1() {
-    List split = str_split("", "");
-    List result = list_new();
+    ADTList split = str_split("", "");
+    ADTList result = list_new();
     g_assert_cmpint(list_equals_cmp(split, result,
                     (int (*)(void *, void *)) str_equals), ==, 1);
     list_release(split);
@@ -265,8 +265,8 @@ static void test_str_split_1() {
 }
 
 static void test_str_split_2() {
-    List split = str_split("abc", "");
-    List result = list_new();
+    ADTList split = str_split("abc", "");
+    ADTList result = list_new();
     list_append(result, "abc");
     g_assert_cmpint(list_equals_cmp(split, result,
                                     (int (*)(void *, void *)) str_equals), ==, 1);
@@ -275,8 +275,8 @@ static void test_str_split_2() {
 }
 
 static void test_str_split_3() {
-    List split = str_split("abc", "___");
-    List result = list_new();
+    ADTList split = str_split("abc", "___");
+    ADTList result = list_new();
     list_append(result, "abc");
     g_assert_cmpint(list_equals_cmp(split, result,
                                     (int (*)(void *, void *)) str_equals), ==, 1);
@@ -285,8 +285,8 @@ static void test_str_split_3() {
 }
 
 static void test_str_split_4() {
-    List split = str_split("___abc", "___");
-    List result = list_new();
+    ADTList split = str_split("___abc", "___");
+    ADTList result = list_new();
     list_append(result, "");
     list_append(result, "abc");
     g_assert_cmpint(list_equals_cmp(split, result,
@@ -296,8 +296,8 @@ static void test_str_split_4() {
 }
 
 static void test_str_split_5() {
-    List split = str_split("abc___", "___");
-    List result = list_new();
+    ADTList split = str_split("abc___", "___");
+    ADTList result = list_new();
     list_append(result, "abc");
     list_append(result, "");
     g_assert_cmpint(list_equals_cmp(split, result,
@@ -307,8 +307,8 @@ static void test_str_split_5() {
 }
 
 static void test_str_split_6() {
-    List split = str_split("abc___def", "___");
-    List result = list_new();
+    ADTList split = str_split("abc___def", "___");
+    ADTList result = list_new();
     list_append(result, "abc");
     list_append(result, "def");
     g_assert_cmpint(list_equals_cmp(split, result,
@@ -318,8 +318,8 @@ static void test_str_split_6() {
 }
 
 static void test_str_split_7() {
-    List split = str_split("abc___def___ghi", "___");
-    List result = list_new();
+    ADTList split = str_split("abc___def___ghi", "___");
+    ADTList result = list_new();
     list_append(result, "abc");
     list_append(result, "def");
     list_append(result, "ghi");
@@ -330,8 +330,8 @@ static void test_str_split_7() {
 }
 
 static void test_str_split_8() {
-    List split = str_split("Sport Club Corinthians Paulista", " ");
-    List result = list_new();
+    ADTList split = str_split("Sport Club Corinthians Paulista", " ");
+    ADTList result = list_new();
     list_append(result, "Sport");
     list_append(result, "Club");
     list_append(result, "Corinthians");

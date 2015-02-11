@@ -10,12 +10,12 @@
 #define POLL_TIMEOUT 500
 
 static void test_accept_server_connection_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(strlen(server_connection->id), ==, SERVER_CONNECTION_ID_LENGTH);
     g_assert_cmpint(connection_is_on(server_connection->connection), ==, 1);
     server_connection_release(server_connection);
@@ -25,12 +25,12 @@ static void test_accept_server_connection_1() {
 }
 
 static void test_server_connection_release_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     server_connection_release(server_connection);
     connection_release(connected);
     sock_release(server);
@@ -38,12 +38,12 @@ static void test_server_connection_release_1() {
 }
 
 static void test_server_connection_get_id_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     g_assert(server_connection_get_id(server_connection) == server_connection->id);
     server_connection_release(server_connection);
     connection_release(connected);
@@ -52,12 +52,12 @@ static void test_server_connection_get_id_1() {
 }
 
 static void test_server_connection_set_id_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     char *id = str_random(SERVER_CONNECTION_ID_LENGTH);
     free(server_connection->id);
     server_connection_set_id(server_connection, id);
@@ -69,12 +69,12 @@ static void test_server_connection_set_id_1() {
 }
 
 static void test_server_connection_get_connection_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     g_assert(server_connection_get_connection(server_connection) ==
              server_connection->connection);
     server_connection_release(server_connection);
@@ -84,16 +84,16 @@ static void test_server_connection_get_connection_1() {
 }
 
 static void test_server_connection_set_connection_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected1 = connection_connect(address);
+    NETConnection connected1 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     sleep(1);
-    Connection connected2 = connection_connect(address);
+    NETConnection connected2 = connection_connect(address);
     sleep(1);
-    Connection connection = connection_accept(server);
+    NETConnection connection = connection_accept(server);
     sleep(1);
     connection_release(server_connection->connection);
     server_connection_set_connection(server_connection, connection);
@@ -106,12 +106,12 @@ static void test_server_connection_set_connection_1() {
 }
 
 static void test_server_connection_id_is_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(server_connection_id_is(server_connection, "abc"), ==, 0);
     server_connection_release(server_connection);
     connection_release(connected);
@@ -120,12 +120,12 @@ static void test_server_connection_id_is_1() {
 }
 
 static void test_server_connection_id_is_2() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     sleep(1);
     char *id = str_dup(server_connection->id);
     g_assert_cmpint(server_connection_id_is(server_connection, id), ==, 1);
@@ -137,12 +137,12 @@ static void test_server_connection_id_is_2() {
 }
 
 static void test_server_connection_id_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     char *id = server_connection_id(server_connection);
     g_assert_cmpstr(id, ==, server_connection->id);
     free(id);
@@ -153,12 +153,12 @@ static void test_server_connection_id_1() {
 }
 
 static void test_server_connection_is_on_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(server_connection_is_on(server_connection), ==, 1);
     server_connection_release(server_connection);
     connection_release(connected);
@@ -167,12 +167,12 @@ static void test_server_connection_is_on_1() {
 }
 
 static void test_server_connection_is_on_2() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     connection_turn_off(server_connection->connection);
     g_assert_cmpint(server_connection_is_on(server_connection), ==, 0);
     server_connection_release(server_connection);
@@ -182,12 +182,12 @@ static void test_server_connection_is_on_2() {
 }
 
 static void test_server_connection_is_off_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     g_assert_cmpint(server_connection_is_off(server_connection), ==, 0);
     server_connection_release(server_connection);
     connection_release(connected);
@@ -196,12 +196,12 @@ static void test_server_connection_is_off_1() {
 }
 
 static void test_server_connection_is_off_2() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     connection_turn_off(server_connection->connection);
     g_assert_cmpint(server_connection_is_off(server_connection), ==, 1);
     server_connection_release(server_connection);
@@ -211,12 +211,12 @@ static void test_server_connection_is_off_2() {
 }
 
 static void test_server_connection_turn_off_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     server_connection_turn_off(server_connection);
     g_assert_cmpint(connection_is_off(server_connection->connection), ==, 1);
     server_connection_release(server_connection);
@@ -226,17 +226,17 @@ static void test_server_connection_turn_off_1() {
 }
 
 static void test_server_connection_out_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     connection_push(server_connection->connection,
                     "Sport Club Corinthians Paulista");
     connection_push(server_connection->connection, "Republica Federativa do Brasil");
-    List out1 = connection_out(server_connection->connection);
-    List out2 = server_connection_out(server_connection);
+    ADTList out1 = connection_out(server_connection->connection);
+    ADTList out2 = server_connection_out(server_connection);
     g_assert_cmpint(list_equals_cmp(out1, out2,
                                     (int (*)(void *, void *)) str_equals), ==, 1);
     list_full_release(out1, free);
@@ -248,14 +248,14 @@ static void test_server_connection_out_1() {
 }
 
 static void test_server_connection_push_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     server_connection_push(server_connection, "Sport Club Corinthians Paulista");
-    List out = connection_out(server_connection->connection);
+    ADTList out = connection_out(server_connection->connection);
     g_assert_cmpint(list_size(out), ==, 1);
     g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
     list_full_release(out, free);
@@ -266,12 +266,12 @@ static void test_server_connection_push_1() {
 }
 
 static void test_server_connection_pop_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected = connection_connect(address);
+    NETConnection connected = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection = accept_server_connection(server);
+    NETServerConnection server_connection = accept_server_connection(server);
     connection_push(connected, "Sport Club Corinthians Paulista");
     connection_loop(connected);
     sleep(1);
@@ -288,20 +288,20 @@ static void test_server_connection_pop_1() {
 }
 
 static void test_server_connection_loop_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected1 = connection_connect(address);
+    NETConnection connected1 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection1 = accept_server_connection(server);
+    NETServerConnection server_connection1 = accept_server_connection(server);
     sleep(1);
-    Connection connected2 = connection_connect(address);
+    NETConnection connected2 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection2 = accept_server_connection(server);
+    NETServerConnection server_connection2 = accept_server_connection(server);
     sleep(1);
-    Connection connected3 = connection_connect(address);
+    NETConnection connected3 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection3 = accept_server_connection(server);
+    NETServerConnection server_connection3 = accept_server_connection(server);
     connection_push(connected1, "Sport Club Corinthians Paulista");
     connection_push(connected2, "Republica Federativa do Brasil");
     connection_push(connected3, "Repubblica Italiana");
@@ -319,9 +319,9 @@ static void test_server_connection_loop_1() {
         server_connection_loop(server_connection3);
         sleep(1);
     }
-    List out1 = connection_out(server_connection1->connection);
-    List out2 = connection_out(server_connection2->connection);
-    List out3 = connection_out(server_connection3->connection);
+    ADTList out1 = connection_out(server_connection1->connection);
+    ADTList out2 = connection_out(server_connection2->connection);
+    ADTList out3 = connection_out(server_connection3->connection);
     g_assert_cmpint(list_size(out1), ==, 0);
     g_assert_cmpint(list_size(out2), ==, 0);
     g_assert_cmpint(list_size(out3), ==, 0);
@@ -363,17 +363,17 @@ static void test_server_connection_loop_1() {
 }
 
 static void test_server_connection_list_poll_1() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected1 = connection_connect(address);
+    NETConnection connected1 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection1 = accept_server_connection(server);
+    NETServerConnection server_connection1 = accept_server_connection(server);
     sleep(1);
-    Connection connected2 = connection_connect(address);
+    NETConnection connected2 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection2 = accept_server_connection(server);
-    List server_connections = list_new();
+    NETServerConnection server_connection2 = accept_server_connection(server);
+    ADTList server_connections = list_new();
     list_append(server_connections, server_connection1);
     list_append(server_connections, server_connection2);
     g_assert_cmpint(server_connection_list_poll(server_connections, POLL_TIMEOUT),
@@ -388,17 +388,17 @@ static void test_server_connection_list_poll_1() {
 }
 
 static void test_server_connection_list_poll_2() {
-    Address address = address_new("127.0.0.1", 5000);
-    Sock server = sock_listen(5000);
+    NETAddress address = address_new("127.0.0.1", 5000);
+    NETSock server = sock_listen(5000);
     sleep(1);
-    Connection connected1 = connection_connect(address);
+    NETConnection connected1 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection1 = accept_server_connection(server);
+    NETServerConnection server_connection1 = accept_server_connection(server);
     sleep(1);
-    Connection connected2 = connection_connect(address);
+    NETConnection connected2 = connection_connect(address);
     sleep(1);
-    ServerConnection server_connection2 = accept_server_connection(server);
-    List server_connections = list_new();
+    NETServerConnection server_connection2 = accept_server_connection(server);
+    ADTList server_connections = list_new();
     list_append(server_connections, server_connection1);
     list_append(server_connections, server_connection2);
     connection_push(server_connection1->connection,

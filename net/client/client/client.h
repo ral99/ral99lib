@@ -4,54 +4,54 @@
 #include "net/net.h"
 #include "adt/adt.h"
 
-typedef struct Client *Client;
-struct Client {
-    List connections;
+typedef struct _NETClient *NETClient;
+struct _NETClient {
+    ADTList connections;
     int connection_life;
     int poll_timeout;
 };
 
 /* Return a new client. */
-Client client_new(int connection_life, int poll_timeout);
+NETClient client_new(int connection_life, int poll_timeout);
 
 /* Free the memory used by client and release its resources. */
-void client_release(Client client);
+void client_release(NETClient client);
 
 /* Getter method for connections. */
-List client_get_connections(Client client);
+ADTList client_get_connections(NETClient client);
 
 /* Setter method for connections. */
-void client_set_connections(Client client, List connections);
+void client_set_connections(NETClient client, ADTList connections);
 
 /* Getter method for connection life. */
-int client_get_connection_life(Client client);
+int client_get_connection_life(NETClient client);
 
 /* Setter method for poll timeout. */
-void client_set_connection_life(Client client, int connection_life);
+void client_set_connection_life(NETClient client, int connection_life);
 
 /* Getter method for poll timeout. */
-int client_get_poll_timeout(Client client);
+int client_get_poll_timeout(NETClient client);
 
 /* Setter method for poll timeout. */
-void client_set_poll_timeout(Client client, int poll_timeout);
+void client_set_poll_timeout(NETClient client, int poll_timeout);
 
 /* Boolean method for connection life. */
-int client_connection_life_is(Client client, int connection_life);
+int client_connection_life_is(NETClient client, int connection_life);
 
 /* Boolean method for poll timeout. */
-int client_poll_timeout_is(Client client, int poll_timeout);
+int client_poll_timeout_is(NETClient client, int poll_timeout);
 
 /* Return a client connection connected to address or NULL. */
-ClientConnection client_get_connection(Client client, Address address);
+NETClientConnection client_get_connection(NETClient client, NETAddress address);
 
 /* Return a client connection connected to address. */
-ClientConnection client_get_or_create_connection(Client client, Address address);
+NETClientConnection client_get_or_create_connection(NETClient client, NETAddress address);
 
 /* Push a message to be sent to address. */
-void client_push(Client client, Address address, char *text);
+void client_push(NETClient client, NETAddress address, char *text);
 
 /* Poll, establish, receive, send and remove connections. */
-void client_loop(Client client);
+void client_loop(NETClient client);
 
 #endif
 
