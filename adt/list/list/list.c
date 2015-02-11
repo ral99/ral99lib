@@ -148,8 +148,7 @@ void *list_at(ADTList list, int index) {
 }
 
 ADTListItem list_random_item(ADTList list) {
-    return (list->head) ? list_item_at(list, int_random(0, list_size(list) - 1))
-                        : NULL;
+    return (list->head) ? list_item_at(list, int_random(0, list_size(list) - 1)) : NULL;
 }
 
 void *list_random(ADTList list) {

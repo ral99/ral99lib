@@ -42,8 +42,7 @@ static void test_str_random_2() {
     char *str = str_random(len);
     g_assert_cmpint(strlen(str), ==, len);
     for (int i = 0; i < len; i++)
-        g_assert((str[i] >= '0' && str[i] <= '9') ||
-                 (str[i] >= 'a' && str[i] <= 'z') ||
+        g_assert((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' && str[i] <= 'z') ||
                  (str[i] >= 'A' && str[i] <= 'Z'));
     free(str);
 }
@@ -165,8 +164,7 @@ static void test_str_find_5() {
 }
 
 static void test_str_find_6() {
-    g_assert_cmpint(str_find("Sport Club Corinthians Paulista", "Corinthians"), ==,
-                    11);
+    g_assert_cmpint(str_find("Sport Club Corinthians Paulista", "Corinthians"), ==, 11);
 }
 
 static void test_str_join_1() {
@@ -258,8 +256,8 @@ static void test_str_join_9() {
 static void test_str_split_1() {
     ADTList split = str_split("", "");
     ADTList result = list_new();
-    g_assert_cmpint(list_equals_cmp(split, result,
-                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(split);
     list_release(result);
 }
@@ -268,8 +266,8 @@ static void test_str_split_2() {
     ADTList split = str_split("abc", "");
     ADTList result = list_new();
     list_append(result, "abc");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }
@@ -278,8 +276,8 @@ static void test_str_split_3() {
     ADTList split = str_split("abc", "___");
     ADTList result = list_new();
     list_append(result, "abc");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }
@@ -289,8 +287,8 @@ static void test_str_split_4() {
     ADTList result = list_new();
     list_append(result, "");
     list_append(result, "abc");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }
@@ -300,8 +298,8 @@ static void test_str_split_5() {
     ADTList result = list_new();
     list_append(result, "abc");
     list_append(result, "");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }
@@ -311,8 +309,8 @@ static void test_str_split_6() {
     ADTList result = list_new();
     list_append(result, "abc");
     list_append(result, "def");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }
@@ -323,8 +321,8 @@ static void test_str_split_7() {
     list_append(result, "abc");
     list_append(result, "def");
     list_append(result, "ghi");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }
@@ -336,8 +334,8 @@ static void test_str_split_8() {
     list_append(result, "Club");
     list_append(result, "Corinthians");
     list_append(result, "Paulista");
-    g_assert_cmpint(list_equals_cmp(split, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(split, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(split, free);
     list_release(result);
 }

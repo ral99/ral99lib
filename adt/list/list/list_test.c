@@ -154,8 +154,8 @@ static void test_list_equals_4() {
 static void test_list_equals_cmp_1() {
     ADTList list1 = list_new();
     ADTList list2 = list_new();
-    g_assert_cmpint(list_equals_cmp(list1, list2,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, list2, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
 }
@@ -181,8 +181,8 @@ static void test_list_equals_cmp_2() {
     list_item_set_next(list22, list23);
     list_item_set_prev(list22, list21);
     list_item_set_prev(list23, list22);
-    g_assert_cmpint(list_equals_cmp(list1, list2,
-                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, list2, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
 }
@@ -208,8 +208,8 @@ static void test_list_equals_cmp_3() {
     list_item_set_next(list22, list23);
     list_item_set_prev(list22, list21);
     list_item_set_prev(list23, list22);
-    g_assert_cmpint(list_equals_cmp(list1, list2,
-                    (int (*)(void *, void *)) str_equals), ==, 0);
+    g_assert_cmpint(list_equals_cmp(list1, list2, (int (*)(void *, void *)) str_equals), ==,
+                    0);
     list_release(list1);
     list_release(list2);
 }
@@ -238,8 +238,8 @@ static void test_list_equals_cmp_4() {
     list_item_set_prev(list22, list21);
     list_item_set_prev(list23, list22);
     list_item_set_prev(list24, list23);
-    g_assert_cmpint(list_equals_cmp(list1, list2,
-                    (int (*)(void *, void *)) str_equals), ==, 0);
+    g_assert_cmpint(list_equals_cmp(list1, list2, (int (*)(void *, void *)) str_equals), ==,
+                    0);
     list_release(list1);
     list_release(list2);
 }
@@ -309,8 +309,8 @@ static void test_list_to_str_5() {
 static void test_list_from_str_1() {
     ADTList from_str = list_from_str("", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
-    g_assert_cmpint(list_equals_cmp(list, from_str,
-                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(from_str);
 }
@@ -320,8 +320,8 @@ static void test_list_from_str_2() {
     ADTList list = list_new();
     ADTListItem list1 = list_item_new("abc", NULL, NULL);
     list->head = list->tail = list1;
-    g_assert_cmpint(list_equals_cmp(list, from_str,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_full_release(from_str, free);
 }
@@ -338,8 +338,8 @@ static void test_list_from_str_3() {
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert_cmpint(list_equals_cmp(list, from_str,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_full_release(from_str, free);
 }
@@ -349,15 +349,14 @@ static void test_list_from_str_4() {
     ADTList list = list_new();
     ADTListItem list1 = list_item_new("abc,", NULL, NULL);
     list->head = list->tail = list1;
-    g_assert_cmpint(list_equals_cmp(list, from_str,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_full_release(from_str, free);
 }
 
 static void test_list_from_str_5() {
-    ADTList from_str = list_from_str("abc\\,,def\\,,ghi\\,",
-                                  (void *(*)(char *)) str_dup);
+    ADTList from_str = list_from_str("abc\\,,def\\,,ghi\\,", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
     ADTListItem list1 = list_item_new("abc,", NULL, NULL);
     ADTListItem list2 = list_item_new("def,", NULL, NULL);
@@ -368,8 +367,8 @@ static void test_list_from_str_5() {
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert_cmpint(list_equals_cmp(list, from_str,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_full_release(from_str, free);
 }
@@ -651,8 +650,8 @@ static void test_list_insert_before_item_1() {
     list_item_set_prev(result3, result2);
     list_item_set_prev(result4, result3);
     list_item_set_prev(result5, result4);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -680,8 +679,8 @@ static void test_list_insert_after_item_1() {
     list_item_set_prev(result3, result2);
     list_item_set_prev(result4, result3);
     list_item_set_prev(result5, result4);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -709,8 +708,8 @@ static void test_list_insert_1() {
     list_item_set_prev(result3, result2);
     list_item_set_prev(result4, result3);
     list_item_set_prev(result5, result4);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -738,8 +737,8 @@ static void test_list_insert_2() {
     list_item_set_prev(result3, result2);
     list_item_set_prev(result4, result3);
     list_item_set_prev(result5, result4);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -759,8 +758,8 @@ static void test_list_prepend_1() {
     list_item_set_next(result2, result3);
     list_item_set_prev(result2, result1);
     list_item_set_prev(result3, result2);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -780,8 +779,8 @@ static void test_list_append_1() {
     list_item_set_next(result2, result3);
     list_item_set_prev(result2, result1);
     list_item_set_prev(result3, result2);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -802,8 +801,8 @@ static void test_list_remove_item_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("def", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -824,8 +823,8 @@ static void test_list_remove_full_item_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("def", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(list, free);
     list_release(result);
 }
@@ -846,8 +845,8 @@ static void test_list_remove_at_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("def", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -868,8 +867,8 @@ static void test_list_full_remove_at_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("def", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(list, free);
     list_release(result);
 }
@@ -893,8 +892,8 @@ static void test_list_remove_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new(value3, NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -918,8 +917,8 @@ static void test_list_full_remove_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new(value3, NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(list, free);
     list_release(result);
 }
@@ -940,8 +939,8 @@ static void test_list_remove_cmp_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("def", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -962,8 +961,8 @@ static void test_list_full_remove_cmp_1() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("def", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(list, free);
     list_release(result);
 }
@@ -994,8 +993,8 @@ static void test_list_pop_front_2() {
     result->tail = result2;
     list_item_set_next(result1, result2);
     list_item_set_prev(result2, result1);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -1026,8 +1025,8 @@ static void test_list_pop_back_2() {
     result->tail = result2;
     list_item_set_next(result1, result2);
     list_item_set_prev(result2, result1);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -1099,8 +1098,8 @@ static void test_list_extend_1() {
     ADTList list2 = list_new();
     list_extend(list1, list2);
     ADTList result = list_new();
-    g_assert_cmpint(list_equals_cmp(list1, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
     list_release(result);
@@ -1115,8 +1114,8 @@ static void test_list_extend_2() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("abc", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list1, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
     list_release(result);
@@ -1131,8 +1130,8 @@ static void test_list_extend_3() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("abc", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list1, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
     list_release(result);
@@ -1160,8 +1159,8 @@ static void test_list_extend_4() {
     list_item_set_next(result2, result3);
     list_item_set_prev(result2, result1);
     list_item_set_prev(result3, result2);
-    g_assert_cmpint(list_equals_cmp(list1, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
     list_release(result);
@@ -1183,8 +1182,7 @@ static void test_list_map_2() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("cba", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(map, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(map, result, (int (*)(void *, void *)) str_equals), ==, 1);
     list_release(list);
     list_release(result);
     list_full_release(map, free);
@@ -1212,8 +1210,7 @@ static void test_list_map_3() {
     list_item_set_next(result2, result3);
     list_item_set_prev(result2, result1);
     list_item_set_prev(result3, result2);
-    g_assert_cmpint(list_equals_cmp(map, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(map, result, (int (*)(void *, void *)) str_equals), ==, 1);
     list_release(list);
     list_release(result);
     list_full_release(map, free);
@@ -1264,8 +1261,7 @@ static void test_list_find_3() {
 
 static void test_list_find_cmp_1() {
     ADTList list = list_new();
-    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "abc") ==
-             NULL);
+    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "abc") == NULL);
     list_release(list);
 }
 
@@ -1280,8 +1276,7 @@ static void test_list_find_cmp_2() {
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "jkl") ==
-             NULL);
+    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "jkl") == NULL);
     list_release(list);
 }
 
@@ -1296,8 +1291,7 @@ static void test_list_find_cmp_3() {
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "abc") ==
-             list1);
+    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "abc") == list1);
     list_release(list);
 }
 
@@ -1407,8 +1401,8 @@ static void test_list_reverse_2() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("abc", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -1435,8 +1429,8 @@ static void test_list_reverse_3() {
     list_item_set_next(result2, result3);
     list_item_set_prev(result2, result1);
     list_item_set_prev(result3, result2);
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -1469,10 +1463,10 @@ static void test_list_foreach_2() {
     ADTList list5 = list_new();
     ADTListItem list51 = list_item_new("abc", NULL, NULL);
     list5->head = list5->tail = list51;
-    g_assert_cmpint(list_equals_cmp(list1, list5,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
-    g_assert_cmpint(list_equals_cmp(list2, list4,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, list5, (int (*)(void *, void *)) str_equals), ==,
+                    1);
+    g_assert_cmpint(list_equals_cmp(list2, list4, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
     list_release(list3);
@@ -1529,10 +1523,10 @@ static void test_list_foreach_3() {
     list_item_set_next(list52, list53);
     list_item_set_prev(list52, list51);
     list_item_set_prev(list53, list52);
-    g_assert_cmpint(list_equals_cmp(list1, list5,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
-    g_assert_cmpint(list_equals_cmp(list2, list4,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list1, list5, (int (*)(void *, void *)) str_equals), ==,
+                    1);
+    g_assert_cmpint(list_equals_cmp(list2, list4, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list1);
     list_release(list2);
     list_release(list3);
@@ -1562,8 +1556,8 @@ static void test_list_filter_2() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("abc", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_release(list);
     list_release(result);
 }
@@ -1592,8 +1586,8 @@ static void test_list_full_filter_2() {
     ADTList result = list_new();
     ADTListItem result1 = list_item_new("abc", NULL, NULL);
     result->head = result->tail = result1;
-    g_assert_cmpint(list_equals_cmp(list, result,
-                                    (int (*)(void *, void *)) str_equals), ==, 1);
+    g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
+                    1);
     list_full_release(list, free);
     list_release(result);
 }

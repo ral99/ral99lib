@@ -1732,7 +1732,7 @@ static void test_triangle_points_1() {
     list_append(points1, point_new(1, 0));
     list_append(points1, point_new(0, 1));
     CGTriangle triangle = triangle_new(list_at(points1, 0), list_at(points1, 1),
-                                     list_at(points1, 2));
+                                       list_at(points1, 2));
     ADTList points2 = triangle_points(triangle);
     g_assert(list_equals_cmp(points1, points2, (int (*)(void *, void *)) point_equals));
     list_full_release(points1, (void (*)(void *)) point_release);

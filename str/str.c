@@ -99,8 +99,7 @@ int str_find(char *str, char *pat) {
 }
 
 char *str_join(ADTList strs, char *sep) {
-    int len = (list_max(strs, (int (*)(void *)) strlen) + strlen(sep)) *
-              list_size(strs);
+    int len = (list_max(strs, (int (*)(void *)) strlen) + strlen(sep)) * list_size(strs);
     char join[len + 1];
     join[0] = 0;
     for (ADTListItem it = list_head(strs); it; it = list_next(it)) {
