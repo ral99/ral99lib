@@ -5,7 +5,7 @@ GLIB_FLAGS	= `pkg-config --cflags glib-2.0`
 GLIB_LIB	= `pkg-config --libs glib-2.0`
 MATH_LIB	= -lm
 
-STATICLIB	= libcg.a
+STATICLIB	= lib99.a
 
 MEM_PATH							= mem/mem
 NUM_PATH							= num/num
