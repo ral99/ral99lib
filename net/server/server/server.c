@@ -5,7 +5,7 @@
 #include "mem/mem.h"
 
 NETServer server_listen(int port, int poll_timeout) {
-    NETServer server = memalloc(sizeof(*server));
+    NETServer server = (NETServer) memalloc(sizeof(*server));
     server->port = port;
     server->poll_timeout = poll_timeout;
     server->sock = sock_listen(port);
@@ -80,14 +80,14 @@ void server_accept(NETServer server) {
 
 void server_push(NETServer server, char *id, char *text) {
     ADTListItem server_connection_item = list_find_cmp(server->connections,
-                                              (int (*)(void *, void *))
-                                              server_connection_id_is, id);
+                                                       (int (*)(void *, void *))
+                                                       server_connection_id_is, id);
     if (server_connection_item)
-        server_connection_push(list_value(server_connection_item), text);
+        server_connection_push((NETServerConnection) list_value(server_connection_item), text);
 }
 
 NETMessage server_pop(NETServer server) {
-    return list_pop_front(server->messages);
+    return (NETMessage) list_pop_front(server->messages);
 }
 
 void server_loop(NETServer server) {
@@ -97,7 +97,7 @@ void server_loop(NETServer server) {
     list_foreach(server->connections, (void (*)(void *)) server_connection_loop);
     server_accept(server);
     for (ADTListItem it = list_head(server->connections); it; it = list_next(it)) {
-        NETServerConnection server_connection = list_value(it);
+        NETServerConnection server_connection = (NETServerConnection) list_value(it);
         char *text = server_connection_pop(server_connection);
         if (text) {
             char *id = server_connection_id(server_connection);

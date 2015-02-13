@@ -13,7 +13,7 @@
 #include "str/str.h"
 
 NETSock sock_new(int fd, int on) {
-    NETSock sock = memalloc(sizeof(*sock));
+    NETSock sock = (NETSock) memalloc(sizeof(*sock));
     sock->fd = fd;
     sock->on = on;
     return sock;
@@ -34,7 +34,7 @@ NETSock sock_listen(int port) {
     int reuse = 1;
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     NETSock sock = sock_nonblocking(fd);
-    NETAddress address = address_new("127.0.0.1", port);
+    NETAddress address = address_new((char *) "127.0.0.1", port);
     struct sockaddr *sockaddr = address_sockaddr(address);
     if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0 ||
         #ifdef __APPLE__
@@ -131,9 +131,8 @@ char *sock_recv(NETSock sock) {
     return NULL;
 }
 
-int sock_list_poll(NETSock socks[], int pollin[], int pollout[], int nfds,
-                     int timeout) {
-    struct pollfd fds[nfds];
+int sock_list_poll(NETSock socks[], int pollin[], int pollout[], int nfds, int timeout) {
+    struct pollfd *fds = (struct pollfd *) memalloc(nfds * sizeof(struct pollfd));
     for (int i = 0; i < nfds; i++) {
         fds[i].fd = socks[i]->fd;
         fds[i].events = 0;
@@ -146,6 +145,7 @@ int sock_list_poll(NETSock socks[], int pollin[], int pollout[], int nfds,
             fds[i].revents & POLLNVAL)
             sock_turn_off(socks[i]);
     }
+    free(fds);
     return result;
 }
 

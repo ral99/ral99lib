@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "net/net.h"
+#include "mem/mem.h"
 
 #define POLL_TIMEOUT 500
 
@@ -31,7 +32,7 @@ static void test_sock_nonblocking_2() {
 }
 
 static void test_sock_listen_accept_connect_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
@@ -138,17 +139,17 @@ static void test_sock_turn_off_2() {
 }
 
 static void test_sock_send_recv_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
     sleep(1);
     NETSock accepted = sock_accept(server);
     sleep(1);
-    sock_send(connected, "Sport Club Corinthians Paulista");
+    sock_send(connected, (char *) "Sport Club Corinthians Paulista");
     sleep(1);
     char *text = sock_recv(accepted);
-    g_assert_cmpstr(text, ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr(text, ==, (char *) "Sport Club Corinthians Paulista");
     free(text);
     sock_release(accepted);
     sock_release(connected);
@@ -157,47 +158,56 @@ static void test_sock_send_recv_1() {
 }
 
 static void test_sock_list_poll_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
     sleep(1);
     int nfds = 2;
-    int pollin[nfds], pollout[nfds];
-    NETSock socks[nfds];
+    int *pollin = (int *) memalloc(sizeof(int) * nfds);
+    int *pollout = (int *) memalloc(sizeof(int) * nfds);
+    NETSock *socks = (NETSock *) memalloc(sizeof(NETSock) * nfds);
     socks[0] = server;
     socks[1] = connected;
     pollin[0] = pollout[0] = 0;
     pollin[1] = pollout[1] = 0;
     g_assert_cmpint(sock_list_poll(socks, pollin, pollout, nfds, POLL_TIMEOUT), ==,
                     0);
+    free(socks);
+    free(pollin);
+    free(pollout);
     sock_release(connected);
     sock_release(server);
     address_release(address);
 }
 
 static void test_sock_list_poll_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
     sleep(1);
     int nfds = 2;
-    int pollin[nfds], pollout[nfds];
-    NETSock socks[nfds];
+    int *pollin = (int *) memalloc(sizeof(int) * nfds);
+    int *pollout = (int *) memalloc(sizeof(int) * nfds);
+    NETSock *socks = (NETSock *) memalloc(sizeof(NETSock) * nfds);
+    socks[0] = server;
     socks[0] = server;
     socks[1] = connected;
     pollin[0] = pollout[0] = 1;
     pollin[1] = pollout[1] = 1;
     g_assert_cmpint(sock_list_poll(socks, pollin, pollout, nfds, POLL_TIMEOUT), ==,
                     2);
+    free(socks);
+    free(pollin);
+    free(pollout);
     sock_release(connected);
     sock_release(server);
     address_release(address);
 }
 
 static void test_sock_list_poll_3() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
@@ -205,8 +215,9 @@ static void test_sock_list_poll_3() {
     NETSock accepted = sock_accept(server);
     sleep(1);
     int nfds = 3;
-    int pollin[nfds], pollout[nfds];
-    NETSock socks[nfds];
+    int *pollin = (int *) memalloc(sizeof(int) * nfds);
+    int *pollout = (int *) memalloc(sizeof(int) * nfds);
+    NETSock *socks = (NETSock *) memalloc(sizeof(NETSock) * nfds);
     socks[0] = server;
     socks[1] = connected;
     socks[2] = accepted;
@@ -215,6 +226,9 @@ static void test_sock_list_poll_3() {
     pollin[2] = pollout[2] = 1;
     g_assert_cmpint(sock_list_poll(socks, pollin, pollout, nfds, POLL_TIMEOUT), ==,
                     2);
+    free(socks);
+    free(pollin);
+    free(pollout);
     sock_release(accepted);
     sock_release(connected);
     sock_release(server);
@@ -222,7 +236,7 @@ static void test_sock_list_poll_3() {
 }
 
 static void test_sock_list_poll_4() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
@@ -230,8 +244,9 @@ static void test_sock_list_poll_4() {
     NETSock accepted = sock_accept(server);
     sleep(1);
     int nfds = 3;
-    int pollin[nfds], pollout[nfds];
-    NETSock socks[nfds];
+    int *pollin = (int *) memalloc(sizeof(int) * nfds);
+    int *pollout = (int *) memalloc(sizeof(int) * nfds);
+    NETSock *socks = (NETSock *) memalloc(sizeof(NETSock) * nfds);
     socks[0] = server;
     socks[1] = connected;
     socks[2] = accepted;
@@ -240,6 +255,9 @@ static void test_sock_list_poll_4() {
     pollin[2] = pollout[2] = 1;
     g_assert_cmpint(sock_list_poll(socks, pollin, pollout, nfds, POLL_TIMEOUT), ==,
                     2);
+    free(socks);
+    free(pollin);
+    free(pollout);
     sock_release(accepted);
     sock_release(connected);
     sock_release(server);
@@ -247,7 +265,7 @@ static void test_sock_list_poll_4() {
 }
 
 static void test_sock_list_poll_5() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETSock connected = sock_connect(address);
@@ -255,8 +273,9 @@ static void test_sock_list_poll_5() {
     NETSock accepted = sock_accept(server);
     sleep(1);
     int nfds = 3;
-    int pollin[nfds], pollout[nfds];
-    NETSock socks[nfds];
+    int *pollin = (int *) memalloc(sizeof(int) * nfds);
+    int *pollout = (int *) memalloc(sizeof(int) * nfds);
+    NETSock *socks = (NETSock *) memalloc(sizeof(NETSock) * nfds);
     socks[0] = server;
     socks[1] = connected;
     socks[2] = accepted;
@@ -264,6 +283,9 @@ static void test_sock_list_poll_5() {
     pollout[0] = pollout[1] = pollout[2] = 0;
     g_assert_cmpint(sock_list_poll(socks, pollin, pollout, nfds, POLL_TIMEOUT), ==,
                     0);
+    free(socks);
+    free(pollin);
+    free(pollout);
     sock_release(accepted);
     sock_release(connected);
     sock_release(server);

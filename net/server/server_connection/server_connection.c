@@ -6,7 +6,8 @@
 #include "str/str.h"
 
 NETServerConnection accept_server_connection(NETSock server_sock) {
-    NETServerConnection server_connection = memalloc(sizeof(*server_connection));
+    NETServerConnection server_connection =
+        (NETServerConnection) memalloc(sizeof(*server_connection));
     server_connection->id = str_random(SERVER_CONNECTION_ID_LENGTH);
     server_connection->connection = connection_accept(server_sock);
     return server_connection;

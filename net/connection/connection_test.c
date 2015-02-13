@@ -9,7 +9,7 @@
 #define POLL_TIMEOUT 500
 
 static void test_connection_connect_accept_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETConnection connected = connection_connect(address);
@@ -29,14 +29,14 @@ static void test_connection_connect_accept_1() {
 }
 
 static void test_connection_release_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connected = connection_connect(address);
     connection_release(connected);
     address_release(address);
 }
 
 static void test_connection_get_sock_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     g_assert(connection_get_sock(connection) == connection->sock);
     connection_release(connection);
@@ -44,7 +44,7 @@ static void test_connection_get_sock_1() {
 }
 
 static void test_connection_set_sock_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     NETSock sock = sock_new(0, 1);
     sock_release(connection->sock);
@@ -55,7 +55,7 @@ static void test_connection_set_sock_1() {
 }
 
 static void test_connection_get_in_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     g_assert(connection_get_in(connection) == connection->in);
     connection_release(connection);
@@ -63,7 +63,7 @@ static void test_connection_get_in_1() {
 }
 
 static void test_connection_set_in_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     ADTList in = list_new();
     list_release(connection->in);
@@ -74,7 +74,7 @@ static void test_connection_set_in_1() {
 }
 
 static void test_connection_get_out_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     g_assert(connection_get_out(connection) == connection->out);
     connection_release(connection);
@@ -82,7 +82,7 @@ static void test_connection_get_out_1() {
 }
 
 static void test_connection_set_out_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     ADTList out = list_new();
     list_release(connection->out);
@@ -93,7 +93,7 @@ static void test_connection_set_out_1() {
 }
 
 static void test_connection_is_on_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     g_assert_cmpint(connection_is_on(connection), ==, 1);
     connection_release(connection);
@@ -101,7 +101,7 @@ static void test_connection_is_on_1() {
 }
 
 static void test_connection_is_on_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     sock_turn_off(connection->sock);
     g_assert_cmpint(connection_is_on(connection), ==, 0);
@@ -110,7 +110,7 @@ static void test_connection_is_on_2() {
 }
 
 static void test_connection_is_off_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     g_assert_cmpint(connection_is_off(connection), ==, 0);
     connection_release(connection);
@@ -118,7 +118,7 @@ static void test_connection_is_off_1() {
 }
 
 static void test_connection_is_off_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     sock_turn_off(connection->sock);
     g_assert_cmpint(connection_is_off(connection), ==, 1);
@@ -127,7 +127,7 @@ static void test_connection_is_off_2() {
 }
 
 static void test_connection_turn_off_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     connection_turn_off(connection);
     g_assert_cmpint(sock_is_off(connection->sock), ==, 1);
@@ -136,12 +136,12 @@ static void test_connection_turn_off_1() {
 }
 
 static void test_connection_out_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
-    list_append(connection->out, str_dup("Sport"));
-    list_append(connection->out, str_dup("Club"));
-    list_append(connection->out, str_dup("Corinthians"));
-    list_append(connection->out, str_dup("Paulista"));
+    list_append(connection->out, str_dup((char *) "Sport"));
+    list_append(connection->out, str_dup((char *) "Club"));
+    list_append(connection->out, str_dup((char *) "Corinthians"));
+    list_append(connection->out, str_dup((char *) "Paulista"));
     ADTList out = connection_out(connection);
     g_assert_cmpint(list_equals_cmp(connection->out, out,
                     (int (*)(void *, void *)) str_equals), ==, 1);
@@ -151,17 +151,17 @@ static void test_connection_out_1() {
 }
 
 static void test_connection_push_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
-    connection_push(connection, "Sport");
-    connection_push(connection, "Club");
-    connection_push(connection, "Corinthians");
-    connection_push(connection, "Paulista");
+    connection_push(connection, (char *) "Sport");
+    connection_push(connection, (char *) "Club");
+    connection_push(connection, (char *) "Corinthians");
+    connection_push(connection, (char *) "Paulista");
     ADTList out = list_new();
-    list_append(out, "Sport");
-    list_append(out, "Club");
-    list_append(out, "Corinthians");
-    list_append(out, "Paulista");
+    list_append(out, (char *) "Sport");
+    list_append(out, (char *) "Club");
+    list_append(out, (char *) "Corinthians");
+    list_append(out, (char *) "Paulista");
     g_assert_cmpint(list_equals_cmp(connection->out, out,
                                     (int (*)(void *, void *)) str_equals), ==, 1);
     list_release(out);
@@ -170,18 +170,18 @@ static void test_connection_push_1() {
 }
 
 static void test_connection_pop_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
-    list_append(connection->in, str_dup("Sport"));
-    list_append(connection->in, str_dup("Club"));
-    list_append(connection->in, str_dup("Corinthians"));
-    list_append(connection->in, str_dup("Paulista"));
+    list_append(connection->in, str_dup((char *) "Sport"));
+    list_append(connection->in, str_dup((char *) "Club"));
+    list_append(connection->in, str_dup((char *) "Corinthians"));
+    list_append(connection->in, str_dup((char *) "Paulista"));
     char *text = connection_pop(connection);
     ADTList in = list_new();
-    list_append(in, "Club");
-    list_append(in, "Corinthians");
-    list_append(in, "Paulista");
-    g_assert_cmpstr(text, ==, "Sport");
+    list_append(in, (char *) "Club");
+    list_append(in, (char *) "Corinthians");
+    list_append(in, (char *) "Paulista");
+    g_assert_cmpstr(text, ==, (char *) "Sport");
     g_assert_cmpint(list_equals_cmp(connection->in, in,
                                     (int (*)(void *, void *)) str_equals), ==, 1);
     free(text);
@@ -191,21 +191,22 @@ static void test_connection_pop_1() {
 }
 
 static void test_connection_send_recv_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETConnection connected = connection_connect(address);
     sleep(1);
     NETConnection accepted = connection_accept(server);
     sleep(1);
-    list_append(connected->out, str_dup("Sport Club Corinthians Paulista"));
+    list_append(connected->out, str_dup((char *) "Sport Club Corinthians Paulista"));
     connection_send(connected);
     sleep(1);
     connection_recv(accepted);
     sleep(1);
     g_assert_cmpint(list_size(connected->out), ==, 0);
     g_assert_cmpint(list_size(accepted->in), ==, 1);
-    g_assert_cmpstr(list_at(accepted->in, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(accepted->in, 0), ==,
+                    (char *) "Sport Club Corinthians Paulista");
     connection_release(accepted);
     connection_release(connected);
     sock_release(server);
@@ -213,21 +214,22 @@ static void test_connection_send_recv_1() {
 }
 
 static void test_connection_loop_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETConnection connected = connection_connect(address);
     sleep(1);
     NETConnection accepted = connection_accept(server);
     sleep(1);
-    list_append(connected->out, str_dup("Sport Club Corinthians Paulista"));
+    list_append(connected->out, str_dup((char *) "Sport Club Corinthians Paulista"));
     connection_loop(connected);
     sleep(1);
     connection_loop(accepted);
     sleep(1);
     g_assert_cmpint(list_size(connected->out), ==, 0);
     g_assert_cmpint(list_size(accepted->in), ==, 1);
-    g_assert_cmpstr(list_at(accepted->in, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(accepted->in, 0), ==,
+                    (char *) "Sport Club Corinthians Paulista");
     connection_release(accepted);
     connection_release(connected);
     sock_release(server);
@@ -235,7 +237,7 @@ static void test_connection_loop_1() {
 }
 
 static void test_connection_list_poll_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETConnection connected = connection_connect(address);
@@ -254,7 +256,7 @@ static void test_connection_list_poll_1() {
 }
 
 static void test_connection_list_poll_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETConnection connected = connection_connect(address);
@@ -264,7 +266,7 @@ static void test_connection_list_poll_2() {
     ADTList connections = list_new();
     list_append(connections, connected);
     list_append(connections, accepted);
-    list_append(connected->out, str_dup("Sport Club Corinthians Paulista"));
+    list_append(connected->out, str_dup((char *) "Sport Club Corinthians Paulista"));
     g_assert_cmpint(connection_list_poll(connections, POLL_TIMEOUT), ==, 1);
     list_release(connections);
     connection_release(accepted);

@@ -6,7 +6,7 @@
 #include "str/str.h"
 
 NETMessage message_new(char *id, char *text) {
-    NETMessage message = memalloc(sizeof(*message));
+    NETMessage message = (NETMessage) memalloc(sizeof(*message));
     message->id = str_dup(id);
     message->text = str_dup(text);
     return message;
@@ -34,8 +34,8 @@ char *message_to_str(NETMessage message) {
 
 NETMessage message_from_str(char *str) {
     ADTList message_list = list_from_str(str, (void *(*)(char *)) str_dup);
-    NETMessage message = message_new(list_at(message_list, 0),
-                                  list_at(message_list, 1));
+    NETMessage message = message_new((char *) list_at(message_list, 0),
+                                     (char *) list_at(message_list, 1));
     list_full_release(message_list, free);
     return message;
 }

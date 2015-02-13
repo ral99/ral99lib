@@ -5,7 +5,7 @@
 #include "mem/mem.h"
 
 NETClient client_new(int connection_life, int poll_timeout) {
-    NETClient client = memalloc(sizeof(*client));
+    NETClient client = (NETClient) memalloc(sizeof(*client));
     client->connections = list_new();
     client->connection_life = connection_life;
     client->poll_timeout = poll_timeout;
@@ -54,7 +54,8 @@ NETClientConnection client_get_connection(NETClient client, NETAddress address) 
     ADTListItem client_connection_item = list_find_cmp(client->connections,
                                               (int (*)(void *, void*))
                                               client_connection_address_is, address);
-    return (client_connection_item) ? list_value(client_connection_item) : NULL;
+    return (client_connection_item) ? (NETClientConnection) list_value(client_connection_item)
+                                    : NULL;
 }
 
 NETClientConnection client_get_or_create_connection(NETClient client, NETAddress address) {

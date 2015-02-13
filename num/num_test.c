@@ -67,12 +67,12 @@ static void test_double_to_str_2() {
 }
 
 static void test_double_from_str_1() {
-    double x = double_from_str("0.0");
+    double x = double_from_str((char *) "0.0");
     g_assert_cmpint(double_equals(x, 0), ==, 1);
 }
 
 static void test_double_from_str_2() {
-    double x = double_from_str("1.001");
+    double x = double_from_str((char *) "1.001");
     g_assert_cmpint(double_equals(x, 1.001), ==, 1);
 }
 
@@ -225,15 +225,15 @@ static void test_int_to_str_3() {
 }
 
 static void test_int_from_str_1() {
-    g_assert_cmpint(int_from_str("0"), ==, 0);
+    g_assert_cmpint(int_from_str((char *) "0"), ==, 0);
 }
 
 static void test_int_from_str_2() {
-    g_assert_cmpint(int_from_str("1234567890"), ==, 1234567890);
+    g_assert_cmpint(int_from_str((char *) "1234567890"), ==, 1234567890);
 }
 
 static void test_int_from_str_3() {
-    g_assert_cmpint(int_from_str("-1234567890"), ==, -1234567890);
+    g_assert_cmpint(int_from_str((char *) "-1234567890"), ==, -1234567890);
 }
 
 int main(int argc, char *argv[]) {

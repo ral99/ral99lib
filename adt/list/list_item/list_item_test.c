@@ -5,7 +5,7 @@
 #include "str/str.h"
 
 static void test_list_item_new_1() {
-    char *value = "Sport Club Corinthians Paulista";
+    char *value = (char *) "Sport Club Corinthians Paulista";
     ADTListItem prev = list_item_new(NULL, NULL, NULL);
     ADTListItem next = list_item_new(NULL, NULL, NULL);
     ADTListItem item = list_item_new(value, prev, next);
@@ -23,7 +23,7 @@ static void test_list_item_release_1() {
 }
 
 static void test_list_item_full_release_1() {
-    ADTListItem item = list_item_new(str_dup("Corinthians"), NULL, NULL);
+    ADTListItem item = list_item_new(str_dup((char *) "Corinthians"), NULL, NULL);
     list_item_full_release(item, free);
 }
 
@@ -62,14 +62,14 @@ static void test_list_item_set_next_1() {
 }
 
 static void test_list_item_get_value_1() {
-    ADTListItem item = list_item_new("Sport Club Corinthians Paulista", NULL, NULL);
+    ADTListItem item = list_item_new((char *) "Sport Club Corinthians Paulista", NULL, NULL);
     g_assert(list_item_get_value(item) == item->value);
     list_item_release(item);
 }
 
 static void test_list_item_set_value_1() {
     ADTListItem item = list_item_new(NULL, NULL, NULL);
-    char *value = "Sport Club Corinthians Paulista";
+    char *value = (char *) "Sport Club Corinthians Paulista";
     list_item_set_value(item, value);
     g_assert(item->value == value);
     list_item_release(item);
@@ -108,15 +108,15 @@ static void test_list_item_next_is_2() {
 }
 
 static void test_list_item_value_is_1() {
-    char *value = "Sport Club Corinthians Paulista";
+    char *value = (char *) "Sport Club Corinthians Paulista";
     ADTListItem item = list_item_new(value, NULL, NULL);
     g_assert_cmpint(list_item_value_is(item, value), ==, 1);
     list_item_release(item);
 }
 
 static void test_list_item_value_is_2() {
-    char *value1 = "Sport Club Corinthians Paulista";
-    char *value2 = "Republica Federativa do Brasil";
+    char *value1 = (char *) "Sport Club Corinthians Paulista";
+    char *value2 = (char *) "Republica Federativa do Brasil";
     ADTListItem item = list_item_new(value1, NULL, NULL);
     g_assert_cmpint(list_item_value_is(item, value2), ==, 0);
     list_item_release(item);
@@ -139,7 +139,7 @@ static void test_list_item_next_1() {
 }
 
 static void test_list_item_value_1() {
-    ADTListItem item = list_item_new("Sport Club Corinthians Paulista", NULL, NULL);
+    ADTListItem item = list_item_new((char *) "Sport Club Corinthians Paulista", NULL, NULL);
     g_assert(list_item_value(item) == item->value);
     list_item_release(item);
 }

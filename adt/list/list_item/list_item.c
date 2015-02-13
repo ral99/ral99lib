@@ -4,7 +4,7 @@
 #include "mem/mem.h"
 
 ADTListItem list_item_new(void *value, ADTListItem prev, ADTListItem next) {
-    ADTListItem item = memalloc(sizeof(*item));
+    ADTListItem item = (ADTListItem) memalloc(sizeof(*item));
     item->value = value;
     item->prev = prev;
     item->next = next;

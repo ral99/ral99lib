@@ -118,7 +118,7 @@ static void test_server_poll_timeout_is_2() {
 }
 
 static void test_server_accept_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETServer server = server_listen(5000, POLL_TIMEOUT);
     sleep(1);
     NETConnection connected = connection_connect(address);
@@ -131,7 +131,7 @@ static void test_server_accept_1() {
 }
 
 static void test_server_push_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETServer server = server_listen(5000, POLL_TIMEOUT);
     sleep(1);
     NETConnection connected = connection_connect(address);
@@ -139,10 +139,10 @@ static void test_server_push_1() {
     NETServerConnection accepted = accept_server_connection(server->sock);
     char *id = server_connection_id(accepted);
     list_append(server->connections, accepted);
-    server_push(server, id, "Sport Club Corinthians Paulista");
+    server_push(server, id, (char *) "Sport Club Corinthians Paulista");
     ADTList out = server_connection_out(accepted);
     g_assert_cmpint(list_size(out), ==, 1);
-    g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(out, 0), ==, (char *) "Sport Club Corinthians Paulista");
     list_full_release(out, free);
     free(id);
     connection_release(connected);
@@ -152,7 +152,7 @@ static void test_server_push_1() {
 
 static void test_server_pop_1() {
     NETServer server = server_listen(5000, POLL_TIMEOUT);
-    NETMessage message = message_new("abc", "Sport Club Corinthians Paulista");
+    NETMessage message = message_new((char *) "abc", (char *) "Sport Club Corinthians Paulista");
     list_append(server->messages, message);
     g_assert(server_pop(server) == message);
     g_assert(server_pop(server) == NULL);
@@ -161,7 +161,7 @@ static void test_server_pop_1() {
 }
 
 static void test_server_loop_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETServer server = server_listen(5000, POLL_TIMEOUT);
     sleep(1);
     NETConnection connected1 = connection_connect(address);
@@ -179,10 +179,10 @@ static void test_server_loop_1() {
     list_append(server->connections, accepted1);
     list_append(server->connections, accepted2);
     g_assert_cmpint(list_size(server->connections), ==, 3);
-    server_connection_push(accepted1, "Sport Club Corinthians Paulista");
-    server_connection_push(accepted2, "Republica Federativa do Brasil");
-    connection_push(connected2, "Sport Club Corinthians Paulista");
-    connection_push(connected3, "Republica Federativa do Brasil");
+    server_connection_push(accepted1, (char *) "Sport Club Corinthians Paulista");
+    server_connection_push(accepted2, (char *) "Republica Federativa do Brasil");
+    connection_push(connected2, (char *) "Sport Club Corinthians Paulista");
+    connection_push(connected3, (char *) "Republica Federativa do Brasil");
     connection_turn_off(connected1);
     for (int i = 0; i < 2; i++) {
         connection_loop(connected1);
@@ -194,7 +194,7 @@ static void test_server_loop_1() {
     char *text = connection_pop(connected2);
     g_assert_cmpint(list_size(server->connections), ==, 2);
     g_assert_cmpint(list_size(server->messages), ==, 2);
-    g_assert_cmpstr(text, ==, "Republica Federativa do Brasil");
+    g_assert_cmpstr(text, ==, (char *) "Republica Federativa do Brasil");
     free(text);
     connection_release(connected1);
     connection_release(connected2);

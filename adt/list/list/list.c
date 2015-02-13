@@ -8,7 +8,7 @@
 #include "str/str.h"
 
 ADTList list_new() {
-    ADTList list = memalloc(sizeof(*list));
+    ADTList list = (ADTList) memalloc(sizeof(*list));
     list->head = NULL;
     list->tail = NULL;
     return list;
@@ -50,10 +50,10 @@ char *list_to_str(ADTList list, char *(*to_str)(void *)) {
     ADTList str_list = list_new();
     for (ADTListItem it = list_head(list); it; it = list_next(it)) {
         char *str = to_str(list_value(it));
-        list_append(str_list, str_escape(str, ","));
+        list_append(str_list, str_escape(str, (char *) ","));
         free(str);
     }
-    char *str = str_join(str_list, ",");
+    char *str = str_join(str_list, (char *) ",");
     list_full_release(str_list, free);
     return str;
 }

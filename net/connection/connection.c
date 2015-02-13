@@ -6,7 +6,7 @@
 #include "str/str.h"
 
 NETConnection connection_connect(NETAddress address) {
-    NETConnection connection = memalloc(sizeof(*connection));
+    NETConnection connection = (NETConnection) memalloc(sizeof(*connection));
     connection->in = list_new();
     connection->out = list_new();
     connection->sock = sock_connect(address);
@@ -14,7 +14,7 @@ NETConnection connection_connect(NETAddress address) {
 }
 
 NETConnection connection_accept(NETSock server_sock) {
-    NETConnection connection = memalloc(sizeof(*connection));
+    NETConnection connection = (NETConnection) memalloc(sizeof(*connection));
     connection->in = list_new();
     connection->out = list_new();
     connection->sock = sock_accept(server_sock);
@@ -73,11 +73,11 @@ void connection_push(NETConnection connection, char *text) {
 }
 
 char *connection_pop(NETConnection connection) {
-    return list_pop_front(connection->in);
+    return (char *) list_pop_front(connection->in);
 }
 
 void connection_send(NETConnection connection) {
-    char *text = list_at(connection->out, 0);
+    char *text = (char *) list_at(connection->out, 0);
     if (text && sock_send(connection->sock, text))
         list_full_remove_at(connection->out, 0, free);
 }
@@ -97,14 +97,19 @@ void connection_loop(NETConnection connection) {
 
 int connection_list_poll(ADTList connections, int timeout) {
     int nfds = list_size(connections);
-    int pollin[nfds], pollout[nfds];
-    NETSock socks[nfds];
+    int *pollin = (int *) memalloc(sizeof(int) * nfds);
+    int *pollout = (int *) memalloc(sizeof(int) * nfds);
+    NETSock *socks = (NETSock *) memalloc(sizeof(NETSock) * nfds);
     for (int i = 0; i < nfds; i++) {
-        NETConnection connection = list_at(connections, i);
+        NETConnection connection = (NETConnection) list_at(connections, i);
         socks[i] = connection->sock;
         pollin[i] = 1;
         pollout[i] = (list_head(connection->out)) ? 1 : 0;
     }
-    return sock_list_poll(socks, pollin, pollout, nfds, timeout);
+    int result = sock_list_poll(socks, pollin, pollout, nfds, timeout);
+    free(socks);
+    free(pollin);
+    free(pollout);
+    return result;
 }
 

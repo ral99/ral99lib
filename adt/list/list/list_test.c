@@ -21,9 +21,9 @@ static void test_list_release_1() {
 
 static void test_list_release_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -40,9 +40,9 @@ static void test_list_full_release_1() {
 
 static void test_list_full_release_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup("abc"), NULL, NULL);
-    ADTListItem list2 = list_item_new(str_dup("def"), NULL, NULL);
-    ADTListItem list3 = list_item_new(str_dup("ghi"), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) "abc"), NULL, NULL);
+    ADTListItem list2 = list_item_new(str_dup((char *) "def"), NULL, NULL);
+    ADTListItem list3 = list_item_new(str_dup((char *) "ghi"), NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -61,9 +61,9 @@ static void test_list_equals_1() {
 }
 
 static void test_list_equals_2() {
-    char *value1 = "abc";
-    char *value2 = "def";
-    char *value3 = "ghi";
+    char *value1 = (char *) "abc";
+    char *value2 = (char *) "def";
+    char *value3 = (char *) "ghi";
     ADTList list1 = list_new();
     ADTListItem list11 = list_item_new(value1, NULL, NULL);
     ADTListItem list12 = list_item_new(value2, NULL, NULL);
@@ -90,9 +90,9 @@ static void test_list_equals_2() {
 }
 
 static void test_list_equals_3() {
-    char *value1 = "abc";
-    char *value2 = "def";
-    char *value3 = "ghi";
+    char *value1 = (char *) "abc";
+    char *value2 = (char *) "def";
+    char *value3 = (char *) "ghi";
     ADTList list1 = list_new();
     ADTListItem list11 = list_item_new(value1, NULL, NULL);
     ADTListItem list12 = list_item_new(value2, NULL, NULL);
@@ -119,10 +119,10 @@ static void test_list_equals_3() {
 }
 
 static void test_list_equals_4() {
-    char *value1 = "abc";
-    char *value2 = "def";
-    char *value3 = "ghi";
-    char *value4 = "jkl";
+    char *value1 = (char *) "abc";
+    char *value2 = (char *) "def";
+    char *value3 = (char *) "ghi";
+    char *value4 = (char *) "jkl";
     ADTList list1 = list_new();
     ADTListItem list11 = list_item_new(value1, NULL, NULL);
     ADTListItem list12 = list_item_new(value2, NULL, NULL);
@@ -162,9 +162,9 @@ static void test_list_equals_cmp_1() {
 
 static void test_list_equals_cmp_2() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
-    ADTListItem list12 = list_item_new("def", NULL, NULL);
-    ADTListItem list13 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list12 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list13 = list_item_new((char *) "ghi", NULL, NULL);
     list1->head = list11;
     list1->tail = list13;
     list_item_set_next(list11, list12);
@@ -172,9 +172,9 @@ static void test_list_equals_cmp_2() {
     list_item_set_prev(list12, list11);
     list_item_set_prev(list13, list12);
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("abc", NULL, NULL);
-    ADTListItem list22 = list_item_new("def", NULL, NULL);
-    ADTListItem list23 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list22 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list23 = list_item_new((char *) "ghi", NULL, NULL);
     list2->head = list21;
     list2->tail = list23;
     list_item_set_next(list21, list22);
@@ -189,9 +189,9 @@ static void test_list_equals_cmp_2() {
 
 static void test_list_equals_cmp_3() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
-    ADTListItem list12 = list_item_new("def", NULL, NULL);
-    ADTListItem list13 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list12 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list13 = list_item_new((char *) "ghi", NULL, NULL);
     list1->head = list11;
     list1->tail = list13;
     list_item_set_next(list11, list12);
@@ -199,9 +199,9 @@ static void test_list_equals_cmp_3() {
     list_item_set_prev(list12, list11);
     list_item_set_prev(list13, list12);
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("ghi", NULL, NULL);
-    ADTListItem list22 = list_item_new("def", NULL, NULL);
-    ADTListItem list23 = list_item_new("abc", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "ghi", NULL, NULL);
+    ADTListItem list22 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list23 = list_item_new((char *) "abc", NULL, NULL);
     list2->head = list21;
     list2->tail = list23;
     list_item_set_next(list21, list22);
@@ -216,9 +216,9 @@ static void test_list_equals_cmp_3() {
 
 static void test_list_equals_cmp_4() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
-    ADTListItem list12 = list_item_new("def", NULL, NULL);
-    ADTListItem list13 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list12 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list13 = list_item_new((char *) "ghi", NULL, NULL);
     list1->head = list11;
     list1->tail = list13;
     list_item_set_next(list11, list12);
@@ -226,10 +226,10 @@ static void test_list_equals_cmp_4() {
     list_item_set_prev(list12, list11);
     list_item_set_prev(list13, list12);
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("abc", NULL, NULL);
-    ADTListItem list22 = list_item_new("def", NULL, NULL);
-    ADTListItem list23 = list_item_new("ghi", NULL, NULL);
-    ADTListItem list24 = list_item_new("jkl", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list22 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list23 = list_item_new((char *) "ghi", NULL, NULL);
+    ADTListItem list24 = list_item_new((char *) "jkl", NULL, NULL);
     list2->head = list21;
     list2->tail = list24;
     list_item_set_next(list21, list22);
@@ -247,26 +247,26 @@ static void test_list_equals_cmp_4() {
 static void test_list_to_str_1() {
     ADTList list = list_new();
     char *str = list_to_str(list, (char *(*)(void *)) str_dup);
-    g_assert_cmpstr(str, ==, "");
+    g_assert_cmpstr(str, ==, (char *) "");
     free(str);
     list_release(list);
 }
 
 static void test_list_to_str_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
     char *str = list_to_str(list, (char *(*)(void *)) str_dup);
-    g_assert_cmpstr(str, ==, "abc");
+    g_assert_cmpstr(str, ==, (char *) "abc");
     free(str);
     list_release(list);
 }
 
 static void test_list_to_str_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -274,26 +274,26 @@ static void test_list_to_str_3() {
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
     char *str = list_to_str(list, (char *(*)(void *)) str_dup);
-    g_assert_cmpstr(str, ==, "abc,def,ghi");
+    g_assert_cmpstr(str, ==, (char *) "abc,def,ghi");
     free(str);
     list_release(list);
 }
 
 static void test_list_to_str_4() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc,", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc,", NULL, NULL);
     list->head = list->tail = list1;
     char *str = list_to_str(list, (char *(*)(void *)) str_dup);
-    g_assert_cmpstr(str, ==, "abc\\,");
+    g_assert_cmpstr(str, ==, (char *) "abc\\,");
     free(str);
     list_release(list);
 }
 
 static void test_list_to_str_5() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc,", NULL, NULL);
-    ADTListItem list2 = list_item_new("def,", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi,", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc,", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def,", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi,", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -301,13 +301,13 @@ static void test_list_to_str_5() {
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
     char *str = list_to_str(list, (char *(*)(void *)) str_dup);
-    g_assert_cmpstr(str, ==, "abc\\,,def\\,,ghi\\,");
+    g_assert_cmpstr(str, ==, (char *) "abc\\,,def\\,,ghi\\,");
     free(str);
     list_release(list);
 }
 
 static void test_list_from_str_1() {
-    ADTList from_str = list_from_str("", (void *(*)(char *)) str_dup);
+    ADTList from_str = list_from_str((char *) "", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
     g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -316,9 +316,9 @@ static void test_list_from_str_1() {
 }
 
 static void test_list_from_str_2() {
-    ADTList from_str = list_from_str("abc", (void *(*)(char *)) str_dup);
+    ADTList from_str = list_from_str((char *) "abc", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
     g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -327,11 +327,11 @@ static void test_list_from_str_2() {
 }
 
 static void test_list_from_str_3() {
-    ADTList from_str = list_from_str("abc,def,ghi", (void *(*)(char *)) str_dup);
+    ADTList from_str = list_from_str((char *) "abc,def,ghi", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -345,9 +345,9 @@ static void test_list_from_str_3() {
 }
 
 static void test_list_from_str_4() {
-    ADTList from_str = list_from_str("abc\\,", (void *(*)(char *)) str_dup);
+    ADTList from_str = list_from_str((char *) "abc\\,", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc,", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc,", NULL, NULL);
     list->head = list->tail = list1;
     g_assert_cmpint(list_equals_cmp(list, from_str, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -356,11 +356,11 @@ static void test_list_from_str_4() {
 }
 
 static void test_list_from_str_5() {
-    ADTList from_str = list_from_str("abc\\,,def\\,,ghi\\,", (void *(*)(char *)) str_dup);
+    ADTList from_str = list_from_str((char *) "abc\\,,def\\,,ghi\\,", (void *(*)(char *)) str_dup);
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc,", NULL, NULL);
-    ADTListItem list2 = list_item_new("def,", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi,", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc,", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def,", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi,", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -383,7 +383,7 @@ static void test_list_dup_1() {
 
 static void test_list_dup_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
     ADTList dup = list_dup(list);
     g_assert_cmpint(list_equals(list, dup), ==, 1);
@@ -393,9 +393,9 @@ static void test_list_dup_2() {
 
 static void test_list_dup_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -410,9 +410,9 @@ static void test_list_dup_3() {
 
 static void test_list_get_head_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     g_assert(list_get_head(list) == list->head);
     list->head = list1;
     list->tail = list3;
@@ -435,9 +435,9 @@ static void test_list_set_head_1() {
 
 static void test_list_get_tail_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     g_assert(list_get_tail(list) == list->tail);
     list->head = list1;
     list->tail = list3;
@@ -475,16 +475,16 @@ static void test_list_next_1() {
 }
 
 static void test_list_value_1() {
-    ADTListItem item = list_item_new("Sport Club Corinthians Paulista", NULL, NULL); 
+    ADTListItem item = list_item_new((char *) "Sport Club Corinthians Paulista", NULL, NULL); 
     g_assert(list_value(item) == item->value);
     list_item_release(item);
 }
 
 static void test_list_head_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     g_assert(list_head(list) == list->head);
     list->head = list1;
     list->tail = list3;
@@ -498,9 +498,9 @@ static void test_list_head_1() {
 
 static void test_list_tail_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     g_assert(list_tail(list) == list->tail);
     list->head = list1;
     list->tail = list3;
@@ -520,9 +520,9 @@ static void test_list_size_1() {
 
 static void test_list_size_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -542,9 +542,9 @@ static void test_list_item_at_1() {
 
 static void test_list_item_at_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -571,22 +571,22 @@ static void test_list_at_1() {
 
 static void test_list_at_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert_cmpstr(list_at(list, 0), ==, "abc");
-    g_assert_cmpstr(list_at(list, 1), ==, "def");
-    g_assert_cmpstr(list_at(list, 2), ==, "ghi");
+    g_assert_cmpstr((char *) list_at(list, 0), ==, (char *) "abc");
+    g_assert_cmpstr((char *) list_at(list, 1), ==, (char *) "def");
+    g_assert_cmpstr((char *) list_at(list, 2), ==, (char *) "ghi");
     g_assert(list_at(list, 3) == NULL);
-    g_assert_cmpstr(list_at(list, -1), ==, "ghi");
-    g_assert_cmpstr(list_at(list, -2), ==, "def");
-    g_assert_cmpstr(list_at(list, -3), ==, "abc");
+    g_assert_cmpstr((char *) list_at(list, -1), ==, (char *) "ghi");
+    g_assert_cmpstr((char *) list_at(list, -2), ==, (char *) "def");
+    g_assert_cmpstr((char *) list_at(list, -3), ==, (char *) "abc");
     g_assert(list_at(list, -4) ==  NULL);
     list_release(list);
 }
@@ -599,9 +599,9 @@ static void test_list_random_item_1() {
 
 static void test_list_random_item_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -621,25 +621,25 @@ static void test_list_random_1() {
 
 static void test_list_random_2() {
     ADTList list = list_new();
-    ADTListItem item = list_item_new("abc", NULL, NULL);
+    ADTListItem item = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = item;
-    g_assert_cmpstr(list_random(list), ==, "abc");
+    g_assert_cmpstr((char *) list_random(list), ==, (char *) "abc");
     list_release(list);
 }
 
 static void test_list_insert_before_item_1() {
     ADTList list = list_new();
-    list_insert_before_item(list, "4", NULL);
-    list_insert_before_item(list, "1", list->head);
-    list_insert_before_item(list, "2", list->head->next);
-    list_insert_before_item(list, "3", list->tail);
-    list_insert_before_item(list, "5", NULL);
+    list_insert_before_item(list, (char *) "4", NULL);
+    list_insert_before_item(list, (char *) "1", list->head);
+    list_insert_before_item(list, (char *) "2", list->head->next);
+    list_insert_before_item(list, (char *) "3", list->tail);
+    list_insert_before_item(list, (char *) "5", NULL);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("1", NULL, NULL);
-    ADTListItem result2 = list_item_new("2", NULL, NULL);
-    ADTListItem result3 = list_item_new("3", NULL, NULL);
-    ADTListItem result4 = list_item_new("4", NULL, NULL);
-    ADTListItem result5 = list_item_new("5", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "1", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "2", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "3", NULL, NULL);
+    ADTListItem result4 = list_item_new((char *) "4", NULL, NULL);
+    ADTListItem result5 = list_item_new((char *) "5", NULL, NULL);
     result->head = result1;
     result->tail = result5;
     list_item_set_next(result1, result2);
@@ -658,17 +658,17 @@ static void test_list_insert_before_item_1() {
 
 static void test_list_insert_after_item_1() {
     ADTList list = list_new();
-    list_insert_after_item(list, "2", NULL);
-    list_insert_after_item(list, "3", list->head);
-    list_insert_after_item(list, "4", list->head->next);
-    list_insert_after_item(list, "5", list->tail);
-    list_insert_after_item(list, "1", NULL);
+    list_insert_after_item(list, (char *) "2", NULL);
+    list_insert_after_item(list, (char *) "3", list->head);
+    list_insert_after_item(list, (char *) "4", list->head->next);
+    list_insert_after_item(list, (char *) "5", list->tail);
+    list_insert_after_item(list, (char *) "1", NULL);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("1", NULL, NULL);
-    ADTListItem result2 = list_item_new("2", NULL, NULL);
-    ADTListItem result3 = list_item_new("3", NULL, NULL);
-    ADTListItem result4 = list_item_new("4", NULL, NULL);
-    ADTListItem result5 = list_item_new("5", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "1", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "2", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "3", NULL, NULL);
+    ADTListItem result4 = list_item_new((char *) "4", NULL, NULL);
+    ADTListItem result5 = list_item_new((char *) "5", NULL, NULL);
     result->head = result1;
     result->tail = result5;
     list_item_set_next(result1, result2);
@@ -687,17 +687,17 @@ static void test_list_insert_after_item_1() {
 
 static void test_list_insert_1() {
     ADTList list = list_new();
-    list_insert(list, "1", 0);
-    list_insert(list, "2", 1);
-    list_insert(list, "3", 2);
-    list_insert(list, "4", 3);
-    list_insert(list, "5", 4);
+    list_insert(list, (char *) "1", 0);
+    list_insert(list, (char *) "2", 1);
+    list_insert(list, (char *) "3", 2);
+    list_insert(list, (char *) "4", 3);
+    list_insert(list, (char *) "5", 4);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("1", NULL, NULL);
-    ADTListItem result2 = list_item_new("2", NULL, NULL);
-    ADTListItem result3 = list_item_new("3", NULL, NULL);
-    ADTListItem result4 = list_item_new("4", NULL, NULL);
-    ADTListItem result5 = list_item_new("5", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "1", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "2", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "3", NULL, NULL);
+    ADTListItem result4 = list_item_new((char *) "4", NULL, NULL);
+    ADTListItem result5 = list_item_new((char *) "5", NULL, NULL);
     result->head = result1;
     result->tail = result5;
     list_item_set_next(result1, result2);
@@ -716,17 +716,17 @@ static void test_list_insert_1() {
 
 static void test_list_insert_2() {
     ADTList list = list_new();
-    list_insert(list, "2", -10);
-    list_insert(list, "3", -1);
-    list_insert(list, "1", -3);
-    list_insert(list, "4", 3);
-    list_insert(list, "5", 10);
+    list_insert(list, (char *) "2", -10);
+    list_insert(list, (char *) "3", -1);
+    list_insert(list, (char *) "1", -3);
+    list_insert(list, (char *) "4", 3);
+    list_insert(list, (char *) "5", 10);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("1", NULL, NULL);
-    ADTListItem result2 = list_item_new("2", NULL, NULL);
-    ADTListItem result3 = list_item_new("3", NULL, NULL);
-    ADTListItem result4 = list_item_new("4", NULL, NULL);
-    ADTListItem result5 = list_item_new("5", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "1", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "2", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "3", NULL, NULL);
+    ADTListItem result4 = list_item_new((char *) "4", NULL, NULL);
+    ADTListItem result5 = list_item_new((char *) "5", NULL, NULL);
     result->head = result1;
     result->tail = result5;
     list_item_set_next(result1, result2);
@@ -745,13 +745,13 @@ static void test_list_insert_2() {
 
 static void test_list_prepend_1() {
     ADTList list = list_new();
-    list_prepend(list, "ghi");
-    list_prepend(list, "def");
-    list_prepend(list, "abc");
+    list_prepend(list, (char *) "ghi");
+    list_prepend(list, (char *) "def");
+    list_prepend(list, (char *) "abc");
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
-    ADTListItem result2 = list_item_new("def", NULL, NULL);
-    ADTListItem result3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "ghi", NULL, NULL);
     result->head = result1;
     result->tail = result3;
     list_item_set_next(result1, result2);
@@ -766,13 +766,13 @@ static void test_list_prepend_1() {
 
 static void test_list_append_1() {
     ADTList list = list_new();
-    list_append(list, "abc");
-    list_append(list, "def");
-    list_append(list, "ghi");
+    list_append(list, (char *) "abc");
+    list_append(list, (char *) "def");
+    list_append(list, (char *) "ghi");
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
-    ADTListItem result2 = list_item_new("def", NULL, NULL);
-    ADTListItem result3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "ghi", NULL, NULL);
     result->head = result1;
     result->tail = result3;
     list_item_set_next(result1, result2);
@@ -787,9 +787,9 @@ static void test_list_append_1() {
 
 static void test_list_remove_item_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -799,7 +799,7 @@ static void test_list_remove_item_1() {
     list_remove_item(list, list->head);
     list_remove_item(list, list->tail);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -809,9 +809,9 @@ static void test_list_remove_item_1() {
 
 static void test_list_remove_full_item_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup("abc"), NULL, NULL);
-    ADTListItem list2 = list_item_new(str_dup("def"), NULL, NULL);
-    ADTListItem list3 = list_item_new(str_dup("ghi"), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) "abc"), NULL, NULL);
+    ADTListItem list2 = list_item_new(str_dup((char *) "def"), NULL, NULL);
+    ADTListItem list3 = list_item_new(str_dup((char *) "ghi"), NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -821,7 +821,7 @@ static void test_list_remove_full_item_1() {
     list_remove_full_item(list, list->head, free);
     list_remove_full_item(list, list->tail, free);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -831,9 +831,9 @@ static void test_list_remove_full_item_1() {
 
 static void test_list_remove_at_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -843,7 +843,7 @@ static void test_list_remove_at_1() {
     list_remove_at(list, 0);
     list_remove_at(list, -1);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -853,9 +853,9 @@ static void test_list_remove_at_1() {
 
 static void test_list_full_remove_at_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup("abc"), NULL, NULL);
-    ADTListItem list2 = list_item_new(str_dup("def"), NULL, NULL);
-    ADTListItem list3 = list_item_new(str_dup("ghi"), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) "abc"), NULL, NULL);
+    ADTListItem list2 = list_item_new(str_dup((char *) "def"), NULL, NULL);
+    ADTListItem list3 = list_item_new(str_dup((char *) "ghi"), NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -865,7 +865,7 @@ static void test_list_full_remove_at_1() {
     list_full_remove_at(list, 0, free);
     list_full_remove_at(list, -1, free);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -874,9 +874,9 @@ static void test_list_full_remove_at_1() {
 }
 
 static void test_list_remove_1() {
-    char *value1 = "abc";
-    char *value2 = "def";
-    char *value3 = "ghi";
+    char *value1 = (char *) "abc";
+    char *value2 = (char *) "def";
+    char *value3 = (char *) "ghi";
     ADTList list = list_new();
     ADTListItem list1 = list_item_new(value1, NULL, NULL);
     ADTListItem list2 = list_item_new(value2, NULL, NULL);
@@ -899,9 +899,9 @@ static void test_list_remove_1() {
 }
 
 static void test_list_full_remove_1() {
-    char *value1 = str_dup("abc");
-    char *value2 = str_dup("def");
-    char *value3 = str_dup("ghi");
+    char *value1 = str_dup((char *) "abc");
+    char *value2 = str_dup((char *) "def");
+    char *value3 = str_dup((char *) "ghi");
     ADTList list = list_new();
     ADTListItem list1 = list_item_new(value1, NULL, NULL);
     ADTListItem list2 = list_item_new(value2, NULL, NULL);
@@ -925,19 +925,19 @@ static void test_list_full_remove_1() {
 
 static void test_list_remove_cmp_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    list_remove_cmp(list, (int (*)(void *, void *)) str_equals, "abc");
-    list_remove_cmp(list, (int (*)(void *, void *)) str_equals, "ghi");
+    list_remove_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "abc");
+    list_remove_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "ghi");
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -947,19 +947,19 @@ static void test_list_remove_cmp_1() {
 
 static void test_list_full_remove_cmp_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup("abc"), NULL, NULL);
-    ADTListItem list2 = list_item_new(str_dup("def"), NULL, NULL);
-    ADTListItem list3 = list_item_new(str_dup("ghi"), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) "abc"), NULL, NULL);
+    ADTListItem list2 = list_item_new(str_dup((char *) "def"), NULL, NULL);
+    ADTListItem list3 = list_item_new(str_dup((char *) "ghi"), NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    list_full_remove_cmp(list, (int (*)(void *, void *)) str_equals, "abc", free);
-    list_full_remove_cmp(list, (int (*)(void *, void *)) str_equals, "ghi", free);
+    list_full_remove_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "abc", free);
+    list_full_remove_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "ghi", free);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -976,19 +976,19 @@ static void test_list_pop_front_1() {
 
 static void test_list_pop_front_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert_cmpstr(list_pop_front(list), ==, "abc");
+    g_assert_cmpstr((char *) list_pop_front(list), ==, (char *) "abc");
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("def", NULL, NULL);
-    ADTListItem result2 = list_item_new("ghi", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "ghi", NULL, NULL);
     result->head = result1;
     result->tail = result2;
     list_item_set_next(result1, result2);
@@ -1008,19 +1008,19 @@ static void test_list_pop_back_1() {
 
 static void test_list_pop_back_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert_cmpstr(list_pop_back(list), ==, "ghi");
+    g_assert_cmpstr((char *) list_pop_back(list), ==, (char *) "ghi");
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
-    ADTListItem result2 = list_item_new("def", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "def", NULL, NULL);
     result->head = result1;
     result->tail = result2;
     list_item_set_next(result1, result2);
@@ -1040,9 +1040,9 @@ static void test_list_pop_random_1() {
 
 static void test_list_pop_random_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
-    g_assert_cmpstr(list_pop_random(list), ==, "abc");
+    g_assert_cmpstr((char *) list_pop_random(list), ==, (char *) "abc");
     g_assert(list->head == NULL && list->tail == NULL);
     list_release(list);
 }
@@ -1056,9 +1056,9 @@ static void test_list_clear_1() {
 
 static void test_list_clear_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1079,9 +1079,9 @@ static void test_list_full_clear_1() {
 
 static void test_list_full_clear_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup("abc"), NULL, NULL);
-    ADTListItem list2 = list_item_new(str_dup("def"), NULL, NULL);
-    ADTListItem list3 = list_item_new(str_dup("ghi"), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) "abc"), NULL, NULL);
+    ADTListItem list2 = list_item_new(str_dup((char *) "def"), NULL, NULL);
+    ADTListItem list3 = list_item_new(str_dup((char *) "ghi"), NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1108,11 +1108,11 @@ static void test_list_extend_1() {
 static void test_list_extend_2() {
     ADTList list1 = list_new();
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("abc", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "abc", NULL, NULL);
     list2->head = list2->tail = list21;
     list_extend(list1, list2);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list1, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -1123,12 +1123,12 @@ static void test_list_extend_2() {
 
 static void test_list_extend_3() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
     list1->head = list1->tail = list11;
     ADTList list2 = list_new();
     list_extend(list1, list2);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list1, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -1139,20 +1139,20 @@ static void test_list_extend_3() {
 
 static void test_list_extend_4() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
     list1->head = list1->tail = list11;
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("def", NULL, NULL);
-    ADTListItem list22 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list22 = list_item_new((char *) "ghi", NULL, NULL);
     list_item_set_next(list21, list22);
     list_item_set_prev(list22, list21);
     list2->head = list21;
     list2->tail = list22;
     list_extend(list1, list2);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
-    ADTListItem result2 = list_item_new("def", NULL, NULL);
-    ADTListItem result3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "ghi", NULL, NULL);
     result->head = result1;
     result->tail = result3;
     list_item_set_next(result1, result2);
@@ -1176,11 +1176,11 @@ static void test_list_map_1() {
 
 static void test_list_map_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
     ADTList map = list_map(list, (void *(*)(void *)) str_reverse);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("cba", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "cba", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(map, result, (int (*)(void *, void *)) str_equals), ==, 1);
     list_release(list);
@@ -1190,9 +1190,9 @@ static void test_list_map_2() {
 
 static void test_list_map_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1201,9 +1201,9 @@ static void test_list_map_3() {
     list_item_set_prev(list3, list2);
     ADTList map = list_map(list, (void *(*)(void *)) str_reverse);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("cba", NULL, NULL);
-    ADTListItem result2 = list_item_new("fed", NULL, NULL);
-    ADTListItem result3 = list_item_new("ihg", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "cba", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "fed", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "ihg", NULL, NULL);
     result->head = result1;
     result->tail = result3;
     list_item_set_next(result1, result2);
@@ -1218,15 +1218,15 @@ static void test_list_map_3() {
 
 static void test_list_find_1() {
     ADTList list = list_new();
-    g_assert(list_find(list, "abc") == NULL);
+    g_assert(list_find(list, (char *) "abc") == NULL);
     list_release(list);
 }
 
 static void test_list_find_2() {
-    char *value1 = "abc";
-    char *value2 = "def";
-    char *value3 = "ghi";
-    char *value4 = "jkl";
+    char *value1 = (char *) "abc";
+    char *value2 = (char *) "def";
+    char *value3 = (char *) "ghi";
+    char *value4 = (char *) "jkl";
     ADTList list = list_new();
     ADTListItem list1 = list_item_new(value1, NULL, NULL);
     ADTListItem list2 = list_item_new(value2, NULL, NULL);
@@ -1242,9 +1242,9 @@ static void test_list_find_2() {
 }
 
 static void test_list_find_3() {
-    char *value1 = "abc";
-    char *value2 = "def";
-    char *value3 = "ghi";
+    char *value1 = (char *) "abc";
+    char *value2 = (char *) "def";
+    char *value3 = (char *) "ghi";
     ADTList list = list_new();
     ADTListItem list1 = list_item_new(value1, NULL, NULL);
     ADTListItem list2 = list_item_new(value2, NULL, NULL);
@@ -1261,37 +1261,40 @@ static void test_list_find_3() {
 
 static void test_list_find_cmp_1() {
     ADTList list = list_new();
-    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "abc") == NULL);
+    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "abc") ==
+             NULL);
     list_release(list);
 }
 
 static void test_list_find_cmp_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "jkl") == NULL);
+    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "jkl") ==
+             NULL);
     list_release(list);
 }
 
 static void test_list_find_cmp_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
     list_item_set_next(list2, list3);
     list_item_set_prev(list2, list1);
     list_item_set_prev(list3, list2);
-    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, "abc") == list1);
+    g_assert(list_find_cmp(list, (int (*)(void *, void *)) str_equals, (char *) "abc") ==
+             list1);
     list_release(list);
 }
 
@@ -1304,7 +1307,7 @@ static void test_list_index_1() {
 
 static void test_list_index_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
     g_assert_cmpint(list_index(list, list->head), ==, 0);
     g_assert_cmpint(list_index(list, list->tail), ==, 0);
@@ -1313,9 +1316,9 @@ static void test_list_index_2() {
 
 static void test_list_index_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1336,7 +1339,7 @@ static void test_list_min_1() {
 
 static void test_list_min_2() {
     ADTList list = list_new();
-    ADTListItem item = list_item_new("abc", NULL, NULL);
+    ADTListItem item = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = item;
     g_assert_cmpint(list_min(list, (int (*)(void *)) strlen), ==, 3);
     list_release(list);
@@ -1344,9 +1347,9 @@ static void test_list_min_2() {
 
 static void test_list_min_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("a", NULL, NULL);
-    ADTListItem list2 = list_item_new("ab", NULL, NULL);
-    ADTListItem list3 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "a", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "ab", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1365,7 +1368,7 @@ static void test_list_max_1() {
 
 static void test_list_max_2() {
     ADTList list = list_new();
-    ADTListItem item = list_item_new("abc", NULL, NULL);
+    ADTListItem item = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = item;
     g_assert_cmpint(list_max(list, (int (*)(void *)) strlen), ==, 3);
     list_release(list);
@@ -1373,9 +1376,9 @@ static void test_list_max_2() {
 
 static void test_list_max_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("a", NULL, NULL);
-    ADTListItem list2 = list_item_new("ab", NULL, NULL);
-    ADTListItem list3 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "a", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "ab", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1395,11 +1398,11 @@ static void test_list_reverse_1() {
 
 static void test_list_reverse_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
     list->head = list->tail = list1;
     list_reverse(list);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -1409,9 +1412,9 @@ static void test_list_reverse_2() {
 
 static void test_list_reverse_3() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("abc", NULL, NULL);
-    ADTListItem list2 = list_item_new("def", NULL, NULL);
-    ADTListItem list3 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "ghi", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1420,9 +1423,9 @@ static void test_list_reverse_3() {
     list_item_set_prev(list3, list2);
     list_reverse(list);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("ghi", NULL, NULL);
-    ADTListItem result2 = list_item_new("def", NULL, NULL);
-    ADTListItem result3 = list_item_new("abc", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "ghi", NULL, NULL);
+    ADTListItem result2 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem result3 = list_item_new((char *) "abc", NULL, NULL);
     result->head = result1;
     result->tail = result3;
     list_item_set_next(result1, result2);
@@ -1444,10 +1447,10 @@ static void test_list_foreach_1() {
 
 static void test_list_foreach_2() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
     list1->head = list1->tail = list11;
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("abc", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "abc", NULL, NULL);
     list2->head = list2->tail = list21;
     ADTList list3 = list_new();
     ADTListItem list31 = list_item_new(list1, NULL, NULL);
@@ -1458,10 +1461,10 @@ static void test_list_foreach_2() {
     list_item_set_prev(list32, list31);
     list_foreach(list3, (void (*)(void *)) list_reverse);
     ADTList list4 = list_new();
-    ADTListItem list41 = list_item_new("abc", NULL, NULL);
+    ADTListItem list41 = list_item_new((char *) "abc", NULL, NULL);
     list4->head = list4->tail = list41;
     ADTList list5 = list_new();
-    ADTListItem list51 = list_item_new("abc", NULL, NULL);
+    ADTListItem list51 = list_item_new((char *) "abc", NULL, NULL);
     list5->head = list5->tail = list51;
     g_assert_cmpint(list_equals_cmp(list1, list5, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -1476,9 +1479,9 @@ static void test_list_foreach_2() {
 
 static void test_list_foreach_3() {
     ADTList list1 = list_new();
-    ADTListItem list11 = list_item_new("abc", NULL, NULL);
-    ADTListItem list12 = list_item_new("def", NULL, NULL);
-    ADTListItem list13 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list11 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list12 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list13 = list_item_new((char *) "ghi", NULL, NULL);
     list1->head = list11;
     list1->tail = list13;
     list_item_set_next(list11, list12);
@@ -1486,9 +1489,9 @@ static void test_list_foreach_3() {
     list_item_set_prev(list12, list11);
     list_item_set_prev(list13, list12);
     ADTList list2 = list_new();
-    ADTListItem list21 = list_item_new("ghi", NULL, NULL);
-    ADTListItem list22 = list_item_new("def", NULL, NULL);
-    ADTListItem list23 = list_item_new("abc", NULL, NULL);
+    ADTListItem list21 = list_item_new((char *) "ghi", NULL, NULL);
+    ADTListItem list22 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list23 = list_item_new((char *) "abc", NULL, NULL);
     list2->head = list21;
     list2->tail = list23;
     list_item_set_next(list21, list22);
@@ -1504,9 +1507,9 @@ static void test_list_foreach_3() {
     list_item_set_prev(list32, list31);
     list_foreach(list3, (void (*)(void *)) list_reverse);
     ADTList list4 = list_new();
-    ADTListItem list41 = list_item_new("abc", NULL, NULL);
-    ADTListItem list42 = list_item_new("def", NULL, NULL);
-    ADTListItem list43 = list_item_new("ghi", NULL, NULL);
+    ADTListItem list41 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list42 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list43 = list_item_new((char *) "ghi", NULL, NULL);
     list4->head = list41;
     list4->tail = list43;
     list_item_set_next(list41, list42);
@@ -1514,9 +1517,9 @@ static void test_list_foreach_3() {
     list_item_set_prev(list42, list41);
     list_item_set_prev(list43, list42);
     ADTList list5 = list_new();
-    ADTListItem list51 = list_item_new("ghi", NULL, NULL);
-    ADTListItem list52 = list_item_new("def", NULL, NULL);
-    ADTListItem list53 = list_item_new("abc", NULL, NULL);
+    ADTListItem list51 = list_item_new((char *) "ghi", NULL, NULL);
+    ADTListItem list52 = list_item_new((char *) "def", NULL, NULL);
+    ADTListItem list53 = list_item_new((char *) "abc", NULL, NULL);
     list5->head = list51;
     list5->tail = list53;
     list_item_set_next(list51, list52);
@@ -1543,9 +1546,9 @@ static void test_list_filter_1() {
 
 static void test_list_filter_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new("", NULL, NULL);
-    ADTListItem list2 = list_item_new("abc", NULL, NULL);
-    ADTListItem list3 = list_item_new("", NULL, NULL);
+    ADTListItem list1 = list_item_new((char *) "", NULL, NULL);
+    ADTListItem list2 = list_item_new((char *) "abc", NULL, NULL);
+    ADTListItem list3 = list_item_new((char *) "", NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1554,7 +1557,7 @@ static void test_list_filter_2() {
     list_item_set_prev(list3, list2);
     list_filter(list, (int (*)(void *)) strlen);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);
@@ -1564,7 +1567,7 @@ static void test_list_filter_2() {
 
 static void test_list_full_filter_1() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup(""), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) ""), NULL, NULL);
     list->head = list->tail = list1;
     list_full_filter(list, (int (*)(void *)) strlen, free);
     g_assert(list->head == NULL && list->tail == NULL);
@@ -1573,9 +1576,9 @@ static void test_list_full_filter_1() {
 
 static void test_list_full_filter_2() {
     ADTList list = list_new();
-    ADTListItem list1 = list_item_new(str_dup(""), NULL, NULL);
-    ADTListItem list2 = list_item_new(str_dup("abc"), NULL, NULL);
-    ADTListItem list3 = list_item_new(str_dup(""), NULL, NULL);
+    ADTListItem list1 = list_item_new(str_dup((char *) ""), NULL, NULL);
+    ADTListItem list2 = list_item_new(str_dup((char *) "abc"), NULL, NULL);
+    ADTListItem list3 = list_item_new(str_dup((char *) ""), NULL, NULL);
     list->head = list1;
     list->tail = list3;
     list_item_set_next(list1, list2);
@@ -1584,7 +1587,7 @@ static void test_list_full_filter_2() {
     list_item_set_prev(list3, list2);
     list_full_filter(list, (int (*)(void *)) strlen, free);
     ADTList result = list_new();
-    ADTListItem result1 = list_item_new("abc", NULL, NULL);
+    ADTListItem result1 = list_item_new((char *) "abc", NULL, NULL);
     result->head = result->tail = result1;
     g_assert_cmpint(list_equals_cmp(list, result, (int (*)(void *, void *)) str_equals), ==,
                     1);

@@ -10,7 +10,7 @@
 #include "str/str.h"
 
 NETAddress address_new(char *ip, int port) {
-    NETAddress address = memalloc(sizeof(*address));
+    NETAddress address = (NETAddress) memalloc(sizeof(*address));
     address->ip = str_dup(ip);
     address->port = port;
     return address;
@@ -37,8 +37,8 @@ char *address_to_str(NETAddress address) {
 
 NETAddress address_from_str(char *str) {
     ADTList address_list = list_from_str(str, (void *(*)(char *)) str_dup);
-    char *ip = list_at(address_list, 0);
-    int port = int_from_str(list_at(address_list, 1));
+    char *ip = (char *) list_at(address_list, 0);
+    int port = int_from_str((char *) list_at(address_list, 1));
     NETAddress address = address_new(ip, port);
     list_full_release(address_list, free);
     return address;
@@ -81,7 +81,7 @@ int address_port(NETAddress address) {
 }
 
 struct sockaddr *address_sockaddr(NETAddress address) {
-    struct sockaddr_in *sockaddr = memalloc(sizeof(*sockaddr));
+    struct sockaddr_in *sockaddr = (struct sockaddr_in*) memalloc(sizeof(*sockaddr));
     memset(sockaddr, 0, sizeof(*sockaddr));
     sockaddr->sin_family = AF_INET;
     sockaddr->sin_addr.s_addr = inet_addr(address->ip);

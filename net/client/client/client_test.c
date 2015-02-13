@@ -89,9 +89,9 @@ static void test_client_poll_timeout_is_2() {
 
 static void test_client_get_connection_1() {
     NETClient client = client_new(CONNECTION_LIFE, POLL_TIMEOUT);
-    NETAddress address1 = address_new("127.0.0.1", 5000);
-    NETAddress address2 = address_new("127.0.0.1", 5001);
-    NETAddress address3 = address_new("127.0.0.1", 5002);
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
+    NETAddress address2 = address_new((char *) "127.0.0.1", 5001);
+    NETAddress address3 = address_new((char *) "127.0.0.1", 5002);
     NETClientConnection client_connection1 = connect_client_connection(address1,
                                                               CONNECTION_LIFE);
     NETClientConnection client_connection2 = connect_client_connection(address2,
@@ -112,10 +112,10 @@ static void test_client_get_connection_1() {
 
 static void test_client_get_or_create_connection_1() {
     NETClient client = client_new(CONNECTION_LIFE, POLL_TIMEOUT);
-    NETAddress address1 = address_new("127.0.0.1", 5000);
-    NETAddress address2 = address_new("127.0.0.1", 5001);
-    NETAddress address3 = address_new("127.0.0.1", 5002);
-    NETAddress address4 = address_new("127.0.0.1", 5003);
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
+    NETAddress address2 = address_new((char *) "127.0.0.1", 5001);
+    NETAddress address3 = address_new((char *) "127.0.0.1", 5002);
+    NETAddress address4 = address_new((char *) "127.0.0.1", 5003);
     NETClientConnection client_connection1 = connect_client_connection(address1,
                                                               CONNECTION_LIFE);
     NETClientConnection client_connection2 = connect_client_connection(address2,
@@ -136,9 +136,9 @@ static void test_client_get_or_create_connection_1() {
 
 static void test_client_push_1() {
     NETClient client = client_new(CONNECTION_LIFE, POLL_TIMEOUT);
-    NETAddress address1 = address_new("127.0.0.1", 5000);
-    NETAddress address2 = address_new("127.0.0.1", 5001);
-    NETAddress address3 = address_new("127.0.0.1", 5002);
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
+    NETAddress address2 = address_new((char *) "127.0.0.1", 5001);
+    NETAddress address3 = address_new((char *) "127.0.0.1", 5002);
     NETClientConnection client_connection1 = connect_client_connection(address1,
                                                               CONNECTION_LIFE);
     NETClientConnection client_connection2 = connect_client_connection(address2,
@@ -148,10 +148,10 @@ static void test_client_push_1() {
     list_append(client->connections, client_connection1);
     list_append(client->connections, client_connection2);
     list_append(client->connections, client_connection3);
-    client_push(client, address1, "Sport Club Corinthians Paulista");
+    client_push(client, address1, (char *) "Sport Club Corinthians Paulista");
     ADTList out = client_connection_out(client_connection1);
     g_assert_cmpint(list_size(out), ==, 1);
-    g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(out, 0), ==, (char *) "Sport Club Corinthians Paulista");
     list_full_release(out, free);
     address_release(address1);
     address_release(address2);
@@ -163,9 +163,9 @@ static void test_client_loop_1() {
     NETClient client = client_new(CONNECTION_LIFE, POLL_TIMEOUT);
     NETSock server = sock_listen(5000);
     sleep(1);
-    NETAddress address1 = address_new("127.0.0.1", 5000);
-    NETAddress address2 = address_new("127.0.0.1", 5001);
-    NETAddress address3 = address_new("127.0.0.1", 5002);
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
+    NETAddress address2 = address_new((char *) "127.0.0.1", 5001);
+    NETAddress address3 = address_new((char *) "127.0.0.1", 5002);
     NETClientConnection client_connection1 = connect_client_connection(address1,
                                                               CONNECTION_LIFE);
     sleep(1);
@@ -178,8 +178,8 @@ static void test_client_loop_1() {
                                                               CONNECTION_LIFE);
     sleep(1);
     NETConnection accepted3 = connection_accept(server);
-    client_connection_push(client_connection1, "Sport Club Corinthians Paulista");
-    connection_push(accepted2, "Republica Federativa do Brasil");
+    client_connection_push(client_connection1, (char *) "Sport Club Corinthians Paulista");
+    connection_push(accepted2, (char *) "Republica Federativa do Brasil");
     list_append(client->connections, client_connection1);
     list_append(client->connections, client_connection2);
     list_append(client->connections, client_connection3);
@@ -200,7 +200,7 @@ static void test_client_loop_1() {
     g_assert(connection_pop(accepted1) == NULL);
     g_assert(connection_pop(accepted2) == NULL);
     g_assert(connection_pop(accepted3) == NULL);
-    g_assert_cmpstr(text, ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr(text, ==, (char *) "Sport Club Corinthians Paulista");
     free(text);
     list_full_release(out1, free);
     list_full_release(out2, free);

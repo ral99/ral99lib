@@ -14,7 +14,7 @@ double deg_to_rad(double deg) {
 }
 
 CGVector vector_new(double x, double y) {
-    CGVector vector = memalloc(sizeof(*vector));
+    CGVector vector = (CGVector) memalloc(sizeof(*vector));
     vector->x = x;
     vector->y = y;
     return vector;
@@ -35,7 +35,7 @@ int vector_equals(CGVector vector1, CGVector vector2) {
 }
 
 CGVector vector_dup(CGVector vector) {
-    CGVector dup = memalloc(sizeof(*dup));
+    CGVector dup = (CGVector) memalloc(sizeof(*dup));
     dup->x = vector->x;
     dup->y = vector->y;
     return dup;
@@ -43,20 +43,22 @@ CGVector vector_dup(CGVector vector) {
 
 char *vector_to_str(CGVector vector, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Vector: ("));
+    list_append(str_list, str_dup((char *) "<< Vector: ("));
     list_append(str_list, double_to_str(vector->x, decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(vector->y, decimal_positions));
-    list_append(str_list, str_dup(") >>"));
-    char *str = str_join(str_list, "");
+    list_append(str_list, str_dup((char *) ") >>"));
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGVector vector_from_str(char *str) {
-    ADTList str_list = str_split(str, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 12, strlen(list_at(str_list, 0)) - 12);
-    char *str_y = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 4);
+    ADTList str_list = str_split(str, (char *) ", ");
+    char *str_x = str_substr((char *) list_at(str_list, 0), 12,
+                             strlen((char *) list_at(str_list, 0)) - 12);
+    char *str_y = str_substr((char *) list_at(str_list, 1), 0,
+                             strlen((char *) list_at(str_list, 1)) - 4);
     CGVector vector = vector_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -130,7 +132,7 @@ void vector_rotate(CGVector vector, double deg) {
 }
 
 CGPoint point_new(double x, double y) {
-    CGPoint point = memalloc(sizeof(*point));
+    CGPoint point = (CGPoint) memalloc(sizeof(*point));
     point->w = 1;
     point->x = x;
     point->y = y;
@@ -147,7 +149,7 @@ int point_equals(CGPoint point1, CGPoint point2) {
 }
 
 CGPoint point_dup(CGPoint point) {
-    CGPoint dup = memalloc(sizeof(*dup));
+    CGPoint dup = (CGPoint) memalloc(sizeof(*dup));
     dup->w = point->w;
     dup->x = point->x;
     dup->y = point->y;
@@ -156,20 +158,22 @@ CGPoint point_dup(CGPoint point) {
 
 char *point_to_str(CGPoint point, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Point: ("));
+    list_append(str_list, str_dup((char *) "<< Point: ("));
     list_append(str_list, double_to_str(point_x(point), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(point), decimal_positions));
-    list_append(str_list, str_dup(") >>"));
-    char *str = str_join(str_list, "");
+    list_append(str_list, str_dup((char *) ") >>"));
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGPoint point_from_str(char *str) {
-    ADTList str_list = str_split(str, ", ");
-    char *str_x = str_substr(list_at(str_list, 0), 11, strlen(list_at(str_list, 0)) - 11);
-    char *str_y = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 4);
+    ADTList str_list = str_split(str, (char *) ", ");
+    char *str_x = str_substr((char *) list_at(str_list, 0), 11,
+                             strlen((char *) list_at(str_list, 0)) - 11);
+    char *str_y = str_substr((char *) list_at(str_list, 1), 0,
+                             strlen((char *) list_at(str_list, 1)) - 4);
     CGPoint point = point_new(atof(str_x), atof(str_y));
     list_full_release(str_list, free);
     free(str_x);
@@ -229,7 +233,7 @@ void point_rotate_around(CGPoint point, CGPoint center, double deg) {
 }
 
 CGPoint midpoint_between_points(CGPoint point1, CGPoint point2) {
-    CGPoint midpoint = memalloc(sizeof(*midpoint));
+    CGPoint midpoint = (CGPoint) memalloc(sizeof(*midpoint));
     midpoint->w = 2 * point1->w * point2->w;
     midpoint->x = point1->x * point2->w + point2->x * point1->w;
     midpoint->y = point1->y * point2->w + point2->y * point1->w;
@@ -262,7 +266,7 @@ double point_distance_to_line(CGPoint point, CGLine line) {
 CGLine line_new(CGPoint a, CGPoint b) {
     if (point_equals(a, b))
         return NULL;
-    CGLine line = memalloc(sizeof(*line));
+    CGLine line = (CGLine) memalloc(sizeof(*line));
     line->w = a->x * b->y - b->x * a->y;
     line->x = b->w * a->y - a->w * b->y;
     line->y = a->w * b->x - b->w * a->x;
@@ -279,7 +283,7 @@ int line_equals(CGLine line1, CGLine line2) {
 }
 
 CGLine line_dup(CGLine line) {
-    CGLine dup = memalloc(sizeof(*dup));
+    CGLine dup = (CGLine) memalloc(sizeof(*dup));
     dup->w = line->w;
     dup->x = line->x;
     dup->y = line->y;
@@ -288,24 +292,26 @@ CGLine line_dup(CGLine line) {
 
 char *line_to_str(CGLine line, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Line: ("));
+    list_append(str_list, str_dup((char *) "<< Line: ("));
     list_append(str_list, double_to_str(line->w, decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(line->x, decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(line->y, decimal_positions));
-    list_append(str_list, str_dup(") >>"));
-    char *str = str_join(str_list, "");
+    list_append(str_list, str_dup((char *) ") >>"));
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGLine line_from_str(char *str) {
-    ADTList str_list = str_split(str, ", ");
-    char *str_w = str_substr(list_at(str_list, 0), 10, strlen(list_at(str_list, 0)) - 10);
-    char *str_x = str_dup(list_at(str_list, 1));
-    char *str_y = str_substr(list_at(str_list, 2), 0, strlen(list_at(str_list, 2)) - 4);
-    CGLine line = memalloc(sizeof(*line));
+    ADTList str_list = str_split(str, (char *) ", ");
+    char *str_w = str_substr((char *) list_at(str_list, 0), 10,
+                             strlen((char *) list_at(str_list, 0)) - 10);
+    char *str_x = str_dup((char *) list_at(str_list, 1));
+    char *str_y = str_substr((char *) list_at(str_list, 2), 0,
+                             strlen((char *) list_at(str_list, 2)) - 4);
+    CGLine line = (CGLine) memalloc(sizeof(*line));
     line->w = atof(str_w);
     line->x = atof(str_x);
     line->y = atof(str_y);
@@ -317,7 +323,7 @@ CGLine line_from_str(char *str) {
 }
 
 CGLine line_perpendicular(CGLine line, CGPoint point) {
-    CGLine perpendicular = memalloc(sizeof(*perpendicular));
+    CGLine perpendicular = (CGLine) memalloc(sizeof(*perpendicular));
     perpendicular->w = (line->y * point->x - line->x * point->y) / point->w;
     perpendicular->x = -line->y;
     perpendicular->y = line->x;
@@ -325,7 +331,7 @@ CGLine line_perpendicular(CGLine line, CGPoint point) {
 }
 
 CGPoint line_intersection(CGLine line1, CGLine line2) {
-    CGPoint point = memalloc(sizeof(*point));
+    CGPoint point = (CGPoint) memalloc(sizeof(*point));
     point->w = line1->x * line2->y - line1->y * line2->x;
     point->x = line1->y * line2->w - line1->w * line2->y;
     point->y = line1->w * line2->x - line1->x * line2->w;
@@ -365,7 +371,7 @@ double angle_between_lines(CGLine line1, CGLine line2) {
 CGSegment segment_new(CGPoint a, CGPoint b) {
     if (point_equals(a, b))
         return NULL;
-    CGSegment segment = memalloc(sizeof(*segment));
+    CGSegment segment = (CGSegment) memalloc(sizeof(*segment));
     segment->a = point_dup(a);
     segment->b = point_dup(b);
     return segment;
@@ -388,30 +394,36 @@ CGSegment segment_dup(CGSegment segment) {
 
 char *segment_to_str(CGSegment segment, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Segment: ("));
+    list_append(str_list, str_dup((char *) "<< Segment: ("));
     list_append(str_list, double_to_str(point_x(segment->a), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(segment->a), decimal_positions));
-    list_append(str_list, str_dup("); ("));
+    list_append(str_list, str_dup((char *) "); ("));
     list_append(str_list, double_to_str(point_x(segment->b), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(segment->b), decimal_positions));
-    list_append(str_list, str_dup(") >>"));
-    char *str = str_join(str_list, "");
+    list_append(str_list, str_dup((char *) ") >>"));
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGSegment segment_from_str(char *str) {
-    ADTList str_list = str_split(str, "; ");
-    char *point_a = str_substr(list_at(str_list, 0), 12, strlen(list_at(str_list, 0)) - 12);
-    char *point_b = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 3);
-    ADTList a_list = str_split(point_a, ", ");
-    ADTList b_list = str_split(point_b, ", ");
-    char *a_x = str_substr(list_at(a_list, 0), 1, strlen(list_at(a_list, 0)) - 1);
-    char *a_y = str_substr(list_at(a_list, 1), 0, strlen(list_at(a_list, 1)) - 1);
-    char *b_x = str_substr(list_at(b_list, 0), 1, strlen(list_at(b_list, 0)) - 1);
-    char *b_y = str_substr(list_at(b_list, 1), 0, strlen(list_at(b_list, 1)) - 1);
+    ADTList str_list = str_split(str, (char *) "; ");
+    char *point_a = str_substr((char *) list_at(str_list, 0), 12,
+                               strlen((char *) list_at(str_list, 0)) - 12);
+    char *point_b = str_substr((char *) list_at(str_list, 1), 0,
+                               strlen((char *) list_at(str_list, 1)) - 3);
+    ADTList a_list = str_split(point_a, (char *) ", ");
+    ADTList b_list = str_split(point_b, (char *) ", ");
+    char *a_x = str_substr((char *) list_at(a_list, 0), 1,
+                           strlen((char *) list_at(a_list, 0)) - 1);
+    char *a_y = str_substr((char *) list_at(a_list, 1), 0,
+                           strlen((char *) list_at(a_list, 1)) - 1);
+    char *b_x = str_substr((char *) list_at(b_list, 0), 1,
+                           strlen((char *) list_at(b_list, 0)) - 1);
+    char *b_y = str_substr((char *) list_at(b_list, 1), 0,
+                           strlen((char *) list_at(b_list, 1)) - 1);
     CGPoint a = point_new(atof(a_x), atof(a_y));
     CGPoint b = point_new(atof(b_x), atof(b_y));
     CGSegment segment = segment_new(a, b);
@@ -495,7 +507,7 @@ int point_is_in_segment(CGPoint point, CGSegment segment) {
 CGCircle circle_new(CGPoint center, double radius) {
     if (double_lte(radius, 0))
         return NULL;
-    CGCircle circle = memalloc(sizeof(*circle));
+    CGCircle circle = (CGCircle) memalloc(sizeof(*circle));
     circle->center = point_dup(center);
     circle->radius = radius;
     return circle;
@@ -514,7 +526,7 @@ int circle_equals(CGCircle circle1, CGCircle circle2) {
 }
 
 CGCircle circle_dup(CGCircle circle) {
-    CGCircle dup = memalloc(sizeof(*dup));
+    CGCircle dup = (CGCircle) memalloc(sizeof(*dup));
     dup->center = point_dup(circle->center);
     dup->radius = circle->radius;
     return dup;
@@ -522,25 +534,29 @@ CGCircle circle_dup(CGCircle circle) {
 
 char *circle_to_str(CGCircle circle, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Circle: ("));
+    list_append(str_list, str_dup((char *) "<< Circle: ("));
     list_append(str_list, double_to_str(point_x(circle->center), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(circle->center), decimal_positions));
-    list_append(str_list, str_dup("); "));
+    list_append(str_list, str_dup((char *) "); "));
     list_append(str_list, double_to_str(circle->radius, decimal_positions));
-    list_append(str_list, str_dup(" >>"));
-    char *str = str_join(str_list, "");
+    list_append(str_list, str_dup((char *) " >>"));
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGCircle circle_from_str(char *str) {
-    ADTList str_list = str_split(str, "; ");
-    char *str_center = str_substr(list_at(str_list, 0), 11, strlen(list_at(str_list, 0)) - 11);
-    char *str_radius = str_substr(list_at(str_list, 1), 0, strlen(list_at(str_list, 1)) - 3);
-    ADTList center_list = str_split(str_center, ", ");
-    char *str_x = str_substr(list_at(center_list, 0), 1, strlen(list_at(center_list, 0)) - 1);
-    char *str_y = str_substr(list_at(center_list, 1), 0, strlen(list_at(center_list, 1)) - 1);
+    ADTList str_list = str_split(str, (char *) "; ");
+    char *str_center = str_substr((char *) list_at(str_list, 0), 11,
+                                  strlen((char *) list_at(str_list, 0)) - 11);
+    char *str_radius = str_substr((char *) list_at(str_list, 1), 0,
+                                  strlen((char *) list_at(str_list, 1)) - 3);
+    ADTList center_list = str_split(str_center, (char *) ", ");
+    char *str_x = str_substr((char *) list_at(center_list, 0), 1,
+                             strlen((char *) list_at(center_list, 0)) - 1);
+    char *str_y = str_substr((char *) list_at(center_list, 1), 0,
+                             strlen((char *) list_at(center_list, 1)) - 1);
     CGPoint center = point_new(atof(str_x), atof(str_y));
     CGCircle circle = circle_new(center, atof(str_radius));
     point_release(center);
@@ -582,7 +598,7 @@ CGShapeProjectionOnAxis circle_projection_on_axis(CGCircle circle, CGVector axis
 ADTList circle_collision_axes(CGCircle circle, ADTList points) {
     ADTList collision_axes = list_new();
     for (ADTListItem it = list_head(points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         CGVector axis = vector_from_point_to_point(circle->center, point);
         vector_normalize(axis);
         list_append(collision_axes, axis);
@@ -601,7 +617,7 @@ int point_is_in_circle(CGPoint point, CGCircle circle) {
 }
 
 CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c) {
-    CGTriangle triangle = memalloc(sizeof(*triangle));
+    CGTriangle triangle = (CGTriangle) memalloc(sizeof(*triangle));
     triangle->a = point_dup(a);
     triangle->b = point_dup(b);
     triangle->c = point_dup(c);
@@ -644,35 +660,41 @@ CGTriangle triangle_dup(CGTriangle triangle) {
 
 char *triangle_to_str(CGTriangle triangle, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Triangle: ("));
+    list_append(str_list, str_dup((char *) "<< Triangle: ("));
     list_append(str_list, double_to_str(point_x(triangle->a), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(triangle->a), decimal_positions));
-    list_append(str_list, str_dup("); ("));
+    list_append(str_list, str_dup((char *) "); ("));
     list_append(str_list, double_to_str(point_x(triangle->b), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(triangle->b), decimal_positions));
-    list_append(str_list, str_dup("); ("));
+    list_append(str_list, str_dup((char *) "); ("));
     list_append(str_list, double_to_str(point_x(triangle->c), decimal_positions));
-    list_append(str_list, str_dup(", "));
+    list_append(str_list, str_dup((char *) ", "));
     list_append(str_list, double_to_str(point_y(triangle->c), decimal_positions));
-    list_append(str_list, str_dup(") >>"));
-    char *str = str_join(str_list, "");
+    list_append(str_list, str_dup((char *) ") >>"));
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGTriangle triangle_from_str(char *str) {
-    ADTList str_list = str_split(str, "; ");
-    char *str_a = str_substr(list_at(str_list, 0), 14, strlen(list_at(str_list, 0)) - 15);
-    ADTList str_a_list = str_split(str_a, ", ");
-    CGPoint a = point_new(atof(list_at(str_a_list, 0)), atof(list_at(str_a_list, 1)));
-    char *str_b = str_substr(list_at(str_list, 1), 1, strlen(list_at(str_list, 1)) - 2);
-    ADTList str_b_list = str_split(str_b, ", ");
-    CGPoint b = point_new(atof(list_at(str_b_list, 0)), atof(list_at(str_b_list, 1)));
-    char *str_c = str_substr(list_at(str_list, 2), 1, strlen(list_at(str_list, 2)) - 5);
-    ADTList str_c_list = str_split(str_c, ", ");
-    CGPoint c = point_new(atof(list_at(str_c_list, 0)), atof(list_at(str_c_list, 1)));
+    ADTList str_list = str_split(str, (char *) "; ");
+    char *str_a = str_substr((char *) list_at(str_list, 0), 14,
+                             strlen((char *) list_at(str_list, 0)) - 15);
+    ADTList str_a_list = str_split(str_a, (char *) ", ");
+    CGPoint a = point_new(atof((char *) list_at(str_a_list, 0)),
+                          atof((char *) list_at(str_a_list, 1)));
+    char *str_b = str_substr((char *) list_at(str_list, 1), 1,
+                             strlen((char *) list_at(str_list, 1)) - 2);
+    ADTList str_b_list = str_split(str_b, (char *) ", ");
+    CGPoint b = point_new(atof((char *) list_at(str_b_list, 0)),
+                          atof((char *) list_at(str_b_list, 1)));
+    char *str_c = str_substr((char *) list_at(str_list, 2), 1,
+                             strlen((char *) list_at(str_list, 2)) - 5);
+    ADTList str_c_list = str_split(str_c, (char *) ", ");
+    CGPoint c = point_new(atof((char *) list_at(str_c_list, 0)),
+                          atof((char *) list_at(str_c_list, 1)));
     CGTriangle triangle = triangle_new(a, b, c);
     point_release(a);
     point_release(b);
@@ -730,7 +752,7 @@ CGShapeProjectionOnAxis triangle_projection_on_axis(CGTriangle triangle, CGVecto
     double min, max;
     ADTList points = triangle_points(triangle);
     for (ADTListItem it = list_head(points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         double magnitude = point_projection_magnitude_on_axis(point, axis);
         min = (it == list_head(points) || double_lt(magnitude, min)) ? magnitude : min;
         max = (it == list_head(points) || double_gt(magnitude, max)) ? magnitude : max;
@@ -743,8 +765,8 @@ ADTList triangle_collision_axes(CGTriangle triangle) {
     ADTList collision_axes = list_new();
     ADTList points = triangle_points(triangle);
     for (int i = 0; i < 3; i++) {
-        CGPoint point1 = list_at(points, i);
-        CGPoint point2 = list_at(points, (i + 1) % 3);
+        CGPoint point1 = (CGPoint) list_at(points, i);
+        CGPoint point2 = (CGPoint) list_at(points, (i + 1) % 3);
         CGVector vector = vector_from_point_to_point(point1, point2);
         CGVector axis = vector_right_perpendicular(vector);
         vector_normalize(axis);
@@ -777,12 +799,12 @@ CGPolygon polygon_new(ADTList points) {
     int n = list_size(points);
     if (n < 3)
         return NULL;
-    CGPolygon polygon = memalloc(sizeof(*polygon));
+    CGPolygon polygon = (CGPolygon) memalloc(sizeof(*polygon));
     polygon->points = list_new();
     points = list_dup(points);
     CGPoint base_point = NULL;
     for (ADTListItem it = list_head(points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         if (!base_point ||
             double_lt(point_y(point), point_y(base_point)) ||
             (double_equals(point_y(point), point_y(base_point)) &&
@@ -796,7 +818,7 @@ CGPolygon polygon_new(ADTList points) {
         CGPoint next_point = NULL;
         double next_angle;
         for (ADTListItem it = list_head(points); it; it = list_next(it)) {
-            CGPoint point = list_value(it);
+            CGPoint point = (CGPoint) list_value(it);
             CGVector vector = vector_new(point_x(point) - point_x(base_point),
                                        point_y(point) - point_y(base_point));
             double angle = angle_between_vectors(base_vector, vector);
@@ -813,8 +835,8 @@ CGPolygon polygon_new(ADTList points) {
     list_release(points);
     double value = 0;
     for (int i = 0; i < n; i++) {
-        CGPoint point1 = list_at(polygon->points, i);
-        CGPoint point2 = list_at(polygon->points, (i + 1) % n);
+        CGPoint point1 = (CGPoint) list_at(polygon->points, i);
+        CGPoint point2 = (CGPoint) list_at(polygon->points, (i + 1) % n);
         value += point_x(point1) * point_y(point2) - point_x(point2) * point_y(point1);
     }
     if (double_equals(value, 0)) {
@@ -865,7 +887,7 @@ int polygon_equals(CGPolygon polygon1, CGPolygon polygon2) {
     if (list_size(polygon1->points) != list_size(polygon2->points))
         return 0;
     for (ADTListItem it = list_head(polygon1->points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         if (!list_find_cmp(polygon2->points, (int (*)(void *, void *)) point_equals, point))
             return 0;
     }
@@ -873,56 +895,56 @@ int polygon_equals(CGPolygon polygon1, CGPolygon polygon2) {
 }
 
 CGPolygon polygon_dup(CGPolygon polygon) {
-    CGPolygon dup = memalloc(sizeof(*dup));
+    CGPolygon dup = (CGPolygon) memalloc(sizeof(*dup));
     dup->points = list_new();
     for (ADTListItem it = list_head(polygon->points); it; it = list_next(it))
-        list_append(dup->points, point_dup(list_value(it)));
+        list_append(dup->points, point_dup((CGPoint) list_value(it)));
     return dup;
 }
 
 char *polygon_to_str(CGPolygon polygon, int decimal_positions) {
     ADTList str_list = list_new();
-    list_append(str_list, str_dup("<< Polygon: ("));
+    list_append(str_list, str_dup((char *) "<< Polygon: ("));
     for (ADTListItem it = list_head(polygon->points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         list_append(str_list, double_to_str(point_x(point), decimal_positions));
-        list_append(str_list, str_dup(", "));
+        list_append(str_list, str_dup((char *) ", "));
         list_append(str_list, double_to_str(point_y(point), decimal_positions));
         if (list_next(it))
-            list_append(str_list, str_dup("); ("));
+            list_append(str_list, str_dup((char *) "); ("));
         else
-            list_append(str_list, str_dup(") >>"));
+            list_append(str_list, str_dup((char *) ") >>"));
     }
-    char *str = str_join(str_list, "");
+    char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
 }
 
 CGPolygon polygon_from_str(char *str) {
-    ADTList str_list = str_split(str, "; ");
+    ADTList str_list = str_split(str, (char *) "; ");
     ADTList points = list_new();
     int n_points = list_size(str_list);
     for (int i = 1; i < n_points - 1; i++) {
-        ADTList point_list = str_split(list_at(str_list, i), ", ");
-        char *point_x = str_substr(list_at(point_list, 0), 1,
-                                   strlen(list_at(point_list, 0)) - 1);
-        char *point_y = str_substr(list_at(point_list, 1), 0,
-                                   strlen(list_at(point_list, 1)) - 1);
+        ADTList point_list = str_split((char *) list_at(str_list, i), (char *) ", ");
+        char *point_x = str_substr((char *) list_at(point_list, 0), 1,
+                                   strlen((char *) list_at(point_list, 0)) - 1);
+        char *point_y = str_substr((char *) list_at(point_list, 1), 0,
+                                   strlen((char *) list_at(point_list, 1)) - 1);
         list_append(points, point_new(atof(point_x), atof(point_y)));
         list_full_release(point_list, free);
         free(point_x);
         free(point_y);
     }
-    ADTList point_0_list = str_split(list_at(str_list, 0), ", ");
-    ADTList point_n_list = str_split(list_at(str_list, n_points - 1), ", ");
-    char *point_0_x = str_substr(list_at(point_0_list, 0), 13,
-                                 strlen(list_at(point_0_list, 0)) - 13);
-    char *point_0_y = str_substr(list_at(point_0_list, 1), 0,
-                                 strlen(list_at(point_0_list, 1)) - 1);
-    char *point_n_x = str_substr(list_at(point_n_list, 0), 1,
-                                 strlen(list_at(point_n_list, 0)) - 1);
-    char *point_n_y = str_substr(list_at(point_n_list, 1), 0,
-                                 strlen(list_at(point_n_list, 1)) - 4);
+    ADTList point_0_list = str_split((char *) list_at(str_list, 0), (char *) ", ");
+    ADTList point_n_list = str_split((char *) list_at(str_list, n_points - 1), (char *) ", ");
+    char *point_0_x = str_substr((char *) list_at(point_0_list, 0), 13,
+                                 strlen((char *) list_at(point_0_list, 0)) - 13);
+    char *point_0_y = str_substr((char *) list_at(point_0_list, 1), 0,
+                                 strlen((char *) list_at(point_0_list, 1)) - 1);
+    char *point_n_x = str_substr((char *) list_at(point_n_list, 0), 1,
+                                 strlen((char *) list_at(point_n_list, 0)) - 1);
+    char *point_n_y = str_substr((char *) list_at(point_n_list, 1), 0,
+                                 strlen((char *) list_at(point_n_list, 1)) - 4);
     list_append(points, point_new(atof(point_0_x), atof(point_0_y)));
     list_append(points, point_new(atof(point_n_x), atof(point_n_y)));
     CGPolygon polygon = polygon_new(points);
@@ -940,20 +962,20 @@ CGPolygon polygon_from_str(char *str) {
 ADTList polygon_points(CGPolygon polygon) {
     ADTList points = list_new();
     for (ADTListItem it = list_head(polygon->points); it; it = list_next(it))
-        list_append(points, point_dup(list_value(it)));
+        list_append(points, point_dup((CGPoint) list_value(it)));
     return points;
 }
 
 void polygon_translate(CGPolygon polygon, CGVector vector) {
     for (ADTListItem it = list_head(polygon->points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         point_translate(point, vector);
     }
 }
 
 void polygon_rotate_around(CGPolygon polygon, CGPoint center, double deg) {
     for (ADTListItem it = list_head(polygon->points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         point_rotate_around(point, center, deg);
     }
 }
@@ -962,8 +984,8 @@ double polygon_area(CGPolygon polygon) {
     double double_area = 0;
     int n = list_size(polygon->points);
     for (int i = 0; i < n; i++) {
-        CGPoint point1 = list_at(polygon->points, i);
-        CGPoint point2 = list_at(polygon->points, (i + 1) % n);
+        CGPoint point1 = (CGPoint) list_at(polygon->points, i);
+        CGPoint point2 = (CGPoint) list_at(polygon->points, (i + 1) % n);
         double_area += point_x(point1) * point_y(point2) - point_x(point2) * point_y(point1);
     }
     return fabs(double_area) / 2;
@@ -973,7 +995,7 @@ CGShapeProjectionOnAxis polygon_projection_on_axis(CGPolygon polygon, CGVector a
     double min, max;
     ADTList points = polygon_points(polygon);
     for (ADTListItem it = list_head(points); it; it = list_next(it)) {
-        CGPoint point = list_value(it);
+        CGPoint point = (CGPoint) list_value(it);
         double magnitude = point_projection_magnitude_on_axis(point, axis);
         min = (it == list_head(points) || double_lt(magnitude, min)) ? magnitude : min;
         max = (it == list_head(points) || double_gt(magnitude, max)) ? magnitude : max;
@@ -987,8 +1009,8 @@ ADTList polygon_collision_axes(CGPolygon polygon) {
     ADTList points = polygon_points(polygon);
     int n_points = list_size(points);
     for (int i = 0; i < n_points; i++) {
-        CGPoint point1 = list_at(points, i);
-        CGPoint point2 = list_at(points, (i + 1) % n_points);
+        CGPoint point1 = (CGPoint) list_at(points, i);
+        CGPoint point2 = (CGPoint) list_at(points, (i + 1) % n_points);
         CGVector side_vec = vector_from_point_to_point(point1, point2);
         CGVector axis = vector_right_perpendicular(side_vec);
         vector_normalize(axis);
@@ -1004,8 +1026,8 @@ int point_is_in_polygon(CGPoint point, CGPolygon polygon) {
     int n = list_size(polygon->points);
     int orientation;
     for (int i = 0; i < n && point_is_in; i++) {
-        CGPoint point1 = list_at(polygon->points, i);
-        CGPoint point2 = list_at(polygon->points, (i + 1) % n);
+        CGPoint point1 = (CGPoint) list_at(polygon->points, i);
+        CGPoint point2 = (CGPoint) list_at(polygon->points, (i + 1) % n);
         CGTriangle triangle = triangle_new(point1, point, point2);
         if (i == 0)
             orientation = triangle_orientation(triangle);
@@ -1017,7 +1039,7 @@ int point_is_in_polygon(CGPoint point, CGPolygon polygon) {
 }
 
 CGShapeProjectionOnAxis shape_projection_on_axis_new(double min, double max) {
-    CGShapeProjectionOnAxis spoa = memalloc(sizeof(*spoa));
+    CGShapeProjectionOnAxis spoa = (CGShapeProjectionOnAxis) memalloc(sizeof(*spoa));
     spoa->min = min;
     spoa->max = max;
     return spoa;
@@ -1061,7 +1083,7 @@ CGVector segment_segment_intersection(CGSegment segment1, CGSegment segment2) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment1, axis);
         CGShapeProjectionOnAxis spoa2 = segment_projection_on_axis(segment2, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1089,7 +1111,7 @@ CGVector segment_triangle_intersection(CGSegment segment, CGTriangle triangle) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
         CGShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(triangle, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1117,7 +1139,7 @@ CGVector segment_polygon_intersection(CGSegment segment, CGPolygon polygon) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
         CGShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(polygon, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1146,7 +1168,7 @@ CGVector segment_circle_intersection(CGSegment segment, CGCircle circle) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = segment_projection_on_axis(segment, axis);
         CGShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1181,7 +1203,7 @@ CGVector triangle_triangle_intersection(CGTriangle triangle1, CGTriangle triangl
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle1, axis);
         CGShapeProjectionOnAxis spoa2 = triangle_projection_on_axis(triangle2, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1209,7 +1231,7 @@ CGVector triangle_polygon_intersection(CGTriangle triangle, CGPolygon polygon) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle, axis);
         CGShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(polygon, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1238,7 +1260,7 @@ CGVector triangle_circle_intersection(CGTriangle triangle, CGCircle circle) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = triangle_projection_on_axis(triangle, axis);
         CGShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1279,7 +1301,7 @@ CGVector polygon_polygon_intersection(CGPolygon polygon1, CGPolygon polygon2) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(polygon1, axis);
         CGShapeProjectionOnAxis spoa2 = polygon_projection_on_axis(polygon2, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);
@@ -1308,7 +1330,7 @@ CGVector polygon_circle_intersection(CGPolygon polygon, CGCircle circle) {
     list_extend(axes, axes1);
     list_extend(axes, axes2);
     for (ADTListItem it = list_head(axes); it; it = list_next(it)) {
-        CGVector axis = list_value(it);
+        CGVector axis = (CGVector) list_value(it);
         CGShapeProjectionOnAxis spoa1 = polygon_projection_on_axis(polygon, axis);
         CGShapeProjectionOnAxis spoa2 = circle_projection_on_axis(circle, axis);
         double tv_magnitude = shape_projection_on_axis_tv(spoa1, spoa2);

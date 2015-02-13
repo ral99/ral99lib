@@ -9,7 +9,7 @@
 #define POLL_TIMEOUT 500
 
 static void test_connect_client_connection_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert_cmpint(address_equals(client_connection->address, address), ==, 1);
     g_assert_cmpint(connection_is_on(client_connection->connection), ==, 1);
@@ -20,14 +20,14 @@ static void test_connect_client_connection_1() {
 }
 
 static void test_client_connection_release_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     client_connection_release(client_connection);
     address_release(address);
 }
 
 static void test_client_connection_get_address_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert(client_connection_get_address(client_connection) ==
              client_connection->address);
@@ -36,7 +36,7 @@ static void test_client_connection_get_address_1() {
 }
 
 static void test_client_connection_set_address_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     address_release(client_connection->address);
     client_connection_set_address(client_connection, address);
@@ -45,7 +45,7 @@ static void test_client_connection_set_address_1() {
 }
 
 static void test_client_connection_get_connection_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert(client_connection_get_connection(client_connection) ==
              client_connection->connection);
@@ -54,7 +54,7 @@ static void test_client_connection_get_connection_1() {
 }
 
 static void test_client_connection_set_connection_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     NETConnection connection = connection_connect(address);
     connection_release(client_connection->connection);
@@ -65,7 +65,7 @@ static void test_client_connection_set_connection_1() {
 }
 
 static void test_client_connection_get_expires_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert(client_connection_get_expires(client_connection) ==
              client_connection->expires);
@@ -74,7 +74,7 @@ static void test_client_connection_get_expires_1() {
 }
 
 static void test_client_connection_set_expires_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 10);
     time_t expires = time(NULL) + 5;
     client_connection_set_expires(client_connection, expires);
@@ -84,7 +84,7 @@ static void test_client_connection_set_expires_1() {
 }
 
 static void test_client_connection_address_is_1() {
-    NETAddress address1 = address_new("127.0.0.1", 5000);
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
     NETAddress address2 = address_dup(address1);
     NETClientConnection client_connection = connect_client_connection(address1, 5);
     g_assert_cmpint(client_connection_address_is(client_connection, address2), ==,
@@ -95,8 +95,8 @@ static void test_client_connection_address_is_1() {
 }
 
 static void test_client_connection_address_is_2() {
-    NETAddress address1 = address_new("127.0.0.1", 5000);
-    NETAddress address2 = address_new("127.0.0.1", 5001);
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
+    NETAddress address2 = address_new((char *) "127.0.0.1", 5001);
     NETClientConnection client_connection = connect_client_connection(address1, 5);
     g_assert_cmpint(client_connection_address_is(client_connection, address2), ==,
                     0);
@@ -106,7 +106,7 @@ static void test_client_connection_address_is_2() {
 }
 
 static void test_client_connection_is_alive_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert_cmpint(client_connection_is_alive(client_connection), ==, 1);
     client_connection_release(client_connection);
@@ -114,7 +114,7 @@ static void test_client_connection_is_alive_1() {
 }
 
 static void test_client_connection_is_alive_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 0);
     g_assert_cmpint(client_connection_is_alive(client_connection), ==, 0);
     client_connection_release(client_connection);
@@ -122,7 +122,7 @@ static void test_client_connection_is_alive_2() {
 }
 
 static void test_client_connection_is_dead_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert_cmpint(client_connection_is_dead(client_connection), ==, 0);
     client_connection_release(client_connection);
@@ -130,7 +130,7 @@ static void test_client_connection_is_dead_1() {
 }
 
 static void test_client_connection_is_dead_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 0);
     g_assert_cmpint(client_connection_is_dead(client_connection), ==, 1);
     client_connection_release(client_connection);
@@ -138,7 +138,7 @@ static void test_client_connection_is_dead_2() {
 }
 
 static void test_client_connection_is_on_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert_cmpint(client_connection_is_on(client_connection), ==, 1);
     client_connection_release(client_connection);
@@ -146,7 +146,7 @@ static void test_client_connection_is_on_1() {
 }
 
 static void test_client_connection_is_on_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     connection_turn_off(client_connection->connection);
     g_assert_cmpint(client_connection_is_on(client_connection), ==, 0);
@@ -155,7 +155,7 @@ static void test_client_connection_is_on_2() {
 }
 
 static void test_client_connection_is_off_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     g_assert_cmpint(client_connection_is_off(client_connection), ==, 0);
     client_connection_release(client_connection);
@@ -163,7 +163,7 @@ static void test_client_connection_is_off_1() {
 }
 
 static void test_client_connection_is_off_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     connection_turn_off(client_connection->connection);
     g_assert_cmpint(client_connection_is_off(client_connection), ==, 1);
@@ -172,15 +172,15 @@ static void test_client_connection_is_off_2() {
 }
 
 static void test_client_connection_turn_on_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     connection_push(client_connection->connection,
-                    "Sport Club Corinthians Paulista");
+                    (char *) "Sport Club Corinthians Paulista");
     connection_turn_off(client_connection->connection);
     client_connection_turn_on(client_connection);
     ADTList out = connection_out(client_connection->connection);
     g_assert_cmpint(list_size(out), ==, 1);
-    g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(out, 0), ==, (char *) "Sport Club Corinthians Paulista");
     g_assert_cmpint(connection_is_on(client_connection->connection), ==, 1);
     list_full_release(out, free);
     client_connection_release(client_connection);
@@ -188,7 +188,7 @@ static void test_client_connection_turn_on_1() {
 }
 
 static void test_client_connection_turn_off_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
     client_connection_turn_off(client_connection);
     g_assert_cmpint(connection_is_off(client_connection->connection), ==, 1);
@@ -197,7 +197,7 @@ static void test_client_connection_turn_off_1() {
 }
 
 static void test_client_connection_lasts_for_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 0);
     client_connection_lasts_for(client_connection, 5);
     g_assert(client_connection->expires >= time(NULL) + 3 &&
@@ -207,11 +207,11 @@ static void test_client_connection_lasts_for_1() {
 }
 
 static void test_client_connection_out_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 0);
     connection_push(client_connection->connection,
-                    "Sport Club Corinthians Paulista");
-    connection_push(client_connection->connection, "Republica Federativa do Brasil");
+                    (char *) "Sport Club Corinthians Paulista");
+    connection_push(client_connection->connection, (char *) "Republica Federativa do Brasil");
     ADTList out1 = connection_out(client_connection->connection);
     ADTList out2 = client_connection_out(client_connection);
     g_assert_cmpint(list_equals_cmp(out1, out2,
@@ -223,19 +223,19 @@ static void test_client_connection_out_1() {
 }
 
 static void test_client_connection_push_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETClientConnection client_connection = connect_client_connection(address, 5);
-    client_connection_push(client_connection, "Sport Club Corinthians Paulista");
+    client_connection_push(client_connection, (char *) "Sport Club Corinthians Paulista");
     ADTList out = connection_out(client_connection->connection);
     g_assert_cmpint(list_size(out), ==, 1);
-    g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(out, 0), ==, (char *) "Sport Club Corinthians Paulista");
     list_full_release(out, free);
     client_connection_release(client_connection);
     address_release(address);
 }
 
 static void test_client_connection_loop_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETClientConnection client_connection1 = connect_client_connection(address, 60);
@@ -249,19 +249,19 @@ static void test_client_connection_loop_1() {
     NETClientConnection client_connection3 = connect_client_connection(address, 60);
     sleep(1);
     NETConnection accepted3 = connection_accept(server);
-    connection_push(client_connection1->connection, "Repubblica Italiana");
+    connection_push(client_connection1->connection, (char *) "Repubblica Italiana");
     connection_push(client_connection2->connection,
-                    "Sport Club Corinthians Paulista");
+                    (char *) "Sport Club Corinthians Paulista");
     connection_push(client_connection3->connection,
-                    "Republica Federativa do Brasil");
+                    (char *) "Republica Federativa do Brasil");
     connection_turn_off(client_connection3->connection);
     client_connection_loop(client_connection3);
     sleep(1);
     NETConnection accepted4 = connection_accept(server);
     sleep(1);
-    connection_push(accepted1, "Sport Club Corinthians Paulista");
-    connection_push(accepted2, "Republica Federativa do Brasil");
-    connection_push(accepted4, "Repubblica Italiana");
+    connection_push(accepted1, (char *) "Sport Club Corinthians Paulista");
+    connection_push(accepted2, (char *) "Republica Federativa do Brasil");
+    connection_push(accepted4, (char *) "Repubblica Italiana");
     for (int i = 0; i < 2; i++) {
         connection_loop(accepted1);
         connection_loop(accepted2);
@@ -277,9 +277,9 @@ static void test_client_connection_loop_1() {
     char *text1 = connection_pop(accepted1);
     char *text2 = connection_pop(accepted2);
     char *text3 = connection_pop(accepted4);
-    g_assert_cmpstr(text1, ==, "Repubblica Italiana");
-    g_assert_cmpstr(text2, ==, "Sport Club Corinthians Paulista");
-    g_assert_cmpstr(text3, ==, "Republica Federativa do Brasil");
+    g_assert_cmpstr(text1, ==, (char *) "Repubblica Italiana");
+    g_assert_cmpstr(text2, ==, (char *) "Sport Club Corinthians Paulista");
+    g_assert_cmpstr(text3, ==, (char *) "Republica Federativa do Brasil");
     free(text1);
     free(text2);
     free(text3);
@@ -298,7 +298,7 @@ static void test_client_connection_loop_1() {
 }
 
 static void test_client_connection_list_poll_1() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETClientConnection client_connection = connect_client_connection(address, 5);
@@ -317,7 +317,7 @@ static void test_client_connection_list_poll_1() {
 }
 
 static void test_client_connection_list_poll_2() {
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETSock server = sock_listen(5000);
     sleep(1);
     NETClientConnection client_connection = connect_client_connection(address, 5);
@@ -327,7 +327,7 @@ static void test_client_connection_list_poll_2() {
     ADTList client_connections = list_new();
     list_append(client_connections, client_connection);
     connection_push(client_connection->connection,
-                    "Sport Club Corinthians Paulista");
+                    (char *) "Sport Club Corinthians Paulista");
     g_assert_cmpint(client_connection_list_poll(client_connections, POLL_TIMEOUT),
                     ==, 1);
     list_release(client_connections);

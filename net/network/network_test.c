@@ -121,10 +121,10 @@ static void test_network_reply_1() {
     NETNetwork network = network_new(5000, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                      SERVER_POLL_TIMEOUT);
     sleep(1);
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     sleep(1);
-    connection_push(connection, "Sport Club Corinthians Paulista");
+    connection_push(connection, (char *) "Sport Club Corinthians Paulista");
     for (int i = 0; i < 2; i++) {
         server_loop(network->server);
         connection_loop(connection);
@@ -132,7 +132,7 @@ static void test_network_reply_1() {
     }
     NETMessage message = server_pop(network->server);
     char *id = message_id(message);
-    network_reply(network, id, "Republica Federativa do Brasil");
+    network_reply(network, id, (char *) "Republica Federativa do Brasil");
     sleep(1);
     for (int i = 0; i < 2; i++) {
         server_loop(network->server);
@@ -140,7 +140,7 @@ static void test_network_reply_1() {
         sleep(1);
     }
     char *text = connection_pop(connection);
-    g_assert_cmpstr(text, ==, "Republica Federativa do Brasil");
+    g_assert_cmpstr(text, ==, (char *) "Republica Federativa do Brasil");
     free(text);
     free(id);
     message_release(message);
@@ -153,12 +153,12 @@ static void test_network_send_1() {
     NETNetwork network = network_new(5000, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                      SERVER_POLL_TIMEOUT);
     sleep(1);
-    NETAddress address = address_new("127.0.0.1", 5000);
-    network_send(network, address, "Sport Club Corinthians Paulista");
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
+    network_send(network, address, (char *) "Sport Club Corinthians Paulista");
     sleep(1);
     ADTList out = client_connection_out(client_get_connection(network->client, address));
     g_assert_cmpint(list_size(out), ==, 1);
-    g_assert_cmpstr(list_at(out, 0), ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr((char *) list_at(out, 0), ==, (char *) "Sport Club Corinthians Paulista");
     list_full_release(out, free);
     address_release(address);
     network_release(network);
@@ -168,10 +168,10 @@ static void test_network_recv_1() {
     NETNetwork network = network_new(5000, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                      SERVER_POLL_TIMEOUT);
     sleep(1);
-    NETAddress address = address_new("127.0.0.1", 5000);
+    NETAddress address = address_new((char *) "127.0.0.1", 5000);
     NETConnection connection = connection_connect(address);
     sleep(1);
-    connection_push(connection, "Sport Club Corinthians Paulista");
+    connection_push(connection, (char *) "Sport Club Corinthians Paulista");
     for (int i = 0; i < 2; i++) {
         server_loop(network->server);
         connection_loop(connection);
@@ -179,7 +179,7 @@ static void test_network_recv_1() {
     }
     NETMessage message = network_recv(network);
     char *text = message_text(message);
-    g_assert_cmpstr(text, ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr(text, ==, (char *) "Sport Club Corinthians Paulista");
     free(text);
     message_release(message);
     connection_release(connection);
@@ -193,10 +193,10 @@ static void test_network_loop_1() {
     NETNetwork network2 = network_new(5001, CONNECTION_LIFE, CLIENT_POLL_TIMEOUT,
                                       SERVER_POLL_TIMEOUT);
     sleep(1);
-    NETAddress address1 = address_new("127.0.0.1", 5000);
-    NETAddress address2 = address_new("127.0.0.1", 5001);
-    client_push(network1->client, address2, "Sport Club Corinthians Paulista");
-    client_push(network2->client, address1, "Republica Federativa do Brasil");
+    NETAddress address1 = address_new((char *) "127.0.0.1", 5000);
+    NETAddress address2 = address_new((char *) "127.0.0.1", 5001);
+    client_push(network1->client, address2, (char *) "Sport Club Corinthians Paulista");
+    client_push(network2->client, address1, (char *) "Republica Federativa do Brasil");
     for (int i = 0; i < 2; i++) {
         network_loop(network1);
         network_loop(network2);
@@ -206,8 +206,8 @@ static void test_network_loop_1() {
     NETMessage message2 = server_pop(network2->server);
     char *text1 = message_text(message1);
     char *text2 = message_text(message2);
-    g_assert_cmpstr(text1, ==, "Republica Federativa do Brasil");
-    g_assert_cmpstr(text2, ==, "Sport Club Corinthians Paulista");
+    g_assert_cmpstr(text1, ==, (char *) "Republica Federativa do Brasil");
+    g_assert_cmpstr(text2, ==, (char *) "Sport Club Corinthians Paulista");
     free(text1);
     free(text2);
     message_release(message1);

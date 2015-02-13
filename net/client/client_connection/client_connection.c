@@ -6,7 +6,8 @@
 #include "mem/mem.h"
 
 NETClientConnection connect_client_connection(NETAddress address, int life) {
-    NETClientConnection client_connection = memalloc(sizeof(*client_connection));
+    NETClientConnection client_connection =
+        (NETClientConnection) memalloc(sizeof(*client_connection));
     client_connection->address = address_dup(address);
     client_connection->connection = connection_connect(address);
     client_connection->expires = time(NULL) + life;
@@ -69,7 +70,7 @@ void client_connection_turn_on(NETClientConnection client_connection) {
     ADTList out = connection_out(client_connection->connection);
     NETConnection connection = connection_connect(client_connection->address);
     for (ADTListItem it = list_head(out); it; it = it->next)
-        connection_push(connection, list_value(it));
+        connection_push(connection, (char *) list_value(it));
     list_full_release(out, free);
     connection_release(client_connection->connection);
     client_connection->connection = connection;

@@ -5,7 +5,7 @@
 
 NETNetwork network_new(int port, int connection_life, int client_poll_timeout,
                        int server_poll_timeout) {
-    NETNetwork network = memalloc(sizeof(*network));
+    NETNetwork network = (NETNetwork) memalloc(sizeof(*network));
     network->client = client_new(connection_life, client_poll_timeout);
     network->server = server_listen(port, server_poll_timeout);
     return network;

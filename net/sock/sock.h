@@ -58,8 +58,7 @@ int sock_send(NETSock sock, char *text);
 char *sock_recv(NETSock sock);
 
 /* Poll the socket array and return the number of selected sockets. */
-int sock_list_poll(NETSock socks[], int pollin[], int pollout[], int nfds,
-                     int timeout);
+int sock_list_poll(NETSock socks[], int pollin[], int pollout[], int nfds, int timeout);
 
 #endif
 
