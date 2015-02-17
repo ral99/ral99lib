@@ -707,19 +707,6 @@ static void test_midpoint_between_points_1() {
     point_release(midpoint);
 }
 
-static void test_point_is_infinite_1() {
-    CGPoint point = point_new(1, 1);
-    g_assert_false(point_is_infinite(point));
-    point_release(point);
-}
-
-static void test_point_is_infinite_2() {
-    CGPoint point = point_new(1, 1);
-    point->w = 0;
-    g_assert(point_is_infinite(point));
-    point_release(point);
-}
-
 static void test_point_normalize_1() {
     CGPoint point = (CGPoint) memalloc(sizeof(*point));
     point->w = 2;
@@ -913,14 +900,30 @@ static void test_line_intersection_2() {
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(c, d);
     CGPoint intersection = line_intersection(line1, line2);
-    g_assert(point_is_infinite(intersection));
+    g_assert(intersection == NULL);
     point_release(a);
     point_release(b);
     point_release(c);
     point_release(d);
-    point_release(intersection);
     line_release(line1);
     line_release(line2);
+}
+
+static void test_line_intersection_3() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0.5, 0);
+    CGPoint d = point_new(1.5, 0);
+    CGLine line1 = line_new(a, b);
+    CGLine line2 = line_new(c, d);
+    CGPoint intersection = line_intersection(line1, line2);
+    g_assert(intersection == NULL);
+    line_release(line1);
+    line_release(line2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
 }
 
 static void test_line_normalize_1() {
@@ -1352,7 +1355,7 @@ static void test_segment_rotate_around_4() {
 }
 
 static void test_segment_collision_axes_1() {
-    CGSegment segment = segment_from_str((char *) "<< Segment: (0.00, 0.00); (5.00, 0.00) >>");
+    CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (5, 0) >>");
     ADTList collision_axes = segment_collision_axes(segment);
     g_assert_cmpint(list_size(collision_axes), ==, 1);
     CGVector axis = (CGVector) list_at(collision_axes, 0);
@@ -1363,7 +1366,7 @@ static void test_segment_collision_axes_1() {
 }
 
 static void test_segment_collision_axes_2() {
-    CGSegment segment = segment_from_str((char *) "<< Segment: (0.00, 0.00); (0.00, 5.00) >>");
+    CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (0, 5) >>");
     ADTList collision_axes = segment_collision_axes(segment);
     g_assert_cmpint(list_size(collision_axes), ==, 1);
     CGVector vector = (CGVector) list_at(collision_axes, 0);
@@ -1373,13 +1376,53 @@ static void test_segment_collision_axes_2() {
     segment_release(segment);
 }
 
+static void test_segment_intersection_1() {
+    CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
+    CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 0); (0, 1) >>");
+    CGPoint intersection = segment_intersection(segment1, segment2);
+    g_assert(double_equals(point_x(intersection), 0.5));
+    g_assert(double_equals(point_y(intersection), 0.5));
+    point_release(intersection);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_intersection_2() {
+    CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 0) >>");
+    CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 0); (1, 1) >>");
+    CGPoint intersection = segment_intersection(segment1, segment2);
+    g_assert(double_equals(point_x(intersection), 1));
+    g_assert(double_equals(point_y(intersection), 0));
+    point_release(intersection);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_intersection_3() {
+    CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 0) >>");
+    CGSegment segment2 = segment_from_str((char *) "<< Segment: (0.5, 0); (1.5, 0) >>");
+    CGPoint intersection = segment_intersection(segment1, segment2);
+    g_assert(intersection == NULL);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
+static void test_segment_intersection_4() {
+    CGSegment segment1 = segment_from_str((char *) "<< Segment: (2, 0); (2, 2) >>");
+    CGSegment segment2 = segment_from_str((char *) "<< Segment: (0, 1); (1, 1) >>");
+    CGPoint intersection = segment_intersection(segment1, segment2);
+    g_assert(intersection == NULL);
+    segment_release(segment1);
+    segment_release(segment2);
+}
+
 static void test_point_is_in_segment_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 1);
     CGPoint c = point_new(0, 1);
     CGPoint d = point_new(0.5, 0.5);
     CGPoint e = point_new(2, 2);
-    CGSegment segment = segment_from_str((char *) "<< Segment: (0.00, 0.00); (1.00, 1.00) >>");
+    CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     g_assert_cmpint(point_is_in_segment(a, segment), ==, 1);
     g_assert_cmpint(point_is_in_segment(b, segment), ==, 1);
     g_assert_cmpint(point_is_in_segment(c, segment), ==, 0);
@@ -2882,8 +2925,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_7);
     g_test_add_func("/gc/point_rotate", test_point_rotate_around_8);
     g_test_add_func("/gc/midpoint_between_points", test_midpoint_between_points_1);
-    g_test_add_func("/gc/point_is_infinite", test_point_is_infinite_1);
-    g_test_add_func("/gc/point_is_infinite", test_point_is_infinite_2);
     g_test_add_func("/gc/point_normalize", test_point_normalize_1);
     g_test_add_func("/gc/point_distance_to_point", test_point_distance_to_point_1);
     g_test_add_func("/gc/line_new", test_line_new_1);
@@ -2899,6 +2940,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/line_perpendicular", test_line_perpendicular_1);
     g_test_add_func("/gc/line_intersection", test_line_intersection_1);
     g_test_add_func("/gc/line_intersection", test_line_intersection_2);
+    g_test_add_func("/gc/line_intersection", test_line_intersection_3);
     g_test_add_func("/gc/line_normalize", test_line_normalize_1);
     g_test_add_func("/gc/point_is_in_line", test_point_is_in_line_1);
     g_test_add_func("/gc/point_is_in_line", test_point_is_in_line_2);
@@ -2936,6 +2978,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_projection_on_axis", test_segment_projection_on_axis_5);
     g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_1);
     g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_2);
+    g_test_add_func("/gc/segment_intersection", test_segment_intersection_1);
+    g_test_add_func("/gc/segment_intersection", test_segment_intersection_2);
+    g_test_add_func("/gc/segment_intersection", test_segment_intersection_3);
+    g_test_add_func("/gc/segment_intersection", test_segment_intersection_4);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_1);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
     g_test_add_func("/gc/circle_new", test_circle_new_2);

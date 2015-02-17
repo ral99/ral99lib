@@ -240,10 +240,6 @@ CGPoint midpoint_between_points(CGPoint point1, CGPoint point2) {
     return midpoint;
 }
 
-int point_is_infinite(CGPoint point) {
-    return double_equals(point->w, 0);
-}
-
 void point_normalize(CGPoint point) {
     point->x /= point->w;
     point->y /= point->w;
@@ -335,6 +331,10 @@ CGPoint line_intersection(CGLine line1, CGLine line2) {
     point->w = line1->x * line2->y - line1->y * line2->x;
     point->x = line1->y * line2->w - line1->w * line2->y;
     point->y = line1->w * line2->x - line1->x * line2->w;
+    if (double_equals(point->w, 0)) {
+        point_release(point);
+        point = NULL;
+    }
     return point;
 }
 
@@ -488,6 +488,43 @@ void segment_translate(CGSegment segment, CGVector vector) {
 void segment_rotate_around(CGSegment segment, CGPoint center, double deg) {
     point_rotate_around(segment->a, center, deg);
     point_rotate_around(segment->b, center, deg);
+}
+
+CGPoint segment_intersection(CGSegment segment1, CGSegment segment2) {
+    double segment1_min_x = (double_lt(point_x(segment1->a), point_x(segment1->b)))
+                            ? point_x(segment1->a) : point_x(segment1->b);
+    double segment1_max_x = (double_gt(point_x(segment1->a), point_x(segment1->b)))
+                            ? point_x(segment1->a) : point_x(segment1->b);
+    double segment1_min_y = (double_lt(point_y(segment1->a), point_y(segment1->b)))
+                            ? point_y(segment1->a) : point_y(segment1->b);
+    double segment1_max_y = (double_gt(point_y(segment1->a), point_y(segment1->b)))
+                            ? point_y(segment1->a) : point_y(segment1->b);
+    double segment2_min_x = (double_lt(point_x(segment2->a), point_x(segment2->b)))
+                            ? point_x(segment2->a) : point_x(segment2->b);
+    double segment2_max_x = (double_gt(point_x(segment2->a), point_x(segment2->b)))
+                            ? point_x(segment2->a) : point_x(segment2->b);
+    double segment2_min_y = (double_lt(point_y(segment2->a), point_y(segment2->b)))
+                            ? point_y(segment2->a) : point_y(segment2->b);
+    double segment2_max_y = (double_gt(point_y(segment2->a), point_y(segment2->b)))
+                            ? point_y(segment2->a) : point_y(segment2->b);
+    CGLine line1 = segment_line(segment1);
+    CGLine line2 = segment_line(segment2);
+    CGPoint intersection = line_intersection(line1, line2);
+    if (intersection != NULL &&
+        (double_lt(point_x(intersection), segment1_min_x) ||
+        double_gt(point_x(intersection), segment1_max_x) ||
+        double_lt(point_y(intersection), segment1_min_y) ||
+        double_gt(point_y(intersection), segment1_max_y) ||
+        double_lt(point_x(intersection), segment2_min_x) ||
+        double_gt(point_x(intersection), segment2_max_x) ||
+        double_lt(point_y(intersection), segment2_min_y) ||
+        double_gt(point_y(intersection), segment2_max_y))) {
+        point_release(intersection);
+        intersection = NULL;
+    }
+    line_release(line1);
+    line_release(line2);
+    return intersection;
 }
 
 int point_is_in_segment(CGPoint point, CGSegment segment) {

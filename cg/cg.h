@@ -157,9 +157,6 @@ void point_rotate_around(CGPoint point, CGPoint center, double deg);
 /* Return the midpoint between 2 points. */
 CGPoint midpoint_between_points(CGPoint point1, CGPoint point2);
 
-/* Return 1 if the point is in infinite. 0, otherwise. */
-int point_is_infinite(CGPoint point);
-
 /* Normalize the point coordinates. */
 void point_normalize(CGPoint point);
 
@@ -188,7 +185,7 @@ CGLine line_from_str(char *str);
 /* Return the perpendicular line which contains point. */
 CGLine line_perpendicular(CGLine line, CGPoint point);
 
-/* Return the point of intersection between 2 lines. */
+/* Return the point of intersection between 2 lines or NULL if they're parallel. */
 CGPoint line_intersection(CGLine line1, CGLine line2);
 
 /* Normalize the line coefficients. */
@@ -246,6 +243,9 @@ CGShapeProjectionOnAxis segment_projection_on_axis(CGSegment segment, CGVector a
 
 /* Return a list of segment collision detection axes. */
 ADTList segment_collision_axes(CGSegment segment);
+
+/* Return the point of intersection between 2 segments or NULL. */
+CGPoint segment_intersection(CGSegment segment1, CGSegment segment2);
 
 /* Return 1 if the point is in the segment. 0, otherwise. */
 int point_is_in_segment(CGPoint point, CGSegment segment);
