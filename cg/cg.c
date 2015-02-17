@@ -384,8 +384,8 @@ void segment_release(CGSegment segment) {
 }
 
 int segment_equals(CGSegment segment1, CGSegment segment2) {
-    return (point_equals(segment1->a, segment2->a) &&
-            point_equals(segment1->b, segment2->b)) ? 1 : 0;
+    return (point_equals(segment1->a, segment2->a) && point_equals(segment1->b, segment2->b))
+           ? 1 : 0;
 }
 
 CGSegment segment_dup(CGSegment segment) {
@@ -512,13 +512,13 @@ CGPoint segments_intersection(CGSegment segment1, CGSegment segment2) {
     CGPoint intersection = lines_intersection(line1, line2);
     if (intersection != NULL &&
         (double_lt(point_x(intersection), segment1_min_x) ||
-        double_gt(point_x(intersection), segment1_max_x) ||
-        double_lt(point_y(intersection), segment1_min_y) ||
-        double_gt(point_y(intersection), segment1_max_y) ||
-        double_lt(point_x(intersection), segment2_min_x) ||
-        double_gt(point_x(intersection), segment2_max_x) ||
-        double_lt(point_y(intersection), segment2_min_y) ||
-        double_gt(point_y(intersection), segment2_max_y))) {
+         double_gt(point_x(intersection), segment1_max_x) ||
+         double_lt(point_y(intersection), segment1_min_y) ||
+         double_gt(point_y(intersection), segment1_max_y) ||
+         double_lt(point_x(intersection), segment2_min_x) ||
+         double_gt(point_x(intersection), segment2_max_x) ||
+         double_lt(point_y(intersection), segment2_min_y) ||
+         double_gt(point_y(intersection), segment2_max_y))) {
         point_release(intersection);
         intersection = NULL;
     }
@@ -530,10 +530,10 @@ CGPoint segments_intersection(CGSegment segment1, CGSegment segment2) {
 int point_is_in_segment(CGPoint point, CGSegment segment) {
     int is_in = 0;
     CGLine line = line_new(segment->a, segment->b);
-    double min_x = (double_lt(point_x(segment->a), point_x(segment->b))) ?
-                   point_x(segment->a) : point_x(segment->b);
-    double max_x = (double_gt(point_x(segment->a), point_x(segment->b))) ? 
-                   point_x(segment->a) : point_x(segment->b);
+    double min_x = (double_lt(point_x(segment->a), point_x(segment->b)))
+                   ? point_x(segment->a) : point_x(segment->b);
+    double max_x = (double_gt(point_x(segment->a), point_x(segment->b)))
+                   ? point_x(segment->a) : point_x(segment->b);
     if (point_is_in_line(point, line) && double_gte(point_x(point), min_x) &&
         double_lte(point_x(point), max_x))
         is_in = 1;
@@ -857,7 +857,7 @@ CGPolygon polygon_new(ADTList points) {
         for (ADTListItem it = list_head(points); it; it = list_next(it)) {
             CGPoint point = (CGPoint) list_value(it);
             CGVector vector = vector_new(point_x(point) - point_x(base_point),
-                                       point_y(point) - point_y(base_point));
+                                         point_y(point) - point_y(base_point));
             double angle = angle_between_vectors(base_vector, vector);
             if (!next_point || double_lt(angle, next_angle)) {
                 next_angle = angle;
@@ -1086,9 +1086,10 @@ void shape_projection_on_axis_release(CGShapeProjectionOnAxis spoa) {
     free(spoa);
 }
 
-int shape_projection_on_axis_equals(CGShapeProjectionOnAxis spoa1, CGShapeProjectionOnAxis spoa2) {
-    return (double_equals(spoa1->min, spoa2->min) &&
-            double_equals(spoa1->max, spoa2->max)) ? 1 : 0;
+int shape_projection_on_axis_equals(CGShapeProjectionOnAxis spoa1,
+                                    CGShapeProjectionOnAxis spoa2) {
+    return (double_equals(spoa1->min, spoa2->min) && double_equals(spoa1->max, spoa2->max))
+           ? 1 : 0;
 }
 
 CGShapeProjectionOnAxis shape_projection_on_axis_dup(CGShapeProjectionOnAxis spoa) {
@@ -1103,7 +1104,8 @@ double shape_projection_on_axis_max(CGShapeProjectionOnAxis spoa) {
     return spoa->max;
 }
 
-double shape_projection_on_axis_tv(CGShapeProjectionOnAxis spoa1, CGShapeProjectionOnAxis spoa2) {
+double shape_projection_on_axis_tv(CGShapeProjectionOnAxis spoa1,
+                                   CGShapeProjectionOnAxis spoa2) {
     if (double_gte(spoa1->min, spoa2->max) || double_gte(spoa2->min, spoa1->max))
         return 0;
     if (double_lte(spoa1->max - spoa2->min, spoa2->max - spoa1->min))

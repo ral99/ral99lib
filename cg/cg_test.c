@@ -1691,20 +1691,36 @@ static void test_triangle_release_1() {
 }
 
 static void test_triangle_equals_1() {
-    CGTriangle triangle1 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>");
-    CGTriangle triangle2 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>");
+    CGTriangle triangle1 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>"
+    );
+    CGTriangle triangle2 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>"
+    );
     g_assert_cmpint(triangle_equals(triangle1, triangle2), ==, 0);
     triangle_release(triangle1);
     triangle_release(triangle2);
 }
 
 static void test_triangle_equals_2() {
-    CGTriangle triangle1 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>");
-    CGTriangle triangle2 = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
-    CGTriangle triangle3 = triangle_from_str((char *) "<< Triangle: (1, 0); (0, 0); (0, 1) >>");
-    CGTriangle triangle4 = triangle_from_str((char *) "<< Triangle: (1, 0); (0, 1); (0, 0) >>");
-    CGTriangle triangle5 = triangle_from_str((char *) "<< Triangle: (0, 1); (0, 0); (1, 0) >>");
-    CGTriangle triangle6 = triangle_from_str((char *) "<< Triangle: (0, 1); (1, 0); (0, 0) >>");
+    CGTriangle triangle1 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>"
+    );
+    CGTriangle triangle2 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>"
+    );
+    CGTriangle triangle3 = triangle_from_str(
+            (char *) "<< Triangle: (1, 0); (0, 0); (0, 1) >>"
+    );
+    CGTriangle triangle4 = triangle_from_str(
+            (char *) "<< Triangle: (1, 0); (0, 1); (0, 0) >>"
+    );
+    CGTriangle triangle5 = triangle_from_str(
+            (char *) "<< Triangle: (0, 1); (0, 0); (1, 0) >>"
+    );
+    CGTriangle triangle6 = triangle_from_str(
+            (char *) "<< Triangle: (0, 1); (1, 0); (0, 0) >>"
+    );
     g_assert_cmpint(triangle_equals(triangle1, triangle1), ==, 1);
     g_assert_cmpint(triangle_equals(triangle1, triangle2), ==, 1);
     g_assert_cmpint(triangle_equals(triangle1, triangle3), ==, 1);
@@ -2100,29 +2116,43 @@ static void test_polygon_new_square_1() {
 }
 
 static void test_polygon_release_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     polygon_release(polygon);
 }
 
 static void test_polygon_equals_1() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (0, 0); (2, 0); (0, 2); (2, 2) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (2, 0); (0, 2); (2, 2) >>"
+    );
     g_assert_cmpint(polygon_equals(polygon1, polygon2), ==, 0);
     polygon_release(polygon1);
     polygon_release(polygon2);
 }
 
 static void test_polygon_equals_2() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     g_assert_cmpint(polygon_equals(polygon1, polygon2), ==, 1);
     polygon_release(polygon1);
     polygon_release(polygon2);
 }
 
 static void test_polygon_equals_3() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     list_reverse(polygon1->points);
     g_assert_cmpint(polygon_equals(polygon1, polygon2), ==, 1);
     polygon_release(polygon1);
@@ -2130,7 +2160,9 @@ static void test_polygon_equals_3() {
 }
 
 static void test_polygon_dup_1() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGPolygon polygon2 = polygon_dup(polygon1);
     g_assert(polygon1 != polygon2);
     g_assert(polygon1->points != polygon2->points);
@@ -2141,7 +2173,8 @@ static void test_polygon_dup_1() {
 }
 
 static void test_polygon_to_str_1() {
-    char *polygon_str = (char *) "<< Polygon: (0.0, 0.0); (1.0, 0.0); (1.0, 1.0); (0.0, 1.0) >>";
+    char *polygon_str =
+        (char *) "<< Polygon: (0.0, 0.0); (1.0, 0.0); (1.0, 1.0); (0.0, 1.0) >>";
     ADTList points = list_new();
     list_append(points, point_new(0, 0));
     list_append(points, point_new(0, 1));
@@ -2156,7 +2189,7 @@ static void test_polygon_to_str_1() {
 }
 
 static void test_polygon_from_str_1() {
-    char *polygon_str = (char *) "<< Polygon: (1.0, 0.0); (0.0, 0.0); (1.0, 1.0); (0.0, 1.0) >>";
+    char *polygon_str = (char *) "<< Polygon: (1, 0); (0, 0); (1, 1); (0, 1) >>";
     ADTList points = list_new();
     list_append(points, point_new(0, 0));
     list_append(points, point_new(0, 1));
@@ -2171,7 +2204,9 @@ static void test_polygon_from_str_1() {
 }
 
 static void test_polygon_points_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     ADTList points = polygon_points(polygon);
     g_assert(polygon->points != points);
     g_assert(list_equals_cmp(polygon->points, points, (int (*)(void *, void *)) point_equals));
@@ -2180,8 +2215,12 @@ static void test_polygon_points_1() {
 }
 
 static void test_polygon_translate_1() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (1, 1); (2, 1); (1, 2); (2, 2) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (1, 1); (2, 1); (1, 2); (2, 2) >>"
+    );
     CGVector vector = vector_new(1, 1);
     polygon_translate(polygon1, vector);
     g_assert(polygon_equals(polygon1, polygon2));
@@ -2191,8 +2230,12 @@ static void test_polygon_translate_1() {
 }
 
 static void test_polygon_translate_2() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector vector = vector_new(0, 0);
     polygon_translate(polygon1, vector);
     g_assert(polygon_equals(polygon1, polygon2));
@@ -2203,8 +2246,12 @@ static void test_polygon_translate_2() {
 
 static void test_polygon_rotate_around_1() {
     CGPoint center = point_new(1, 1);
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     polygon_rotate_around(polygon1, center, 0);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
@@ -2214,8 +2261,12 @@ static void test_polygon_rotate_around_1() {
 
 static void test_polygon_rotate_around_2() {
     CGPoint center = point_new(0.5, 0.5);
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     polygon_rotate_around(polygon1, center, 90);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
@@ -2225,8 +2276,12 @@ static void test_polygon_rotate_around_2() {
 
 static void test_polygon_rotate_around_3() {
     CGPoint center = point_new(1, 1);
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (1, 1); (2, 1); (1, 2); (2, 2) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (1, 1); (2, 1); (1, 2); (2, 2) >>"
+    );
     polygon_rotate_around(polygon1, center, 180);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
@@ -2254,7 +2309,9 @@ static void test_polygon_rotate_around_4() {
 }
 
 static void test_polygon_area_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     g_assert(double_equals(polygon_area(polygon), 1));
     polygon_release(polygon);
 }
@@ -2266,7 +2323,9 @@ static void test_polygon_area_2() {
 }
 
 static void test_polygon_projection_on_axis_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (2, 0); (2, 3); (0, 3) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (2, 0); (2, 3); (0, 3) >>"
+    );
     CGVector axis = vector_new(1, 0);
     CGShapeProjectionOnAxis spoa = polygon_projection_on_axis(polygon, axis);
     g_assert(double_equals(spoa->min, 0));
@@ -2277,7 +2336,9 @@ static void test_polygon_projection_on_axis_1() {
 }
 
 static void test_polygon_projection_on_axis_2() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (2, 0); (2, 3); (0, 3) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (2, 0); (2, 3); (0, 3) >>"
+    );
     CGVector axis = vector_new(0, 1);
     CGShapeProjectionOnAxis spoa = polygon_projection_on_axis(polygon, axis);
     g_assert(double_equals(spoa->min, 0));
@@ -2288,7 +2349,9 @@ static void test_polygon_projection_on_axis_2() {
 }
 
 static void test_polygon_collision_axes_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (2, 0); (2, 3); (0, 3) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (2, 0); (2, 3); (0, 3) >>"
+    );
     ADTList collision_axes = polygon_collision_axes(polygon);
     g_assert_cmpint(list_size(collision_axes), ==, 4);
     CGVector axis = (CGVector) list_at(collision_axes, 0);
@@ -2308,16 +2371,24 @@ static void test_polygon_collision_axes_1() {
 }
 
 static void test_point_is_in_polygon_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 0), polygon), ==, 0);
-    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 1), polygon), ==, 0);
-    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 2), polygon), ==, 0);
-    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 3), polygon), ==, 0);
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 0), polygon), ==,
+                    0);
+    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 1), polygon), ==,
+                    0);
+    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 2), polygon), ==,
+                    0);
+    g_assert_cmpint(point_is_in_polygon((CGPoint) list_at(polygon->points, 3), polygon), ==,
+                    0);
     polygon_release(polygon);
 }
 
 static void test_point_is_in_polygon_2() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGPoint point = point_new(2, 2);
     g_assert_cmpint(point_is_in_polygon(point, polygon), ==, 0);
     point_release(point);
@@ -2325,7 +2396,9 @@ static void test_point_is_in_polygon_2() {
 }
 
 static void test_point_is_in_polygon_3() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGPoint point = point_new(0.5, 0.5);
     g_assert_cmpint(point_is_in_polygon(point, polygon), ==, 1);
     point_release(point);
@@ -2333,7 +2406,9 @@ static void test_point_is_in_polygon_3() {
 }
 
 static void test_point_is_in_polygon_4() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGPoint point = point_new(0.5, 0);
     g_assert_cmpint(point_is_in_polygon(point, polygon), ==, 0);
     polygon_release(polygon);
@@ -2498,7 +2573,9 @@ static void test_segment_triangle_collision_mtv_2() {
 
 static void test_segment_polygon_collision_mtv_1() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (0, 1) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>"
+    );
     CGVector mtv = segment_polygon_collision_mtv(segment, polygon);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -2509,7 +2586,9 @@ static void test_segment_polygon_collision_mtv_1() {
 
 static void test_segment_polygon_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0.10, 0.10); (0.10, 1.00) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>"
+    );
     CGVector mtv = segment_polygon_collision_mtv(segment, polygon);
     g_assert(double_equals(mtv->x, 0.10));
     g_assert(double_equals(mtv->y, 0));
@@ -2580,8 +2659,12 @@ static void test_triangle_segment_collision_mtv_2() {
 }
 
 static void test_triangle_triangle_collision_mtv_1() {
-    CGTriangle triangle1 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>");
-    CGTriangle triangle2 = triangle_from_str((char *) "<< Triangle: (1, 0); (2, 0); (1, 1) >>");
+    CGTriangle triangle1 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>"
+    );
+    CGTriangle triangle2 = triangle_from_str(
+            (char *) "<< Triangle: (1, 0); (2, 0); (1, 1) >>"
+    );
     CGVector vector = triangle_triangle_collision_mtv(triangle1, triangle2);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 0));
@@ -2591,8 +2674,12 @@ static void test_triangle_triangle_collision_mtv_1() {
 }
 
 static void test_triangle_triangle_collision_mtv_2() {
-    CGTriangle triangle1 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>");
-    CGTriangle triangle2 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>");
+    CGTriangle triangle1 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>"
+    );
+    CGTriangle triangle2 = triangle_from_str(
+            (char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>"
+    );
     CGVector vector1 = triangle_triangle_collision_mtv(triangle1, triangle2);
     g_assert(double_equals(vector1->x, 0.5));
     g_assert(double_equals(vector1->y, 0.5));
@@ -2607,7 +2694,9 @@ static void test_triangle_triangle_collision_mtv_2() {
 
 static void test_triangle_polygon_collision_mtv_1() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (1, 1); (2, 0) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector mtv = triangle_polygon_collision_mtv(triangle, polygon);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -2618,7 +2707,9 @@ static void test_triangle_polygon_collision_mtv_1() {
 
 static void test_triangle_polygon_collision_mtv_2() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (0, 1); (0, 0) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector mtv = triangle_polygon_collision_mtv(triangle, polygon);
     g_assert(double_equals(mtv->x, 0.5));
     g_assert(double_equals(mtv->y, 0.5));
@@ -2651,7 +2742,9 @@ static void test_triangle_circle_collision_mtv_2() {
 
 static void test_polygon_segment_collision_mtv_1() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (0, 1) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector mtv = polygon_segment_collision_mtv(polygon, segment);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -2662,7 +2755,9 @@ static void test_polygon_segment_collision_mtv_1() {
 
 static void test_polygon_segment_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0.10, 0.10); (0.10, 1.00) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector mtv = polygon_segment_collision_mtv(polygon, segment);
     g_assert(double_equals(mtv->x, -0.10));
     g_assert(double_equals(mtv->y, 0));
@@ -2673,7 +2768,9 @@ static void test_polygon_segment_collision_mtv_2() {
 
 static void test_polygon_triangle_collision_mtv_1() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (1, 1); (2, 0) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector mtv = polygon_triangle_collision_mtv(polygon, triangle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -2684,7 +2781,9 @@ static void test_polygon_triangle_collision_mtv_1() {
 
 static void test_polygon_triangle_collision_mtv_2() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (0, 1); (0, 0) >>");
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGVector mtv = polygon_triangle_collision_mtv(polygon, triangle);
     g_assert(double_equals(mtv->x, -0.5));
     g_assert(double_equals(mtv->y, -0.5));
@@ -2694,8 +2793,12 @@ static void test_polygon_triangle_collision_mtv_2() {
 }
 
 static void test_polygon_polygon_collision_mtv_1() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (1, 0); (1, 1); (2, 0); (2, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
+    CGPolygon polygon2 = polygon_from_str(
+            (char *) "<< Polygon: (1, 0); (1, 1); (2, 0); (2, 1) >>"
+    );
     CGVector mtv = polygon_polygon_collision_mtv(polygon1, polygon2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
@@ -2705,7 +2808,9 @@ static void test_polygon_polygon_collision_mtv_1() {
 }
 
 static void test_polygon_polygon_collision_mtv_2() {
-    CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon1 = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGPolygon polygon2 = polygon_from_str(
             (char *) "<< Polygon: (0.9, 0.2); (0.9, 1.2); (1.9, 0.2); (1.9, 1.2) >>"
     );
@@ -2718,7 +2823,9 @@ static void test_polygon_polygon_collision_mtv_2() {
 }
 
 static void test_polygon_circle_collision_mtv_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGCircle circle = circle_from_str((char *) "<< Circle: (2, 1); 1 >>");
     CGVector mtv = polygon_circle_collision_mtv(polygon, circle);
     g_assert(double_equals(mtv->x, 0));
@@ -2729,7 +2836,9 @@ static void test_polygon_circle_collision_mtv_1() {
 }
 
 static void test_polygon_circle_collision_mtv_2() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGCircle circle = circle_from_str((char *) "<< Circle: (1.10, 1); 1 >>");
     CGVector mtv = polygon_circle_collision_mtv(polygon, circle);
     g_assert(double_equals(mtv->x, 0.9));

@@ -413,7 +413,7 @@ double shape_projection_on_axis_tv(CGShapeProjectionOnAxis spoa1,
                                    CGShapeProjectionOnAxis spoa2);
 
 /* Return a minimum translation vector to be applied on the second parameter to separate the
- * shapes. */
+ * geometric shapes. */
 CGVector segment_segment_collision_mtv(CGSegment segment1, CGSegment segment2);
 CGVector segment_triangle_collision_mtv(CGSegment segment, CGTriangle triangle);
 CGVector segment_polygon_collision_mtv(CGSegment segment, CGPolygon polygon);
