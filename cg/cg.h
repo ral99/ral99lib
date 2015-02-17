@@ -414,22 +414,22 @@ double shape_projection_on_axis_tv(CGShapeProjectionOnAxis spoa1,
 
 /* Return a minimum translation vector to be applied on the second parameter to separate the
  * shapes. */
-CGVector segment_segment_intersection(CGSegment segment1, CGSegment segment2);
-CGVector segment_triangle_intersection(CGSegment segment, CGTriangle triangle);
-CGVector segment_polygon_intersection(CGSegment segment, CGPolygon polygon);
-CGVector segment_circle_intersection(CGSegment segment, CGCircle circle);
-CGVector triangle_segment_intersection(CGTriangle triangle, CGSegment segment);
-CGVector triangle_triangle_intersection(CGTriangle triangle1, CGTriangle triangle2);
-CGVector triangle_polygon_intersection(CGTriangle triangle, CGPolygon polygon);
-CGVector triangle_circle_intersection(CGTriangle triangle, CGCircle circle);
-CGVector polygon_segment_intersection(CGPolygon polygon, CGSegment segment);
-CGVector polygon_triangle_intersection(CGPolygon polygon, CGTriangle triangle);
-CGVector polygon_polygon_intersection(CGPolygon polygon1, CGPolygon polygon2);
-CGVector polygon_circle_intersection(CGPolygon polygon, CGCircle circle);
-CGVector circle_segment_intersection(CGCircle circle, CGSegment segment);
-CGVector circle_triangle_intersection(CGCircle circle, CGTriangle triangle);
-CGVector circle_polygon_intersection(CGCircle circle, CGPolygon polygon);
-CGVector circle_circle_intersection(CGCircle circle1, CGCircle circle2);
+CGVector segment_segment_collision_mtv(CGSegment segment1, CGSegment segment2);
+CGVector segment_triangle_collision_mtv(CGSegment segment, CGTriangle triangle);
+CGVector segment_polygon_collision_mtv(CGSegment segment, CGPolygon polygon);
+CGVector segment_circle_collision_mtv(CGSegment segment, CGCircle circle);
+CGVector triangle_segment_collision_mtv(CGTriangle triangle, CGSegment segment);
+CGVector triangle_triangle_collision_mtv(CGTriangle triangle1, CGTriangle triangle2);
+CGVector triangle_polygon_collision_mtv(CGTriangle triangle, CGPolygon polygon);
+CGVector triangle_circle_collision_mtv(CGTriangle triangle, CGCircle circle);
+CGVector polygon_segment_collision_mtv(CGPolygon polygon, CGSegment segment);
+CGVector polygon_triangle_collision_mtv(CGPolygon polygon, CGTriangle triangle);
+CGVector polygon_polygon_collision_mtv(CGPolygon polygon1, CGPolygon polygon2);
+CGVector polygon_circle_collision_mtv(CGPolygon polygon, CGCircle circle);
+CGVector circle_segment_collision_mtv(CGCircle circle, CGSegment segment);
+CGVector circle_triangle_collision_mtv(CGCircle circle, CGTriangle triangle);
+CGVector circle_polygon_collision_mtv(CGCircle circle, CGPolygon polygon);
+CGVector circle_circle_collision_mtv(CGCircle circle1, CGCircle circle2);
 
 #endif
 

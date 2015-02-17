@@ -1111,7 +1111,7 @@ double shape_projection_on_axis_tv(CGShapeProjectionOnAxis spoa1, CGShapeProject
     return spoa1->min - spoa2->max;
 }
 
-CGVector segment_segment_intersection(CGSegment segment1, CGSegment segment2) {
+CGVector segment_segment_collision_mtv(CGSegment segment1, CGSegment segment2) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList axes = list_new();
@@ -1139,7 +1139,7 @@ CGVector segment_segment_intersection(CGSegment segment1, CGSegment segment2) {
     return mtv;
 }
 
-CGVector segment_triangle_intersection(CGSegment segment, CGTriangle triangle) {
+CGVector segment_triangle_collision_mtv(CGSegment segment, CGTriangle triangle) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList axes = list_new();
@@ -1167,7 +1167,7 @@ CGVector segment_triangle_intersection(CGSegment segment, CGTriangle triangle) {
     return mtv;
 }
 
-CGVector segment_polygon_intersection(CGSegment segment, CGPolygon polygon) {
+CGVector segment_polygon_collision_mtv(CGSegment segment, CGPolygon polygon) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList axes = list_new();
@@ -1195,7 +1195,7 @@ CGVector segment_polygon_intersection(CGSegment segment, CGPolygon polygon) {
     return mtv;
 }
 
-CGVector segment_circle_intersection(CGSegment segment, CGCircle circle) {
+CGVector segment_circle_collision_mtv(CGSegment segment, CGCircle circle) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList seg_points = segment_points(segment);
@@ -1225,13 +1225,13 @@ CGVector segment_circle_intersection(CGSegment segment, CGCircle circle) {
     return mtv;
 }
 
-CGVector triangle_segment_intersection(CGTriangle triangle, CGSegment segment) {
-    CGVector mtv = segment_triangle_intersection(segment, triangle);
+CGVector triangle_segment_collision_mtv(CGTriangle triangle, CGSegment segment) {
+    CGVector mtv = segment_triangle_collision_mtv(segment, triangle);
     vector_reverse(mtv);
     return mtv;
 }
 
-CGVector triangle_triangle_intersection(CGTriangle triangle1, CGTriangle triangle2) {
+CGVector triangle_triangle_collision_mtv(CGTriangle triangle1, CGTriangle triangle2) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList axes = list_new();
@@ -1259,7 +1259,7 @@ CGVector triangle_triangle_intersection(CGTriangle triangle1, CGTriangle triangl
     return mtv;
 }
 
-CGVector triangle_polygon_intersection(CGTriangle triangle, CGPolygon polygon) {
+CGVector triangle_polygon_collision_mtv(CGTriangle triangle, CGPolygon polygon) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList axes = list_new();
@@ -1287,7 +1287,7 @@ CGVector triangle_polygon_intersection(CGTriangle triangle, CGPolygon polygon) {
     return mtv;
 }
 
-CGVector triangle_circle_intersection(CGTriangle triangle, CGCircle circle) {
+CGVector triangle_circle_collision_mtv(CGTriangle triangle, CGCircle circle) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList tri_points = triangle_points(triangle);
@@ -1317,19 +1317,19 @@ CGVector triangle_circle_intersection(CGTriangle triangle, CGCircle circle) {
     return mtv;
 }
 
-CGVector polygon_segment_intersection(CGPolygon polygon, CGSegment segment) {
-    CGVector mtv = segment_polygon_intersection(segment, polygon);
+CGVector polygon_segment_collision_mtv(CGPolygon polygon, CGSegment segment) {
+    CGVector mtv = segment_polygon_collision_mtv(segment, polygon);
     vector_reverse(mtv);
     return mtv;
 }
 
-CGVector polygon_triangle_intersection(CGPolygon polygon, CGTriangle triangle) {
-    CGVector mtv = triangle_polygon_intersection(triangle, polygon);
+CGVector polygon_triangle_collision_mtv(CGPolygon polygon, CGTriangle triangle) {
+    CGVector mtv = triangle_polygon_collision_mtv(triangle, polygon);
     vector_reverse(mtv);
     return mtv;
 }
 
-CGVector polygon_polygon_intersection(CGPolygon polygon1, CGPolygon polygon2) {
+CGVector polygon_polygon_collision_mtv(CGPolygon polygon1, CGPolygon polygon2) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList axes = list_new();
@@ -1357,7 +1357,7 @@ CGVector polygon_polygon_intersection(CGPolygon polygon1, CGPolygon polygon2) {
     return mtv;
 }
 
-CGVector polygon_circle_intersection(CGPolygon polygon, CGCircle circle) {
+CGVector polygon_circle_collision_mtv(CGPolygon polygon, CGCircle circle) {
     CGVector mtv;
     double mtv_magnitude;
     ADTList poly_points = polygon_points(polygon);
@@ -1387,25 +1387,25 @@ CGVector polygon_circle_intersection(CGPolygon polygon, CGCircle circle) {
     return mtv;
 }
 
-CGVector circle_segment_intersection(CGCircle circle, CGSegment segment) {
-    CGVector mtv = segment_circle_intersection(segment, circle);
+CGVector circle_segment_collision_mtv(CGCircle circle, CGSegment segment) {
+    CGVector mtv = segment_circle_collision_mtv(segment, circle);
     vector_reverse(mtv);
     return mtv;
 }
 
-CGVector circle_triangle_intersection(CGCircle circle, CGTriangle triangle) {
-    CGVector mtv = triangle_circle_intersection(triangle, circle);
+CGVector circle_triangle_collision_mtv(CGCircle circle, CGTriangle triangle) {
+    CGVector mtv = triangle_circle_collision_mtv(triangle, circle);
     vector_reverse(mtv);
     return mtv;
 }
 
-CGVector circle_polygon_intersection(CGCircle circle, CGPolygon polygon) {
-    CGVector mtv = polygon_circle_intersection(polygon, circle);
+CGVector circle_polygon_collision_mtv(CGCircle circle, CGPolygon polygon) {
+    CGVector mtv = polygon_circle_collision_mtv(polygon, circle);
     vector_reverse(mtv);
     return mtv;
 }
 
-CGVector circle_circle_intersection(CGCircle circle1, CGCircle circle2) {
+CGVector circle_circle_collision_mtv(CGCircle circle1, CGCircle circle2) {
     CGVector axis = vector_from_point_to_point(circle1->center, circle2->center);
     vector_normalize(axis);
     CGShapeProjectionOnAxis spoa1 = circle_projection_on_axis(circle1, axis);

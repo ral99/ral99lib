@@ -2416,10 +2416,10 @@ static void test_shape_projection_on_axis_tv_1() {
     shape_projection_on_axis_release(spoa5);
 }
 
-static void test_segment_segment_intersection_1() {
+static void test_segment_segment_collision_mtv_1() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (0, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 0); (1, 1) >>");
-    CGVector mtv = segment_segment_intersection(segment1, segment2);
+    CGVector mtv = segment_segment_collision_mtv(segment1, segment2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2427,13 +2427,13 @@ static void test_segment_segment_intersection_1() {
     segment_release(segment2);
 }
 
-static void test_segment_segment_intersection_2() {
+static void test_segment_segment_collision_mtv_2() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (1, 0.5); (1, 2) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (0, 1); (1.5, 1) >>");
-    CGVector mtv1 = segment_segment_intersection(segment1, segment2);
+    CGVector mtv1 = segment_segment_collision_mtv(segment1, segment2);
     g_assert(double_equals(mtv1->x, -0.5));
     g_assert(double_equals(mtv1->y, 0));
-    CGVector mtv2 = segment_segment_intersection(segment2, segment1);
+    CGVector mtv2 = segment_segment_collision_mtv(segment2, segment1);
     g_assert(double_equals(mtv2->x, 0));
     g_assert(double_equals(mtv2->y, 0.5));
     vector_release(mtv1);
@@ -2442,13 +2442,13 @@ static void test_segment_segment_intersection_2() {
     segment_release(segment2);
 }
 
-static void test_segment_segment_intersection_3() {
+static void test_segment_segment_collision_mtv_3() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 1); (1, 0) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (0.49, 0.49); (1, 1) >>");
-    CGVector mtv1 = segment_segment_intersection(segment1, segment2);
+    CGVector mtv1 = segment_segment_collision_mtv(segment1, segment2);
     g_assert(double_equals(mtv1->x, 0.01));
     g_assert(double_equals(mtv1->y, 0.01));
-    CGVector mtv2 = segment_segment_intersection(segment2, segment1);
+    CGVector mtv2 = segment_segment_collision_mtv(segment2, segment1);
     g_assert(double_equals(mtv2->x, -0.01));
     g_assert(double_equals(mtv2->y, -0.01));
     vector_release(mtv1);
@@ -2457,10 +2457,10 @@ static void test_segment_segment_intersection_3() {
     segment_release(segment2);
 }
 
-static void test_segment_segment_intersection_4() {
+static void test_segment_segment_collision_mtv_4() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 1); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (2, 1); (3, 1) >>");
-    CGVector mtv = segment_segment_intersection(segment1, segment2);
+    CGVector mtv = segment_segment_collision_mtv(segment1, segment2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2468,14 +2468,14 @@ static void test_segment_segment_intersection_4() {
     segment_release(segment2);
 }
 
-static void test_segment_triangle_intersection_1() {
+static void test_segment_triangle_collision_mtv_1() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 1); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 1); (1, 0) >>");
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
-    CGVector mtv1 = segment_triangle_intersection(segment1, triangle);
+    CGVector mtv1 = segment_triangle_collision_mtv(segment1, triangle);
     g_assert(double_equals(mtv1->x, 0));
     g_assert(double_equals(mtv1->y, 0));
-    CGVector mtv2 = segment_triangle_intersection(segment2, triangle);
+    CGVector mtv2 = segment_triangle_collision_mtv(segment2, triangle);
     g_assert(double_equals(mtv2->x, 0));
     g_assert(double_equals(mtv2->y, 0));
     vector_release(mtv1);
@@ -2485,10 +2485,10 @@ static void test_segment_triangle_intersection_1() {
     triangle_release(triangle);
 }
 
-static void test_segment_triangle_intersection_2() {
+static void test_segment_triangle_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0.10, 0.10); (1.00, 0.10) >>");
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
-    CGVector mtv = segment_triangle_intersection(segment, triangle);
+    CGVector mtv = segment_triangle_collision_mtv(segment, triangle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0.10));
     vector_release(mtv);
@@ -2496,10 +2496,10 @@ static void test_segment_triangle_intersection_2() {
     triangle_release(triangle);
 }
 
-static void test_segment_polygon_intersection_1() {
+static void test_segment_polygon_collision_mtv_1() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (0, 1) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>");
-    CGVector mtv = segment_polygon_intersection(segment, polygon);
+    CGVector mtv = segment_polygon_collision_mtv(segment, polygon);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2507,10 +2507,10 @@ static void test_segment_polygon_intersection_1() {
     segment_release(segment);
 }
 
-static void test_segment_polygon_intersection_2() {
+static void test_segment_polygon_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0.10, 0.10); (0.10, 1.00) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>");
-    CGVector mtv = segment_polygon_intersection(segment, polygon);
+    CGVector mtv = segment_polygon_collision_mtv(segment, polygon);
     g_assert(double_equals(mtv->x, 0.10));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2518,10 +2518,10 @@ static void test_segment_polygon_intersection_2() {
     segment_release(segment);
 }
 
-static void test_segment_circle_intersection_1() {
+static void test_segment_circle_collision_mtv_1() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 3); (1, 3) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
-    CGVector mtv = segment_circle_intersection(segment, circle);
+    CGVector mtv = segment_circle_collision_mtv(segment, circle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2529,10 +2529,10 @@ static void test_segment_circle_intersection_1() {
     segment_release(segment);
 }
 
-static void test_segment_circle_intersection_2() {
+static void test_segment_circle_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
-    CGVector mtv = segment_circle_intersection(segment, circle);
+    CGVector mtv = segment_circle_collision_mtv(segment, circle);
     g_assert(double_equals(mtv->x, sqrt(2) / 2));
     g_assert(double_equals(mtv->y, -sqrt(2) / 2));
     vector_release(mtv);
@@ -2540,10 +2540,10 @@ static void test_segment_circle_intersection_2() {
     segment_release(segment);
 }
 
-static void test_segment_circle_intersection_3() {
+static void test_segment_circle_collision_mtv_3() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 1); (1, 1) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 0.9 >>");
-    CGVector mtv = segment_circle_intersection(segment, circle);
+    CGVector mtv = segment_circle_collision_mtv(segment, circle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, -0.9));
     vector_release(mtv);
@@ -2551,14 +2551,14 @@ static void test_segment_circle_intersection_3() {
     segment_release(segment);
 }
 
-static void test_triangle_segment_intersection_1() {
+static void test_triangle_segment_collision_mtv_1() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 1); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 1); (1, 0) >>");
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
-    CGVector mtv1 = triangle_segment_intersection(triangle, segment1);
+    CGVector mtv1 = triangle_segment_collision_mtv(triangle, segment1);
     g_assert(double_equals(mtv1->x, 0));
     g_assert(double_equals(mtv1->y, 0));
-    CGVector mtv2 = triangle_segment_intersection(triangle, segment2);
+    CGVector mtv2 = triangle_segment_collision_mtv(triangle, segment2);
     g_assert(double_equals(mtv2->x, 0));
     g_assert(double_equals(mtv2->y, 0));
     vector_release(mtv1);
@@ -2568,10 +2568,10 @@ static void test_triangle_segment_intersection_1() {
     triangle_release(triangle);
 }
 
-static void test_triangle_segment_intersection_2() {
+static void test_triangle_segment_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0.10, 0.10); (1.00, 0.10) >>");
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
-    CGVector mtv = triangle_segment_intersection(triangle, segment);
+    CGVector mtv = triangle_segment_collision_mtv(triangle, segment);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, -0.10));
     vector_release(mtv);
@@ -2579,10 +2579,10 @@ static void test_triangle_segment_intersection_2() {
     triangle_release(triangle);
 }
 
-static void test_triangle_triangle_intersection_1() {
+static void test_triangle_triangle_collision_mtv_1() {
     CGTriangle triangle1 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>");
     CGTriangle triangle2 = triangle_from_str((char *) "<< Triangle: (1, 0); (2, 0); (1, 1) >>");
-    CGVector vector = triangle_triangle_intersection(triangle1, triangle2);
+    CGVector vector = triangle_triangle_collision_mtv(triangle1, triangle2);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 0));
     vector_release(vector);
@@ -2590,13 +2590,13 @@ static void test_triangle_triangle_intersection_1() {
     triangle_release(triangle2);
 }
 
-static void test_triangle_triangle_intersection_2() {
+static void test_triangle_triangle_collision_mtv_2() {
     CGTriangle triangle1 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (0, 1) >>");
     CGTriangle triangle2 = triangle_from_str((char *) "<< Triangle: (0, 0); (1, 0); (1, 1) >>");
-    CGVector vector1 = triangle_triangle_intersection(triangle1, triangle2);
+    CGVector vector1 = triangle_triangle_collision_mtv(triangle1, triangle2);
     g_assert(double_equals(vector1->x, 0.5));
     g_assert(double_equals(vector1->y, 0.5));
-    CGVector vector2 = triangle_triangle_intersection(triangle2, triangle1);
+    CGVector vector2 = triangle_triangle_collision_mtv(triangle2, triangle1);
     g_assert(double_equals(vector2->x, -0.5));
     g_assert(double_equals(vector2->y, 0.5));
     vector_release(vector1);
@@ -2605,10 +2605,10 @@ static void test_triangle_triangle_intersection_2() {
     triangle_release(triangle2);
 }
 
-static void test_triangle_polygon_intersection_1() {
+static void test_triangle_polygon_collision_mtv_1() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (1, 1); (2, 0) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGVector mtv = triangle_polygon_intersection(triangle, polygon);
+    CGVector mtv = triangle_polygon_collision_mtv(triangle, polygon);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2616,10 +2616,10 @@ static void test_triangle_polygon_intersection_1() {
     triangle_release(triangle);
 }
 
-static void test_triangle_polygon_intersection_2() {
+static void test_triangle_polygon_collision_mtv_2() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (0, 1); (0, 0) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGVector mtv = triangle_polygon_intersection(triangle, polygon);
+    CGVector mtv = triangle_polygon_collision_mtv(triangle, polygon);
     g_assert(double_equals(mtv->x, 0.5));
     g_assert(double_equals(mtv->y, 0.5));
     vector_release(mtv);
@@ -2627,10 +2627,10 @@ static void test_triangle_polygon_intersection_2() {
     triangle_release(triangle);
 }
 
-static void test_triangle_circle_intersection_1() {
+static void test_triangle_circle_collision_mtv_1() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (5, 5); 1 >>");
-    CGVector mtv = triangle_circle_intersection(triangle, circle);
+    CGVector mtv = triangle_circle_collision_mtv(triangle, circle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2638,10 +2638,10 @@ static void test_triangle_circle_intersection_1() {
     triangle_release(triangle);
 }
 
-static void test_triangle_circle_intersection_2() {
+static void test_triangle_circle_collision_mtv_2() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 5); (5, 0) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1.00, 1.00); 1.00 >>");
-    CGVector mtv = triangle_circle_intersection(triangle, circle);
+    CGVector mtv = triangle_circle_collision_mtv(triangle, circle);
     g_assert(double_equals(mtv->x, -2));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2649,10 +2649,10 @@ static void test_triangle_circle_intersection_2() {
     triangle_release(triangle);
 }
 
-static void test_polygon_segment_intersection_1() {
+static void test_polygon_segment_collision_mtv_1() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (0, 1) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGVector mtv = polygon_segment_intersection(polygon, segment);
+    CGVector mtv = polygon_segment_collision_mtv(polygon, segment);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2660,10 +2660,10 @@ static void test_polygon_segment_intersection_1() {
     segment_release(segment);
 }
 
-static void test_polygon_segment_intersection_2() {
+static void test_polygon_segment_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0.10, 0.10); (0.10, 1.00) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGVector mtv = polygon_segment_intersection(polygon, segment);
+    CGVector mtv = polygon_segment_collision_mtv(polygon, segment);
     g_assert(double_equals(mtv->x, -0.10));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2671,10 +2671,10 @@ static void test_polygon_segment_intersection_2() {
     segment_release(segment);
 }
 
-static void test_polygon_triangle_intersection_1() {
+static void test_polygon_triangle_collision_mtv_1() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (1, 1); (2, 0) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGVector mtv = polygon_triangle_intersection(polygon, triangle);
+    CGVector mtv = polygon_triangle_collision_mtv(polygon, triangle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2682,10 +2682,10 @@ static void test_polygon_triangle_intersection_1() {
     triangle_release(triangle);
 }
 
-static void test_polygon_triangle_intersection_2() {
+static void test_polygon_triangle_collision_mtv_2() {
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (1, 0); (0, 1); (0, 0) >>");
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
-    CGVector mtv = polygon_triangle_intersection(polygon, triangle);
+    CGVector mtv = polygon_triangle_collision_mtv(polygon, triangle);
     g_assert(double_equals(mtv->x, -0.5));
     g_assert(double_equals(mtv->y, -0.5));
     vector_release(mtv);
@@ -2693,10 +2693,10 @@ static void test_polygon_triangle_intersection_2() {
     triangle_release(triangle);
 }
 
-static void test_polygon_polygon_intersection_1() {
+static void test_polygon_polygon_collision_mtv_1() {
     CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
     CGPolygon polygon2 = polygon_from_str((char *) "<< Polygon: (1, 0); (1, 1); (2, 0); (2, 1) >>");
-    CGVector mtv = polygon_polygon_intersection(polygon1, polygon2);
+    CGVector mtv = polygon_polygon_collision_mtv(polygon1, polygon2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2704,12 +2704,12 @@ static void test_polygon_polygon_intersection_1() {
     polygon_release(polygon2);
 }
 
-static void test_polygon_polygon_intersection_2() {
+static void test_polygon_polygon_collision_mtv_2() {
     CGPolygon polygon1 = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
     CGPolygon polygon2 = polygon_from_str(
             (char *) "<< Polygon: (0.9, 0.2); (0.9, 1.2); (1.9, 0.2); (1.9, 1.2) >>"
     );
-    CGVector mtv = polygon_polygon_intersection(polygon1, polygon2);
+    CGVector mtv = polygon_polygon_collision_mtv(polygon1, polygon2);
     g_assert(double_equals(mtv->x, 0.1));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2717,10 +2717,10 @@ static void test_polygon_polygon_intersection_2() {
     polygon_release(polygon2);
 }
 
-static void test_polygon_circle_intersection_1() {
+static void test_polygon_circle_collision_mtv_1() {
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (2, 1); 1 >>");
-    CGVector mtv = polygon_circle_intersection(polygon, circle);
+    CGVector mtv = polygon_circle_collision_mtv(polygon, circle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2728,10 +2728,10 @@ static void test_polygon_circle_intersection_1() {
     circle_release(circle);
 }
 
-static void test_polygon_circle_intersection_2() {
+static void test_polygon_circle_collision_mtv_2() {
     CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1.10, 1); 1 >>");
-    CGVector mtv = polygon_circle_intersection(polygon, circle);
+    CGVector mtv = polygon_circle_collision_mtv(polygon, circle);
     g_assert(double_equals(mtv->x, 0.9));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2739,10 +2739,10 @@ static void test_polygon_circle_intersection_2() {
     circle_release(circle);
 }
 
-static void test_circle_segment_intersection_1() {
+static void test_circle_segment_collision_mtv_1() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 3); (1, 3) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
-    CGVector mtv = circle_segment_intersection(circle, segment);
+    CGVector mtv = circle_segment_collision_mtv(circle, segment);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2750,10 +2750,10 @@ static void test_circle_segment_intersection_1() {
     segment_release(segment);
 }
 
-static void test_circle_segment_intersection_2() {
+static void test_circle_segment_collision_mtv_2() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
-    CGVector mtv = circle_segment_intersection(circle, segment);
+    CGVector mtv = circle_segment_collision_mtv(circle, segment);
     g_assert(double_equals(mtv->x, -sqrt(2) / 2));
     g_assert(double_equals(mtv->y, sqrt(2) / 2));
     vector_release(mtv);
@@ -2761,10 +2761,10 @@ static void test_circle_segment_intersection_2() {
     segment_release(segment);
 }
 
-static void test_circle_segment_intersection_3() {
+static void test_circle_segment_collision_mtv_3() {
     CGSegment segment = segment_from_str((char *) "<< Segment: (0, 1); (1, 1) >>");
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 0.9 >>");
-    CGVector mtv = circle_segment_intersection(circle, segment);
+    CGVector mtv = circle_segment_collision_mtv(circle, segment);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0.9));
     vector_release(mtv);
@@ -2772,10 +2772,10 @@ static void test_circle_segment_intersection_3() {
     segment_release(segment);
 }
 
-static void test_circle_triangle_intersection_1() {
+static void test_circle_triangle_collision_mtv_1() {
     CGCircle circle = circle_from_str((char *) "<< Circle: (5, 5); 1 >>");
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 1); (1, 0) >>");
-    CGVector mtv = circle_triangle_intersection(circle, triangle);
+    CGVector mtv = circle_triangle_collision_mtv(circle, triangle);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2783,10 +2783,10 @@ static void test_circle_triangle_intersection_1() {
     triangle_release(triangle);
 }
 
-static void test_circle_triangle_intersection_2() {
+static void test_circle_triangle_collision_mtv_2() {
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
     CGTriangle triangle = triangle_from_str((char *) "<< Triangle: (0, 0); (0, 5); (5, 0) >>");
-    CGVector mtv = circle_triangle_intersection(circle, triangle);
+    CGVector mtv = circle_triangle_collision_mtv(circle, triangle);
     g_assert(double_equals(mtv->x, 2));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2794,10 +2794,12 @@ static void test_circle_triangle_intersection_2() {
     triangle_release(triangle);
 }
 
-static void test_circle_polygon_intersection_1() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+static void test_circle_polygon_collision_mtv_1() {
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGCircle circle = circle_from_str((char *) "<< Circle: (2, 1); 1 >>");
-    CGVector mtv = circle_polygon_intersection(circle, polygon);
+    CGVector mtv = circle_polygon_collision_mtv(circle, polygon);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2805,10 +2807,12 @@ static void test_circle_polygon_intersection_1() {
     circle_release(circle);
 }
 
-static void test_circle_polygon_intersection_2() {
-    CGPolygon polygon = polygon_from_str((char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>");
+static void test_circle_polygon_collision_mtv_2() {
+    CGPolygon polygon = polygon_from_str(
+            (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
+    );
     CGCircle circle = circle_from_str((char *) "<< Circle: (1.10, 1); 1 >>");
-    CGVector mtv = circle_polygon_intersection(circle, polygon);
+    CGVector mtv = circle_polygon_collision_mtv(circle, polygon);
     g_assert(double_equals(mtv->x, -0.9));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2816,10 +2820,10 @@ static void test_circle_polygon_intersection_2() {
     circle_release(circle);
 }
 
-static void test_circle_circle_intersection_1() {
+static void test_circle_circle_collision_mtv_1() {
     CGCircle circle1 = circle_from_str((char *) "<< Circle: (0, 0); 1 >>");
     CGCircle circle2 = circle_from_str((char *) "<< Circle: (2, 0); 1 >>");
-    CGVector mtv = circle_circle_intersection(circle1, circle2);
+    CGVector mtv = circle_circle_collision_mtv(circle1, circle2);
     g_assert(double_equals(mtv->x, 0));
     g_assert(double_equals(mtv->y, 0));
     vector_release(mtv);
@@ -2827,13 +2831,13 @@ static void test_circle_circle_intersection_1() {
     circle_release(circle2);
 }
 
-static void test_circle_circle_intersection_2() {
+static void test_circle_circle_collision_mtv_2() {
     CGCircle circle1 = circle_from_str((char *) "<< Circle: (0, 0); 1 >>");
     CGCircle circle2 = circle_from_str((char *) "<< Circle: (1, 0); 1 >>");
-    CGVector mtv1 = circle_circle_intersection(circle1, circle2);
+    CGVector mtv1 = circle_circle_collision_mtv(circle1, circle2);
     g_assert(double_equals(mtv1->x, 1));
     g_assert(double_equals(mtv1->y, 0));
-    CGVector mtv2 = circle_circle_intersection(circle2, circle1);
+    CGVector mtv2 = circle_circle_collision_mtv(circle2, circle1);
     g_assert(double_equals(mtv2->x, -1));
     g_assert(double_equals(mtv2->y, 0));
     vector_release(mtv1);
@@ -2978,7 +2982,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_projection_on_axis", test_segment_projection_on_axis_5);
     g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_1);
     g_test_add_func("/gc/segment_collision_axes", test_segment_collision_axes_2);
-    g_test_add_func("/gc/segment_intersection", test_segments_intersection_1);
+    g_test_add_func("/gc/segments_intersection", test_segments_intersection_1);
     g_test_add_func("/gc/segments_intersection", test_segments_intersection_2);
     g_test_add_func("/gc/segments_intersection", test_segments_intersection_3);
     g_test_add_func("/gc/segments_intersection", test_segments_intersection_4);
@@ -3070,44 +3074,52 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/shape_projection_on_axis_min", test_shape_projection_on_axis_min_1);
     g_test_add_func("/gc/shape_projection_on_axis_max", test_shape_projection_on_axis_max_1);
     g_test_add_func("/gc/shape_projection_on_axis_tv", test_shape_projection_on_axis_tv_1);
-    g_test_add_func("/gc/segment_segment_intersection", test_segment_segment_intersection_1);
-    g_test_add_func("/gc/segment_segment_intersection", test_segment_segment_intersection_2);
-    g_test_add_func("/gc/segment_segment_intersection", test_segment_segment_intersection_3);
-    g_test_add_func("/gc/segment_segment_intersection", test_segment_segment_intersection_4);
-    g_test_add_func("/gc/segment_triangle_intersection", test_segment_triangle_intersection_1);
-    g_test_add_func("/gc/segment_triangle_intersection", test_segment_triangle_intersection_2);
-    g_test_add_func("/gc/segment_polygon_intersection", test_segment_polygon_intersection_1);
-    g_test_add_func("/gc/segment_polygon_intersection", test_segment_polygon_intersection_2);
-    g_test_add_func("/gc/segment_circle_intersection", test_segment_circle_intersection_1);
-    g_test_add_func("/gc/segment_circle_intersection", test_segment_circle_intersection_2);
-    g_test_add_func("/gc/segment_circle_intersection", test_segment_circle_intersection_3);
-    g_test_add_func("/gc/triangle_segment_intersection", test_triangle_segment_intersection_1);
-    g_test_add_func("/gc/triangle_segment_intersection", test_triangle_segment_intersection_2);
-    g_test_add_func("/gc/triangle_triangle_intersection",
-                    test_triangle_triangle_intersection_1);
-    g_test_add_func("/gc/triangle_triangle_intersection",
-                    test_triangle_triangle_intersection_2);
-    g_test_add_func("/gc/triangle_polygon_intersection", test_triangle_polygon_intersection_1);
-    g_test_add_func("/gc/triangle_polygon_intersection", test_triangle_polygon_intersection_2);
-    g_test_add_func("/gc/triangle_circle_intersection", test_triangle_circle_intersection_1);
-    g_test_add_func("/gc/triangle_circle_intersection", test_triangle_circle_intersection_2);
-    g_test_add_func("/gc/polygon_segment_intersection", test_polygon_segment_intersection_1);
-    g_test_add_func("/gc/polygon_segment_intersection", test_polygon_segment_intersection_2);
-    g_test_add_func("/gc/polygon_triangle_intersection", test_polygon_triangle_intersection_1);
-    g_test_add_func("/gc/polygon_triangle_intersection", test_polygon_triangle_intersection_2);
-    g_test_add_func("/gc/polygon_polygon_intersection", test_polygon_polygon_intersection_1);
-    g_test_add_func("/gc/polygon_polygon_intersection", test_polygon_polygon_intersection_2);
-    g_test_add_func("/gc/polygon_circle_intersection", test_polygon_circle_intersection_1);
-    g_test_add_func("/gc/polygon_circle_intersection", test_polygon_circle_intersection_2);
-    g_test_add_func("/gc/circle_segment_intersection", test_circle_segment_intersection_1);
-    g_test_add_func("/gc/circle_segment_intersection", test_circle_segment_intersection_2);
-    g_test_add_func("/gc/circle_segment_intersection", test_circle_segment_intersection_3);
-    g_test_add_func("/gc/circle_triangle_intersection", test_circle_triangle_intersection_1);
-    g_test_add_func("/gc/circle_triangle_intersection", test_circle_triangle_intersection_2);
-    g_test_add_func("/gc/circle_polygon_intersection", test_circle_polygon_intersection_1);
-    g_test_add_func("/gc/circle_polygon_intersection", test_circle_polygon_intersection_2);
-    g_test_add_func("/gc/circle_circle_intersection", test_circle_circle_intersection_1);
-    g_test_add_func("/gc/circle_circle_intersection", test_circle_circle_intersection_2);
+    g_test_add_func("/gc/segment_segment_collision_mtv", test_segment_segment_collision_mtv_1);
+    g_test_add_func("/gc/segment_segment_collision_mtv", test_segment_segment_collision_mtv_2);
+    g_test_add_func("/gc/segment_segment_collision_mtv", test_segment_segment_collision_mtv_3);
+    g_test_add_func("/gc/segment_segment_collision_mtv", test_segment_segment_collision_mtv_4);
+    g_test_add_func("/gc/segment_triangle_collision_mtv",
+                    test_segment_triangle_collision_mtv_1);
+    g_test_add_func("/gc/segment_triangle_collision_mtv",
+                    test_segment_triangle_collision_mtv_2);
+    g_test_add_func("/gc/segment_polygon_collision_mtv", test_segment_polygon_collision_mtv_1);
+    g_test_add_func("/gc/segment_polygon_collision_mtv", test_segment_polygon_collision_mtv_2);
+    g_test_add_func("/gc/segment_circle_collision_mtv", test_segment_circle_collision_mtv_1);
+    g_test_add_func("/gc/segment_circle_collision_mtv", test_segment_circle_collision_mtv_2);
+    g_test_add_func("/gc/segment_circle_collision_mtv", test_segment_circle_collision_mtv_3);
+    g_test_add_func("/gc/triangle_segment_collision_mtv",
+                    test_triangle_segment_collision_mtv_1);
+    g_test_add_func("/gc/triangle_segment_collision_mtv",
+                    test_triangle_segment_collision_mtv_2);
+    g_test_add_func("/gc/triangle_triangle_collision_mtv",
+                    test_triangle_triangle_collision_mtv_1);
+    g_test_add_func("/gc/triangle_triangle_collision_mtv",
+                    test_triangle_triangle_collision_mtv_2);
+    g_test_add_func("/gc/triangle_polygon_collision_mtv",
+                    test_triangle_polygon_collision_mtv_1);
+    g_test_add_func("/gc/triangle_polygon_collision_mtv",
+                    test_triangle_polygon_collision_mtv_2);
+    g_test_add_func("/gc/triangle_circle_collision_mtv", test_triangle_circle_collision_mtv_1);
+    g_test_add_func("/gc/triangle_circle_collision_mtv", test_triangle_circle_collision_mtv_2);
+    g_test_add_func("/gc/polygon_segment_collision_mtv", test_polygon_segment_collision_mtv_1);
+    g_test_add_func("/gc/polygon_segment_collision_mtv", test_polygon_segment_collision_mtv_2);
+    g_test_add_func("/gc/polygon_triangle_collision_mtv",
+                    test_polygon_triangle_collision_mtv_1);
+    g_test_add_func("/gc/polygon_triangle_collision_mtv",
+                    test_polygon_triangle_collision_mtv_2);
+    g_test_add_func("/gc/polygon_polygon_collision_mtv", test_polygon_polygon_collision_mtv_1);
+    g_test_add_func("/gc/polygon_polygon_collision_mtv", test_polygon_polygon_collision_mtv_2);
+    g_test_add_func("/gc/polygon_circle_collision_mtv", test_polygon_circle_collision_mtv_1);
+    g_test_add_func("/gc/polygon_circle_collision_mtv", test_polygon_circle_collision_mtv_2);
+    g_test_add_func("/gc/circle_segment_collision_mtv", test_circle_segment_collision_mtv_1);
+    g_test_add_func("/gc/circle_segment_collision_mtv", test_circle_segment_collision_mtv_2);
+    g_test_add_func("/gc/circle_segment_collision_mtv", test_circle_segment_collision_mtv_3);
+    g_test_add_func("/gc/circle_triangle_collision_mtv", test_circle_triangle_collision_mtv_1);
+    g_test_add_func("/gc/circle_triangle_collision_mtv", test_circle_triangle_collision_mtv_2);
+    g_test_add_func("/gc/circle_polygon_collision_mtv", test_circle_polygon_collision_mtv_1);
+    g_test_add_func("/gc/circle_polygon_collision_mtv", test_circle_polygon_collision_mtv_2);
+    g_test_add_func("/gc/circle_circle_collision_mtv", test_circle_circle_collision_mtv_1);
+    g_test_add_func("/gc/circle_circle_collision_mtv", test_circle_circle_collision_mtv_2);
     return g_test_run();
 }
 
