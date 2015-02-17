@@ -326,7 +326,7 @@ CGLine line_perpendicular(CGLine line, CGPoint point) {
     return perpendicular;
 }
 
-CGPoint line_intersection(CGLine line1, CGLine line2) {
+CGPoint lines_intersection(CGLine line1, CGLine line2) {
     CGPoint point = (CGPoint) memalloc(sizeof(*point));
     point->w = line1->x * line2->y - line1->y * line2->x;
     point->x = line1->y * line2->w - line1->w * line2->y;
@@ -490,7 +490,7 @@ void segment_rotate_around(CGSegment segment, CGPoint center, double deg) {
     point_rotate_around(segment->b, center, deg);
 }
 
-CGPoint segment_intersection(CGSegment segment1, CGSegment segment2) {
+CGPoint segments_intersection(CGSegment segment1, CGSegment segment2) {
     double segment1_min_x = (double_lt(point_x(segment1->a), point_x(segment1->b)))
                             ? point_x(segment1->a) : point_x(segment1->b);
     double segment1_max_x = (double_gt(point_x(segment1->a), point_x(segment1->b)))
@@ -509,7 +509,7 @@ CGPoint segment_intersection(CGSegment segment1, CGSegment segment2) {
                             ? point_y(segment2->a) : point_y(segment2->b);
     CGLine line1 = segment_line(segment1);
     CGLine line2 = segment_line(segment2);
-    CGPoint intersection = line_intersection(line1, line2);
+    CGPoint intersection = lines_intersection(line1, line2);
     if (intersection != NULL &&
         (double_lt(point_x(intersection), segment1_min_x) ||
         double_gt(point_x(intersection), segment1_max_x) ||
