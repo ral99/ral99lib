@@ -274,24 +274,6 @@ static void test_angle_replementary_3() {
     angle_release(rep_angle);
 }
 
-static void test_rad_to_deg_1() {
-    g_assert(double_equals(rad_to_deg(0), 0));
-    g_assert(double_equals(rad_to_deg(M_PI / 2), 90));
-    g_assert(double_equals(rad_to_deg(M_PI), 180));
-    g_assert(double_equals(rad_to_deg(2 * M_PI), 0));
-    g_assert(double_equals(rad_to_deg(2 * M_PI + M_PI / 2), 90));
-    g_assert(double_equals(rad_to_deg(2 * M_PI + M_PI), 180));
-}
-
-static void test_deg_to_rad_1() {
-    g_assert(double_equals(deg_to_rad(0), 0));
-    g_assert(double_equals(deg_to_rad(90), M_PI / 2));
-    g_assert(double_equals(deg_to_rad(180), M_PI));
-    g_assert(double_equals(deg_to_rad(360), 0));
-    g_assert(double_equals(deg_to_rad(450), M_PI / 2));
-    g_assert(double_equals(deg_to_rad(540), M_PI));
-}
-
 static void test_vector_new_1() {
     CGVector vector = vector_new(2, 3);
     g_assert(vector != NULL);
@@ -521,7 +503,7 @@ static void test_vector_dot_4() {
     CGVector vector2 = vector_new(1, 0);
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
-    double dot = magnitude1 * magnitude2 * cos(deg_to_rad(135));
+    double dot = magnitude1 * magnitude2 * cos(3 * M_PI / 4);
     g_assert(double_equals(vector_dot(vector1, vector2), dot));
     vector_release(vector1);
     vector_release(vector2);
@@ -532,7 +514,7 @@ static void test_vector_dot_5() {
     CGVector vector2 = vector_new(1, 0);
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
-    double dot = magnitude1 * magnitude2 * cos(deg_to_rad(45));
+    double dot = magnitude1 * magnitude2 * cos(M_PI / 4);
     g_assert(double_equals(vector_dot(vector1, vector2), dot));
     vector_release(vector1);
     vector_release(vector2);
@@ -3459,8 +3441,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_replementary", test_angle_replementary_1);
     g_test_add_func("/gc/angle_replementary", test_angle_replementary_2);
     g_test_add_func("/gc/angle_replementary", test_angle_replementary_3);
-    g_test_add_func("/gc/rad_to_deg", test_rad_to_deg_1);
-    g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);
     g_test_add_func("/gc/vector_from_point_to_point", test_vector_from_point_to_point_1);
     g_test_add_func("/gc/vector_release", test_vector_release_1);

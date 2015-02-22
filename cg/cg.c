@@ -98,18 +98,6 @@ CGAngle angle_replementary(CGAngle angle) {
     return angle_in_radians_new(2 * M_PI - angle->rad);
 }
 
-double rad_to_deg(double rad) {
-    int complete = rad / (2 * M_PI);
-    rad -= complete * (2 * M_PI);
-    return (180 * rad) / M_PI;
-}
-
-double deg_to_rad(double deg) {
-    int complete = deg / 360;
-    deg -= complete * 360;
-    return (M_PI * deg) / 180;
-}
-
 CGVector vector_new(double x, double y) {
     CGVector vector = (CGVector) memalloc(sizeof(*vector));
     vector->x = x;

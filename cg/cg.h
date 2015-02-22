@@ -109,12 +109,6 @@ CGAngle angle_supplementary(CGAngle angle);
 /* Return the replementary angle. */
 CGAngle angle_replementary(CGAngle angle);
 
-/* Converts an angle specified in radias to degrees. */
-double rad_to_deg(double rad);
-
-/* Converts an angle specified in degrees to radians. */
-double deg_to_rad(double deg);
-
 /* Return a new vector. */
 CGVector vector_new(double x, double y);
 
