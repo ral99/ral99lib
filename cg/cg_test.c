@@ -6,6 +6,15 @@
 #include "mem/mem.h"
 #include "num/num.h"
 
+static void test_rad_to_deg_1() {
+    g_assert(double_equals(rad_to_deg(0), 0));
+    g_assert(double_equals(rad_to_deg(M_PI / 2), 90));
+    g_assert(double_equals(rad_to_deg(M_PI), 180));
+    g_assert(double_equals(rad_to_deg(2 * M_PI), 0));
+    g_assert(double_equals(rad_to_deg(2 * M_PI + M_PI / 2), 90));
+    g_assert(double_equals(rad_to_deg(2 * M_PI + M_PI), 180));
+}
+
 static void test_deg_to_rad_1() {
     g_assert(double_equals(deg_to_rad(0), 0));
     g_assert(double_equals(deg_to_rad(90), M_PI / 2));
@@ -271,6 +280,7 @@ static void test_angle_between_vectors_2() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 0);
     g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI / 2));
+    g_assert(double_equals(angle_between_vectors(vector2, vector1), M_PI / 2));
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -279,6 +289,7 @@ static void test_angle_between_vectors_3() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 0);
     g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI));
+    g_assert(double_equals(angle_between_vectors(vector2, vector1), M_PI));
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -287,6 +298,7 @@ static void test_angle_between_vectors_4() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 1);
     g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI / 4));
+    g_assert(double_equals(angle_between_vectors(vector2, vector1), M_PI / 4));
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -295,6 +307,49 @@ static void test_angle_between_vectors_5() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 1);
     g_assert(double_equals(angle_between_vectors(vector1, vector2), deg_to_rad(135)));
+    g_assert(double_equals(angle_between_vectors(vector2, vector1), deg_to_rad(135)));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_from_vector_to_vector_1() {
+    CGVector vector = vector_new(1, 1);
+    g_assert(double_equals(angle_from_vector_to_vector(vector, vector), 0));
+    vector_release(vector);
+}
+
+static void test_angle_from_vector_to_vector_2() {
+    CGVector vector1 = vector_new(0, 1);
+    CGVector vector2 = vector_new(1, 0);
+    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), 3 * M_PI / 2));
+    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), M_PI / 2));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_from_vector_to_vector_3() {
+    CGVector vector1 = vector_new(1, 0);
+    CGVector vector2 = vector_new(-1, 0);
+    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), M_PI));
+    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), M_PI));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_from_vector_to_vector_4() {
+    CGVector vector1 = vector_new(0, 1);
+    CGVector vector2 = vector_new(1, 1);
+    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), 7 * M_PI / 4));
+    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), M_PI / 4));
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_angle_from_vector_to_vector_5() {
+    CGVector vector1 = vector_new(1, 0);
+    CGVector vector2 = vector_new(-1, 1);
+    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), deg_to_rad(135)));
+    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), deg_to_rad(225)));
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -1549,6 +1604,18 @@ static void test_circle_center_y_1() {
 static void test_circle_radius_1() {
     CGCircle circle = circle_from_str((char *) "<< Circle: (1, 2); 3 >>");
     g_assert(double_equals(circle_radius(circle), 3));
+    circle_release(circle);
+}
+
+static void test_circle_area_1() {
+    CGCircle circle = circle_from_str("<< Circle: (1, 1); 1 >>");
+    g_assert(double_equals(circle_area(circle), M_PI));
+    circle_release(circle);
+}
+
+static void test_circle_area_2() {
+    CGCircle circle = circle_from_str("<< Circle: (1, 1); 2 >>");
+    g_assert(double_equals(circle_area(circle), 4 * M_PI));
     circle_release(circle);
 }
 
@@ -2957,6 +3024,7 @@ static void test_circle_circle_collision_mtv_2() {
 
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
+    g_test_add_func("/gc/rad_to_deg", test_rad_to_deg_1);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);
     g_test_add_func("/gc/vector_from_point_to_point", test_vector_from_point_to_point_1);
@@ -2991,6 +3059,11 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_3);
     g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_4);
     g_test_add_func("/gc/angle_between_vectors", test_angle_between_vectors_5);
+    g_test_add_func("/gc/angle_from_vector_to_vector", test_angle_from_vector_to_vector_1);
+    g_test_add_func("/gc/angle_from_vector_to_vector", test_angle_from_vector_to_vector_2);
+    g_test_add_func("/gc/angle_from_vector_to_vector", test_angle_from_vector_to_vector_3);
+    g_test_add_func("/gc/angle_from_vector_to_vector", test_angle_from_vector_to_vector_4);
+    g_test_add_func("/gc/angle_from_vector_to_vector", test_angle_from_vector_to_vector_5);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);
@@ -3110,6 +3183,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_center_x", test_circle_center_x_1);
     g_test_add_func("/gc/circle_center_y", test_circle_center_y_1);
     g_test_add_func("/gc/circle_radius", test_circle_radius_1);
+    g_test_add_func("/gc/circle_area", test_circle_area_1);
+    g_test_add_func("/gc/circle_area", test_circle_area_2);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_2);
     g_test_add_func("/gc/circle_projection_on_axis", test_circle_projection_on_axis_1);

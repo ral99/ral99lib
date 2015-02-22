@@ -49,6 +49,9 @@ struct _CGShapeProjectionOnAxis {
     double min, max;
 };
 
+/* Converts an angle specified in radias to degrees. */
+double rad_to_deg(double rad);
+
 /* Converts an angle specified in degrees to radians. */
 double deg_to_rad(double deg);
 
@@ -109,6 +112,10 @@ double vector_dot(CGVector vector1, CGVector vector2);
 
 /* Return the angle in radians between two vectors in range [0, PI]. */
 double angle_between_vectors(CGVector vector1, CGVector vector2);
+
+/* Return the angle in radians from vector1 to vector2 in counter-clockwise orientation in
+ * range [0, 2* PI[. */
+double angle_from_vector_to_vector(CGVector vector1, CGVector vector2);
 
 /* Rotate the vector by the specified degrees in counter-clockwise orientation. */
 void vector_rotate(CGVector vector, double deg);
@@ -281,6 +288,9 @@ double circle_center_y(CGCircle circle);
 
 /* Return circle radius. */
 double circle_radius(CGCircle circle);
+
+/* Return circle area. */
+double circle_area(CGCircle circle);
 
 /* Translate the point by the vector. */
 void circle_translate(CGCircle circle, CGVector vector);

@@ -8,9 +8,16 @@
 #include "mem/mem.h"
 #include "str/str.h"
 
+double rad_to_deg(double rad) {
+    int complete = rad / (2 * M_PI);
+    rad -= complete * (2 * M_PI);
+    return (180 * rad) / M_PI;
+}
+
 double deg_to_rad(double deg) {
-    deg = deg - (((int) (deg) / 360) * 360);
-    return (deg * M_PI) / 180;
+    int complete = deg / 360;
+    deg -= complete * 360;
+    return (M_PI * deg) / 180;
 }
 
 CGVector vector_new(double x, double y) {
@@ -121,6 +128,20 @@ double angle_between_vectors(CGVector vector1, CGVector vector2) {
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
     return acos(dot / (magnitude1 * magnitude2));
+}
+
+double angle_from_vector_to_vector(CGVector vector1, CGVector vector2) {
+    CGVector vector1_dup = vector_dup(vector1);
+    CGVector vector2_dup = vector_dup(vector2);
+    vector_normalize(vector1_dup);
+    vector_normalize(vector2_dup);
+    double angle_between = angle_between_vectors(vector1_dup, vector2_dup);
+    vector_rotate(vector1_dup, rad_to_deg(angle_between));
+    double angle_from_to = (vector_equals(vector1_dup, vector2_dup))
+                           ? angle_between : (2 * M_PI - angle_between);
+    vector_release(vector1_dup);
+    vector_release(vector2_dup);
+    return angle_from_to;
 }
 
 void vector_rotate(CGVector vector, double deg) {
@@ -620,6 +641,10 @@ double circle_center_y(CGCircle circle) {
 
 double circle_radius(CGCircle circle) {
     return circle->radius;
+}
+
+double circle_area(CGCircle circle) {
+    return M_PI * circle->radius * circle->radius;
 }
 
 void circle_translate(CGCircle circle, CGVector vector) {
