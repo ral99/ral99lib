@@ -232,7 +232,7 @@ CGLine line_from_str(char *str);
 CGLine line_perpendicular(CGLine line, CGPoint point);
 
 /* Return the point of intersection between 2 lines or NULL if they're parallel. */
-CGPoint lines_intersection(CGLine line1, CGLine line2);
+CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
 
 /* Normalize the line coefficients. */
 void line_normalize(CGLine line);
@@ -291,7 +291,7 @@ CGShapeProjectionOnAxis segment_projection_on_axis(CGSegment segment, CGVector a
 ADTList segment_collision_axes(CGSegment segment);
 
 /* Return the point of intersection between 2 segments or NULL. */
-CGPoint segments_intersection(CGSegment segment1, CGSegment segment2);
+CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
 
 /* Return 1 if the point is in the segment. 0, otherwise. */
 int point_is_in_segment(CGPoint point, CGSegment segment);
