@@ -1608,15 +1608,40 @@ static void test_circle_radius_1() {
 }
 
 static void test_circle_area_1() {
-    CGCircle circle = circle_from_str("<< Circle: (1, 1); 1 >>");
+    CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
     g_assert(double_equals(circle_area(circle), M_PI));
     circle_release(circle);
 }
 
 static void test_circle_area_2() {
-    CGCircle circle = circle_from_str("<< Circle: (1, 1); 2 >>");
+    CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 2 >>");
     g_assert(double_equals(circle_area(circle), 4 * M_PI));
     circle_release(circle);
+}
+
+static void test_circle_points_1() {
+    CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
+    ADTList points1 = circle_points(circle, 1);
+    ADTList points2 = list_new();
+    list_append(points2, point_new(2, 1));
+    g_assert(list_equals_cmp(points1, points2, (int (*)(void *, void *)) point_equals));
+    circle_release(circle);
+    list_full_release(points1, (void (*)(void *)) point_release);
+    list_full_release(points2, (void (*)(void *)) point_release);
+}
+
+static void test_circle_points_2() {
+    CGCircle circle = circle_from_str((char *) "<< Circle: (1, 1); 1 >>");
+    ADTList points1 = circle_points(circle, 4);
+    ADTList points2 = list_new();
+    list_append(points2, point_new(2, 1));
+    list_append(points2, point_new(1, 2));
+    list_append(points2, point_new(0, 1));
+    list_append(points2, point_new(1, 0));
+    g_assert(list_equals_cmp(points1, points2, (int (*)(void *, void *)) point_equals));
+    circle_release(circle);
+    list_full_release(points1, (void (*)(void *)) point_release);
+    list_full_release(points2, (void (*)(void *)) point_release);
 }
 
 static void test_circle_translate_1() {
@@ -3185,6 +3210,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_radius", test_circle_radius_1);
     g_test_add_func("/gc/circle_area", test_circle_area_1);
     g_test_add_func("/gc/circle_area", test_circle_area_2);
+    g_test_add_func("/gc/circle_points", test_circle_points_1);
+    g_test_add_func("/gc/circle_points", test_circle_points_2);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_2);
     g_test_add_func("/gc/circle_projection_on_axis", test_circle_projection_on_axis_1);

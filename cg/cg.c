@@ -647,6 +647,19 @@ double circle_area(CGCircle circle) {
     return M_PI * circle->radius * circle->radius;
 }
 
+ADTList circle_points(CGCircle circle, int n_points) {
+    ADTList points = list_new();
+    for (int i = 0; i < n_points; i++) {
+        CGPoint point = point_dup(circle->center);
+        CGVector vector = vector_new(circle->radius, 0);
+        vector_rotate(vector, (360 * i) / n_points);
+        point_translate(point, vector);
+        list_append(points, point);
+        vector_release(vector);
+    }
+    return points;
+}
+
 void circle_translate(CGCircle circle, CGVector vector) {
     point_translate(circle->center, vector);
 }

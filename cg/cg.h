@@ -292,6 +292,9 @@ double circle_radius(CGCircle circle);
 /* Return circle area. */
 double circle_area(CGCircle circle);
 
+/* Return a list of circle points with the specified size. */
+ADTList circle_points(CGCircle circle, int n_points);
+
 /* Translate the point by the vector. */
 void circle_translate(CGCircle circle, CGVector vector);
 
