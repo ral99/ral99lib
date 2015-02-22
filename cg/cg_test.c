@@ -6,6 +6,124 @@
 #include "mem/mem.h"
 #include "num/num.h"
 
+static void test_angle_in_radians_new_1() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    g_assert(angle != NULL);
+    g_assert(double_equals(angle->rad, M_PI));
+    angle_release(angle);
+}
+
+static void test_angle_in_radians_new_2() {
+    CGAngle angle = angle_in_radians_new(2 * M_PI);
+    g_assert(angle != NULL);
+    g_assert(double_equals(angle->rad, 0));
+    angle_release(angle);
+}
+
+static void test_angle_in_degrees_new_1() {
+    CGAngle angle = angle_in_degrees_new(180);
+    g_assert(angle != NULL);
+    g_assert(double_equals(angle->rad, M_PI));
+    angle_release(angle);
+}
+
+static void test_angle_in_degrees_new_2() {
+    CGAngle angle = angle_in_degrees_new(360);
+    g_assert(angle != NULL);
+    g_assert(double_equals(angle->rad, 0));
+    angle_release(angle);
+}
+
+static void test_angle_release_1() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    angle_release(angle);
+}
+
+static void test_angle_equals_1() {
+    CGAngle angle1 = angle_in_radians_new(0);
+    CGAngle angle2 = angle_in_radians_new(2 * M_PI);
+    g_assert_cmpint(angle_equals(angle1, angle2), ==, 1);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_equals_2() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(2 * M_PI);
+    g_assert_cmpint(angle_equals(angle1, angle2), ==, 0);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_dup_1() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    CGAngle dup = angle_dup(angle);
+    g_assert(dup != NULL);
+    g_assert(double_equals(angle->rad, dup->rad));
+    angle_release(angle);
+    angle_release(dup);
+}
+
+static void test_angle_to_str_1() {
+    char *angle_str = (char *) "<< Angle: 3.14 >>";
+    CGAngle angle = angle_in_radians_new(M_PI);
+    char *str = angle_to_str(angle, 2);
+    g_assert_cmpstr(str, ==, angle_str);
+    free(str);
+    angle_release(angle);
+}
+
+static void test_angle_from_str_1() {
+    char *angle_str = (char *) "<< Angle: 3.14 >>";
+    CGAngle angle1 = angle_from_str(angle_str);
+    CGAngle angle2 = angle_in_radians_new(3.14);
+    g_assert(angle_equals(angle1, angle2));
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_sum_1() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI / 2);
+    angle_sum(angle1, angle2);
+    g_assert(double_equals(angle1->rad, M_PI + M_PI / 2));
+    g_assert(double_equals(angle2->rad, M_PI / 2));
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_sum_2() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI);
+    angle_sum(angle1, angle2);
+    g_assert(double_equals(angle1->rad, 0));
+    g_assert(double_equals(angle2->rad, M_PI));
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_subtract_1() {
+    CGAngle angle1 = angle_in_radians_new(M_PI / 2);
+    CGAngle angle2 = angle_in_radians_new(M_PI / 2);
+    angle_subtract(angle1, angle2);
+    g_assert(double_equals(angle1->rad, 0));
+    g_assert(double_equals(angle2->rad, M_PI / 2));
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_in_radians_1() {
+    CGAngle angle = angle_in_degrees_new(180);
+    g_assert(double_equals(angle_in_radians(angle), M_PI));
+    angle_release(angle);
+}
+
+static void test_angle_in_degrees_1() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    g_assert(double_equals(angle_in_degrees(angle), 180));
+    angle_release(angle);
+}
+
 static void test_rad_to_deg_1() {
     g_assert(double_equals(rad_to_deg(0), 0));
     g_assert(double_equals(rad_to_deg(M_PI / 2), 90));
@@ -3049,6 +3167,21 @@ static void test_circle_circle_collision_mtv_2() {
 
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
+    g_test_add_func("/gc/angle_in_radians_new", test_angle_in_radians_new_1);
+    g_test_add_func("/gc/angle_in_radians_new", test_angle_in_radians_new_2);
+    g_test_add_func("/gc/angle_in_degrees_new", test_angle_in_degrees_new_1);
+    g_test_add_func("/gc/angle_in_degrees_new", test_angle_in_degrees_new_2);
+    g_test_add_func("/gc/angle_release", test_angle_release_1);
+    g_test_add_func("/gc/angle_equals", test_angle_equals_1);
+    g_test_add_func("/gc/angle_equals", test_angle_equals_2);
+    g_test_add_func("/gc/angle_dup", test_angle_dup_1);
+    g_test_add_func("/gc/angle_to_str", test_angle_to_str_1);
+    g_test_add_func("/gc/angle_from_str", test_angle_from_str_1);
+    g_test_add_func("/gc/angle_sum", test_angle_sum_1);
+    g_test_add_func("/gc/angle_sum", test_angle_sum_2);
+    g_test_add_func("/gc/angle_subtract", test_angle_subtract_1);
+    g_test_add_func("/gc/angle_in_radians", test_angle_in_radians_1);
+    g_test_add_func("/gc/angle_in_degrees", test_angle_in_degrees_1);
     g_test_add_func("/gc/rad_to_deg", test_rad_to_deg_1);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);

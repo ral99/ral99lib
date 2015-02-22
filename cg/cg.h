@@ -8,6 +8,11 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+typedef struct _CGAngle *CGAngle;
+struct _CGAngle {
+    double rad;
+};
+
 typedef struct _CGVector *CGVector;
 struct _CGVector {
     double x, y;
@@ -48,6 +53,40 @@ typedef struct _CGShapeProjectionOnAxis *CGShapeProjectionOnAxis;
 struct _CGShapeProjectionOnAxis {
     double min, max;
 };
+
+/* Return a new angle defined in radians. */
+CGAngle angle_in_radians_new(double rad);
+
+/* Return a new angle defined in degrees. */
+CGAngle angle_in_degrees_new(double deg);
+
+/* Free the memory used by angle. */
+void angle_release(CGAngle angle);
+
+/* Return 1 if the angles are equal. 0, otherwise. */
+int angle_equals(CGAngle angle1, CGAngle angle2);
+
+/* Return the duplicated angle. */
+CGAngle angle_dup(CGAngle angle);
+
+/* Return the string representation of the angle with the specified number of decimal
+ * positions. */
+char *angle_to_str(CGAngle angle, int decimal_positions);
+
+/* Return angle from its string representation. */
+CGAngle angle_from_str(char *str);
+
+/* Sum angle2 to angle1. */
+void angle_sum(CGAngle angle1, CGAngle angle2);
+
+/* Subtract angle2 from angle1. */
+void angle_subtract(CGAngle angle1, CGAngle angle2);
+
+/* Return angle in radians. */
+double angle_in_radians(CGAngle angle);
+
+/* Return angle in degrees. */
+double angle_in_degrees(CGAngle angle);
 
 /* Converts an angle specified in radias to degrees. */
 double rad_to_deg(double rad);

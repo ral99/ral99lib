@@ -8,6 +8,66 @@
 #include "mem/mem.h"
 #include "str/str.h"
 
+CGAngle angle_in_radians_new(double rad) {
+    CGAngle angle = (CGAngle) memalloc(sizeof(*angle));
+    angle->rad = rad - ((int) (rad / (2 * M_PI))) * (2 * M_PI);
+    return angle;
+}
+
+CGAngle angle_in_degrees_new(double deg) {
+    return angle_in_radians_new((M_PI * deg) / 180);
+}
+
+void angle_release(CGAngle angle) {
+    free(angle);
+}
+
+int angle_equals(CGAngle angle1, CGAngle angle2) {
+    return double_equals(angle1->rad, angle2->rad);
+}
+
+CGAngle angle_dup(CGAngle angle) {
+    CGAngle dup = (CGAngle) memalloc(sizeof(*dup));
+    dup->rad = angle->rad;
+    return dup;
+}
+
+char *angle_to_str(CGAngle angle, int decimal_positions) {
+    ADTList str_list = list_new();
+    list_append(str_list, str_dup((char *) "<< Angle: "));
+    list_append(str_list, double_to_str(angle->rad, decimal_positions));
+    list_append(str_list, str_dup((char *) " >>"));
+    char *str = str_join(str_list, (char *) "");
+    list_full_release(str_list, free);
+    return str;
+}
+
+CGAngle angle_from_str(char *str) {
+    char *str_rad = str_substr(str, 10, strlen(str) - 13);
+    CGAngle angle = angle_in_radians_new(atof(str_rad));
+    free(str_rad);
+    return angle;
+}
+
+void angle_sum(CGAngle angle1, CGAngle angle2) {
+    angle1->rad += angle2->rad;
+    angle1->rad -= ((int) (angle1->rad / (2 * M_PI))) * (2 * M_PI);
+}
+
+void angle_subtract(CGAngle angle1, CGAngle angle2) {
+    angle1->rad -= angle2->rad;
+    while (double_lt(angle1->rad, 0))
+        angle1->rad += 2 * M_PI;
+}
+
+double angle_in_radians(CGAngle angle) {
+    return angle->rad;
+}
+
+double angle_in_degrees(CGAngle angle) {
+    return (180 * angle->rad) / M_PI;
+}
+
 double rad_to_deg(double rad) {
     int complete = rad / (2 * M_PI);
     rad -= complete * (2 * M_PI);
