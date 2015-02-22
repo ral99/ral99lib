@@ -10,6 +10,8 @@
 
 CGAngle angle_in_radians_new(double rad) {
     CGAngle angle = (CGAngle) memalloc(sizeof(*angle));
+    while (double_lt(rad, 0))
+        rad += 2 * M_PI;
     angle->rad = rad - ((int) (rad / (2 * M_PI))) * (2 * M_PI);
     return angle;
 }
@@ -24,6 +26,22 @@ void angle_release(CGAngle angle) {
 
 int angle_equals(CGAngle angle1, CGAngle angle2) {
     return double_equals(angle1->rad, angle2->rad);
+}
+
+int angle_lt(CGAngle angle1, CGAngle angle2) {
+    return double_lt(angle1->rad, angle2->rad);
+}
+
+int angle_lte(CGAngle angle1, CGAngle angle2) {
+    return double_lte(angle1->rad, angle2->rad);
+}
+
+int angle_gt(CGAngle angle1, CGAngle angle2) {
+    return double_gt(angle1->rad, angle2->rad);
+}
+
+int angle_gte(CGAngle angle1, CGAngle angle2) {
+    return double_gte(angle1->rad, angle2->rad);
 }
 
 CGAngle angle_dup(CGAngle angle) {
@@ -66,6 +84,18 @@ double angle_in_radians(CGAngle angle) {
 
 double angle_in_degrees(CGAngle angle) {
     return (180 * angle->rad) / M_PI;
+}
+
+CGAngle angle_complementary(CGAngle angle) {
+    return angle_in_radians_new(M_PI / 2 - angle->rad);
+}
+
+CGAngle angle_supplementary(CGAngle angle) {
+    return angle_in_radians_new(M_PI - angle->rad);
+}
+
+CGAngle angle_replementary(CGAngle angle) {
+    return angle_in_radians_new(2 * M_PI - angle->rad);
 }
 
 double rad_to_deg(double rad) {
@@ -183,33 +213,33 @@ double vector_dot(CGVector vector1, CGVector vector2) {
     return vector1->x * vector2->x + vector1->y * vector2->y;
 }
 
-double angle_between_vectors(CGVector vector1, CGVector vector2) {
+CGAngle angle_between_vectors(CGVector vector1, CGVector vector2) {
     double dot = vector_dot(vector1, vector2);
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
-    return acos(dot / (magnitude1 * magnitude2));
+    return angle_in_radians_new(acos(dot / (magnitude1 * magnitude2)));
 }
 
-double angle_from_vector_to_vector(CGVector vector1, CGVector vector2) {
+CGAngle angle_from_vector_to_vector(CGVector vector1, CGVector vector2) {
     CGVector vector1_dup = vector_dup(vector1);
     CGVector vector2_dup = vector_dup(vector2);
     vector_normalize(vector1_dup);
     vector_normalize(vector2_dup);
-    double angle_between = angle_between_vectors(vector1_dup, vector2_dup);
-    vector_rotate(vector1_dup, rad_to_deg(angle_between));
-    double angle_from_to = (vector_equals(vector1_dup, vector2_dup))
-                           ? angle_between : (2 * M_PI - angle_between);
+    CGAngle angle_between = angle_between_vectors(vector1_dup, vector2_dup);
+    vector_rotate(vector1_dup, angle_between);
+    CGAngle angle_from_to = (vector_equals(vector1_dup, vector2_dup))
+                            ? angle_dup(angle_between) : angle_replementary(angle_between);
+    angle_release(angle_between);
     vector_release(vector1_dup);
     vector_release(vector2_dup);
     return angle_from_to;
 }
 
-void vector_rotate(CGVector vector, double deg) {
-    double rad = deg_to_rad(deg);
+void vector_rotate(CGVector vector, CGAngle angle) {
     double vector_x = vector->x;
     double vector_y = vector->y;
-    vector->x = vector_x * cos(rad) - vector_y * sin(rad);
-    vector->y = vector_x * sin(rad) + vector_y * cos(rad);
+    vector->x = vector_x * cos(angle->rad) - vector_y * sin(angle->rad);
+    vector->y = vector_x * sin(angle->rad) + vector_y * cos(angle->rad);
 }
 
 CGPoint point_new(double x, double y) {
@@ -299,15 +329,14 @@ void point_translate(CGPoint point, CGVector vector) {
     point->y = point_y + point->w * vector->y;
 }
 
-void point_rotate_around(CGPoint point, CGPoint center, double deg) {
-    double rad = deg_to_rad(deg);
+void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle) {
     CGVector vector1 = vector_new(-point_x(center), -point_y(center));
     CGVector vector2 = vector_new(point_x(center), point_y(center));
     point_translate(point, vector1);
     double point_x = point->x;
     double point_y = point->y;
-    point->x = point_x * cos(rad) - point_y * sin(rad);
-    point->y = point_x * sin(rad) + point_y * cos(rad);
+    point->x = point_x * cos(angle->rad) - point_y * sin(angle->rad);
+    point->y = point_x * sin(angle->rad) + point_y * cos(angle->rad);
     point_translate(point, vector2);
     vector_release(vector1);
     vector_release(vector2);
@@ -436,7 +465,7 @@ double point_distance_to_point(CGPoint point1, CGPoint point2) {
     return sqrt(x_dist * x_dist + y_dist * y_dist);
 }
 
-double angle_between_lines(CGLine line1, CGLine line2) {
+CGAngle angle_between_lines(CGLine line1, CGLine line2) {
     CGLine normalized_line1 = line_dup(line1);
     CGLine normalized_line2 = line_dup(line2);
     line_normalize(normalized_line1);
@@ -446,7 +475,7 @@ double angle_between_lines(CGLine line1, CGLine line2) {
     double rad = acos(cos);
     line_release(normalized_line1);
     line_release(normalized_line2);
-    return double_gt(rad, M_PI / 2) ? M_PI - rad : rad;
+    return angle_in_radians_new(double_gt(rad, M_PI / 2) ? M_PI - rad : rad);
 }
 
 CGSegment segment_new(CGPoint a, CGPoint b) {
@@ -566,9 +595,9 @@ void segment_translate(CGSegment segment, CGVector vector) {
     point_translate(segment->b, vector);
 }
 
-void segment_rotate_around(CGSegment segment, CGPoint center, double deg) {
-    point_rotate_around(segment->a, center, deg);
-    point_rotate_around(segment->b, center, deg);
+void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle) {
+    point_rotate_around(segment->a, center, angle);
+    point_rotate_around(segment->b, center, angle);
 }
 
 CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2) {
@@ -712,9 +741,11 @@ ADTList circle_points(CGCircle circle, int n_points) {
     for (int i = 0; i < n_points; i++) {
         CGPoint point = point_dup(circle->center);
         CGVector vector = vector_new(circle->radius, 0);
-        vector_rotate(vector, (360 * i) / n_points);
+        CGAngle angle = angle_in_degrees_new((360 * i) / n_points);
+        vector_rotate(vector, angle);
         point_translate(point, vector);
         list_append(points, point);
+        angle_release(angle);
         vector_release(vector);
     }
     return points;
@@ -858,10 +889,10 @@ void triangle_translate(CGTriangle triangle, CGVector vector) {
     point_translate(triangle->c, vector);
 }
 
-void triangle_rotate_around(CGTriangle triangle, CGPoint center, double deg) {
-    point_rotate_around(triangle->a, center, deg);
-    point_rotate_around(triangle->b, center, deg);
-    point_rotate_around(triangle->c, center, deg);
+void triangle_rotate_around(CGTriangle triangle, CGPoint center, CGAngle angle) {
+    point_rotate_around(triangle->a, center, angle);
+    point_rotate_around(triangle->b, center, angle);
+    point_rotate_around(triangle->c, center, angle);
 }
 
 int triangle_orientation(CGTriangle triangle) {
@@ -956,9 +987,9 @@ CGPolygon polygon_new(ADTList points) {
             CGPoint point = (CGPoint) list_value(it);
             CGVector vector = vector_new(point_x(point) - point_x(base_point),
                                          point_y(point) - point_y(base_point));
-            double angle = angle_between_vectors(base_vector, vector);
-            if (!next_point || double_lt(angle, next_angle)) {
-                next_angle = angle;
+            CGAngle angle = angle_between_vectors(base_vector, vector);
+            if (!next_point || double_lt(angle_in_radians(angle), next_angle)) {
+                next_angle = angle_in_radians(angle);
                 next_point = point;
             }
             vector_release(vector);
@@ -1108,10 +1139,10 @@ void polygon_translate(CGPolygon polygon, CGVector vector) {
     }
 }
 
-void polygon_rotate_around(CGPolygon polygon, CGPoint center, double deg) {
+void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle) {
     for (ADTListItem it = list_head(polygon->points); it; it = list_next(it)) {
         CGPoint point = (CGPoint) list_value(it);
-        point_rotate_around(point, center, deg);
+        point_rotate_around(point, center, angle);
     }
 }
 

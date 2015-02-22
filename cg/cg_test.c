@@ -20,6 +20,13 @@ static void test_angle_in_radians_new_2() {
     angle_release(angle);
 }
 
+static void test_angle_in_radians_new_3() {
+    CGAngle angle = angle_in_radians_new(-M_PI / 2);
+    g_assert(angle != NULL);
+    g_assert(double_equals(angle->rad, 3 * M_PI / 2));
+    angle_release(angle);
+}
+
 static void test_angle_in_degrees_new_1() {
     CGAngle angle = angle_in_degrees_new(180);
     g_assert(angle != NULL);
@@ -31,6 +38,13 @@ static void test_angle_in_degrees_new_2() {
     CGAngle angle = angle_in_degrees_new(360);
     g_assert(angle != NULL);
     g_assert(double_equals(angle->rad, 0));
+    angle_release(angle);
+}
+
+static void test_angle_in_degrees_new_3() {
+    CGAngle angle = angle_in_degrees_new(-90);
+    g_assert(angle != NULL);
+    g_assert(double_equals(angle->rad, 3 * M_PI / 2));
     angle_release(angle);
 }
 
@@ -51,6 +65,70 @@ static void test_angle_equals_2() {
     CGAngle angle1 = angle_in_radians_new(M_PI);
     CGAngle angle2 = angle_in_radians_new(2 * M_PI);
     g_assert_cmpint(angle_equals(angle1, angle2), ==, 0);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_lt_1() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI / 2);
+    g_assert_cmpint(angle_lt(angle1, angle2), ==, 0);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_lt_2() {
+    CGAngle angle1 = angle_in_radians_new(M_PI / 2);
+    CGAngle angle2 = angle_in_radians_new(M_PI);
+    g_assert_cmpint(angle_lt(angle1, angle2), ==, 1);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_lte_1() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI / 2);
+    g_assert_cmpint(angle_lte(angle1, angle2), ==, 0);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_lte_2() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI);
+    g_assert_cmpint(angle_lte(angle1, angle2), ==, 1);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_gt_1() {
+    CGAngle angle1 = angle_in_radians_new(M_PI / 2);
+    CGAngle angle2 = angle_in_radians_new(M_PI);
+    g_assert_cmpint(angle_gt(angle1, angle2), ==, 0);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_gt_2() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI / 2);
+    g_assert_cmpint(angle_gt(angle1, angle2), ==, 1);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_gte_1() {
+    CGAngle angle1 = angle_in_radians_new(M_PI / 2);
+    CGAngle angle2 = angle_in_radians_new(M_PI);
+    g_assert_cmpint(angle_gte(angle1, angle2), ==, 0);
+    angle_release(angle1);
+    angle_release(angle2);
+}
+
+static void test_angle_gte_2() {
+    CGAngle angle1 = angle_in_radians_new(M_PI);
+    CGAngle angle2 = angle_in_radians_new(M_PI);
+    g_assert_cmpint(angle_gte(angle1, angle2), ==, 1);
     angle_release(angle1);
     angle_release(angle2);
 }
@@ -122,6 +200,78 @@ static void test_angle_in_degrees_1() {
     CGAngle angle = angle_in_radians_new(M_PI);
     g_assert(double_equals(angle_in_degrees(angle), 180));
     angle_release(angle);
+}
+
+static void test_angle_complementary_1() {
+    CGAngle angle = angle_in_radians_new(0);
+    CGAngle comp_angle = angle_complementary(angle);
+    g_assert(double_equals(angle_in_radians(comp_angle), M_PI / 2));
+    angle_release(angle);
+    angle_release(comp_angle);
+}
+
+static void test_angle_complementary_2() {
+    CGAngle angle = angle_in_radians_new(M_PI / 4);
+    CGAngle comp_angle = angle_complementary(angle);
+    g_assert(double_equals(angle_in_radians(comp_angle), M_PI / 4));
+    angle_release(angle);
+    angle_release(comp_angle);
+}
+
+static void test_angle_complementary_3() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    CGAngle comp_angle = angle_complementary(angle);
+    g_assert(double_equals(angle_in_radians(comp_angle), 3 * M_PI / 2));
+    angle_release(angle);
+    angle_release(comp_angle);
+}
+
+static void test_angle_supplementary_1() {
+    CGAngle angle = angle_in_radians_new(0);
+    CGAngle sup_angle = angle_supplementary(angle);
+    g_assert(double_equals(angle_in_radians(sup_angle), M_PI));
+    angle_release(angle);
+    angle_release(sup_angle);
+}
+
+static void test_angle_supplementary_2() {
+    CGAngle angle = angle_in_radians_new(M_PI / 2);
+    CGAngle sup_angle = angle_supplementary(angle);
+    g_assert(double_equals(angle_in_radians(sup_angle), M_PI / 2));
+    angle_release(angle);
+    angle_release(sup_angle);
+}
+
+static void test_angle_supplementary_3() {
+    CGAngle angle = angle_in_radians_new(3 * M_PI / 2);
+    CGAngle sup_angle = angle_supplementary(angle);
+    g_assert(double_equals(angle_in_radians(sup_angle), 3 * M_PI / 2));
+    angle_release(angle);
+    angle_release(sup_angle);
+}
+
+static void test_angle_replementary_1() {
+    CGAngle angle = angle_in_radians_new(0);
+    CGAngle rep_angle = angle_replementary(angle);
+    g_assert(double_equals(angle_in_radians(rep_angle), 0));
+    angle_release(angle);
+    angle_release(rep_angle);
+}
+
+static void test_angle_replementary_2() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    CGAngle rep_angle = angle_replementary(angle);
+    g_assert(double_equals(angle_in_radians(rep_angle), M_PI));
+    angle_release(angle);
+    angle_release(rep_angle);
+}
+
+static void test_angle_replementary_3() {
+    CGAngle angle = angle_in_radians_new(2 * M_PI);
+    CGAngle rep_angle = angle_replementary(angle);
+    g_assert(double_equals(angle_in_radians(rep_angle), 0));
+    angle_release(angle);
+    angle_release(rep_angle);
 }
 
 static void test_rad_to_deg_1() {
@@ -390,15 +540,21 @@ static void test_vector_dot_5() {
 
 static void test_angle_between_vectors_1() {
     CGVector vector = vector_new(1, 1);
-    g_assert(double_equals(angle_between_vectors(vector, vector), 0));
+    CGAngle angle = angle_between_vectors(vector, vector);
+    g_assert(double_equals(angle_in_radians(angle), 0));
+    angle_release(angle);
     vector_release(vector);
 }
 
 static void test_angle_between_vectors_2() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 0);
-    g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI / 2));
-    g_assert(double_equals(angle_between_vectors(vector2, vector1), M_PI / 2));
+    CGAngle angle1 = angle_between_vectors(vector1, vector2);
+    CGAngle angle2 = angle_between_vectors(vector2, vector1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI / 2));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 2));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -406,8 +562,12 @@ static void test_angle_between_vectors_2() {
 static void test_angle_between_vectors_3() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 0);
-    g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI));
-    g_assert(double_equals(angle_between_vectors(vector2, vector1), M_PI));
+    CGAngle angle1 = angle_between_vectors(vector1, vector2);
+    CGAngle angle2 = angle_between_vectors(vector2, vector1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -415,8 +575,12 @@ static void test_angle_between_vectors_3() {
 static void test_angle_between_vectors_4() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 1);
-    g_assert(double_equals(angle_between_vectors(vector1, vector2), M_PI / 4));
-    g_assert(double_equals(angle_between_vectors(vector2, vector1), M_PI / 4));
+    CGAngle angle1 = angle_between_vectors(vector1, vector2);
+    CGAngle angle2 = angle_between_vectors(vector2, vector1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI / 4));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 4));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -424,23 +588,33 @@ static void test_angle_between_vectors_4() {
 static void test_angle_between_vectors_5() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 1);
-    g_assert(double_equals(angle_between_vectors(vector1, vector2), deg_to_rad(135)));
-    g_assert(double_equals(angle_between_vectors(vector2, vector1), deg_to_rad(135)));
+    CGAngle angle1 = angle_between_vectors(vector1, vector2);
+    CGAngle angle2 = angle_between_vectors(vector2, vector1);
+    g_assert(double_equals(angle_in_degrees(angle1), 135));
+    g_assert(double_equals(angle_in_degrees(angle2), 135));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
 
 static void test_angle_from_vector_to_vector_1() {
     CGVector vector = vector_new(1, 1);
-    g_assert(double_equals(angle_from_vector_to_vector(vector, vector), 0));
+    CGAngle angle = angle_from_vector_to_vector(vector, vector);
+    g_assert(double_equals(angle_in_radians(angle), 0));
+    angle_release(angle);
     vector_release(vector);
 }
 
 static void test_angle_from_vector_to_vector_2() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 0);
-    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), 3 * M_PI / 2));
-    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), M_PI / 2));
+    CGAngle angle1 = angle_from_vector_to_vector(vector1, vector2);
+    CGAngle angle2 = angle_from_vector_to_vector(vector2, vector1);
+    g_assert(double_equals(angle_in_radians(angle1), 3 * M_PI / 2));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 2));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -448,8 +622,12 @@ static void test_angle_from_vector_to_vector_2() {
 static void test_angle_from_vector_to_vector_3() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 0);
-    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), M_PI));
-    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), M_PI));
+    CGAngle angle1 = angle_from_vector_to_vector(vector1, vector2);
+    CGAngle angle2 = angle_from_vector_to_vector(vector2, vector1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -457,8 +635,12 @@ static void test_angle_from_vector_to_vector_3() {
 static void test_angle_from_vector_to_vector_4() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 1);
-    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), 7 * M_PI / 4));
-    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), M_PI / 4));
+    CGAngle angle1 = angle_from_vector_to_vector(vector1, vector2);
+    CGAngle angle2 = angle_from_vector_to_vector(vector2, vector1);
+    g_assert(double_equals(angle_in_radians(angle1), 7 * M_PI / 4));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 4));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
@@ -466,41 +648,53 @@ static void test_angle_from_vector_to_vector_4() {
 static void test_angle_from_vector_to_vector_5() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 1);
-    g_assert(double_equals(angle_from_vector_to_vector(vector1, vector2), deg_to_rad(135)));
-    g_assert(double_equals(angle_from_vector_to_vector(vector2, vector1), deg_to_rad(225)));
+    CGAngle angle1 = angle_from_vector_to_vector(vector1, vector2);
+    CGAngle angle2 = angle_from_vector_to_vector(vector2, vector1);
+    g_assert(double_equals(angle_in_degrees(angle1), 135));
+    g_assert(double_equals(angle_in_degrees(angle2), 225));
+    angle_release(angle1);
+    angle_release(angle2);
     vector_release(vector1);
     vector_release(vector2);
 }
 
 static void test_vector_rotate_1() {
     CGVector vector = vector_new(1, 0);
-    vector_rotate(vector, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    vector_rotate(vector, angle);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 1));
+    angle_release(angle);
     vector_release(vector);
 }
 
 static void test_vector_rotate_2() {
     CGVector vector = vector_new(0, 1);
-    vector_rotate(vector, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    vector_rotate(vector, angle);
     g_assert(double_equals(vector->x, -1));
     g_assert(double_equals(vector->y, 0));
+    angle_release(angle);
     vector_release(vector);
 }
 
 static void test_vector_rotate_3() {
     CGVector vector = vector_new(-1, 0);
-    vector_rotate(vector, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    vector_rotate(vector, angle);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, -1));
+    angle_release(angle);
     vector_release(vector);
 }
 
 static void test_vector_rotate_4() {
     CGVector vector = vector_new(0, -1);
-    vector_rotate(vector, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    vector_rotate(vector, angle);
     g_assert(double_equals(vector->x, 1));
     g_assert(double_equals(vector->y, 0));
+    angle_release(angle);
     vector_release(vector);
 }
 
@@ -779,45 +973,53 @@ static void test_point_translate_3() {
 static void test_point_rotate_around_1() {
     CGPoint point = point_new(1, 0);
     CGPoint center = point_new(0, 0);
-    point_rotate_around(point, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 0));
     g_assert(double_equals(point->y, 1));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_2() {
     CGPoint point = point_new(0, 1);
     CGPoint center = point_new(0, 0);
-    point_rotate_around(point, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, -1));
     g_assert(double_equals(point->y, 0));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_3() {
     CGPoint point = point_new(-1, 0);
     CGPoint center = point_new(0, 0);
-    point_rotate_around(point, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 0));
     g_assert(double_equals(point->y, -1));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_4() {
     CGPoint point = point_new(0, -1);
     CGPoint center = point_new(0, 0);
-    point_rotate_around(point, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 1));
     g_assert(double_equals(point->y, 0));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_5() {
@@ -827,45 +1029,53 @@ static void test_point_rotate_around_5() {
     point2->w *= 2;
     point2->x *= 2;
     point2->y *= 2;
-    point_rotate_around(point1, center, 90);
-    point_rotate_around(point2, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point1, center, angle);
+    point_rotate_around(point2, center, angle);
     g_assert(point_equals(point1, point2));
     point_release(center);
     point_release(point1);
     point_release(point2);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_6() {
     CGPoint point = point_new(0, 0);
     CGPoint center = point_new(1, 1);
-    point_rotate_around(point, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 2));
     g_assert(double_equals(point->y, 0));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_7() {
     CGPoint point = point_new(1, 1);
     CGPoint center = point_new(1, 1);
-    point_rotate_around(point, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 1));
     g_assert(double_equals(point->y, 1));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_point_rotate_around_8() {
     CGPoint point = point_new(1, 1);
     CGPoint center = point_new(0, 0);
-    point_rotate_around(point, center, 0);
+    CGAngle angle = angle_in_degrees_new(0);
+    point_rotate_around(point, center, angle);
     g_assert(double_equals(point->w, 1));
     g_assert(double_equals(point->x, 1));
     g_assert(double_equals(point->y, 1));
     point_release(center);
     point_release(point);
+    angle_release(angle);
 }
 
 static void test_midpoint_between_points_1() {
@@ -1177,8 +1387,12 @@ static void test_angle_between_lines_1() {
     CGPoint c = point_new(0, 1);
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(a, c);
-    g_assert(double_equals(angle_between_lines(line1, line2), M_PI / 2));
-    g_assert(double_equals(angle_between_lines(line2, line1), M_PI / 2));
+    CGAngle angle1 = angle_between_lines(line1, line2);
+    CGAngle angle2 = angle_between_lines(line2, line1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI / 2));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 2));
+    angle_release(angle1);
+    angle_release(angle2);
     line_release(line1);
     line_release(line2);
     point_release(a);
@@ -1192,8 +1406,12 @@ static void test_angle_between_lines_2() {
     CGPoint c = point_new(-1, 1);
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(a, c);
-    g_assert(double_equals(angle_between_lines(line1, line2), M_PI / 2));
-    g_assert(double_equals(angle_between_lines(line2, line1), M_PI / 2));
+    CGAngle angle1 = angle_between_lines(line1, line2);
+    CGAngle angle2 = angle_between_lines(line2, line1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI / 2));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 2));
+    angle_release(angle1);
+    angle_release(angle2);
     line_release(line1);
     line_release(line2);
     point_release(a);
@@ -1207,8 +1425,12 @@ static void test_angle_between_lines_3() {
     CGPoint c = point_new(0, 1);
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(a, c);
-    g_assert(double_equals(angle_between_lines(line1, line2), M_PI / 4));
-    g_assert(double_equals(angle_between_lines(line2, line1), M_PI / 4));
+    CGAngle angle1 = angle_between_lines(line1, line2);
+    CGAngle angle2 = angle_between_lines(line2, line1);
+    g_assert(double_equals(angle_in_radians(angle1), M_PI / 4));
+    g_assert(double_equals(angle_in_radians(angle2), M_PI / 4));
+    angle_release(angle1);
+    angle_release(angle2);
     line_release(line1);
     line_release(line2);
     point_release(a);
@@ -1222,8 +1444,12 @@ static void test_angle_between_lines_4() {
     CGPoint c = point_new(1, 1);
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(a, c);
-    g_assert(double_equals(angle_between_lines(line1, line2), 0));
-    g_assert(double_equals(angle_between_lines(line2, line1), 0));
+    CGAngle angle1 = angle_between_lines(line1, line2);
+    CGAngle angle2 = angle_between_lines(line2, line1);
+    g_assert(double_equals(angle_in_radians(angle1), 0));
+    g_assert(double_equals(angle_in_radians(angle2), 0));
+    angle_release(angle1);
+    angle_release(angle2);
     line_release(line1);
     line_release(line2);
     point_release(a);
@@ -1238,8 +1464,12 @@ static void test_angle_between_lines_5() {
     CGPoint point4 = point_new(1, 1);
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(c, point4);
-    g_assert(double_equals(angle_between_lines(line1, line2), 0));
-    g_assert(double_equals(angle_between_lines(line2, line1), 0));
+    CGAngle angle1 = angle_between_lines(line1, line2);
+    CGAngle angle2 = angle_between_lines(line2, line1);
+    g_assert(double_equals(angle_in_radians(angle1), 0));
+    g_assert(double_equals(angle_in_radians(angle2), 0));
+    angle_release(angle1);
+    angle_release(angle2);
     line_release(line1);
     line_release(line2);
     point_release(a);
@@ -1254,8 +1484,12 @@ static void test_angle_between_lines_6() {
     CGPoint c = point_new(1, 0.5);
     CGLine line1 = line_new(a, b);
     CGLine line2 = line_new(a, c);
-    g_assert(double_lt(angle_between_lines(line1, line2), M_PI / 4));
-    g_assert(double_lt(angle_between_lines(line2, line1), M_PI / 4));
+    CGAngle angle1 = angle_between_lines(line1, line2);
+    CGAngle angle2 = angle_between_lines(line2, line1);
+    g_assert(double_equals(angle_in_radians(angle1), atan2(0.5, 1)));
+    g_assert(double_equals(angle_in_radians(angle2), atan2(0.5, 1)));
+    angle_release(angle1);
+    angle_release(angle2);
     line_release(line1);
     line_release(line2);
     point_release(a);
@@ -1272,7 +1506,9 @@ static void test_angle_between_lines_7() {
     line2->w = 1;
     line2->x = 1;
     line2->y = 0.5;
-    g_assert(double_equals(angle_between_lines(line1, line2), atan2(3, 1)));
+    CGAngle angle = angle_between_lines(line1, line2);
+    g_assert(double_equals(angle_in_radians(angle), atan2(3, 1)));
+    angle_release(angle);
     line_release(line1);
     line_release(line2);
 }
@@ -1487,44 +1723,52 @@ static void test_segment_rotate_around_1() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGPoint center = point_new(0.5, 0.5);
-    segment_rotate_around(segment1, center, 0);
+    CGAngle angle = angle_in_degrees_new(0);
+    segment_rotate_around(segment1, center, angle);
     g_assert(segment_equals(segment1, segment2));
     point_release(center);
     segment_release(segment1);
     segment_release(segment2);
+    angle_release(angle);
 }
 
 static void test_segment_rotate_around_2() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 0); (0, 1) >>");
     CGPoint center = point_new(0.5, 0.5);
-    segment_rotate_around(segment1, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    segment_rotate_around(segment1, center, angle);
     g_assert(segment_equals(segment1, segment2));
     point_release(center);
     segment_release(segment1);
     segment_release(segment2);
+    angle_release(angle);
 }
 
 static void test_segment_rotate_around_3() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (1, 1); (0, 0) >>");
     CGPoint center = point_new(0.5, 0.5);
-    segment_rotate_around(segment1, center, 180);
+    CGAngle angle = angle_in_degrees_new(180);
+    segment_rotate_around(segment1, center, angle);
     g_assert(segment_equals(segment1, segment2));
     point_release(center);
     segment_release(segment1);
     segment_release(segment2);
+    angle_release(angle);
 }
 
 static void test_segment_rotate_around_4() {
     CGSegment segment1 = segment_from_str((char *) "<< Segment: (0, 0); (1, 1) >>");
     CGSegment segment2 = segment_from_str((char *) "<< Segment: (2, 2); (1, 1) >>");
     CGPoint center = point_new(1, 1);
-    segment_rotate_around(segment1, center, 180);
+    CGAngle angle = angle_in_degrees_new(180);
+    segment_rotate_around(segment1, center, angle);
     g_assert(segment_equals(segment1, segment2));
     point_release(center);
     segment_release(segment1);
     segment_release(segment2);
+    angle_release(angle);
 }
 
 static void test_segment_collision_axes_1() {
@@ -2056,7 +2300,8 @@ static void test_triangle_rotate_around_1() {
     CGPoint c = point_new(0, 1);
     CGPoint center = point_new(1, 1);
     CGTriangle triangle = triangle_new(a, b, c);
-    triangle_rotate_around(triangle, center, 0);
+    CGAngle angle = angle_in_degrees_new(0);
+    triangle_rotate_around(triangle, center, angle);
     g_assert(double_equals(point_x(triangle->a), 0));
     g_assert(double_equals(point_y(triangle->a), 0));
     g_assert(double_equals(point_x(triangle->b), 1));
@@ -2068,6 +2313,7 @@ static void test_triangle_rotate_around_1() {
     point_release(a);
     point_release(b);
     point_release(c);
+    angle_release(angle);
 }
 
 static void test_triangle_rotate_around_2() {
@@ -2076,7 +2322,8 @@ static void test_triangle_rotate_around_2() {
     CGPoint c = point_new(0, 1);
     CGPoint center = point_new(1, 1);
     CGTriangle triangle = triangle_new(a, b, c);
-    triangle_rotate_around(triangle, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    triangle_rotate_around(triangle, center, angle);
     g_assert(double_equals(point_x(triangle->a), 2));
     g_assert(double_equals(point_y(triangle->a), 0));
     g_assert(double_equals(point_x(triangle->b), 2));
@@ -2088,6 +2335,7 @@ static void test_triangle_rotate_around_2() {
     point_release(a);
     point_release(b);
     point_release(c);
+    angle_release(angle);
 }
 
 static void test_triangle_rotate_around_3() {
@@ -2096,7 +2344,8 @@ static void test_triangle_rotate_around_3() {
     CGPoint c = point_new(0, 1);
     CGPoint center = point_new(1, 1);
     CGTriangle triangle = triangle_new(a, b, c);
-    triangle_rotate_around(triangle, center, 180);
+    CGAngle angle = angle_in_degrees_new(180);
+    triangle_rotate_around(triangle, center, angle);
     g_assert(double_equals(point_x(triangle->a), 2));
     g_assert(double_equals(point_y(triangle->a), 2));
     g_assert(double_equals(point_x(triangle->b), 1));
@@ -2108,6 +2357,7 @@ static void test_triangle_rotate_around_3() {
     point_release(a);
     point_release(b);
     point_release(c);
+    angle_release(angle);
 }
 
 static void test_triangle_orientation_1() {
@@ -2462,11 +2712,13 @@ static void test_polygon_rotate_around_1() {
     CGPolygon polygon2 = polygon_from_str(
             (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
     );
-    polygon_rotate_around(polygon1, center, 0);
+    CGAngle angle = angle_in_degrees_new(0);
+    polygon_rotate_around(polygon1, center, angle);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
+    angle_release(angle);
 }
 
 static void test_polygon_rotate_around_2() {
@@ -2477,11 +2729,13 @@ static void test_polygon_rotate_around_2() {
     CGPolygon polygon2 = polygon_from_str(
             (char *) "<< Polygon: (0, 0); (1, 0); (0, 1); (1, 1) >>"
     );
-    polygon_rotate_around(polygon1, center, 90);
+    CGAngle angle = angle_in_degrees_new(90);
+    polygon_rotate_around(polygon1, center, angle);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
+    angle_release(angle);
 }
 
 static void test_polygon_rotate_around_3() {
@@ -2492,11 +2746,13 @@ static void test_polygon_rotate_around_3() {
     CGPolygon polygon2 = polygon_from_str(
             (char *) "<< Polygon: (1, 1); (2, 1); (1, 2); (2, 2) >>"
     );
-    polygon_rotate_around(polygon1, center, 180);
+    CGAngle angle = angle_in_degrees_new(180);
+    polygon_rotate_around(polygon1, center, angle);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
+    angle_release(angle);
 }
 
 static void test_polygon_rotate_around_4() {
@@ -2509,13 +2765,15 @@ static void test_polygon_rotate_around_4() {
     list_append(points, point_new(-sqrt(2) / 2, 0));
     list_append(points, point_new(sqrt(2) / 2, 0));
     CGPolygon polygon2 = polygon_new(points);
-    polygon_rotate_around(polygon1, center, 45);
+    CGAngle angle = angle_in_degrees_new(45);
+    polygon_rotate_around(polygon1, center, angle);
     g_assert(polygon_equals(polygon1, polygon2));
     point_release(center);
     polygon_release(polygon1);
     polygon_release(polygon2);
     point_release(lower_left1);
     list_full_release(points, (void (*)(void *)) point_release);
+    angle_release(angle);
 }
 
 static void test_polygon_area_1() {
@@ -3169,11 +3427,21 @@ int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/gc/angle_in_radians_new", test_angle_in_radians_new_1);
     g_test_add_func("/gc/angle_in_radians_new", test_angle_in_radians_new_2);
+    g_test_add_func("/gc/angle_in_radians_new", test_angle_in_radians_new_3);
     g_test_add_func("/gc/angle_in_degrees_new", test_angle_in_degrees_new_1);
     g_test_add_func("/gc/angle_in_degrees_new", test_angle_in_degrees_new_2);
+    g_test_add_func("/gc/angle_in_degrees_new", test_angle_in_degrees_new_3);
     g_test_add_func("/gc/angle_release", test_angle_release_1);
     g_test_add_func("/gc/angle_equals", test_angle_equals_1);
     g_test_add_func("/gc/angle_equals", test_angle_equals_2);
+    g_test_add_func("/gc/angle_lt", test_angle_lt_1);
+    g_test_add_func("/gc/angle_lt", test_angle_lt_2);
+    g_test_add_func("/gc/angle_lte", test_angle_lte_1);
+    g_test_add_func("/gc/angle_lte", test_angle_lte_2);
+    g_test_add_func("/gc/angle_gt", test_angle_gt_1);
+    g_test_add_func("/gc/angle_gt", test_angle_gt_2);
+    g_test_add_func("/gc/angle_gte", test_angle_gte_1);
+    g_test_add_func("/gc/angle_gte", test_angle_gte_2);
     g_test_add_func("/gc/angle_dup", test_angle_dup_1);
     g_test_add_func("/gc/angle_to_str", test_angle_to_str_1);
     g_test_add_func("/gc/angle_from_str", test_angle_from_str_1);
@@ -3182,6 +3450,15 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_subtract", test_angle_subtract_1);
     g_test_add_func("/gc/angle_in_radians", test_angle_in_radians_1);
     g_test_add_func("/gc/angle_in_degrees", test_angle_in_degrees_1);
+    g_test_add_func("/gc/angle_complementary", test_angle_complementary_1);
+    g_test_add_func("/gc/angle_complementary", test_angle_complementary_2);
+    g_test_add_func("/gc/angle_complementary", test_angle_complementary_3);
+    g_test_add_func("/gc/angle_supplementary", test_angle_supplementary_1);
+    g_test_add_func("/gc/angle_supplementary", test_angle_supplementary_2);
+    g_test_add_func("/gc/angle_supplementary", test_angle_supplementary_3);
+    g_test_add_func("/gc/angle_replementary", test_angle_replementary_1);
+    g_test_add_func("/gc/angle_replementary", test_angle_replementary_2);
+    g_test_add_func("/gc/angle_replementary", test_angle_replementary_3);
     g_test_add_func("/gc/rad_to_deg", test_rad_to_deg_1);
     g_test_add_func("/gc/deg_to_rad", test_deg_to_rad_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);

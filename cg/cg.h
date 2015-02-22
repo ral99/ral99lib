@@ -66,6 +66,18 @@ void angle_release(CGAngle angle);
 /* Return 1 if the angles are equal. 0, otherwise. */
 int angle_equals(CGAngle angle1, CGAngle angle2);
 
+/* Return 1 if angle 1 is lower than angle 2. 0, otherwise. */
+int angle_lt(CGAngle angle1, CGAngle angle2);
+
+/* Return 1 if angle 1 is lower than or equal to angle 2. 0, otherwise. */
+int angle_lte(CGAngle angle1, CGAngle angle2);
+
+/* Return 1 if angle 1 is greater than angle 2. 0, otherwise. */
+int angle_gt(CGAngle angle1, CGAngle angle2);
+
+/* Return 1 if angle 1 is greater than or equal to angle 2. 0, otherwise. */
+int angle_gte(CGAngle angle1, CGAngle angle2);
+
 /* Return the duplicated angle. */
 CGAngle angle_dup(CGAngle angle);
 
@@ -87,6 +99,15 @@ double angle_in_radians(CGAngle angle);
 
 /* Return angle in degrees. */
 double angle_in_degrees(CGAngle angle);
+
+/* Return the complementary angle. */
+CGAngle angle_complementary(CGAngle angle);
+
+/* Return the supplementary angle. */
+CGAngle angle_supplementary(CGAngle angle);
+
+/* Return the replementary angle. */
+CGAngle angle_replementary(CGAngle angle);
 
 /* Converts an angle specified in radias to degrees. */
 double rad_to_deg(double rad);
@@ -149,15 +170,15 @@ double vector_magnitude(CGVector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(CGVector vector1, CGVector vector2);
 
-/* Return the angle in radians between two vectors in range [0, PI]. */
-double angle_between_vectors(CGVector vector1, CGVector vector2);
+/* Return the angle between two vectors in range [0, PI]. */
+CGAngle angle_between_vectors(CGVector vector1, CGVector vector2);
 
-/* Return the angle in radians from vector1 to vector2 in counter-clockwise orientation in
- * range [0, 2* PI[. */
-double angle_from_vector_to_vector(CGVector vector1, CGVector vector2);
+/* Return the angle from vector1 to vector2 in counter-clockwise orientation in range
+ * [0, 2* PI[. */
+CGAngle angle_from_vector_to_vector(CGVector vector1, CGVector vector2);
 
-/* Rotate the vector by the specified degrees in counter-clockwise orientation. */
-void vector_rotate(CGVector vector, double deg);
+/* Rotate the vector by the specified angle in counter-clockwise orientation. */
+void vector_rotate(CGVector vector, CGAngle angle);
 
 /* Return a new point. */
 CGPoint point_new(double x, double y);
@@ -196,9 +217,9 @@ CGVector point_projection_on_axis(CGPoint point, CGVector axis);
 /* Translate the point by the vector. */
 void point_translate(CGPoint point, CGVector vector);
 
-/* Rotate the point by the specified degrees in counter-clockwise orientation around a center
+/* Rotate the point by the specified angle in counter-clockwise orientation around a center
  * point. */
-void point_rotate_around(CGPoint point, CGPoint center, double deg);
+void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle);
 
 /* Return the midpoint between 2 points. */
 CGPoint midpoint_between_points(CGPoint point1, CGPoint point2);
@@ -243,8 +264,8 @@ int point_is_in_line(CGPoint point, CGLine line);
 /* Return the distance from the point to the line. */
 double point_distance_to_line(CGPoint point, CGLine line);
 
-/* Return the angle in radians between two lines in range [0, PI / 2]. */
-double angle_between_lines(CGLine line1, CGLine line2);
+/* Return the angle between two lines in range [0, PI / 2]. */
+CGAngle angle_between_lines(CGLine line1, CGLine line2);
 
 /* Return a segment defined by two points or NULL if points are equal. */
 CGSegment segment_new(CGPoint a, CGPoint b);
@@ -280,9 +301,9 @@ double segment_length(CGSegment segment);
 /* Translate the segment by the vector. */
 void segment_translate(CGSegment segment, CGVector vector);
 
-/* Rotate the segment by the specified degrees in counter-clockwise orientation around a
- * center point. */
-void segment_rotate_around(CGSegment segment, CGPoint center, double deg);
+/* Rotate the segment by the specified angle in counter-clockwise orientation around a center
+ * point. */
+void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
 
 /* Return segment projection on axis. */
 CGShapeProjectionOnAxis segment_projection_on_axis(CGSegment segment, CGVector axis);
@@ -371,9 +392,9 @@ ADTList triangle_points(CGTriangle triangle);
 /* Translate the triangle by the vector. */
 void triangle_translate(CGTriangle triangle, CGVector vector);
 
-/* Rotate the triangle by the specified degrees in counter-clockwise orientation around a
- * center point. */
-void triangle_rotate_around(CGTriangle triangle, CGPoint center, double deg);
+/* Rotate the triangle by the specified angle in counter-clockwise orientation around a center
+ * point. */
+void triangle_rotate_around(CGTriangle triangle, CGPoint center, CGAngle angle);
 
 /* Return -1 if clockwise; 1 if counter-clockwise; 0 if the points are collinear. */
 int triangle_orientation(CGTriangle triangle);
@@ -424,9 +445,9 @@ ADTList polygon_points(CGPolygon polygon);
 /* Translate the polygon by the vector. */
 void polygon_translate(CGPolygon polygon, CGVector vector);
 
-/* Rotate the polygon by the specified degrees in counter-clockwise orientation around a
- * center point. */
-void polygon_rotate_around(CGPolygon polygon, CGPoint center, double deg);
+/* Rotate the polygon by the specified angle in counter-clockwise orientation around a center
+ * point. */
+void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle);
 
 /* Return the area of polygon. */
 double polygon_area(CGPolygon polygon);
