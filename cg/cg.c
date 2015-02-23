@@ -970,18 +970,19 @@ CGPolygon polygon_new(ADTList points) {
     CGVector base_vector = vector_new(1, 0);
     while (list_size(points)) {
         CGPoint next_point = NULL;
-        double next_angle;
+        CGAngle next_angle = NULL;
         for (ADTListItem it = list_head(points); it; it = list_next(it)) {
             CGPoint point = (CGPoint) list_value(it);
-            CGVector vector = vector_new(point_x(point) - point_x(base_point),
-                                         point_y(point) - point_y(base_point));
+            CGVector vector = vector_from_point_to_point(base_point, point);
             CGAngle angle = angle_between_vectors(base_vector, vector);
-            if (!next_point || double_lt(angle_in_radians(angle), next_angle)) {
-                next_angle = angle_in_radians(angle);
+            if (!next_point || angle_lt(angle, next_angle)) {
+                next_angle = angle_dup(angle);
                 next_point = point;
             }
+            angle_release(angle);
             vector_release(vector);
         }
+        angle_release(next_angle);
         list_append(polygon->points, point_dup(next_point));
         list_remove(points, next_point);
     }
