@@ -27,6 +27,14 @@ int double_equals(double a, double b) {
     return (double_gt(a, b) == 0 && double_gt(b, a) == 0) ? 1 : 0;
 }
 
+double double_min(double a, double b) {
+    return (double_lt(a, b)) ? a : b;
+}
+
+double double_max(double a, double b) {
+    return (double_gt(a, b)) ? a : b;
+}
+
 char *double_to_str(double x, int decimal_positions) {
     char format[8];
     char buf[32];

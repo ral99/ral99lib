@@ -54,6 +54,22 @@ static void test_double_equals_1() {
     g_assert_cmpint(double_equals(b, a), ==, 0);
 }
 
+static void test_double_min_1() {
+    double a = 1.0;
+    double b = 2.0;
+    g_assert(double_equals(double_min(a, a), a));
+    g_assert(double_equals(double_min(a, b), a));
+    g_assert(double_equals(double_min(b, a), a));
+}
+
+static void test_double_max_1() {
+    double a = 1.0;
+    double b = 2.0;
+    g_assert(double_equals(double_max(a, a), a));
+    g_assert(double_equals(double_max(a, b), b));
+    g_assert(double_equals(double_max(b, a), b));
+}
+
 static void test_double_to_str_1() {
     char *str = double_to_str(0, 1);
     g_assert_cmpstr(str, ==, "0.0");
@@ -243,6 +259,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/double/lt", test_double_lt_1);
     g_test_add_func("/double/lte", test_double_lte_1);
     g_test_add_func("/double/equals", test_double_equals_1);
+    g_test_add_func("/double/min", test_double_min_1);
+    g_test_add_func("/double/max", test_double_max_1);
     g_test_add_func("/double/to_str", test_double_to_str_1);
     g_test_add_func("/double/to_str", test_double_to_str_2);
     g_test_add_func("/double/from_str", test_double_from_str_1);
