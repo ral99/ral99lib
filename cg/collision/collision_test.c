@@ -284,6 +284,20 @@ static void test_polygon_perpendicular_axes_1() {
     list_full_release(perpendicular_axes, (void (*)(void *)) vector_release);
 }
 
+static void test_collision_new_1() {
+    CGVector mtv = vector_new(1, 2);
+    CGPoint point = point_new(1, 2);
+    CGCollision collision = collision_new(mtv, point);
+    g_assert(collision != NULL);
+    g_assert(collision->mtv != mtv);
+    g_assert(vector_equals(collision->mtv, mtv));
+    g_assert(collision->point != point);
+    g_assert(point_equals(collision->point, point));
+    vector_release(mtv);
+    point_release(point);
+    collision_release(collision);
+}
+
 static void test_segment_and_segment_collision_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(0, 1);
@@ -1520,6 +1534,71 @@ static void test_collision_release_1() {
     collision_release(collision);
 }
 
+static void test_collision_equals_1() {
+    CGVector mtv1 = vector_new(1, 2);
+    CGPoint point1 = point_new(3, 4);
+    CGCollision collision1 = collision_new(mtv1, point1);
+    CGVector mtv2 = vector_new(1, 2);
+    CGPoint point2 = point_new(3, 5);
+    CGCollision collision2 = collision_new(mtv2, point2);
+    g_assert_cmpint(collision_equals(collision1, collision2), ==, 0);
+    point_release(point1);
+    point_release(point2);
+    vector_release(mtv1);
+    vector_release(mtv2);
+    collision_release(collision1);
+    collision_release(collision2);
+}
+
+static void test_collision_equals_2() {
+    CGVector mtv1 = vector_new(1, 2);
+    CGPoint point1 = point_new(3, 4);
+    CGCollision collision1 = collision_new(mtv1, point1);
+    CGVector mtv2 = vector_new(1, 5);
+    CGPoint point2 = point_new(3, 4);
+    CGCollision collision2 = collision_new(mtv2, point2);
+    g_assert_cmpint(collision_equals(collision1, collision2), ==, 0);
+    point_release(point1);
+    point_release(point2);
+    vector_release(mtv1);
+    vector_release(mtv2);
+    collision_release(collision1);
+    collision_release(collision2);
+}
+
+static void test_collision_equals_3() {
+    CGVector mtv1 = vector_new(1, 2);
+    CGPoint point1 = point_new(3, 4);
+    CGCollision collision1 = collision_new(mtv1, point1);
+    CGVector mtv2 = vector_new(1, 2);
+    CGPoint point2 = point_new(3, 4);
+    CGCollision collision2 = collision_new(mtv2, point2);
+    g_assert_cmpint(collision_equals(collision1, collision2), ==, 1);
+    point_release(point1);
+    point_release(point2);
+    vector_release(mtv1);
+    vector_release(mtv2);
+    collision_release(collision1);
+    collision_release(collision2);
+}
+
+static void test_collision_dup_1() {
+    CGVector mtv = vector_new(1, 2);
+    CGPoint point = point_new(1, 2);
+    CGCollision collision = collision_new(mtv, point);
+    CGCollision dup = collision_dup(collision);
+    g_assert(dup != NULL);
+    g_assert(dup != collision);
+    g_assert(dup->mtv != collision->mtv);
+    g_assert(vector_equals(dup->mtv, collision->mtv));
+    g_assert(dup->point != collision->point);
+    g_assert(point_equals(dup->point, collision->point));
+    collision_release(dup);
+    collision_release(collision);
+    vector_release(mtv);
+    point_release(point);
+}
+
 static void test_collision_minimum_translation_vector_1() {
     CGCollision collision = memalloc(sizeof(*collision));
     collision->mtv = vector_new(1, 2);
@@ -1582,6 +1661,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_perpendicular_axes", test_segment_perpendicular_axes_2);
     g_test_add_func("/gc/triangle_perpendicular_axes", test_triangle_perpendicular_axes_1);
     g_test_add_func("/gc/polygon_perpendicular_axes", test_polygon_perpendicular_axes_1);
+    g_test_add_func("/gc/collision_new", test_collision_new_1);
     g_test_add_func("/gc/segment_and_segment_collision", test_segment_and_segment_collision_1);
     g_test_add_func("/gc/segment_and_segment_collision", test_segment_and_segment_collision_2);
     g_test_add_func("/gc/segment_and_segment_collision", test_segment_and_segment_collision_3);
@@ -1674,6 +1754,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_and_circle_collision", test_circle_and_circle_collision_3);
     g_test_add_func("/gc/circle_and_circle_collision", test_circle_and_circle_collision_4);
     g_test_add_func("/gc/collision_release", test_collision_release_1);
+    g_test_add_func("/gc/collision_dup", test_collision_dup_1);
+    g_test_add_func("/gc/collision_equals", test_collision_equals_1);
+    g_test_add_func("/gc/collision_equals", test_collision_equals_2);
+    g_test_add_func("/gc/collision_equals", test_collision_equals_3);
     g_test_add_func("/gc/collision_minimum_translation_vector",
                     test_collision_minimum_translation_vector_1);
     g_test_add_func("/gc/collision_point", test_collision_point_1);

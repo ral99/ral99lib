@@ -131,6 +131,13 @@ ADTList triangle_perpendicular_axes(CGTriangle triangle) {
     return perpendicular_axes;
 }
 
+CGCollision collision_new(CGVector mtv, CGPoint point) {
+    CGCollision collision = memalloc(sizeof(*collision));
+    collision->mtv = vector_dup(mtv);
+    collision->point = point_dup(point);
+    return collision;
+}
+
 ADTList polygon_perpendicular_axes(CGPolygon polygon) {
     ADTList perpendicular_axes = list_new();
     int n_vertices = list_size(polygon->vertices);
@@ -167,8 +174,6 @@ CGCollision segment_and_segment_collision(CGSegment segment1, CGSegment segment2
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGPoint point1 = NULL;
         CGPoint point2 = NULL;
         CGSegment dup = segment_dup(segment2);
@@ -187,7 +192,9 @@ CGCollision segment_and_segment_collision(CGSegment segment1, CGSegment segment2
                     point2 = vertex;
             }
         }
-        collision->point = midpoint_between(point1, point2);
+        CGPoint point = midpoint_between(point1, point2);
+        collision = collision_new(mtv, point);
+        point_release(point);
         segment_release(dup);
         list_release(vertices);
         list_full_release(vertices1, (void (*)(void *)) point_release);
@@ -220,8 +227,6 @@ CGCollision segment_and_triangle_collision(CGSegment segment, CGTriangle triangl
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGPoint point1 = NULL;
         CGPoint point2 = NULL;
         CGTriangle dup = triangle_dup(triangle);
@@ -240,7 +245,9 @@ CGCollision segment_and_triangle_collision(CGSegment segment, CGTriangle triangl
                     point2 = vertex;
             }
         }
-        collision->point = midpoint_between(point1, point2);
+        CGPoint point = midpoint_between(point1, point2);
+        collision = collision_new(mtv, point);
+        point_release(point);
         triangle_release(dup);
         list_release(vertices);
         list_full_release(vertices1, (void (*)(void *)) point_release);
@@ -273,8 +280,6 @@ CGCollision segment_and_polygon_collision(CGSegment segment, CGPolygon polygon) 
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGPoint point1 = NULL;
         CGPoint point2 = NULL;
         CGPolygon dup = polygon_dup(polygon);
@@ -293,7 +298,9 @@ CGCollision segment_and_polygon_collision(CGSegment segment, CGPolygon polygon) 
                     point2 = vertex;
             }
         }
-        collision->point = midpoint_between(point1, point2);
+        CGPoint point = midpoint_between(point1, point2);
+        collision = collision_new(mtv, point);
+        point_release(point);
         polygon_release(dup);
         list_release(vertices);
         list_full_release(vertices1, (void (*)(void *)) point_release);
@@ -329,23 +336,23 @@ CGCollision segment_and_circle_collision(CGSegment segment, CGCircle circle) {
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
-        collision->point = NULL;
+        CGPoint coll_point = NULL;
         CGCircle dup = circle_dup(circle);
         circle_translate(dup, mtv);
-        for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
+        for (ADTListItem it = list_head(vertices); it && !coll_point; it = list_next(it)) {
             CGPoint vertex = (CGPoint) list_value(it);
             if (point_is_in_circle(vertex, dup))
-                collision->point = point_dup(vertex);
+                coll_point = point_dup(vertex);
         }
-        if (collision->point == NULL) {
+        if (coll_point == NULL) {
             CGLine line = segment_line(segment);
             CGLine perpendicular_line = line_perpendicular(line, dup->center);
-            collision->point = point_intersection_of_lines(line, perpendicular_line);
+            coll_point = point_intersection_of_lines(line, perpendicular_line);
             line_release(line);
             line_release(perpendicular_line);
         }
+        collision = collision_new(mtv, coll_point);
+        point_release(coll_point);
         circle_release(dup);
     }
     list_full_release(axes, (void (*)(void *)) vector_release);
@@ -383,8 +390,6 @@ CGCollision triangle_and_triangle_collision(CGTriangle triangle1, CGTriangle tri
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGPoint point1 = NULL;
         CGPoint point2 = NULL;
         CGTriangle dup = triangle_dup(triangle2);
@@ -403,7 +408,9 @@ CGCollision triangle_and_triangle_collision(CGTriangle triangle1, CGTriangle tri
                     point2 = vertex;
             }
         }
-        collision->point = midpoint_between(point1, point2);
+        CGPoint point = midpoint_between(point1, point2);
+        collision = collision_new(mtv, point);
+        point_release(point);
         triangle_release(dup);
         list_release(vertices);
         list_full_release(vertices1, (void (*)(void *)) point_release);
@@ -436,8 +443,6 @@ CGCollision triangle_and_polygon_collision(CGTriangle triangle, CGPolygon polygo
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGPoint point1 = NULL;
         CGPoint point2 = NULL;
         CGPolygon dup = polygon_dup(polygon);
@@ -456,7 +461,9 @@ CGCollision triangle_and_polygon_collision(CGTriangle triangle, CGPolygon polygo
                     point2 = vertex;
             }
         }
-        collision->point = midpoint_between(point1, point2);
+        CGPoint point = midpoint_between(point1, point2);
+        collision = collision_new(mtv, point);
+        point_release(point);
         polygon_release(dup);
         list_release(vertices);
         list_full_release(vertices1, (void (*)(void *)) point_release);
@@ -492,31 +499,31 @@ CGCollision triangle_and_circle_collision(CGTriangle triangle, CGCircle circle) 
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
-        collision->point = NULL;
+        CGPoint coll_point = NULL;
         CGCircle dup = circle_dup(circle);
         circle_translate(dup, mtv);
-        for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
+        for (ADTListItem it = list_head(vertices); it && !coll_point; it = list_next(it)) {
             CGPoint vertex = (CGPoint) list_value(it);
             if (point_is_in_circle(vertex, dup))
-                collision->point = point_dup(vertex);
+                coll_point = point_dup(vertex);
         }
-        if (collision->point == NULL) {
+        if (coll_point == NULL) {
             ADTList edges = triangle_edges(triangle);
-            for (ADTListItem it = list_head(edges); it; it = list_next(it)) {
+            for (ADTListItem it = list_head(edges); it && !coll_point; it = list_next(it)) {
                 CGSegment segment = (CGSegment) list_value(it);
                 CGLine line = segment_line(segment);
                 CGLine perpendicular_line = line_perpendicular(line, dup->center);
                 CGPoint point = point_intersection_of_lines(line, perpendicular_line);
                 if (point_is_in_circle(point, dup) && point_is_in_triangle(point, triangle))
-                    collision->point = point_dup(point);
+                    coll_point = point_dup(point);
                 line_release(line);
                 line_release(perpendicular_line);
                 point_release(point);
             }
             list_full_release(edges, (void (*)(void *)) segment_release);
         }
+        collision = collision_new(mtv, coll_point);
+        point_release(coll_point);
         circle_release(dup);
     }
     list_full_release(axes, (void (*)(void *)) vector_release);
@@ -563,8 +570,6 @@ CGCollision polygon_and_polygon_collision(CGPolygon polygon1, CGPolygon polygon2
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGPoint point1 = NULL;
         CGPoint point2 = NULL;
         CGPolygon dup = polygon_dup(polygon2);
@@ -583,7 +588,9 @@ CGCollision polygon_and_polygon_collision(CGPolygon polygon1, CGPolygon polygon2
                     point2 = vertex;
             }
         }
-        collision->point = midpoint_between(point1, point2);
+        CGPoint point = midpoint_between(point1, point2);
+        collision = collision_new(mtv, point);
+        point_release(point);
         polygon_release(dup);
         list_release(vertices);
         list_full_release(vertices1, (void (*)(void *)) point_release);
@@ -619,31 +626,31 @@ CGCollision polygon_and_circle_collision(CGPolygon polygon, CGCircle circle) {
         }
     }
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
-        collision->point = NULL;
+        CGPoint coll_point = NULL;
         CGCircle dup = circle_dup(circle);
         circle_translate(dup, mtv);
-        for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
+        for (ADTListItem it = list_head(vertices); it && !coll_point; it = list_next(it)) {
             CGPoint vertex = (CGPoint) list_value(it);
             if (point_is_in_circle(vertex, dup))
-                collision->point = point_dup(vertex);
+                coll_point = point_dup(vertex);
         }
-        if (collision->point == NULL) {
+        if (coll_point == NULL) {
             ADTList edges = polygon_edges(polygon);
-            for (ADTListItem it = list_head(edges); it; it = list_next(it)) {
+            for (ADTListItem it = list_head(edges); it && !coll_point; it = list_next(it)) {
                 CGSegment segment = (CGSegment) list_value(it);
                 CGLine line = segment_line(segment);
                 CGLine perpendicular_line = line_perpendicular(line, dup->center);
                 CGPoint point = point_intersection_of_lines(line, perpendicular_line);
                 if (point_is_in_circle(point, dup) && point_is_in_polygon(point, polygon))
-                    collision->point = point_dup(point);
+                    coll_point = point_dup(point);
                 line_release(line);
                 line_release(perpendicular_line);
                 point_release(point);
             }
             list_full_release(edges, (void (*)(void *)) segment_release);
         }
+        collision = collision_new(mtv, coll_point);
+        point_release(coll_point);
         circle_release(dup);
     }
     list_full_release(axes, (void (*)(void *)) vector_release);
@@ -688,11 +695,11 @@ CGCollision circle_and_circle_collision(CGCircle circle1, CGCircle circle2) {
                               circle_max_projection_on_axis(circle2, mtv), 0);
     vector_multiply(mtv, double_lt(mult1, -mult2) ? mult1 : mult2);
     if (double_gt(vector_magnitude(mtv), 0)) {
-        collision = memalloc(sizeof(*collision));
-        collision->mtv = vector_dup(mtv);
         CGCircle dup = circle_dup(circle2);
         circle_translate(dup, mtv);
-        collision->point = midpoint_between(circle1->center, dup->center);
+        CGPoint point = midpoint_between(circle1->center, dup->center);
+        collision = collision_new(mtv, point);
+        point_release(point);
         circle_release(dup);
     }
     vector_release(mtv);
@@ -703,6 +710,18 @@ void collision_release(CGCollision collision) {
     vector_release(collision->mtv);
     point_release(collision->point);
     free(collision);
+}
+
+int collision_equals(CGCollision collision1, CGCollision collision2) {
+    return (vector_equals(collision1->mtv, collision2->mtv) &&
+            point_equals(collision1->point, collision2->point)) ? 1 : 0;
+}
+
+CGCollision collision_dup(CGCollision collision) {
+    CGCollision dup = memalloc(sizeof(*dup));
+    dup->mtv = vector_dup(collision->mtv);
+    dup->point = point_dup(collision->point);
+    return dup;
 }
 
 CGVector collision_minimum_translation_vector(CGCollision collision) {

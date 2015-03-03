@@ -42,6 +42,9 @@ ADTList triangle_perpendicular_axes(CGTriangle triangle);
 /* Return a list of axes perpendicular to polygon edges. */
 ADTList polygon_perpendicular_axes(CGPolygon polygon);
 
+/* Return a new collision. */
+CGCollision collision_new(CGVector mtv, CGPoint point);
+
 /* Return a collision between a segment and a segment or NULL. */
 CGCollision segment_and_segment_collision(CGSegment segment1, CGSegment segment2);
 
@@ -92,6 +95,12 @@ CGCollision circle_and_circle_collision(CGCircle circle1, CGCircle circle2);
 
 /* Free the memory used by collision. */
 void collision_release(CGCollision collision);
+
+/* Return 1 if collision1 is equal to collision2. 0, otherwise. */
+int collision_equals(CGCollision collision1, CGCollision collision2);
+
+/* Return a copy of collision. */
+CGCollision collision_dup(CGCollision collision);
 
 /* Return collision minimum translation vector. */
 CGVector collision_minimum_translation_vector(CGCollision);
