@@ -12,6 +12,7 @@ LIST_ITEM_PATH						= adt/list/list_item/list_item
 LIST_PATH							= adt/list/list/list
 STR_PATH							= str/str
 CG_PATH								= cg/cg
+COLLISION_PATH						= cg/collision/collision
 ADDRESS_PATH						= net/address/address
 MESSAGE_PATH						= net/message/message
 SOCK_PATH							= net/sock/sock
@@ -28,6 +29,7 @@ HEADERS		= $(MEM_PATH).h \
 			  $(LIST_PATH).h \
 			  $(STR_PATH).h \
 			  $(CG_PATH).h \
+			  $(COLLISION_PATH).h \
 			  $(ADDRESS_PATH).h \
 			  $(MESSAGE_PATH).h \
 			  $(SOCK_PATH).h \
@@ -44,6 +46,7 @@ FILES		= $(MEM_PATH).c \
 			  $(LIST_PATH).c \
 			  $(STR_PATH).c \
 			  $(CG_PATH).c \
+			  $(COLLISION_PATH).c \
 			  $(ADDRESS_PATH).c \
 			  $(MESSAGE_PATH).c \
 			  $(SOCK_PATH).c \
@@ -60,6 +63,7 @@ TESTS		= $(MEM_PATH)_test \
 			  $(LIST_PATH)_test \
 			  $(STR_PATH)_test \
 			  $(CG_PATH)_test \
+			  $(COLLISION_PATH)_test \
 			  $(ADDRESS_PATH)_test \
 			  $(MESSAGE_PATH)_test \
 			  $(SOCK_PATH)_test \
@@ -94,6 +98,9 @@ $(STR_PATH)_test: $(STR_PATH)_test.c $(FILES) $(HEADERS)
 	$(CC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(LDFLAGS)
 
 $(CG_PATH)_test: $(CG_PATH)_test.c $(FILES) $(HEADERS)
+	$(CC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(LDFLAGS)
+
+$(COLLISION_PATH)_test: $(COLLISION_PATH)_test.c $(FILES) $(HEADERS)
 	$(CC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(FILES) $(GLIB_LIB) $(LDFLAGS)
 
 $(ADDRESS_PATH)_test: $(ADDRESS_PATH)_test.c $(FILES) $(HEADERS)

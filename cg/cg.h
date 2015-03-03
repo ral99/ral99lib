@@ -1,11 +1,10 @@
 #ifndef __CG__
 #define __CG__
 
-#include <math.h>
 #include "adt/adt.h"
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846
+    #define M_PI 3.14159265358979323846
 #endif
 
 typedef struct _CGAngle *CGAngle;
@@ -33,12 +32,6 @@ struct _CGSegment {
     CGPoint a, b;
 };
 
-typedef struct _CGCircle *CGCircle;
-struct _CGCircle {
-    CGPoint center;
-    double radius;
-};
-
 typedef struct _CGTriangle *CGTriangle;
 struct _CGTriangle {
     CGPoint a, b, c;
@@ -46,47 +39,44 @@ struct _CGTriangle {
 
 typedef struct _CGPolygon *CGPolygon;
 struct _CGPolygon {
-    ADTList points;
+    ADTList vertices;
 };
 
-typedef struct _CGShapeProjectionOnAxis *CGShapeProjectionOnAxis;
-struct _CGShapeProjectionOnAxis {
-    double min, max;
+typedef struct _CGCircle *CGCircle;
+struct _CGCircle {
+    CGPoint center;
+    double radius;
 };
 
-/* Return a new angle defined in radians. */
+/* Return a new angle specified in radians. */
 CGAngle angle_in_radians_new(double rad);
 
-/* Return a new angle defined in degrees. */
+/* Return a new angle specified in degrees. */
 CGAngle angle_in_degrees_new(double deg);
 
 /* Free the memory used by angle. */
 void angle_release(CGAngle angle);
 
-/* Return 1 if the angles are equal. 0, otherwise. */
+/* Return 1 if angle1 is equal to angle2. 0, otherwise. */
 int angle_equals(CGAngle angle1, CGAngle angle2);
 
-/* Return 1 if angle 1 is lower than angle 2. 0, otherwise. */
+/* Return 1 if angle1 is lower than angle2. 0, otherwise. */
 int angle_lt(CGAngle angle1, CGAngle angle2);
 
-/* Return 1 if angle 1 is lower than or equal to angle 2. 0, otherwise. */
+/* Return 1 if angle1 is lower than or equal to angle2. 0, otherwise. */
 int angle_lte(CGAngle angle1, CGAngle angle2);
 
-/* Return 1 if angle 1 is greater than angle 2. 0, otherwise. */
+/* Return 1 if angle1 is greater than angle2. 0, otherwise. */
 int angle_gt(CGAngle angle1, CGAngle angle2);
 
-/* Return 1 if angle 1 is greater than or equal to angle 2. 0, otherwise. */
+/* Return 1 if angle1 is greater than or equal to angle2. 0, otherwise. */
 int angle_gte(CGAngle angle1, CGAngle angle2);
 
-/* Return the duplicated angle. */
+/* Return a copy of angle. */
 CGAngle angle_dup(CGAngle angle);
 
-/* Return the string representation of the angle with the specified number of decimal
- * positions. */
+/* Return the string representation of angle with the specified decimal positions. */
 char *angle_to_str(CGAngle angle, int decimal_positions);
-
-/* Return angle from its string representation. */
-CGAngle angle_from_str(char *str);
 
 /* Sum angle2 to angle1. */
 void angle_sum(CGAngle angle1, CGAngle angle2);
@@ -112,24 +102,20 @@ CGAngle angle_replementary(CGAngle angle);
 /* Return a new vector. */
 CGVector vector_new(double x, double y);
 
-/* Return a new vector from point a to point b. */
+/* Return a vector specified by two points. */
 CGVector vector_from_point_to_point(CGPoint a, CGPoint b);
 
 /* Free the memory used by vector. */
 void vector_release(CGVector vector);
 
-/* Return 1 if the vectors are equal. 0, otherwise. */
+/* Return 1 if vector1 is equal to vector2. 0, otherwise. */
 int vector_equals(CGVector vector1, CGVector vector2);
 
-/* Return the duplicated vector. */
+/* Return a copy of vector. */
 CGVector vector_dup(CGVector vector);
 
-/* Return the string representation of the vector with the specified number of decimal
- * positions. */
+/* Return the string representation of vector with the specified decimal positions. */
 char *vector_to_str(CGVector vector, int decimal_positions);
-
-/* Return vector from its string representation. */
-CGVector vector_from_str(char *str);
 
 /* Return vector x component. */
 double vector_x(CGVector vector);
@@ -137,10 +123,10 @@ double vector_x(CGVector vector);
 /* Return vector y component. */
 double vector_y(CGVector vector);
 
-/* Return perpendicular vector using right hand rule. */
+/* Return a perpendicular vector using the right hand rule. */
 CGVector vector_right_perpendicular(CGVector vector);
 
-/* Return perpendicular vector using left hand rule. */
+/* Return a perpendicular vector using the left hand rule. */
 CGVector vector_left_perpendicular(CGVector vector);
 
 /* Normalize vector. */
@@ -149,13 +135,13 @@ void vector_normalize(CGVector vector);
 /* Reverse vector. */
 void vector_reverse(CGVector vector);
 
-/* Sum vector 2 to vector 1. */
+/* Sum vector2 to vector1. */
 void vector_sum(CGVector vector1, CGVector vector2);
 
-/* Subtract vector 2 from vector 1. */
+/* Subtract vector2 from vector1. */
 void vector_subtract(CGVector vector1, CGVector vector2);
 
-/* Multiply vector by a scalar factor. */
+/* Multiply vector by a factor. */
 void vector_multiply(CGVector vector, double k);
 
 /* Return vector magnitude. */
@@ -164,34 +150,29 @@ double vector_magnitude(CGVector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(CGVector vector1, CGVector vector2);
 
-/* Return the angle between two vectors in range [0, PI]. */
-CGAngle angle_between_vectors(CGVector vector1, CGVector vector2);
+/* Return the angle from vector1 to vector2 in counter-clockwise direction. */
+CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
-/* Return the angle from vector1 to vector2 in counter-clockwise orientation in range
- * [0, 2* PI[. */
-CGAngle angle_from_vector_to_vector(CGVector vector1, CGVector vector2);
-
-/* Rotate the vector by the specified angle in counter-clockwise orientation. */
+/* Rotate vector in counter-clockwise direction. */
 void vector_rotate(CGVector vector, CGAngle angle);
 
 /* Return a new point. */
 CGPoint point_new(double x, double y);
 
+/* Return the midpoint between two points. */
+CGPoint midpoint_between(CGPoint point1, CGPoint point2);
+
 /* Free the memory used by point. */
 void point_release(CGPoint point);
 
-/* Return 1 if the points are equal. 0, otherwise. */
+/* Return 1 if point1 is equal to point2. 0, otherwise. */
 int point_equals(CGPoint point1, CGPoint point2);
 
-/* Return the duplicated point. */
+/* Return a copy of point. */
 CGPoint point_dup(CGPoint point);
 
-/* Return the string representation of the point with the specified number of decimal
- * positions. */
+/* Return the string representation of point with the specified decimal positions. */
 char *point_to_str(CGPoint point, int decimal_positions);
-
-/* Return point from its string representation. */
-CGPoint point_from_str(char *str);
 
 /* Return point x component. */
 double point_x(CGPoint point);
@@ -199,145 +180,195 @@ double point_x(CGPoint point);
 /* Return point y component. */
 double point_y(CGPoint point);
 
-/* Return point vector from origin. */
+/* Return vector from origin to point. */
 CGVector point_vector_from_origin(CGPoint point);
 
-/* Return point projection magnitude on axis. */
-double point_projection_magnitude_on_axis(CGPoint point, CGVector axis);
-
-/* Return point projection on axis. */
+/* Return point projection vector on axis. */
 CGVector point_projection_on_axis(CGPoint point, CGVector axis);
 
-/* Translate the point by the vector. */
+/* Translate point by vector. */
 void point_translate(CGPoint point, CGVector vector);
 
-/* Rotate the point by the specified angle in counter-clockwise orientation around a center
- * point. */
+/* Rotate point around a center point in counter-clockwise direction. */
 void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle);
 
-/* Return the midpoint between 2 points. */
-CGPoint midpoint_between_points(CGPoint point1, CGPoint point2);
-
-/* Normalize the point coordinates. */
+/* Normalize point. */
 void point_normalize(CGPoint point);
 
-/* Return the distance between two points. */
+/* Return distance between two points. */
 double point_distance_to_point(CGPoint point1, CGPoint point2);
 
-/* Return a new line defined by 2 points or NULL if points are equal. */
+/* Return distance between a point and a line. */
+double point_distance_to_line(CGPoint point, CGLine line);
+
+/* Return 1 if point is in line. 0, otherwise. */
+int point_is_in_line(CGPoint point, CGLine line);
+
+/* Return 1 if point is in segment. 0, otherwise. */
+int point_is_in_segment(CGPoint point, CGSegment segment);
+
+/* Return 1 if point is in triangle. 0, otherwise. */
+int point_is_in_triangle(CGPoint point, CGTriangle triangle);
+
+/* Return 1 if point is in polygon. 0, otherwise. */
+int point_is_in_polygon(CGPoint point, CGPolygon polygon);
+
+/* Return 1 if point is in circle. 0, otherwise. */
+int point_is_in_circle(CGPoint point, CGCircle circle);
+
+/* Return the point of intersection between two lines or NULL, if lines are parallel. */
+CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
+
+/* Return the point of intersection between two segments or NULL, if there are an infinite
+ * number of points. */
+CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
+
+/* Return a new line or NULL if points are equal. */
 CGLine line_new(CGPoint a, CGPoint b);
 
 /* Free the memory used by line. */
 void line_release(CGLine line);
 
-/* Return 1 if the lines are equal. 0, otherwise. */
+/* Return 1 if line1 is equal to line2. 0, otherwise. */
 int line_equals(CGLine line1, CGLine line2);
 
-/* Return the duplicated line. */
+/* Return a copy of line. */
 CGLine line_dup(CGLine line);
 
-/* Return the string representation of the line with the specified number of decimal
- * positions. */
+/* Return the string representation of line with the specified decimal positions. */
 char *line_to_str(CGLine line, int decimal_positions);
 
-/* Return line from its string representation. */
-CGLine line_from_str(char *str);
-
-/* Return the perpendicular line which contains point. */
+/* Return the perpendicular line which contains the specified point. */
 CGLine line_perpendicular(CGLine line, CGPoint point);
 
-/* Return the point of intersection between 2 lines or NULL if they're parallel. */
-CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
-
-/* Normalize the line coefficients. */
+/* Normalize line. */
 void line_normalize(CGLine line);
 
-/* Return 1 if the point is in line. 0, otherwise. */
-int point_is_in_line(CGPoint point, CGLine line);
-
-/* Return the distance from the point to the line. */
-double point_distance_to_line(CGPoint point, CGLine line);
-
-/* Return the angle between two lines in range [0, PI / 2]. */
-CGAngle angle_between_lines(CGLine line1, CGLine line2);
-
-/* Return a segment defined by two points or NULL if points are equal. */
+/* Return a new segment or NULL, if points are equal. */
 CGSegment segment_new(CGPoint a, CGPoint b);
 
 /* Free the memory used by segment. */
 void segment_release(CGSegment segment);
 
-/* Return 1 if the segments are equal. 0, otherwise. */
+/* Return 1 if segment1 is equal to segment2. 0, otherwise. */
 int segment_equals(CGSegment segment1, CGSegment segment2);
 
-/* Return the duplicated segment. */
+/* Return a copy of segment. */
 CGSegment segment_dup(CGSegment segment);
 
-/* Return the string representation of the segment with the specified number of decimal
- * positions. */
+/* Return the string representation of segment with the specified decimal positions. */
 char *segment_to_str(CGSegment segment, int decimal_positions);
 
-/* Return segment from its string representation. */
-CGSegment segment_from_str(char *str);
+/* Return a list of segment vertices. */
+ADTList segment_vertices(CGSegment segment);
 
-/* Return a list of two points that defines the segment. */
-ADTList segment_points(CGSegment segment);
-
-/* Return the vector from segment point a to b. */
-CGVector segment_vector(CGSegment segment);
-
-/* Return the segment line. */
+/* Return a line specified by segment vertices. */
 CGLine segment_line(CGSegment segment);
 
-/* Return the segment length. */
+/* Return segment length. */
 double segment_length(CGSegment segment);
 
-/* Translate the segment by the vector. */
+/* Translate segment by a vector. */
 void segment_translate(CGSegment segment, CGVector vector);
 
-/* Rotate the segment by the specified angle in counter-clockwise orientation around a center
- * point. */
+/* Rotate segment around a center point in counter-clockwise direction. */
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
 
-/* Return segment projection on axis. */
-CGShapeProjectionOnAxis segment_projection_on_axis(CGSegment segment, CGVector axis);
+/* Return a new triangle. */
+CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c);
 
-/* Return a list of segment collision detection axes. */
-ADTList segment_collision_axes(CGSegment segment);
+/* Free the memory used by triangle. */
+void triangle_release(CGTriangle triangle);
 
-/* Return the point of intersection between 2 segments or NULL. */
-CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
+/* Return 1 if triangle1 is equal to triangle2. 0, otherwise. */
+int triangle_equals(CGTriangle triangle1, CGTriangle triangle2);
 
-/* Return 1 if the point is in the segment. 0, otherwise. */
-int point_is_in_segment(CGPoint point, CGSegment segment);
+/* Return a copy of triangle. */
+CGTriangle triangle_dup(CGTriangle triangle);
 
-/* Return a new circle defined by its center point and radius or NULL if radius is less than
- * or equal to 0. */
+/* Return the triangle string representation with the specified decimal positions. */
+char *triangle_to_str(CGTriangle triangle, int decimal_positions);
+
+/* Return a list of triangle vertices. */
+ADTList triangle_vertices(CGTriangle triangle);
+
+/* Return a list of triangle edges. */
+ADTList triangle_edges(CGTriangle triangle);
+
+/* Translate triangle by a vector. */
+void triangle_translate(CGTriangle triangle, CGVector vector);
+
+/* Rotate triangle around a center in counter-clockwise direction. */
+void triangle_rotate_around(CGTriangle triangle, CGPoint center, CGAngle angle);
+
+/* Return 1 if triangle is in counter-clockwise orientation. -1, if in clockwise orientation.
+ * 0, if vertices are collinear. */
+int triangle_orientation(CGTriangle triangle);
+
+/* Return triangle area. */
+double triangle_area(CGTriangle triangle);
+
+/* Return a new polygon or NULL, if there are less than 3 vertices. */
+CGPolygon polygon_new(ADTList vertices);
+
+/* Return a new triangle polygon. */
+CGPolygon polygon_new_triangle(CGPoint a, CGPoint b, CGPoint c);
+
+/* Return a new rectangle polygon. */
+CGPolygon polygon_new_rectangle(CGPoint lower_left, double width, double height);
+
+/* Return a new square polygon. */
+CGPolygon polygon_new_square(CGPoint lower_left, double side);
+
+/* Free the memory used by polygon. */
+void polygon_release(CGPolygon polygon);
+
+/* Return 1 if polygon1 is equal to polygon2. 0, otherwise. */
+int polygon_equals(CGPolygon polygon1, CGPolygon polygon2);
+
+/* Return a copy of polygon. */
+CGPolygon polygon_dup(CGPolygon polygon);
+
+/* Return the string representation of polygon with the specified decimal positions. */
+char *polygon_to_str(CGPolygon polygon, int decimal_positions);
+
+/* Return a list of polygon vertices. */
+ADTList polygon_vertices(CGPolygon polygon);
+
+/* Return a list of polygon edges. */
+ADTList polygon_edges(CGPolygon polygon);
+
+/* Translate polygon by vector. */
+void polygon_translate(CGPolygon polygon, CGVector vector);
+
+/* Rotate polygon around a center point in counter-clockwise direction. */
+void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle);
+
+/* Return polygon area. */
+double polygon_area(CGPolygon polygon);
+
+/* Return a new circle or NULL, if radius is lower than or equal to 0. */
 CGCircle circle_new(CGPoint center, double radius);
 
 /* Free the memory used by circle. */
 void circle_release(CGCircle circle);
 
-/* Return 1 if the circles are equal. 0, otherwise. */
+/* Return 1 if circle1 is equal to circle2. 0, otherwise. */
 int circle_equals(CGCircle circle1, CGCircle circle2);
 
-/* Return the duplicated circle. */
+/* Return a copy of circle. */
 CGCircle circle_dup(CGCircle circle);
 
-/* Return the string representation of the circle with the specified number of decimal
- * positions. */
+/* Return the string representation of circle with the specified decimal positions. */
 char *circle_to_str(CGCircle circle, int decimal_positions);
 
-/* Return circle from its string representation. */
-CGCircle circle_from_str(char *str);
-
-/* Return circle center point. */
+/* Return circle center. */
 CGPoint circle_center(CGCircle circle);
 
-/* Return circle center point x component. */
+/* Return x component of circle center. */
 double circle_center_x(CGCircle circle);
 
-/* Return circle center point y component. */
+/* Return y component of circle center. */
 double circle_center_y(CGCircle circle);
 
 /* Return circle radius. */
@@ -346,157 +377,14 @@ double circle_radius(CGCircle circle);
 /* Return circle area. */
 double circle_area(CGCircle circle);
 
-/* Return a list of circle points with the specified size. */
-ADTList circle_points(CGCircle circle, int n_points);
+/* Return a list of circle vertices. */
+ADTList circle_vertices(CGCircle circle, int n_vertices);
 
-/* Translate the point by the vector. */
+/* Translate circle by a vector. */
 void circle_translate(CGCircle circle, CGVector vector);
 
-/* Return circle projection on axis. */
-CGShapeProjectionOnAxis circle_projection_on_axis(CGCircle circle, CGVector axis);
-
-/* Return a list of circle collision detection axes. */
-ADTList circle_collision_axes(CGCircle circle, ADTList points);
-
-/* Return 1 if the point is inside the circle. 0, otherwise. */
-int point_is_in_circle(CGPoint point, CGCircle circle);
-
-/* Return a new triangle defined by 3 points that can be collinear. */
-CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c);
-
-/* Free the memory used by triangle. */
-void triangle_release(CGTriangle triangle);
-
-/* Return 1 if the triangles are equal. 0, otherwise. */
-int triangle_equals(CGTriangle triangle1, CGTriangle triangle2);
-
-/* Return the duplicated triangle. */
-CGTriangle triangle_dup(CGTriangle triangle);
-
-/* Return the string representation of the triangle with the specified number of decimal
- * positions. */
-char *triangle_to_str(CGTriangle triangle, int decimal_positions);
-
-/* Return triangle from its string representation. */
-CGTriangle triangle_from_str(char *str);
-
-/* Return a list of triangle points. */
-ADTList triangle_points(CGTriangle triangle);
-
-/* Translate the triangle by the vector. */
-void triangle_translate(CGTriangle triangle, CGVector vector);
-
-/* Rotate the triangle by the specified angle in counter-clockwise orientation around a center
- * point. */
-void triangle_rotate_around(CGTriangle triangle, CGPoint center, CGAngle angle);
-
-/* Return -1 if clockwise; 1 if counter-clockwise; 0 if the points are collinear. */
-int triangle_orientation(CGTriangle triangle);
-
-/* Return the area of triangle. */
-double triangle_area(CGTriangle triangle);
-
-/* Return triangle projection on axis. */
-CGShapeProjectionOnAxis triangle_projection_on_axis(CGTriangle triangle, CGVector axis);
-
-/* Return a list of triangle collision detection axes. */
-ADTList triangle_collision_axes(CGTriangle triangle);
-
-/* Return 1 if the point is inside the triangle. 0, otherwise. */
-int point_is_in_triangle(CGPoint point, CGTriangle triangle);
-
-/* Return a new polygon defined by a list of points or NULL if points are collinear. */
-CGPolygon polygon_new(ADTList points);
-
-/* Return a new polygon defined by a triangle specification. */
-CGPolygon polygon_new_triangle(CGPoint a, CGPoint b, CGPoint c);
-
-/* Return a new polygon defined by a rectangle specification. */
-CGPolygon polygon_new_rectangle(CGPoint lower_left, double width, double height);
-
-/* Return a new polygon defined by a square specification. */
-CGPolygon polygon_new_square(CGPoint lower_left, double side);
-
-/* Free the memory used by polygon. */
-void polygon_release(CGPolygon polygon);
-
-/* Return 1 if the polygons are equal. 0, otherwise. */
-int polygon_equals(CGPolygon polygon1, CGPolygon polygon2);
-
-/* Return the duplicated polygon. */
-CGPolygon polygon_dup(CGPolygon polygon);
-
-/* Return the string representation of the polygon with the specified number of decimal
- * positions. */
-char *polygon_to_str(CGPolygon polygon, int decimal_positions);
-
-/* Return polygon from its string representation. */
-CGPolygon polygon_from_str(char *str);
-
-/* Return a list of polygon points. */
-ADTList polygon_points(CGPolygon polygon);
-
-/* Translate the polygon by the vector. */
-void polygon_translate(CGPolygon polygon, CGVector vector);
-
-/* Rotate the polygon by the specified angle in counter-clockwise orientation around a center
- * point. */
-void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle);
-
-/* Return the area of polygon. */
-double polygon_area(CGPolygon polygon);
-
-/* Return polygon projection on axis. */
-CGShapeProjectionOnAxis polygon_projection_on_axis(CGPolygon polygon, CGVector axis);
-
-/* Return a list of polygon collision detection axes. */
-ADTList polygon_collision_axes(CGPolygon polygon);
-
-/* Return 1 if the point is inside the polygon. 0, otherwise. */
-int point_is_in_polygon(CGPoint point, CGPolygon polygon);
-
-/* Return a new SPOA defined by a range. */
-CGShapeProjectionOnAxis shape_projection_on_axis_new(double min, double max);
-
-/* Free the memory used by SPOA. */
-void shape_projection_on_axis_release(CGShapeProjectionOnAxis spoa);
-
-/* Return 1 if the SPOAs are equal. 0, otherwise. */
-int shape_projection_on_axis_equals(CGShapeProjectionOnAxis spoa1,
-                                    CGShapeProjectionOnAxis spoa2);
-
-/* Return the duplicated SPOA. */
-CGShapeProjectionOnAxis shape_projection_on_axis_dup(CGShapeProjectionOnAxis spoa);
-
-/* Return SPOA minimum value. */
-double shape_projection_on_axis_min(CGShapeProjectionOnAxis spoa);
-
-/* Return SPOA maximum value. */
-double shape_projection_on_axis_max(CGShapeProjectionOnAxis spoa);
-
-/* Return the minimum magnitude translation vector that applied to spoa2 separates it from
- * spoa1. */
-double shape_projection_on_axis_tv(CGShapeProjectionOnAxis spoa1,
-                                   CGShapeProjectionOnAxis spoa2);
-
-/* Return a minimum translation vector to be applied on the second parameter to separate the
- * geometric shapes. */
-CGVector segment_segment_collision_mtv(CGSegment segment1, CGSegment segment2);
-CGVector segment_triangle_collision_mtv(CGSegment segment, CGTriangle triangle);
-CGVector segment_polygon_collision_mtv(CGSegment segment, CGPolygon polygon);
-CGVector segment_circle_collision_mtv(CGSegment segment, CGCircle circle);
-CGVector triangle_segment_collision_mtv(CGTriangle triangle, CGSegment segment);
-CGVector triangle_triangle_collision_mtv(CGTriangle triangle1, CGTriangle triangle2);
-CGVector triangle_polygon_collision_mtv(CGTriangle triangle, CGPolygon polygon);
-CGVector triangle_circle_collision_mtv(CGTriangle triangle, CGCircle circle);
-CGVector polygon_segment_collision_mtv(CGPolygon polygon, CGSegment segment);
-CGVector polygon_triangle_collision_mtv(CGPolygon polygon, CGTriangle triangle);
-CGVector polygon_polygon_collision_mtv(CGPolygon polygon1, CGPolygon polygon2);
-CGVector polygon_circle_collision_mtv(CGPolygon polygon, CGCircle circle);
-CGVector circle_segment_collision_mtv(CGCircle circle, CGSegment segment);
-CGVector circle_triangle_collision_mtv(CGCircle circle, CGTriangle triangle);
-CGVector circle_polygon_collision_mtv(CGCircle circle, CGPolygon polygon);
-CGVector circle_circle_collision_mtv(CGCircle circle1, CGCircle circle2);
+/* Rotate circle around a center point in counter-clockwise direction. */
+void circle_rotate_around(CGCircle circle, CGPoint center, CGAngle angle);
 
 #endif
 
