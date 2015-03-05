@@ -64,6 +64,7 @@ static void test_triangle_min_projection_on_axis_1() {
     CGTriangle triangle = triangle_new(a, b, c);
     CGVector axis = vector_new(1, 0);
     g_assert(double_equals(triangle_min_projection_on_axis(triangle, axis), 1));
+    vector_release(axis);
     triangle_release(triangle);
     point_release(a);
     point_release(b);
@@ -77,6 +78,7 @@ static void test_triangle_min_projection_on_axis_2() {
     CGTriangle triangle = triangle_new(a, b, c);
     CGVector axis = vector_new(sqrt(2) / 2, sqrt(2) / 2);
     g_assert(double_equals(triangle_min_projection_on_axis(triangle, axis), 0));
+    vector_release(axis);
     triangle_release(triangle);
     point_release(a);
     point_release(b);
@@ -90,6 +92,7 @@ static void test_triangle_max_projection_on_axis_1() {
     CGTriangle triangle = triangle_new(a, b, c);
     CGVector axis = vector_new(1, 0);
     g_assert(double_equals(triangle_max_projection_on_axis(triangle, axis), 2));
+    vector_release(axis);
     triangle_release(triangle);
     point_release(a);
     point_release(b);
@@ -103,6 +106,7 @@ static void test_triangle_max_projection_on_axis_2() {
     CGTriangle triangle = triangle_new(a, b, c);
     CGVector axis = vector_new(sqrt(2) / 2, sqrt(2) / 2);
     g_assert(double_equals(triangle_max_projection_on_axis(triangle, axis), sqrt(2) / 2));
+    vector_release(axis);
     triangle_release(triangle);
     point_release(a);
     point_release(b);
