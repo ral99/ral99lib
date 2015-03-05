@@ -96,12 +96,14 @@ double polygon_max_projection_on_axis(CGPolygon polygon, CGVector axis) {
 double circle_min_projection_on_axis(CGCircle circle, CGVector axis) {
     CGVector vector = point_vector_from_origin(circle->center);
     double projection = vector_dot(vector, axis);
+    vector_release(vector);
     return projection - circle->radius;
 }
 
 double circle_max_projection_on_axis(CGCircle circle, CGVector axis) {
     CGVector vector = point_vector_from_origin(circle->center);
     double projection = vector_dot(vector, axis);
+    vector_release(vector);
     return projection + circle->radius;
 }
 
