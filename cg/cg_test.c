@@ -2170,6 +2170,7 @@ static void test_polygon_new_square_1() {
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 1), b));
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 2), c));
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 3), d));
+    polygon_release(polygon);
     point_release(lower_left);
     point_release(b);
     point_release(c);
