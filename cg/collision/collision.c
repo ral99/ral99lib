@@ -134,7 +134,7 @@ ADTList triangle_perpendicular_axes(CGTriangle triangle) {
 }
 
 CGCollision collision_new(CGVector mtv, CGPoint point) {
-    CGCollision collision = memalloc(sizeof(*collision));
+    CGCollision collision = (CGCollision) memalloc(sizeof(*collision));
     collision->mtv = vector_dup(mtv);
     collision->point = point_dup(point);
     return collision;
@@ -720,7 +720,7 @@ int collision_equals(CGCollision collision1, CGCollision collision2) {
 }
 
 CGCollision collision_dup(CGCollision collision) {
-    CGCollision dup = memalloc(sizeof(*dup));
+    CGCollision dup = (CGCollision) memalloc(sizeof(*dup));
     dup->mtv = vector_dup(collision->mtv);
     dup->point = point_dup(collision->point);
     return dup;
