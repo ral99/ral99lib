@@ -2528,35 +2528,6 @@ static void test_circle_area_1() {
     circle_release(circle);
 }
 
-static void test_circle_vertices_1() {
-    CGPoint center = point_new(1, 1);
-    CGCircle circle = circle_new(center, 1);
-    ADTList points = list_new();
-    list_append(points, point_new(2, 1));
-    ADTList vertices = circle_vertices(circle, 1);
-    g_assert(list_equals_cmp(points, vertices, (int (*)(void *, void *)) point_equals));
-    point_release(center);
-    circle_release(circle);
-    list_full_release(points, (void (*)(void *)) point_release);
-    list_full_release(vertices, (void (*)(void *)) point_release);
-}
-
-static void test_circle_vertices_2() {
-    CGPoint center = point_new(1, 1);
-    CGCircle circle = circle_new(center, 1);
-    ADTList points = list_new();
-    list_append(points, point_new(2, 1));
-    list_append(points, point_new(1, 2));
-    list_append(points, point_new(0, 1));
-    list_append(points, point_new(1, 0));
-    ADTList vertices = circle_vertices(circle, 4);
-    g_assert(list_equals_cmp(points, vertices, (int (*)(void *, void *)) point_equals));
-    point_release(center);
-    circle_release(circle);
-    list_full_release(points, (void (*)(void *)) point_release);
-    list_full_release(vertices, (void (*)(void *)) point_release);
-}
-
 static void test_circle_translate_1() {
     CGPoint center = point_new(1, 1);
     CGPoint new_center = point_new(2, 2);
@@ -2846,8 +2817,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_center_y", test_circle_center_y_1);
     g_test_add_func("/gc/circle_radius", test_circle_radius_1);
     g_test_add_func("/gc/circle_area", test_circle_area_1);
-    g_test_add_func("/gc/circle_vertices", test_circle_vertices_1);
-    g_test_add_func("/gc/circle_vertices", test_circle_vertices_2);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_2);
     g_test_add_func("/gc/circle_rotate_around", test_circle_rotate_around_1);

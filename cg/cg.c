@@ -901,21 +901,6 @@ double circle_area(CGCircle circle) {
     return (M_PI * circle->radius * circle->radius);
 }
 
-ADTList circle_vertices(CGCircle circle, int n_vertices) {
-    ADTList vertices = list_new();
-    for (int i = 0; i < n_vertices; i++) {
-        CGPoint vertex = point_dup(circle->center);
-        CGVector vector = vector_new(circle->radius, 0);
-        CGAngle angle = angle_in_degrees_new((360 * i) / n_vertices);
-        vector_rotate(vector, angle);
-        point_translate(vertex, vector);
-        list_append(vertices, vertex);
-        angle_release(angle);
-        vector_release(vector);
-    }
-    return vertices;
-}
-
 void circle_translate(CGCircle circle, CGVector vector) {
     point_translate(circle->center, vector);
 }

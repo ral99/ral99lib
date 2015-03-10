@@ -377,9 +377,6 @@ double circle_radius(CGCircle circle);
 /* Return circle area. */
 double circle_area(CGCircle circle);
 
-/* Return a list of circle vertices. */
-ADTList circle_vertices(CGCircle circle, int n_vertices);
-
 /* Translate circle by a vector. */
 void circle_translate(CGCircle circle, CGVector vector);
 
