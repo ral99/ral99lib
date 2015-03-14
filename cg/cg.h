@@ -309,7 +309,7 @@ int triangle_orientation(CGTriangle triangle);
 double triangle_area(CGTriangle triangle);
 
 /* Return a new polygon or NULL, if there are less than 3 vertices, or if the polygon is
- * non-convex, or if there are coincident points or if there are 3 collinear points. */
+ * non-convex, or if there are coincident vertices or if there are 3 collinear vertices. */
 CGPolygon polygon_new(ADTList vertices);
 
 /* Return a new triangle polygon. */
