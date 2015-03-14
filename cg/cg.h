@@ -123,10 +123,10 @@ double vector_x(CGVector vector);
 /* Return vector y component. */
 double vector_y(CGVector vector);
 
-/* Return a perpendicular vector using the right hand rule. */
+/* Return a perpendicular vector with the same magnitude using the right hand rule. */
 CGVector vector_right_perpendicular(CGVector vector);
 
-/* Return a perpendicular vector using the left hand rule. */
+/* Return a perpendicular vector with the same magnitude using the left hand rule. */
 CGVector vector_left_perpendicular(CGVector vector);
 
 /* Normalize vector. */
