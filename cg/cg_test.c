@@ -2126,6 +2126,39 @@ static void test_polygon_new_2() {
     list_full_release(vertices, (void (*)(void *)) point_release);
 }
 
+static void test_polygon_new_3() {
+    ADTList vertices = list_new();
+    list_append(vertices, point_new(0, 0));
+    list_append(vertices, point_new(2, 0));
+    list_append(vertices, point_new(2, 2));
+    list_append(vertices, point_new(1, 1));
+    list_append(vertices, point_new(0, 2));
+    g_assert(polygon_new(vertices) == NULL);
+    list_full_release(vertices, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_new_4() {
+    ADTList vertices = list_new();
+    list_append(vertices, point_new(0, 0));
+    list_append(vertices, point_new(1, 0));
+    list_append(vertices, point_new(1, 1));
+    list_append(vertices, point_new(1, 1));
+    list_append(vertices, point_new(0, 1));
+    g_assert(polygon_new(vertices) == NULL);
+    list_full_release(vertices, (void (*)(void *)) point_release);
+}
+
+static void test_polygon_new_5() {
+    ADTList vertices = list_new();
+    list_append(vertices, point_new(0, 0));
+    list_append(vertices, point_new(1, 0));
+    list_append(vertices, point_new(2, 0));
+    list_append(vertices, point_new(2, 2));
+    list_append(vertices, point_new(0, 2));
+    g_assert(polygon_new(vertices) == NULL);
+    list_full_release(vertices, (void (*)(void *)) point_release);
+}
+
 static void test_polygon_new_triangle_1() {
     CGPoint a = point_new(1, 0);
     CGPoint b = point_new(0, 0);
@@ -2787,6 +2820,9 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_area", test_triangle_area_1);
     g_test_add_func("/gc/polygon_new", test_polygon_new_1);
     g_test_add_func("/gc/polygon_new", test_polygon_new_2);
+    g_test_add_func("/gc/polygon_new", test_polygon_new_3);
+    g_test_add_func("/gc/polygon_new", test_polygon_new_4);
+    g_test_add_func("/gc/polygon_new", test_polygon_new_5);
     g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_1);
     g_test_add_func("/gc/polygon_new_rectangle", test_polygon_new_rectangle_1);
     g_test_add_func("/gc/polygon_new_square", test_polygon_new_square_1);

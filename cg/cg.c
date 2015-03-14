@@ -715,6 +715,17 @@ CGPolygon polygon_new(ADTList vertices) {
     }
     vector_release(base_vector);
     list_release(vertices);
+    for (int i = 0; i < n_vertices && polygon != NULL; i++) {
+        CGPoint a = (CGPoint) list_at(polygon->vertices, i);
+        CGPoint b = (CGPoint) list_at(polygon->vertices, (i + 1) % n_vertices);
+        CGPoint c = (CGPoint) list_at(polygon->vertices, (i + 2) % n_vertices);
+        CGTriangle triangle = triangle_new(a, b, c);
+        if (triangle_orientation(triangle) != 1) {
+            polygon_release(polygon);
+            polygon = NULL;
+        }
+        triangle_release(triangle);
+    }
     return polygon;
 }
 
