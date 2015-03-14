@@ -133,13 +133,6 @@ ADTList triangle_perpendicular_axes(CGTriangle triangle) {
     return perpendicular_axes;
 }
 
-CGCollision collision_new(CGVector mtv, CGPoint point) {
-    CGCollision collision = (CGCollision) memalloc(sizeof(*collision));
-    collision->mtv = vector_dup(mtv);
-    collision->point = point_dup(point);
-    return collision;
-}
-
 ADTList polygon_perpendicular_axes(CGPolygon polygon) {
     ADTList perpendicular_axes = list_new();
     int n_vertices = list_size(polygon->vertices);
@@ -153,6 +146,13 @@ ADTList polygon_perpendicular_axes(CGPolygon polygon) {
         vector_release(vector);
     }
     return perpendicular_axes;
+}
+
+CGCollision collision_new(CGVector mtv, CGPoint point) {
+    CGCollision collision = (CGCollision) memalloc(sizeof(*collision));
+    collision->mtv = vector_dup(mtv);
+    collision->point = point_dup(point);
+    return collision;
 }
 
 CGCollision segment_and_segment_collision(CGSegment segment1, CGSegment segment2) {
