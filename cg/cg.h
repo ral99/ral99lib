@@ -257,7 +257,7 @@ void line_normalize(CGLine line);
  ****************************************** CGSegment *****************************************
  *********************************************************************************************/
 
-/* Return a new segment or NULL, if points are equal. */
+/* Return a new segment. */
 CGSegment segment_new(CGPoint a, CGPoint b);
 
 /* Free the memory used by segment. */

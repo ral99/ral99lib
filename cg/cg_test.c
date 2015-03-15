@@ -1543,9 +1543,14 @@ static void test_segment_new_2() {
     CGPoint a = point_new(1, 1);
     CGPoint b = point_new(1, 1);
     CGSegment segment = segment_new(a, b);
-    g_assert(segment == NULL);
+    g_assert(segment != NULL);
+    g_assert(segment->a != a);
+    g_assert(segment->b != b);
+    g_assert(point_equals(segment->a, a));
+    g_assert(point_equals(segment->b, b));
     point_release(a);
     point_release(b);
+    segment_release(segment);
 }
 
 static void test_segment_release_1() {

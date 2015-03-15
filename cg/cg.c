@@ -520,8 +520,6 @@ void line_normalize(CGLine line) {
  *********************************************************************************************/
 
 CGSegment segment_new(CGPoint a, CGPoint b) {
-    if (point_equals(a, b))
-        return NULL;
     CGSegment segment = (CGSegment) memalloc(sizeof(*segment));
     segment->a = point_dup(a);
     segment->b = point_dup(b);
