@@ -136,14 +136,20 @@ double vector_y(CGVector vector) {
 }
 
 CGVector vector_right_perpendicular_axis(CGVector vector) {
-    CGVector axis = vector_new(vector->y, -vector->x);
-    vector_normalize(axis);
+    CGVector axis = NULL;
+    if (double_gt(vector_magnitude(vector), 0)) {
+        axis = vector_new(vector->y, -vector->x);
+        vector_normalize(axis);
+    }
     return axis;
 }
 
 CGVector vector_left_perpendicular_axis(CGVector vector) {
-    CGVector axis = vector_new(-vector->y, vector->x);
-    vector_normalize(axis);
+    CGVector axis = NULL;
+    if (double_gt(vector_magnitude(vector), 0)) {
+        axis = vector_new(-vector->y, vector->x);
+        vector_normalize(axis);
+    }
     return axis;
 }
 

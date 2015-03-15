@@ -122,10 +122,12 @@ double vector_x(CGVector vector);
 /* Return vector y component. */
 double vector_y(CGVector vector);
 
-/* Return a perpendicular normalized vector using the right hand rule. */
+/* Return a perpendicular normalized vector using the right hand rule, or NULL if vector has
+ * magnitude 0. */
 CGVector vector_right_perpendicular_axis(CGVector vector);
 
-/* Return a perpendicular normalized vector using the left hand rule. */
+/* Return a perpendicular normalized vector using the left hand rule, or NULL if vector has
+ * magnitude 0. */
 CGVector vector_left_perpendicular_axis(CGVector vector);
 
 /* Normalize vector. */

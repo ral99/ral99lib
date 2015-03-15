@@ -349,6 +349,12 @@ static void test_vector_right_perpendicular_axis_1() {
     vector_release(axis);
 }
 
+static void test_vector_right_perpendicular_axis_2() {
+    CGVector vector = vector_new(0, 0);
+    g_assert(vector_right_perpendicular_axis(vector) == NULL);
+    vector_release(vector);
+}
+
 static void test_vector_left_perpendicular_axis_1() {
     CGVector vector = vector_new(3, 4);
     CGVector axis = vector_left_perpendicular_axis(vector);
@@ -356,6 +362,12 @@ static void test_vector_left_perpendicular_axis_1() {
     g_assert(double_equals(axis->y, 3 / 5.0));
     vector_release(vector);
     vector_release(axis);
+}
+
+static void test_vector_left_perpendicular_axis_2() {
+    CGVector vector = vector_new(0, 0);
+    g_assert(vector_left_perpendicular_axis(vector) == NULL);
+    vector_release(vector);
 }
 
 static void test_vector_normalize_1() {
@@ -2646,8 +2658,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_y", test_vector_y_1);
     g_test_add_func("/gc/vector_right_perpendicular_axis",
                     test_vector_right_perpendicular_axis_1);
+    g_test_add_func("/gc/vector_right_perpendicular_axis",
+                    test_vector_right_perpendicular_axis_2);
     g_test_add_func("/gc/vector_left_perpendicular_axis",
                     test_vector_left_perpendicular_axis_1);
+    g_test_add_func("/gc/vector_left_perpendicular_axis",
+                    test_vector_left_perpendicular_axis_2);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_2);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_3);
