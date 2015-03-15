@@ -312,7 +312,7 @@ double triangle_area(CGTriangle triangle);
  * non-convex, or if there are coincident vertices or if there are 3 collinear vertices. */
 CGPolygon polygon_new(ADTList vertices);
 
-/* Return a new triangle polygon or NULL, if two or more points are coincident. */
+/* Return a new triangle polygon or NULL, if two or more points are coincidents. */
 CGPolygon polygon_new_triangle(CGPoint a, CGPoint b, CGPoint c);
 
 /* Return a new rectangle polygon or NULL, if width or height is 0. */
