@@ -48,6 +48,10 @@ struct _CGCircle {
     double radius;
 };
 
+/**********************************************************************************************
+ ******************************************* CGAngle ******************************************
+ *********************************************************************************************/
+
 /* Return a new angle specified in radians. */
 CGAngle angle_in_radians_new(double rad);
 
@@ -90,14 +94,9 @@ double angle_in_radians(CGAngle angle);
 /* Return angle in degrees. */
 double angle_in_degrees(CGAngle angle);
 
-/* Return the complementary angle. */
-CGAngle angle_complementary(CGAngle angle);
-
-/* Return the supplementary angle. */
-CGAngle angle_supplementary(CGAngle angle);
-
-/* Return the replementary angle. */
-CGAngle angle_replementary(CGAngle angle);
+/**********************************************************************************************
+ ****************************************** CGVector ******************************************
+ *********************************************************************************************/
 
 /* Return a new vector. */
 CGVector vector_new(double x, double y);
@@ -155,6 +154,10 @@ CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
 /* Rotate vector in counter-clockwise direction. */
 void vector_rotate(CGVector vector, CGAngle angle);
+
+/**********************************************************************************************
+ ******************************************* CGPoint ******************************************
+ *********************************************************************************************/
 
 /* Return a new point. */
 CGPoint point_new(double x, double y);
@@ -223,6 +226,10 @@ CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
  * number of points. */
 CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
 
+/**********************************************************************************************
+ ******************************************* CGLine *******************************************
+ *********************************************************************************************/
+
 /* Return a new line or NULL if points are equal. */
 CGLine line_new(CGPoint a, CGPoint b);
 
@@ -243,6 +250,10 @@ CGLine line_perpendicular(CGLine line, CGPoint point);
 
 /* Normalize line. */
 void line_normalize(CGLine line);
+
+/**********************************************************************************************
+ ****************************************** CGSegment *****************************************
+ *********************************************************************************************/
 
 /* Return a new segment or NULL, if points are equal. */
 CGSegment segment_new(CGPoint a, CGPoint b);
@@ -273,6 +284,10 @@ void segment_translate(CGSegment segment, CGVector vector);
 
 /* Rotate segment around a center point in counter-clockwise direction. */
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
+
+/**********************************************************************************************
+ ***************************************** CGTriangle *****************************************
+ *********************************************************************************************/
 
 /* Return a new triangle. */
 CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c);
@@ -307,6 +322,10 @@ int triangle_orientation(CGTriangle triangle);
 
 /* Return triangle area. */
 double triangle_area(CGTriangle triangle);
+
+/**********************************************************************************************
+ ****************************************** CGPolygon *****************************************
+ *********************************************************************************************/
 
 /* Return a new polygon or NULL, if there are less than three vertices, or if the polygon is
  * non-convex, or if there are coincident vertices or if there are 3 collinear vertices. */
@@ -347,6 +366,10 @@ void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle);
 
 /* Return polygon area. */
 double polygon_area(CGPolygon polygon);
+
+/**********************************************************************************************
+ ****************************************** CGCircle ******************************************
+ *********************************************************************************************/
 
 /* Return a new circle or NULL, if radius is lower than or equal to 0. */
 CGCircle circle_new(CGPoint center, double radius);

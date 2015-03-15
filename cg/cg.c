@@ -8,6 +8,10 @@
 #include "num/num.h"
 #include "str/str.h"
 
+/**********************************************************************************************
+ ******************************************* CGAngle ******************************************
+ *********************************************************************************************/
+
 CGAngle angle_in_radians_new(double rad) {
     CGAngle angle = (CGAngle) memalloc(sizeof(*angle));
     while (double_lt(rad, 0))
@@ -79,17 +83,9 @@ double angle_in_degrees(CGAngle angle) {
     return (180 * angle->rad) / M_PI;
 }
 
-CGAngle angle_complementary(CGAngle angle) {
-    return angle_in_radians_new(M_PI / 2 - angle->rad);
-}
-
-CGAngle angle_supplementary(CGAngle angle) {
-    return angle_in_radians_new(M_PI - angle->rad);
-}
-
-CGAngle angle_replementary(CGAngle angle) {
-    return angle_in_radians_new(2 * M_PI - angle->rad);
-}
+/**********************************************************************************************
+ ****************************************** CGVector ******************************************
+ *********************************************************************************************/
 
 CGVector vector_new(double x, double y) {
     CGVector vector = (CGVector) memalloc(sizeof(*vector));
@@ -186,14 +182,16 @@ CGAngle vector_angle_to(CGVector vector1, CGVector vector2) {
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
     CGAngle angle_between = angle_in_radians_new(acos(dot / (magnitude1 * magnitude2)));
+    CGAngle replementary_angle = angle_in_radians_new(2 * M_PI - angle_between->rad);
     CGVector vector1_dup = vector_dup(vector1);
     CGVector vector2_dup = vector_dup(vector2);
     vector_normalize(vector1_dup);
     vector_normalize(vector2_dup);
     vector_rotate(vector1_dup, angle_between);
     CGAngle angle = (vector_equals(vector1_dup, vector2_dup))
-                    ? angle_dup(angle_between) : angle_replementary(angle_between);
+                    ? angle_dup(angle_between) : angle_dup(replementary_angle);
     angle_release(angle_between);
+    angle_release(replementary_angle);
     vector_release(vector1_dup);
     vector_release(vector2_dup);
     return angle;
@@ -205,6 +203,10 @@ void vector_rotate(CGVector vector, CGAngle angle) {
     vector->x = vector_x * cos(angle->rad) - vector_y * sin(angle->rad);
     vector->y = vector_x * sin(angle->rad) + vector_y * cos(angle->rad);
 }
+
+/**********************************************************************************************
+ ******************************************* CGPoint ******************************************
+ *********************************************************************************************/
 
 CGPoint point_new(double x, double y) {
     CGPoint point = (CGPoint) memalloc(sizeof(*point));
@@ -441,6 +443,10 @@ CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2) {
     return intersection;
 }
 
+/**********************************************************************************************
+ ******************************************* CGLine *******************************************
+ *********************************************************************************************/
+
 CGLine line_new(CGPoint a, CGPoint b) {
     if (point_equals(a, b))
         return NULL;
@@ -496,6 +502,10 @@ void line_normalize(CGLine line) {
     line->x /= div;
     line->y /= div;
 }
+
+/**********************************************************************************************
+ ****************************************** CGSegment *****************************************
+ *********************************************************************************************/
 
 CGSegment segment_new(CGPoint a, CGPoint b) {
     if (point_equals(a, b))
@@ -565,6 +575,10 @@ void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle) {
     point_rotate_around(segment->a, center, angle);
     point_rotate_around(segment->b, center, angle);
 }
+
+/**********************************************************************************************
+ ***************************************** CGTriangle *****************************************
+ *********************************************************************************************/
 
 CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c) {
     CGTriangle triangle = (CGTriangle) memalloc(sizeof(*triangle));
@@ -674,6 +688,10 @@ double triangle_area(CGTriangle triangle) {
                 triangle->a->w * triangle->b->y * triangle->c->x -
                 triangle->a->x * triangle->b->w * triangle->c->y) / 2;
 }
+
+/**********************************************************************************************
+ ****************************************** CGPolygon *****************************************
+ *********************************************************************************************/
 
 CGPolygon polygon_new(ADTList vertices) {
     int n_vertices = list_size(vertices);
@@ -849,6 +867,10 @@ double polygon_area(CGPolygon polygon) {
     }
     return fabs(area) / 2;
 }
+
+/**********************************************************************************************
+ ****************************************** CGCircle ******************************************
+ *********************************************************************************************/
 
 CGCircle circle_new(CGPoint center, double radius) {
     if (double_lte(radius, 0))

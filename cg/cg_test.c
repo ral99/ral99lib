@@ -246,78 +246,6 @@ static void test_angle_in_degrees_1() {
     angle_release(angle);
 }
 
-static void test_angle_complementary_1() {
-    CGAngle angle = angle_in_radians_new(0);
-    CGAngle comp_angle = angle_complementary(angle);
-    g_assert(double_equals(angle_in_radians(comp_angle), M_PI / 2));
-    angle_release(angle);
-    angle_release(comp_angle);
-}
-
-static void test_angle_complementary_2() {
-    CGAngle angle = angle_in_radians_new(M_PI / 4);
-    CGAngle comp_angle = angle_complementary(angle);
-    g_assert(double_equals(angle_in_radians(comp_angle), M_PI / 4));
-    angle_release(angle);
-    angle_release(comp_angle);
-}
-
-static void test_angle_complementary_3() {
-    CGAngle angle = angle_in_radians_new(M_PI);
-    CGAngle comp_angle = angle_complementary(angle);
-    g_assert(double_equals(angle_in_radians(comp_angle), 3 * M_PI / 2));
-    angle_release(angle);
-    angle_release(comp_angle);
-}
-
-static void test_angle_supplementary_1() {
-    CGAngle angle = angle_in_radians_new(0);
-    CGAngle sup_angle = angle_supplementary(angle);
-    g_assert(double_equals(angle_in_radians(sup_angle), M_PI));
-    angle_release(angle);
-    angle_release(sup_angle);
-}
-
-static void test_angle_supplementary_2() {
-    CGAngle angle = angle_in_radians_new(M_PI / 2);
-    CGAngle sup_angle = angle_supplementary(angle);
-    g_assert(double_equals(angle_in_radians(sup_angle), M_PI / 2));
-    angle_release(angle);
-    angle_release(sup_angle);
-}
-
-static void test_angle_supplementary_3() {
-    CGAngle angle = angle_in_radians_new(3 * M_PI / 2);
-    CGAngle sup_angle = angle_supplementary(angle);
-    g_assert(double_equals(angle_in_radians(sup_angle), 3 * M_PI / 2));
-    angle_release(angle);
-    angle_release(sup_angle);
-}
-
-static void test_angle_replementary_1() {
-    CGAngle angle = angle_in_radians_new(0);
-    CGAngle rep_angle = angle_replementary(angle);
-    g_assert(double_equals(angle_in_radians(rep_angle), 0));
-    angle_release(angle);
-    angle_release(rep_angle);
-}
-
-static void test_angle_replementary_2() {
-    CGAngle angle = angle_in_radians_new(M_PI);
-    CGAngle rep_angle = angle_replementary(angle);
-    g_assert(double_equals(angle_in_radians(rep_angle), M_PI));
-    angle_release(angle);
-    angle_release(rep_angle);
-}
-
-static void test_angle_replementary_3() {
-    CGAngle angle = angle_in_radians_new(2 * M_PI);
-    CGAngle rep_angle = angle_replementary(angle);
-    g_assert(double_equals(angle_in_radians(rep_angle), 0));
-    angle_release(angle);
-    angle_release(rep_angle);
-}
-
 static void test_vector_new_1() {
     CGVector vector = vector_new(1, 2);
     g_assert(vector != NULL);
@@ -2697,15 +2625,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_subtract", test_angle_subtract_2);
     g_test_add_func("/gc/angle_in_radians", test_angle_in_radians_1);
     g_test_add_func("/gc/angle_in_degrees", test_angle_in_degrees_1);
-    g_test_add_func("/gc/angle_complementary", test_angle_complementary_1);
-    g_test_add_func("/gc/angle_complementary", test_angle_complementary_2);
-    g_test_add_func("/gc/angle_complementary", test_angle_complementary_3);
-    g_test_add_func("/gc/angle_supplementary", test_angle_supplementary_1);
-    g_test_add_func("/gc/angle_supplementary", test_angle_supplementary_2);
-    g_test_add_func("/gc/angle_supplementary", test_angle_supplementary_3);
-    g_test_add_func("/gc/angle_replementary", test_angle_replementary_1);
-    g_test_add_func("/gc/angle_replementary", test_angle_replementary_2);
-    g_test_add_func("/gc/angle_replementary", test_angle_replementary_3);
     g_test_add_func("/gc/vector_new", test_vector_new_1);
     g_test_add_func("/gc/vector_from_point_to_point", test_vector_from_point_to_point_1);
     g_test_add_func("/gc/vector_release", test_vector_release_1);
