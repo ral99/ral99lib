@@ -390,6 +390,14 @@ static void test_vector_normalize_4() {
     vector_release(vector);
 }
 
+static void test_vector_normalize_5() {
+    CGVector vector = vector_new(0, 0);
+    vector_normalize(vector);
+    g_assert(double_equals(vector->x, 0));
+    g_assert(double_equals(vector->y, 0));
+    vector_release(vector);
+}
+
 static void test_vector_reverse_1() {
     CGVector vector = vector_new(2, -3);
     vector_reverse(vector);
@@ -2644,6 +2652,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_2);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_3);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_4);
+    g_test_add_func("/gc/vector_normalize", test_vector_normalize_5);
     g_test_add_func("/gc/vector_reverse", test_vector_reverse_1);
     g_test_add_func("/gc/vector_sum", test_vector_sum_1);
     g_test_add_func("/gc/vector_sum", test_vector_sum_2);

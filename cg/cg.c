@@ -149,8 +149,10 @@ CGVector vector_left_perpendicular_axis(CGVector vector) {
 
 void vector_normalize(CGVector vector) {
     double magnitude = vector_magnitude(vector);
-    vector->x /= magnitude;
-    vector->y /= magnitude;
+    if (double_gt(magnitude, 0)) {
+        vector->x /= magnitude;
+        vector->y /= magnitude;
+    }
 }
 
 void vector_reverse(CGVector vector) {
