@@ -110,9 +110,7 @@ double circle_max_projection_on_axis(CGCircle circle, CGVector axis) {
 ADTList segment_perpendicular_axes(CGSegment segment) {
     ADTList perpendicular_axes = list_new();
     CGVector vector = vector_from_point_to_point(segment->a, segment->b);
-    CGVector axis = vector_right_perpendicular(vector);
-    vector_normalize(axis);
-    list_append(perpendicular_axes, axis);
+    list_append(perpendicular_axes, vector_right_perpendicular_axis(vector));
     vector_release(vector);
     return perpendicular_axes;
 }
@@ -124,9 +122,7 @@ ADTList triangle_perpendicular_axes(CGTriangle triangle) {
         CGPoint vertex1 = (CGPoint) list_at(vertices, i);
         CGPoint vertex2 = (CGPoint) list_at(vertices, (i + 1) % 3);
         CGVector vector = vector_from_point_to_point(vertex1, vertex2);
-        CGVector axis = vector_right_perpendicular(vector);
-        vector_normalize(axis);
-        list_append(perpendicular_axes, axis);
+        list_append(perpendicular_axes, vector_right_perpendicular_axis(vector));
         vector_release(vector);
     }
     list_full_release(vertices, (void (*)(void *)) point_release);
@@ -140,9 +136,7 @@ ADTList polygon_perpendicular_axes(CGPolygon polygon) {
         CGPoint vertex1 = (CGPoint) list_at(polygon->vertices, i);
         CGPoint vertex2 = (CGPoint) list_at(polygon->vertices, (i + 1) % n_vertices);
         CGVector vector = vector_from_point_to_point(vertex1, vertex2);
-        CGVector axis = vector_right_perpendicular(vector);
-        vector_normalize(axis);
-        list_append(perpendicular_axes, axis);
+        list_append(perpendicular_axes, vector_right_perpendicular_axis(vector));
         vector_release(vector);
     }
     return perpendicular_axes;

@@ -135,12 +135,16 @@ double vector_y(CGVector vector) {
     return vector->y;
 }
 
-CGVector vector_right_perpendicular(CGVector vector) {
-    return vector_new(vector->y, -vector->x);
+CGVector vector_right_perpendicular_axis(CGVector vector) {
+    CGVector axis = vector_new(vector->y, -vector->x);
+    vector_normalize(axis);
+    return axis;
 }
 
-CGVector vector_left_perpendicular(CGVector vector) {
-    return vector_new(-vector->y, vector->x);
+CGVector vector_left_perpendicular_axis(CGVector vector) {
+    CGVector axis = vector_new(-vector->y, vector->x);
+    vector_normalize(axis);
+    return axis;
 }
 
 void vector_normalize(CGVector vector) {

@@ -340,22 +340,22 @@ static void test_vector_y_1() {
     vector_release(vector);
 }
 
-static void test_vector_right_perpendicular_1() {
-    CGVector vector = vector_new(1, 2);
-    CGVector perpendicular = vector_right_perpendicular(vector);
-    g_assert(double_equals(perpendicular->x, 2));
-    g_assert(double_equals(perpendicular->y, -1));
+static void test_vector_right_perpendicular_axis_1() {
+    CGVector vector = vector_new(3, 4);
+    CGVector axis = vector_right_perpendicular_axis(vector);
+    g_assert(double_equals(axis->x, 4 / 5.0));
+    g_assert(double_equals(axis->y, -3 / 5.0));
     vector_release(vector);
-    vector_release(perpendicular);
+    vector_release(axis);
 }
 
-static void test_vector_left_perpendicular_1() {
-    CGVector vector = vector_new(1, 2);
-    CGVector perpendicular = vector_left_perpendicular(vector);
-    g_assert(double_equals(perpendicular->x, -2));
-    g_assert(double_equals(perpendicular->y, 1));
+static void test_vector_left_perpendicular_axis_1() {
+    CGVector vector = vector_new(3, 4);
+    CGVector axis = vector_left_perpendicular_axis(vector);
+    g_assert(double_equals(axis->x, -4 / 5.0));
+    g_assert(double_equals(axis->y, 3 / 5.0));
     vector_release(vector);
-    vector_release(perpendicular);
+    vector_release(axis);
 }
 
 static void test_vector_normalize_1() {
@@ -2636,8 +2636,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_to_str", test_vector_to_str_1);
     g_test_add_func("/gc/vector_x", test_vector_x_1);
     g_test_add_func("/gc/vector_y", test_vector_y_1);
-    g_test_add_func("/gc/vector_right_perpendicular", test_vector_right_perpendicular_1);
-    g_test_add_func("/gc/vector_left_perpendicular", test_vector_left_perpendicular_1);
+    g_test_add_func("/gc/vector_right_perpendicular_axis",
+                    test_vector_right_perpendicular_axis_1);
+    g_test_add_func("/gc/vector_left_perpendicular_axis",
+                    test_vector_left_perpendicular_axis_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_1);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_2);
     g_test_add_func("/gc/vector_normalize", test_vector_normalize_3);
