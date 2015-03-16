@@ -82,17 +82,17 @@ CGAngle angle_dup(CGAngle angle);
 /* Return the string representation of angle with the specified decimal positions. */
 char *angle_to_str(CGAngle angle, int decimal_positions);
 
-/* Sum angle2 to angle1. */
-void angle_sum(CGAngle angle1, CGAngle angle2);
-
-/* Subtract angle2 from angle1. */
-void angle_subtract(CGAngle angle1, CGAngle angle2);
-
 /* Return angle in radians. */
 double angle_in_radians(CGAngle angle);
 
 /* Return angle in degrees. */
 double angle_in_degrees(CGAngle angle);
+
+/* Sum angle2 to angle1. */
+void angle_sum(CGAngle angle1, CGAngle angle2);
+
+/* Subtract angle2 from angle1. */
+void angle_subtract(CGAngle angle1, CGAngle angle2);
 
 /**********************************************************************************************
  ****************************************** CGVector ******************************************

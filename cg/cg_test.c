@@ -194,6 +194,18 @@ static void test_angle_to_str_1() {
     angle_release(angle);
 }
 
+static void test_angle_in_radians_1() {
+    CGAngle angle = angle_in_degrees_new(180);
+    g_assert(double_equals(angle_in_radians(angle), M_PI));
+    angle_release(angle);
+}
+
+static void test_angle_in_degrees_1() {
+    CGAngle angle = angle_in_radians_new(M_PI);
+    g_assert(double_equals(angle_in_degrees(angle), 180));
+    angle_release(angle);
+}
+
 static void test_angle_sum_1() {
     CGAngle angle1 = angle_in_radians_new(M_PI);
     CGAngle angle2 = angle_in_radians_new(M_PI / 2);
@@ -232,18 +244,6 @@ static void test_angle_subtract_2() {
     g_assert(double_equals(angle2->rad, M_PI));
     angle_release(angle1);
     angle_release(angle2);
-}
-
-static void test_angle_in_radians_1() {
-    CGAngle angle = angle_in_degrees_new(180);
-    g_assert(double_equals(angle_in_radians(angle), M_PI));
-    angle_release(angle);
-}
-
-static void test_angle_in_degrees_1() {
-    CGAngle angle = angle_in_radians_new(M_PI);
-    g_assert(double_equals(angle_in_degrees(angle), 180));
-    angle_release(angle);
 }
 
 static void test_vector_new_1() {
@@ -2755,12 +2755,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_gte", test_angle_gte_3);
     g_test_add_func("/gc/angle_dup", test_angle_dup_1);
     g_test_add_func("/gc/angle_to_str", test_angle_to_str_1);
+    g_test_add_func("/gc/angle_in_radians", test_angle_in_radians_1);
+    g_test_add_func("/gc/angle_in_degrees", test_angle_in_degrees_1);
     g_test_add_func("/gc/angle_sum", test_angle_sum_1);
     g_test_add_func("/gc/angle_sum", test_angle_sum_2);
     g_test_add_func("/gc/angle_subtract", test_angle_subtract_1);
     g_test_add_func("/gc/angle_subtract", test_angle_subtract_2);
-    g_test_add_func("/gc/angle_in_radians", test_angle_in_radians_1);
-    g_test_add_func("/gc/angle_in_degrees", test_angle_in_degrees_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);
     g_test_add_func("/gc/vector_from_point_to_point", test_vector_from_point_to_point_1);
     g_test_add_func("/gc/vector_from_origin_to_point", test_vector_from_origin_to_point_1);

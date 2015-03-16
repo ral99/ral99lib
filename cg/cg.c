@@ -64,6 +64,14 @@ char *angle_to_str(CGAngle angle, int decimal_positions) {
     return str;
 }
 
+double angle_in_radians(CGAngle angle) {
+    return angle->rad;
+}
+
+double angle_in_degrees(CGAngle angle) {
+    return (180 * angle->rad) / M_PI;
+}
+
 void angle_sum(CGAngle angle1, CGAngle angle2) {
     angle1->rad += angle2->rad;
     angle1->rad -= ((int) (angle1->rad / (2 * M_PI))) * (2 * M_PI);
@@ -73,14 +81,6 @@ void angle_subtract(CGAngle angle1, CGAngle angle2) {
     angle1->rad -= angle2->rad;
     while (double_lt(angle1->rad, 0))
         angle1->rad += 2 * M_PI;
-}
-
-double angle_in_radians(CGAngle angle) {
-    return angle->rad;
-}
-
-double angle_in_degrees(CGAngle angle) {
-    return (180 * angle->rad) / M_PI;
 }
 
 /**********************************************************************************************
