@@ -799,90 +799,6 @@ static void test_point_y_2() {
     point_release(point);
 }
 
-static void test_point_projection_on_axis_1() {
-    CGPoint point = point_new(1, 1);
-    CGVector axis = vector_new(1, 0);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 1));
-    g_assert(double_equals(vector->y, 0));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
-static void test_point_projection_on_axis_2() {
-    CGPoint point = point_new(5, 5);
-    CGVector axis = vector_new(1, 0);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 5));
-    g_assert(double_equals(vector->y, 0));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
-static void test_point_projection_on_axis_3() {
-    CGPoint point = point_new(1, 1);
-    CGVector axis = vector_new(0, 1);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 0));
-    g_assert(double_equals(vector->y, 1));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
-static void test_point_projection_on_axis_4() {
-    CGPoint point = point_new(5, 5);
-    CGVector axis = vector_new(0, 1);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 0));
-    g_assert(double_equals(vector->y, 5));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
-static void test_point_projection_on_axis_5() {
-    CGPoint point = point_new(5, 5);
-    CGVector axis = vector_new(0, 2);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 0));
-    g_assert(double_equals(vector->y, 5));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
-static void test_point_projection_on_axis_6() {
-    CGPoint point = point_new(5, 5);
-    CGVector axis = vector_new(2, 0);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 5));
-    g_assert(double_equals(vector->y, 0));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
-static void test_point_projection_on_axis_7() {
-    CGPoint point = point_new(5, 5);
-    CGVector axis = vector_new(1, 1);
-    vector_normalize(axis);
-    CGVector vector = point_projection_on_axis(point, axis);
-    g_assert(double_equals(vector->x, 5));
-    g_assert(double_equals(vector->y, 5));
-    vector_release(vector);
-    vector_release(axis);
-    point_release(point);
-}
-
 static void test_point_translate_1() {
     CGVector vector = vector_new(0, 0);
     CGPoint point = point_new(1, 1);
@@ -2758,13 +2674,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_x", test_point_x_2);
     g_test_add_func("/gc/point_y", test_point_y_1);
     g_test_add_func("/gc/point_y", test_point_y_2);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_1);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_2);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_3);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_4);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_5);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_6);
-    g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_7);
     g_test_add_func("/gc/point_translate", test_point_translate_1);
     g_test_add_func("/gc/point_translate", test_point_translate_2);
     g_test_add_func("/gc/point_translate", test_point_translate_3);

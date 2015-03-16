@@ -279,15 +279,6 @@ double point_y(CGPoint point) {
     return point->y / point->w;
 }
 
-CGVector point_projection_on_axis(CGPoint point, CGVector axis) {
-    CGVector projection = vector_dup(axis);
-    CGVector vector = vector_from_origin_to_point(point);
-    double projection_magnitude = vector_dot(vector, projection);
-    vector_multiply(projection, projection_magnitude);
-    vector_release(vector);
-    return projection;
-}
-
 void point_translate(CGPoint point, CGVector vector) {
     point->x += point->w * vector->x;
     point->y += point->w * vector->y;

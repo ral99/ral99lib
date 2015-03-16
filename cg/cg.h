@@ -189,9 +189,6 @@ double point_x(CGPoint point);
 /* Return point y component. */
 double point_y(CGPoint point);
 
-/* Return point projection vector on axis. */
-CGVector point_projection_on_axis(CGPoint point, CGVector axis);
-
 /* Translate point by vector. */
 void point_translate(CGPoint point, CGVector vector);
 
