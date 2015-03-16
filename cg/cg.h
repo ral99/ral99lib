@@ -273,9 +273,6 @@ CGSegment segment_dup(CGSegment segment);
 /* Return the string representation of segment with the specified decimal positions. */
 char *segment_to_str(CGSegment segment, int decimal_positions);
 
-/* Return a list of segment vertices. */
-ADTList segment_vertices(CGSegment segment);
-
 /* Return segment a point. */
 CGPoint segment_a(CGSegment segment);
 
@@ -312,9 +309,6 @@ CGTriangle triangle_dup(CGTriangle triangle);
 
 /* Return the triangle string representation with the specified decimal positions. */
 char *triangle_to_str(CGTriangle triangle, int decimal_positions);
-
-/* Return a list of triangle vertices. */
-ADTList triangle_vertices(CGTriangle triangle);
 
 /* Return triangle a point. */
 CGPoint triangle_a(CGTriangle triangle);

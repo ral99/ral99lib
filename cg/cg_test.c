@@ -1619,20 +1619,6 @@ static void test_segment_to_str_1() {
     segment_release(segment);
 }
 
-static void test_segment_vertices_1() {
-    CGPoint a = point_new(1, 2);
-    CGPoint b = point_new(3, 4);
-    ADTList points = list_new();
-    list_append(points, a);
-    list_append(points, b);
-    CGSegment segment = segment_new(a, b);
-    ADTList vertices = segment_vertices(segment);
-    g_assert(list_equals_cmp(points, vertices, (int (*)(void *, void *)) point_equals));
-    list_full_release(points, (void (*)(void *)) point_release);
-    list_full_release(vertices, (void (*)(void *)) point_release);
-    segment_release(segment);
-}
-
 static void test_segment_a_1() {
     CGPoint a = point_new(1, 2);
     CGPoint b = point_new(3, 4);
@@ -1948,22 +1934,6 @@ static void test_triangle_to_str_1() {
     point_release(a);
     point_release(b);
     point_release(c);
-    triangle_release(triangle);
-}
-
-static void test_triangle_vertices_1() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(0, 1);
-    ADTList points = list_new();
-    list_append(points, a);
-    list_append(points, b);
-    list_append(points, c);
-    CGTriangle triangle = triangle_new(a, b, c);
-    ADTList vertices = triangle_vertices(triangle);
-    g_assert(list_equals_cmp(points, vertices, (int (*)(void *, void *)) point_equals));
-    list_full_release(points, (void (*)(void *)) point_release);
-    list_full_release(vertices, (void (*)(void *)) point_release);
     triangle_release(triangle);
 }
 
@@ -2945,7 +2915,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_equals", test_segment_equals_1);
     g_test_add_func("/gc/segment_dup", test_segment_dup_1);
     g_test_add_func("/gc/segment_to_str", test_segment_to_str_1);
-    g_test_add_func("/gc/segment_vertices", test_segment_vertices_1);
     g_test_add_func("/gc/segment_a", test_segment_a_1);
     g_test_add_func("/gc/segment_b", test_segment_b_1);
     g_test_add_func("/gc/segment_line", test_segment_line_1);
@@ -2966,7 +2935,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_equals", test_triangle_equals_2);
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);
     g_test_add_func("/gc/triangle_to_str", test_triangle_to_str_1);
-    g_test_add_func("/gc/triangle_vertices", test_triangle_vertices_1);
     g_test_add_func("/gc/triangle_a", test_triangle_a_1);
     g_test_add_func("/gc/triangle_b", test_triangle_b_1);
     g_test_add_func("/gc/triangle_c", test_triangle_c_1);

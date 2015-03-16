@@ -561,13 +561,6 @@ char *segment_to_str(CGSegment segment, int decimal_positions) {
     return str;
 }
 
-ADTList segment_vertices(CGSegment segment) {
-    ADTList vertices = list_new();
-    list_append(vertices, point_dup(segment->a));
-    list_append(vertices, point_dup(segment->b));
-    return vertices;
-}
-
 CGPoint segment_a(CGSegment segment) {
     return point_dup(segment->a);
 }
@@ -660,14 +653,6 @@ char *triangle_to_str(CGTriangle triangle, int decimal_positions) {
     char *str = str_join(str_list, (char *) "");
     list_full_release(str_list, free);
     return str;
-}
-
-ADTList triangle_vertices(CGTriangle triangle) {
-    ADTList vertices = list_new();
-    list_append(vertices, point_dup(triangle->a));
-    list_append(vertices, point_dup(triangle->b));
-    list_append(vertices, point_dup(triangle->c));
-    return vertices;
 }
 
 CGPoint triangle_a(CGTriangle triangle) {
