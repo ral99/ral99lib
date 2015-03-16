@@ -162,7 +162,7 @@ CGCollision polygon_and_circle_collision(CGPolygon polygon, CGCircle circle) {
                 CGSegment segment = (CGSegment) list_value(it);
                 CGLine line = line_new(segment->a, segment->b);
                 CGLine perpendicular_line = line_perpendicular(line, dup->center);
-                CGPoint point = point_intersection_of_lines(line, perpendicular_line);
+                CGPoint point = line_intersection(line, perpendicular_line);
                 if (point_is_in_circle(point, dup) && point_is_in_polygon(point, polygon))
                     coll_point = point_dup(point);
                 line_release(line);

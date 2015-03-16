@@ -389,18 +389,6 @@ int point_is_in_circle(CGPoint point, CGCircle circle) {
     return (double_lte(point_distance_to_point(point, circle->center), circle->radius));
 }
 
-CGPoint point_intersection_of_lines(CGLine line1, CGLine line2) {
-    CGPoint intersection = (CGPoint) memalloc(sizeof(*intersection));
-    intersection->w = line1->x * line2->y - line1->y * line2->x;
-    intersection->x = line1->y * line2->w - line1->w * line2->y;
-    intersection->y = line1->w * line2->x - line1->x * line2->w;
-    if (double_equals(intersection->w, 0)) {
-        point_release(intersection);
-        intersection = NULL;
-    }
-    return intersection;
-}
-
 /**********************************************************************************************
  ******************************************* CGLine *******************************************
  *********************************************************************************************/
@@ -452,6 +440,18 @@ CGLine line_perpendicular(CGLine line, CGPoint point) {
     perpendicular->x = -line->y;
     perpendicular->y = line->x;
     return perpendicular;
+}
+
+CGPoint line_intersection(CGLine line1, CGLine line2) {
+    CGPoint intersection = (CGPoint) memalloc(sizeof(*intersection));
+    intersection->w = line1->x * line2->y - line1->y * line2->x;
+    intersection->x = line1->y * line2->w - line1->w * line2->y;
+    intersection->y = line1->w * line2->x - line1->x * line2->w;
+    if (double_equals(intersection->w, 0)) {
+        point_release(intersection);
+        intersection = NULL;
+    }
+    return intersection;
 }
 
 /**********************************************************************************************

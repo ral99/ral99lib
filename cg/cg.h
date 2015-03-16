@@ -213,9 +213,6 @@ int point_is_in_polygon(CGPoint point, CGPolygon polygon);
 /* Return 1 if point is in circle. 0, otherwise. */
 int point_is_in_circle(CGPoint point, CGCircle circle);
 
-/* Return the point of intersection between two lines, or NULL if lines are parallel. */
-CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
-
 /**********************************************************************************************
  ******************************************* CGLine *******************************************
  *********************************************************************************************/
@@ -237,6 +234,9 @@ char *line_to_str(CGLine line, int decimal_positions);
 
 /* Return the perpendicular line which contains the specified point. */
 CGLine line_perpendicular(CGLine line, CGPoint point);
+
+/* Return the point of intersection between two lines, or NULL if lines are parallel. */
+CGPoint line_intersection(CGLine line1, CGLine line2);
 
 /**********************************************************************************************
  ****************************************** CGSegment *****************************************

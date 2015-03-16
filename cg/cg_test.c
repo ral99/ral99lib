@@ -1188,56 +1188,6 @@ static void test_point_is_in_circle_2() {
     circle_release(circle);
 }
 
-static void test_point_intersection_of_lines_1() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(0, 1);
-    CGPoint d = point_new(1, 1);
-    CGLine line1 = line_new(a, b);
-    CGLine line2 = line_new(c, d);
-    CGPoint intersection = point_intersection_of_lines(line1, line2);
-    g_assert(intersection == NULL);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    point_release(d);
-    line_release(line1);
-    line_release(line2);
-}
-
-static void test_point_intersection_of_lines_2() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(2, 0);
-    CGPoint c = point_new(1, 0);
-    CGPoint d = point_new(3, 0);
-    CGLine line1 = line_new(a, b);
-    CGLine line2 = line_new(c, d);
-    CGPoint intersection = point_intersection_of_lines(line1, line2);
-    g_assert(intersection == NULL);
-    line_release(line1);
-    line_release(line2);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    point_release(d);
-}
-
-static void test_point_intersection_of_lines_3() {
-    CGPoint a = point_new(0, 1);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(1, 1);
-    CGLine line1 = line_new(a, c);
-    CGLine line2 = line_new(b, c);
-    CGPoint intersection = point_intersection_of_lines(line1, line2);
-    g_assert(point_equals(intersection, c));
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    point_release(intersection);
-    line_release(line1);
-    line_release(line2);
-}
-
 /**********************************************************************************************
  ******************************************* CGLine *******************************************
  *********************************************************************************************/
@@ -1362,6 +1312,56 @@ static void test_line_perpendicular_1() {
     g_assert(double_equals(line2->y, -1));
     point_release(a);
     point_release(b);
+    line_release(line1);
+    line_release(line2);
+}
+
+static void test_line_intersection_1() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGPoint d = point_new(1, 1);
+    CGLine line1 = line_new(a, b);
+    CGLine line2 = line_new(c, d);
+    CGPoint intersection = line_intersection(line1, line2);
+    g_assert(intersection == NULL);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    line_release(line1);
+    line_release(line2);
+}
+
+static void test_line_intersection_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(2, 0);
+    CGPoint c = point_new(1, 0);
+    CGPoint d = point_new(3, 0);
+    CGLine line1 = line_new(a, b);
+    CGLine line2 = line_new(c, d);
+    CGPoint intersection = line_intersection(line1, line2);
+    g_assert(intersection == NULL);
+    line_release(line1);
+    line_release(line2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
+static void test_line_intersection_3() {
+    CGPoint a = point_new(0, 1);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(1, 1);
+    CGLine line1 = line_new(a, c);
+    CGLine line2 = line_new(b, c);
+    CGPoint intersection = line_intersection(line1, line2);
+    g_assert(point_equals(intersection, c));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(intersection);
     line_release(line1);
     line_release(line2);
 }
@@ -2701,9 +2701,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_2);
-    g_test_add_func("/gc/point_intersection_of_lines", test_point_intersection_of_lines_1);
-    g_test_add_func("/gc/point_intersection_of_lines", test_point_intersection_of_lines_2);
-    g_test_add_func("/gc/point_intersection_of_lines", test_point_intersection_of_lines_3);
     g_test_add_func("/gc/line_new", test_line_new_1);
     g_test_add_func("/gc/line_new", test_line_new_2);
     g_test_add_func("/gc/line_new", test_line_new_3);
@@ -2714,6 +2711,9 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/line_dup", test_line_dup_1);
     g_test_add_func("/gc/line_to_str", test_line_to_str_1);
     g_test_add_func("/gc/line_perpendicular", test_line_perpendicular_1);
+    g_test_add_func("/gc/line_intersection", test_line_intersection_1);
+    g_test_add_func("/gc/line_intersection", test_line_intersection_2);
+    g_test_add_func("/gc/line_intersection", test_line_intersection_3);
     g_test_add_func("/gc/segment_new", test_segment_new_1);
     g_test_add_func("/gc/segment_new", test_segment_new_2);
     g_test_add_func("/gc/segment_release", test_segment_release_1);
