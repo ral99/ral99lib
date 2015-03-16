@@ -193,6 +193,8 @@ CGAngle vector_angle_to(CGVector vector1, CGVector vector2) {
     double dot = vector_dot(vector1, vector2);
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
+    if (double_equals(magnitude1 * magnitude2, 0))
+        return NULL;
     CGAngle angle_between = angle_in_radians_new(acos(dot / (magnitude1 * magnitude2)));
     CGAngle replementary_angle = angle_in_radians_new(2 * M_PI - angle_between->rad);
     CGVector vector1_dup = vector_dup(vector1);
@@ -728,6 +730,8 @@ CGPolygon polygon_new(ADTList vertices) {
             CGPoint vertex = (CGPoint) list_value(it);
             CGVector vector = vector_from_point_to_point(base_vertex, vertex);
             CGAngle angle = vector_angle_to(base_vector, vector);
+            if (angle == NULL)
+                angle = angle_in_radians_new(0);
             if (!next_vertex || angle_lt(angle, next_angle)) {
                 if (next_angle != NULL)
                     angle_release(next_angle);

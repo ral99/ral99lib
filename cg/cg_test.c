@@ -588,6 +588,15 @@ static void test_vector_angle_to_5() {
     vector_release(vector2);
 }
 
+static void test_vector_angle_to_6() {
+    CGVector vector1 = vector_new(0, 0);
+    CGVector vector2 = vector_new(1, 1);
+    g_assert(vector_angle_to(vector1, vector2) == NULL);
+    g_assert(vector_angle_to(vector2, vector1) == NULL);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
 static void test_vector_rotate_1() {
     CGVector vector = vector_new(1, 0);
     CGAngle angle = angle_in_degrees_new(0);
@@ -2693,6 +2702,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_angle_to", test_vector_angle_to_3);
     g_test_add_func("/gc/vector_angle_to", test_vector_angle_to_4);
     g_test_add_func("/gc/vector_angle_to", test_vector_angle_to_5);
+    g_test_add_func("/gc/vector_angle_to", test_vector_angle_to_6);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_1);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_2);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);

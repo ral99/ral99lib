@@ -151,7 +151,8 @@ double vector_magnitude(CGVector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(CGVector vector1, CGVector vector2);
 
-/* Return the angle from vector1 to vector2 in counter-clockwise direction. */
+/* Return the angle from vector1 to vector2 in counter-clockwise direction, or NULL if the
+ * product of magnitudes is 0. */
 CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
 /* Rotate vector in counter-clockwise direction. */
@@ -232,7 +233,7 @@ CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
  ******************************************* CGLine *******************************************
  *********************************************************************************************/
 
-/* Return a new line or NULL if points are equal. */
+/* Return a new line, or NULL if points are equal. */
 CGLine line_new(CGPoint a, CGPoint b);
 
 /* Free the memory used by line. */
@@ -329,17 +330,17 @@ double triangle_area(CGTriangle triangle);
  ****************************************** CGPolygon *****************************************
  *********************************************************************************************/
 
-/* Return a new polygon or NULL, if there are less than three vertices, or if the polygon is
- * non-convex, or if there are coincident vertices or if there are 3 collinear vertices. */
+/* Return a new polygon, or NULL if there are less than three vertices, or if polygon is
+ * not convex, or if there are coincident vertices, or if there are 3 collinear vertices. */
 CGPolygon polygon_new(ADTList vertices);
 
-/* Return a new triangle polygon or NULL, if two or more points are coincidents. */
+/* Return a new triangle polygon, or NULL if two or more points are coincidents. */
 CGPolygon polygon_new_triangle(CGPoint a, CGPoint b, CGPoint c);
 
-/* Return a new rectangle polygon or NULL, if width or height is 0. */
+/* Return a new rectangle polygon, or NULL if width or height is 0. */
 CGPolygon polygon_new_rectangle(CGPoint lower_left, double width, double height);
 
-/* Return a new square polygon or NULL, if side is 0. */
+/* Return a new square polygon, or NULL if side is 0. */
 CGPolygon polygon_new_square(CGPoint lower_left, double side);
 
 /* Free the memory used by polygon. */
@@ -373,7 +374,7 @@ double polygon_area(CGPolygon polygon);
  ****************************************** CGCircle ******************************************
  *********************************************************************************************/
 
-/* Return a new circle or NULL, if radius is lower than or equal to 0. */
+/* Return a new circle, or NULL if radius is lower than or equal to 0. */
 CGCircle circle_new(CGPoint center, double radius);
 
 /* Free the memory used by circle. */
