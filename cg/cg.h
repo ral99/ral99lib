@@ -276,6 +276,12 @@ char *segment_to_str(CGSegment segment, int decimal_positions);
 /* Return a list of segment vertices. */
 ADTList segment_vertices(CGSegment segment);
 
+/* Return segment a point. */
+CGPoint segment_a(CGSegment segment);
+
+/* Return segment b point. */
+CGPoint segment_b(CGSegment segment);
+
 /* Return a line specified by segment vertices, or NULL if segment vertices are coincidents. */
 CGLine segment_line(CGSegment segment);
 
@@ -309,6 +315,15 @@ char *triangle_to_str(CGTriangle triangle, int decimal_positions);
 
 /* Return a list of triangle vertices. */
 ADTList triangle_vertices(CGTriangle triangle);
+
+/* Return triangle a point. */
+CGPoint triangle_a(CGTriangle triangle);
+
+/* Return triangle b point. */
+CGPoint triangle_b(CGTriangle triangle);
+
+/* Return triangle c point. */
+CGPoint triangle_c(CGTriangle triangle);
 
 /* Translate triangle by a vector. */
 void triangle_translate(CGTriangle triangle, CGVector vector);

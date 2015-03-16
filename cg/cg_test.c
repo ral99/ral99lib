@@ -1633,6 +1633,32 @@ static void test_segment_vertices_1() {
     segment_release(segment);
 }
 
+static void test_segment_a_1() {
+    CGPoint a = point_new(1, 2);
+    CGPoint b = point_new(3, 4);
+    CGSegment segment = segment_new(a, b);
+    CGPoint a_copy = segment_a(segment);
+    g_assert(a_copy != a);
+    g_assert(point_equals(a_copy, a));
+    point_release(a_copy);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
+static void test_segment_b_1() {
+    CGPoint a = point_new(1, 2);
+    CGPoint b = point_new(3, 4);
+    CGSegment segment = segment_new(a, b);
+    CGPoint b_copy = segment_b(segment);
+    g_assert(b_copy != b);
+    g_assert(point_equals(b_copy, b));
+    point_release(b_copy);
+    point_release(a);
+    point_release(b);
+    segment_release(segment);
+}
+
 static void test_segment_line_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 1);
@@ -1938,6 +1964,51 @@ static void test_triangle_vertices_1() {
     g_assert(list_equals_cmp(points, vertices, (int (*)(void *, void *)) point_equals));
     list_full_release(points, (void (*)(void *)) point_release);
     list_full_release(vertices, (void (*)(void *)) point_release);
+    triangle_release(triangle);
+}
+
+static void test_triangle_a_1() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    CGPoint a_copy = triangle_a(triangle);
+    g_assert(a_copy != a);
+    g_assert(point_equals(a_copy, a));
+    point_release(a_copy);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
+static void test_triangle_b_1() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    CGPoint b_copy = triangle_b(triangle);
+    g_assert(b_copy != b);
+    g_assert(point_equals(b_copy, b));
+    point_release(b_copy);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
+static void test_triangle_c_1() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    CGPoint c_copy = triangle_c(triangle);
+    g_assert(c_copy != c);
+    g_assert(point_equals(c_copy, c));
+    point_release(c_copy);
+    point_release(a);
+    point_release(b);
+    point_release(c);
     triangle_release(triangle);
 }
 
@@ -2875,6 +2946,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_dup", test_segment_dup_1);
     g_test_add_func("/gc/segment_to_str", test_segment_to_str_1);
     g_test_add_func("/gc/segment_vertices", test_segment_vertices_1);
+    g_test_add_func("/gc/segment_a", test_segment_a_1);
+    g_test_add_func("/gc/segment_b", test_segment_b_1);
     g_test_add_func("/gc/segment_line", test_segment_line_1);
     g_test_add_func("/gc/segment_line", test_segment_line_2);
     g_test_add_func("/gc/segment_translate", test_segment_translate_1);
@@ -2894,6 +2967,9 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);
     g_test_add_func("/gc/triangle_to_str", test_triangle_to_str_1);
     g_test_add_func("/gc/triangle_vertices", test_triangle_vertices_1);
+    g_test_add_func("/gc/triangle_a", test_triangle_a_1);
+    g_test_add_func("/gc/triangle_b", test_triangle_b_1);
+    g_test_add_func("/gc/triangle_c", test_triangle_c_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_2);
     g_test_add_func("/gc/triangle_rotate_around", test_triangle_rotate_around_1);

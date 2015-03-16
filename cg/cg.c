@@ -568,6 +568,14 @@ ADTList segment_vertices(CGSegment segment) {
     return vertices;
 }
 
+CGPoint segment_a(CGSegment segment) {
+    return point_dup(segment->a);
+}
+
+CGPoint segment_b(CGSegment segment) {
+    return point_dup(segment->b);
+}
+
 CGLine segment_line(CGSegment segment) {
     return line_new(segment->a, segment->b);
 }
@@ -660,6 +668,18 @@ ADTList triangle_vertices(CGTriangle triangle) {
     list_append(vertices, point_dup(triangle->b));
     list_append(vertices, point_dup(triangle->c));
     return vertices;
+}
+
+CGPoint triangle_a(CGTriangle triangle) {
+    return point_dup(triangle->a);
+}
+
+CGPoint triangle_b(CGTriangle triangle) {
+    return point_dup(triangle->b);
+}
+
+CGPoint triangle_c(CGTriangle triangle) {
+    return point_dup(triangle->c);
 }
 
 void triangle_translate(CGTriangle triangle, CGVector vector) {
