@@ -1188,6 +1188,40 @@ static void test_point_is_in_triangle_2() {
     triangle_release(triangle);
 }
 
+static void test_point_is_in_triangle_3() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(1, 0);
+    CGPoint d = point_new(1, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert_cmpint(point_is_in_triangle(a, triangle), ==, 1);
+    g_assert_cmpint(point_is_in_triangle(b, triangle), ==, 1);
+    g_assert_cmpint(point_is_in_triangle(c, triangle), ==, 1);
+    g_assert_cmpint(point_is_in_triangle(d, triangle), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    triangle_release(triangle);
+}
+
+static void test_point_is_in_triangle_4() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(1, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert_cmpint(point_is_in_triangle(a, triangle), ==, 1);
+    g_assert_cmpint(point_is_in_triangle(b, triangle), ==, 1);
+    g_assert_cmpint(point_is_in_triangle(c, triangle), ==, 1);
+    g_assert_cmpint(point_is_in_triangle(d, triangle), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    triangle_release(triangle);
+}
+
 static void test_point_is_in_polygon_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 0);
@@ -2791,6 +2825,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_5);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_1);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_2);
+    g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_3);
+    g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_4);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_1);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_2);
     g_test_add_func("/gc/point_is_in_circle", test_point_is_in_circle_1);
