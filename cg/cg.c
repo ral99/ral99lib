@@ -336,7 +336,7 @@ int point_is_in_line(CGPoint point, CGLine line) {
 
 int point_is_in_segment(CGPoint point, CGSegment segment) {
     int is_in = 0;
-    CGLine line = segment_line(segment);
+    CGLine line = line_new(segment->a, segment->b);
     double min_x = (double_lt(point_x(segment->a), point_x(segment->b)))
                    ? point_x(segment->a) : point_x(segment->b);
     double max_x = (double_gt(point_x(segment->a), point_x(segment->b)))
@@ -535,10 +535,6 @@ void segment_translate(CGSegment segment, CGVector vector) {
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle) {
     point_rotate_around(segment->a, center, angle);
     point_rotate_around(segment->b, center, angle);
-}
-
-CGLine segment_line(CGSegment segment) {
-    return line_new(segment->a, segment->b);
 }
 
 double segment_length(CGSegment segment) {

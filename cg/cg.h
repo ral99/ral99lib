@@ -275,9 +275,6 @@ void segment_translate(CGSegment segment, CGVector vector);
 /* Rotate segment around a center point in counter-clockwise direction. */
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
 
-/* Return a line specified by segment vertices, or NULL if segment vertices are coincidents. */
-CGLine segment_line(CGSegment segment);
-
 /* Return segment length. */
 double segment_length(CGSegment segment);
 

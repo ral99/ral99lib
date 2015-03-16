@@ -160,7 +160,7 @@ CGCollision polygon_and_circle_collision(CGPolygon polygon, CGCircle circle) {
             ADTList edges = polygon_edges(polygon);
             for (ADTListItem it = list_head(edges); it && !coll_point; it = list_next(it)) {
                 CGSegment segment = (CGSegment) list_value(it);
-                CGLine line = segment_line(segment);
+                CGLine line = line_new(segment->a, segment->b);
                 CGLine perpendicular_line = line_perpendicular(line, dup->center);
                 CGPoint point = point_intersection_of_lines(line, perpendicular_line);
                 if (point_is_in_circle(point, dup) && point_is_in_polygon(point, polygon))

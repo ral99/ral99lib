@@ -1657,30 +1657,6 @@ static void test_segment_rotate_around_4() {
     point_release(b);
 }
 
-static void test_segment_line_1() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 1);
-    CGSegment segment = segment_new(a, b);
-    CGLine line1 = line_new(a, b);
-    CGLine line2 = segment_line(segment);
-    g_assert(line_equals(line1, line2));
-    line_release(line1);
-    line_release(line2);
-    segment_release(segment);
-    point_release(a);
-    point_release(b);
-}
-
-static void test_segment_line_2() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(0, 0);
-    CGSegment segment = segment_new(a, b);
-    g_assert(segment_line(segment) == NULL);
-    segment_release(segment);
-    point_release(a);
-    point_release(b);
-}
-
 static void test_segment_length_1() {
     CGPoint a = point_new(3, 0);
     CGPoint b = point_new(0, 4);
@@ -2831,8 +2807,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_2);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_3);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_4);
-    g_test_add_func("/gc/segment_line", test_segment_line_1);
-    g_test_add_func("/gc/segment_line", test_segment_line_2);
     g_test_add_func("/gc/segment_length", test_segment_length_1);
     g_test_add_func("/gc/segment_length", test_segment_length_2);
     g_test_add_func("/gc/triangle_new", test_triangle_new_1);
