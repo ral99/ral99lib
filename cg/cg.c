@@ -561,10 +561,6 @@ CGPoint segment_b(CGSegment segment) {
     return point_dup(segment->b);
 }
 
-CGLine segment_line(CGSegment segment) {
-    return line_new(segment->a, segment->b);
-}
-
 void segment_translate(CGSegment segment, CGVector vector) {
     point_translate(segment->a, vector);
     point_translate(segment->b, vector);
@@ -573,6 +569,10 @@ void segment_translate(CGSegment segment, CGVector vector) {
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle) {
     point_rotate_around(segment->a, center, angle);
     point_rotate_around(segment->b, center, angle);
+}
+
+CGLine segment_line(CGSegment segment) {
+    return line_new(segment->a, segment->b);
 }
 
 double segment_length(CGSegment segment) {
