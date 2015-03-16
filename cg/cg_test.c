@@ -1647,11 +1647,11 @@ static void test_segment_line_1() {
     point_release(b);
 }
 
-static void test_segment_length_1() {
-    CGPoint a = point_new(3, 0);
-    CGPoint b = point_new(0, 4);
+static void test_segment_line_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
     CGSegment segment = segment_new(a, b);
-    g_assert(double_equals(segment_length(segment), 5));
+    g_assert(segment_line(segment) == NULL);
     segment_release(segment);
     point_release(a);
     point_release(b);
@@ -1761,10 +1761,66 @@ static void test_segment_rotate_around_4() {
     point_release(b);
 }
 
+static void test_segment_length_1() {
+    CGPoint a = point_new(3, 0);
+    CGPoint b = point_new(0, 4);
+    CGSegment segment = segment_new(a, b);
+    g_assert(double_equals(segment_length(segment), 5));
+    segment_release(segment);
+    point_release(a);
+    point_release(b);
+}
+
+static void test_segment_length_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGSegment segment = segment_new(a, b);
+    g_assert(double_equals(segment_length(segment), 0));
+    segment_release(segment);
+    point_release(a);
+    point_release(b);
+}
+
 static void test_triangle_new_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 0);
     CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(triangle != NULL);
+    g_assert(a != triangle->a);
+    g_assert(b != triangle->b);
+    g_assert(c != triangle->c);
+    g_assert(point_equals(a, triangle->a));
+    g_assert(point_equals(b, triangle->b));
+    g_assert(point_equals(c, triangle->c));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
+static void test_triangle_new_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 1);
+    CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(triangle != NULL);
+    g_assert(a != triangle->a);
+    g_assert(b != triangle->b);
+    g_assert(c != triangle->c);
+    g_assert(point_equals(a, triangle->a));
+    g_assert(point_equals(b, triangle->b));
+    g_assert(point_equals(c, triangle->c));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    triangle_release(triangle);
+}
+
+static void test_triangle_new_3() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGPoint c = point_new(0, 0);
     CGTriangle triangle = triangle_new(a, b, c);
     g_assert(triangle != NULL);
     g_assert(a != triangle->a);
@@ -1883,25 +1939,6 @@ static void test_triangle_vertices_1() {
     list_full_release(points, (void (*)(void *)) point_release);
     list_full_release(vertices, (void (*)(void *)) point_release);
     triangle_release(triangle);
-}
-
-static void test_triangle_edges_1() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(0, 1);
-    CGTriangle triangle = triangle_new(a, b, c);
-    ADTList segments = list_new();
-    list_append(segments, segment_new(a, b));
-    list_append(segments, segment_new(b, c));
-    list_append(segments, segment_new(c, a));
-    ADTList edges = triangle_edges(triangle);
-    g_assert(list_equals_cmp(segments, edges, (int (*)(void *, void *)) segment_equals));
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    triangle_release(triangle);
-    list_full_release(segments, (void (*)(void *)) segment_release);
-    list_full_release(edges, (void (*)(void *)) segment_release);
 }
 
 static void test_triangle_translate_1() {
@@ -2046,12 +2083,60 @@ static void test_triangle_orientation_3() {
     point_release(c);
 }
 
+static void test_triangle_orientation_4() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 1);
+    CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert_cmpint(triangle_orientation(triangle), ==, 0);
+    triangle_release(triangle);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_triangle_orientation_5() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGPoint c = point_new(0, 0);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert_cmpint(triangle_orientation(triangle), ==, 0);
+    triangle_release(triangle);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
 static void test_triangle_area_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 0);
     CGPoint c = point_new(0, 1);
     CGTriangle triangle = triangle_new(a, b, c);
     g_assert(double_equals(triangle_area(triangle), 0.5));
+    triangle_release(triangle);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_triangle_area_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 1);
+    CGPoint c = point_new(0, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(double_equals(triangle_area(triangle), 0));
+    triangle_release(triangle);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_triangle_area_3() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGPoint c = point_new(0, 0);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(double_equals(triangle_area(triangle), 0));
     triangle_release(triangle);
     point_release(a);
     point_release(b);
@@ -2791,21 +2876,24 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_to_str", test_segment_to_str_1);
     g_test_add_func("/gc/segment_vertices", test_segment_vertices_1);
     g_test_add_func("/gc/segment_line", test_segment_line_1);
-    g_test_add_func("/gc/segment_length", test_segment_length_1);
+    g_test_add_func("/gc/segment_line", test_segment_line_2);
     g_test_add_func("/gc/segment_translate", test_segment_translate_1);
     g_test_add_func("/gc/segment_translate", test_segment_translate_2);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_1);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_2);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_3);
     g_test_add_func("/gc/segment_rotate_around", test_segment_rotate_around_4);
+    g_test_add_func("/gc/segment_length", test_segment_length_1);
+    g_test_add_func("/gc/segment_length", test_segment_length_2);
     g_test_add_func("/gc/triangle_new", test_triangle_new_1);
+    g_test_add_func("/gc/triangle_new", test_triangle_new_2);
+    g_test_add_func("/gc/triangle_new", test_triangle_new_3);
     g_test_add_func("/gc/triangle_release", test_triangle_release_1);
     g_test_add_func("/gc/triangle_equals", test_triangle_equals_1);
     g_test_add_func("/gc/triangle_equals", test_triangle_equals_2);
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);
     g_test_add_func("/gc/triangle_to_str", test_triangle_to_str_1);
     g_test_add_func("/gc/triangle_vertices", test_triangle_vertices_1);
-    g_test_add_func("/gc/triangle_edges", test_triangle_edges_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_1);
     g_test_add_func("/gc/triangle_translate", test_triangle_translate_2);
     g_test_add_func("/gc/triangle_rotate_around", test_triangle_rotate_around_1);
@@ -2814,7 +2902,11 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_1);
     g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_2);
     g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_3);
+    g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_4);
+    g_test_add_func("/gc/triangle_orientation", test_triangle_orientation_5);
     g_test_add_func("/gc/triangle_area", test_triangle_area_1);
+    g_test_add_func("/gc/triangle_area", test_triangle_area_2);
+    g_test_add_func("/gc/triangle_area", test_triangle_area_3);
     g_test_add_func("/gc/polygon_new", test_polygon_new_1);
     g_test_add_func("/gc/polygon_new", test_polygon_new_2);
     g_test_add_func("/gc/polygon_new", test_polygon_new_3);

@@ -122,11 +122,11 @@ double vector_x(CGVector vector);
 /* Return vector y component. */
 double vector_y(CGVector vector);
 
-/* Return a perpendicular normalized vector using the right hand rule, or NULL if vector has
+/* Return a normalized perpendicular vector using the right hand rule, or NULL if vector has
  * magnitude 0. */
 CGVector vector_right_perpendicular_axis(CGVector vector);
 
-/* Return a perpendicular normalized vector using the left hand rule, or NULL if vector has
+/* Return a normalized perpendicular vector using the left hand rule, or NULL if vector has
  * magnitude 0. */
 CGVector vector_left_perpendicular_axis(CGVector vector);
 
@@ -226,7 +226,7 @@ int point_is_in_circle(CGPoint point, CGCircle circle);
 CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
 
 /* Return the point of intersection between two segments, or NULL if there are zero or an
- * infinite number of points. */
+ * infinite number of intersection points. */
 CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
 
 /**********************************************************************************************
@@ -276,17 +276,17 @@ char *segment_to_str(CGSegment segment, int decimal_positions);
 /* Return a list of segment vertices. */
 ADTList segment_vertices(CGSegment segment);
 
-/* Return a line specified by segment vertices. */
+/* Return a line specified by segment vertices, or NULL if segment vertices are coincidents. */
 CGLine segment_line(CGSegment segment);
-
-/* Return segment length. */
-double segment_length(CGSegment segment);
 
 /* Translate segment by a vector. */
 void segment_translate(CGSegment segment, CGVector vector);
 
 /* Rotate segment around a center point in counter-clockwise direction. */
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
+
+/* Return segment length. */
+double segment_length(CGSegment segment);
 
 /**********************************************************************************************
  ***************************************** CGTriangle *****************************************
@@ -309,9 +309,6 @@ char *triangle_to_str(CGTriangle triangle, int decimal_positions);
 
 /* Return a list of triangle vertices. */
 ADTList triangle_vertices(CGTriangle triangle);
-
-/* Return a list of triangle edges. */
-ADTList triangle_edges(CGTriangle triangle);
 
 /* Translate triangle by a vector. */
 void triangle_translate(CGTriangle triangle, CGVector vector);

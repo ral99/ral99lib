@@ -572,12 +572,6 @@ CGLine segment_line(CGSegment segment) {
     return line_new(segment->a, segment->b);
 }
 
-double segment_length(CGSegment segment) {
-    double x_dist = point_x(segment->a) - point_x(segment->b);
-    double y_dist = point_y(segment->a) - point_y(segment->b);
-    return sqrt(x_dist * x_dist + y_dist * y_dist);
-}
-
 void segment_translate(CGSegment segment, CGVector vector) {
     point_translate(segment->a, vector);
     point_translate(segment->b, vector);
@@ -586,6 +580,12 @@ void segment_translate(CGSegment segment, CGVector vector) {
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle) {
     point_rotate_around(segment->a, center, angle);
     point_rotate_around(segment->b, center, angle);
+}
+
+double segment_length(CGSegment segment) {
+    double x_dist = point_x(segment->a) - point_x(segment->b);
+    double y_dist = point_y(segment->a) - point_y(segment->b);
+    return sqrt(x_dist * x_dist + y_dist * y_dist);
 }
 
 /**********************************************************************************************
@@ -660,14 +660,6 @@ ADTList triangle_vertices(CGTriangle triangle) {
     list_append(vertices, point_dup(triangle->b));
     list_append(vertices, point_dup(triangle->c));
     return vertices;
-}
-
-ADTList triangle_edges(CGTriangle triangle) {
-    ADTList edges = list_new();
-    list_append(edges, segment_new(triangle->a, triangle->b));
-    list_append(edges, segment_new(triangle->b, triangle->c));
-    list_append(edges, segment_new(triangle->c, triangle->a));
-    return edges;
 }
 
 void triangle_translate(CGTriangle triangle, CGVector vector) {
