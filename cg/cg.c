@@ -318,7 +318,10 @@ double point_distance_to_line(CGPoint point, CGLine line) {
     normalized_point->y /= point->w;
     normalized_point->w = 1;
     CGLine normalized_line = line_dup(line);
-    line_normalize(normalized_line);
+    double normalized_line_divisor = sqrt(line->x * line->x + line->y * line->y);
+    normalized_line->w /= normalized_line_divisor;
+    normalized_line->x /= normalized_line_divisor;
+    normalized_line->y /= normalized_line_divisor;
     double dist = fabs(normalized_point->w * normalized_line->w +
                        normalized_point->x * normalized_line->x +
                        normalized_point->y * normalized_line->y);
@@ -504,13 +507,6 @@ CGLine line_perpendicular(CGLine line, CGPoint point) {
     perpendicular->x = -line->y;
     perpendicular->y = line->x;
     return perpendicular;
-}
-
-void line_normalize(CGLine line) {
-    double div = sqrt(line->x * line->x + line->y * line->y);
-    line->w /= div;
-    line->x /= div;
-    line->y /= div;
 }
 
 /**********************************************************************************************

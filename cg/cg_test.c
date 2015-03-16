@@ -1510,18 +1510,6 @@ static void test_line_perpendicular_1() {
     line_release(line2);
 }
 
-static void test_line_normalize_1() {
-    CGLine line = (CGLine) memalloc(sizeof(*line));
-    line->w = 1;
-    line->x = 2;
-    line->y = 0;
-    line_normalize(line);
-    g_assert(double_equals(line->w, 0.5));
-    g_assert(double_equals(line->x, 1));
-    g_assert(double_equals(line->y, 0));
-    line_release(line);
-}
-
 static void test_segment_new_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 1);
@@ -2895,7 +2883,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/line_dup", test_line_dup_1);
     g_test_add_func("/gc/line_to_str", test_line_to_str_1);
     g_test_add_func("/gc/line_perpendicular", test_line_perpendicular_1);
-    g_test_add_func("/gc/line_normalize", test_line_normalize_1);
     g_test_add_func("/gc/segment_new", test_segment_new_1);
     g_test_add_func("/gc/segment_new", test_segment_new_2);
     g_test_add_func("/gc/segment_release", test_segment_release_1);

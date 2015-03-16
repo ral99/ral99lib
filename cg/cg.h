@@ -248,9 +248,6 @@ char *line_to_str(CGLine line, int decimal_positions);
 /* Return the perpendicular line which contains the specified point. */
 CGLine line_perpendicular(CGLine line, CGPoint point);
 
-/* Normalize line. */
-void line_normalize(CGLine line);
-
 /**********************************************************************************************
  ****************************************** CGSegment *****************************************
  *********************************************************************************************/
