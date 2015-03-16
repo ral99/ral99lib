@@ -1140,6 +1140,20 @@ static void test_point_is_in_segment_4() {
     segment_release(segment);
 }
 
+static void test_point_is_in_segment_5() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGPoint c = point_new(1, 1);
+    CGSegment segment = segment_new(a, b);
+    g_assert_cmpint(point_is_in_segment(a, segment), ==, 1);
+    g_assert_cmpint(point_is_in_segment(b, segment), ==, 1);
+    g_assert_cmpint(point_is_in_segment(c, segment), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    segment_release(segment);
+}
+
 static void test_point_is_in_triangle_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 0);
@@ -2774,6 +2788,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_2);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_3);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_4);
+    g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_5);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_1);
     g_test_add_func("/gc/point_is_in_triangle", test_point_is_in_triangle_2);
     g_test_add_func("/gc/point_is_in_polygon", test_point_is_in_polygon_1);

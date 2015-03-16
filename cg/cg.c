@@ -336,7 +336,6 @@ int point_is_in_line(CGPoint point, CGLine line) {
 
 int point_is_in_segment(CGPoint point, CGSegment segment) {
     int is_in = 0;
-    CGLine line = line_new(segment->a, segment->b);
     double min_x = (double_lt(point_x(segment->a), point_x(segment->b)))
                    ? point_x(segment->a) : point_x(segment->b);
     double max_x = (double_gt(point_x(segment->a), point_x(segment->b)))
@@ -345,11 +344,18 @@ int point_is_in_segment(CGPoint point, CGSegment segment) {
                    ? point_y(segment->a) : point_y(segment->b);
     double max_y = (double_gt(point_y(segment->a), point_y(segment->b)))
                    ? point_y(segment->a) : point_y(segment->b);
-    if (point_is_in_line(point, line) && double_gte(point_x(point), min_x) &&
-        double_lte(point_x(point), max_x) && double_gte(point_y(point), min_y) &&
-        double_lte(point_y(point), max_y))
-        is_in = 1;
-    line_release(line);
+    CGLine line = line_new(segment->a, segment->b);
+    if (line != NULL) {
+        if (point_is_in_line(point, line) && double_gte(point_x(point), min_x) &&
+            double_lte(point_x(point), max_x) && double_gte(point_y(point), min_y) &&
+            double_lte(point_y(point), max_y))
+            is_in = 1;
+        line_release(line);
+    }
+    else {
+        if (point_equals(point, segment->a))
+            is_in = 1;
+    }
     return is_in;
 }
 
