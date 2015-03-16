@@ -152,7 +152,7 @@ double vector_magnitude(CGVector vector);
 double vector_dot(CGVector vector1, CGVector vector2);
 
 /* Return the angle from vector1 to vector2 in counter-clockwise direction, or NULL if the
- * product of magnitudes is 0. */
+ * product of the magnitudes of the vectors is 0. */
 CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
 /* Rotate vector in counter-clockwise direction. */
