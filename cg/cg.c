@@ -933,10 +933,6 @@ double circle_radius(CGCircle circle) {
     return circle->radius;
 }
 
-double circle_area(CGCircle circle) {
-    return (M_PI * circle->radius * circle->radius);
-}
-
 void circle_translate(CGCircle circle, CGVector vector) {
     point_translate(circle->center, vector);
 }
@@ -945,3 +941,6 @@ void circle_rotate_around(CGCircle circle, CGPoint center, CGAngle angle) {
     point_rotate_around(circle->center, center, angle);
 }
 
+double circle_area(CGCircle circle) {
+    return (M_PI * circle->radius * circle->radius);
+}

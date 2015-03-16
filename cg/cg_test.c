@@ -2653,14 +2653,6 @@ static void test_circle_radius_1() {
     circle_release(circle);
 }
 
-static void test_circle_area_1() {
-    CGPoint center = point_new(1, 1);
-    CGCircle circle = circle_new(center, 1);
-    g_assert(double_equals(circle_area(circle), M_PI));
-    point_release(center);
-    circle_release(circle);
-}
-
 static void test_circle_translate_1() {
     CGPoint center = point_new(1, 1);
     CGPoint new_center = point_new(2, 2);
@@ -2726,6 +2718,14 @@ static void test_circle_rotate_around_3() {
     angle_release(angle);
     point_release(center);
     point_release(point);
+    circle_release(circle);
+}
+
+static void test_circle_area_1() {
+    CGPoint center = point_new(1, 1);
+    CGCircle circle = circle_new(center, 1);
+    g_assert(double_equals(circle_area(circle), M_PI));
+    point_release(center);
     circle_release(circle);
 }
 
@@ -2963,12 +2963,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_center_x", test_circle_center_x_1);
     g_test_add_func("/gc/circle_center_y", test_circle_center_y_1);
     g_test_add_func("/gc/circle_radius", test_circle_radius_1);
-    g_test_add_func("/gc/circle_area", test_circle_area_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_1);
     g_test_add_func("/gc/circle_translate", test_circle_translate_2);
     g_test_add_func("/gc/circle_rotate_around", test_circle_rotate_around_1);
     g_test_add_func("/gc/circle_rotate_around", test_circle_rotate_around_2);
     g_test_add_func("/gc/circle_rotate_around", test_circle_rotate_around_3);
+    g_test_add_func("/gc/circle_area", test_circle_area_1);
     return g_test_run();
 }
 

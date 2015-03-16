@@ -401,14 +401,14 @@ double circle_center_y(CGCircle circle);
 /* Return circle radius. */
 double circle_radius(CGCircle circle);
 
-/* Return circle area. */
-double circle_area(CGCircle circle);
-
 /* Translate circle by a vector. */
 void circle_translate(CGCircle circle, CGVector vector);
 
 /* Rotate circle around a center point in counter-clockwise direction. */
 void circle_rotate_around(CGCircle circle, CGPoint center, CGAngle angle);
+
+/* Return circle area. */
+double circle_area(CGCircle circle);
 
 #endif
 
