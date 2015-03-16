@@ -91,33 +91,33 @@ CGCollision polygon_and_polygon_collision(CGPolygon polygon1, CGPolygon polygon2
             mtv = axis;
         }
     }
-    if (double_gt(vector_magnitude(mtv), 0)) {
-        CGPoint point1 = NULL;
-        CGPoint point2 = NULL;
-        CGPolygon dup = polygon_dup(polygon2);
-        polygon_translate(dup, mtv);
-        ADTList vertices = list_new();
-        ADTList vertices1 = polygon_vertices(polygon1);
-        ADTList vertices2 = polygon_vertices(dup);
-        list_extend(vertices, vertices1);
-        list_extend(vertices, vertices2);
-        for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
-            CGPoint vertex = (CGPoint) list_value(it);
-            if (point_is_in_polygon(vertex, polygon1) && point_is_in_polygon(vertex, dup)) {
-                if (point1 == NULL)
-                    point1 = vertex;
-                if (point2 == NULL || point_equals(point1, point2))
-                    point2 = vertex;
-            }
+    CGPoint point1 = NULL;
+    CGPoint point2 = NULL;
+    CGPolygon dup = polygon_dup(polygon2);
+    polygon_translate(dup, mtv);
+    ADTList vertices = list_new();
+    ADTList vertices1 = polygon_vertices(polygon1);
+    ADTList vertices2 = polygon_vertices(dup);
+    list_extend(vertices, vertices1);
+    list_extend(vertices, vertices2);
+    for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        if (point_is_in_polygon(vertex, polygon1) && point_is_in_polygon(vertex, dup)) {
+            if (point1 == NULL)
+                point1 = vertex;
+            if (point2 == NULL || point_equals(point1, point2))
+                point2 = vertex;
         }
+    }
+    if (point1 != NULL && point2 != NULL) {
         CGPoint point = midpoint_between(point1, point2);
         collision = collision_new(mtv, point);
         point_release(point);
-        polygon_release(dup);
-        list_release(vertices);
-        list_full_release(vertices1, (void (*)(void *)) point_release);
-        list_full_release(vertices2, (void (*)(void *)) point_release);
     }
+    polygon_release(dup);
+    list_release(vertices);
+    list_full_release(vertices1, (void (*)(void *)) point_release);
+    list_full_release(vertices2, (void (*)(void *)) point_release);
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
@@ -147,34 +147,34 @@ CGCollision polygon_and_circle_collision(CGPolygon polygon, CGCircle circle) {
             mtv = axis;
         }
     }
-    if (double_gt(vector_magnitude(mtv), 0)) {
-        CGPoint coll_point = NULL;
-        CGCircle dup = circle_dup(circle);
-        circle_translate(dup, mtv);
-        for (ADTListItem it = list_head(vertices); it && !coll_point; it = list_next(it)) {
-            CGPoint vertex = (CGPoint) list_value(it);
-            if (point_is_in_circle(vertex, dup))
-                coll_point = point_dup(vertex);
+    CGPoint coll_point = NULL;
+    CGCircle dup = circle_dup(circle);
+    circle_translate(dup, mtv);
+    for (ADTListItem it = list_head(vertices); it && !coll_point; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        if (point_is_in_circle(vertex, dup))
+            coll_point = point_dup(vertex);
+    }
+    if (coll_point == NULL) {
+        ADTList edges = polygon_edges(polygon);
+        for (ADTListItem it = list_head(edges); it && !coll_point; it = list_next(it)) {
+            CGSegment segment = (CGSegment) list_value(it);
+            CGLine line = line_new(segment->a, segment->b);
+            CGLine perpendicular_line = line_perpendicular(line, dup->center);
+            CGPoint point = line_intersection(line, perpendicular_line);
+            if (point_is_in_circle(point, dup) && point_is_in_polygon(point, polygon))
+                coll_point = point_dup(point);
+            line_release(line);
+            line_release(perpendicular_line);
+            point_release(point);
         }
-        if (coll_point == NULL) {
-            ADTList edges = polygon_edges(polygon);
-            for (ADTListItem it = list_head(edges); it && !coll_point; it = list_next(it)) {
-                CGSegment segment = (CGSegment) list_value(it);
-                CGLine line = line_new(segment->a, segment->b);
-                CGLine perpendicular_line = line_perpendicular(line, dup->center);
-                CGPoint point = line_intersection(line, perpendicular_line);
-                if (point_is_in_circle(point, dup) && point_is_in_polygon(point, polygon))
-                    coll_point = point_dup(point);
-                line_release(line);
-                line_release(perpendicular_line);
-                point_release(point);
-            }
-            list_full_release(edges, (void (*)(void *)) segment_release);
-        }
+        list_full_release(edges, (void (*)(void *)) segment_release);
+    }
+    if (coll_point != NULL) {
         collision = collision_new(mtv, coll_point);
         point_release(coll_point);
-        circle_release(dup);
     }
+    circle_release(dup);
     list_full_release(axes, (void (*)(void *)) vector_release);
     list_full_release(vertices, (void (*)(void *)) point_release);
     return collision;
@@ -191,22 +191,23 @@ CGCollision circle_and_polygon_collision(CGCircle circle, CGPolygon polygon) {
 
 CGCollision circle_and_circle_collision(CGCircle circle1, CGCircle circle2) {
     CGCollision collision = NULL;
-    CGVector mtv = vector_from_point_to_point(circle1->center, circle2->center);
-    vector_normalize(mtv);
-    double mult1 = double_max(circle_max_projection_on_axis(circle1, mtv) -
-                              circle_min_projection_on_axis(circle2, mtv), 0);
-    double mult2 = double_min(circle_min_projection_on_axis(circle1, mtv) -
-                              circle_max_projection_on_axis(circle2, mtv), 0);
-    vector_multiply(mtv, double_lt(mult1, -mult2) ? mult1 : mult2);
-    if (double_gt(vector_magnitude(mtv), 0)) {
+    if (double_lte(point_distance_to_point(circle1->center, circle2->center),
+                   circle1->radius + circle2->radius)) {
+        CGVector mtv = vector_from_point_to_point(circle1->center, circle2->center);
+        vector_normalize(mtv);
+        double mult1 = double_max(circle_max_projection_on_axis(circle1, mtv) -
+                                  circle_min_projection_on_axis(circle2, mtv), 0);
+        double mult2 = double_min(circle_min_projection_on_axis(circle1, mtv) -
+                                  circle_max_projection_on_axis(circle2, mtv), 0);
+        vector_multiply(mtv, double_lt(mult1, -mult2) ? mult1 : mult2);
         CGCircle dup = circle_dup(circle2);
         circle_translate(dup, mtv);
         CGPoint point = midpoint_between(circle1->center, dup->center);
         collision = collision_new(mtv, point);
+        vector_release(mtv);
         point_release(point);
         circle_release(dup);
     }
-    vector_release(mtv);
     return collision;
 }
 
