@@ -104,6 +104,9 @@ CGVector vector_new(double x, double y);
 /* Return a vector specified by two points. */
 CGVector vector_from_point_to_point(CGPoint a, CGPoint b);
 
+/* Return vector from origin to point. */
+CGVector vector_from_origin_to_point(CGPoint point);
+
 /* Free the memory used by vector. */
 void vector_release(CGVector vector);
 
@@ -185,9 +188,6 @@ double point_x(CGPoint point);
 
 /* Return point y component. */
 double point_y(CGPoint point);
-
-/* Return vector from origin to point. */
-CGVector point_vector_from_origin(CGPoint point);
 
 /* Return point projection vector on axis. */
 CGVector point_projection_on_axis(CGPoint point, CGVector axis);

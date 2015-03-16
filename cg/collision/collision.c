@@ -14,7 +14,7 @@ double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     ADTList vertices = polygon_vertices(polygon);
     for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
         CGPoint point = (CGPoint) list_value(it);
-        CGVector vector = point_vector_from_origin(point);
+        CGVector vector = vector_from_origin_to_point(point);
         double projection = vector_dot(vector, axis);
         min = (it == list_head(vertices) || double_lt(projection, min)) ? projection : min;
         vector_release(vector);
@@ -28,7 +28,7 @@ double polygon_max_projection_on_axis(CGPolygon polygon, CGVector axis) {
     ADTList vertices = polygon_vertices(polygon);
     for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
         CGPoint point = (CGPoint) list_value(it);
-        CGVector vector = point_vector_from_origin(point);
+        CGVector vector = vector_from_origin_to_point(point);
         double projection = vector_dot(vector, axis);
         max = (it == list_head(vertices) || double_gt(projection, max)) ? projection : max;
         vector_release(vector);
@@ -38,14 +38,14 @@ double polygon_max_projection_on_axis(CGPolygon polygon, CGVector axis) {
 }
 
 double circle_min_projection_on_axis(CGCircle circle, CGVector axis) {
-    CGVector vector = point_vector_from_origin(circle->center);
+    CGVector vector = vector_from_origin_to_point(circle->center);
     double projection = vector_dot(vector, axis);
     vector_release(vector);
     return projection - circle->radius;
 }
 
 double circle_max_projection_on_axis(CGCircle circle, CGVector axis) {
-    CGVector vector = point_vector_from_origin(circle->center);
+    CGVector vector = vector_from_origin_to_point(circle->center);
     double projection = vector_dot(vector, axis);
     vector_release(vector);
     return projection + circle->radius;

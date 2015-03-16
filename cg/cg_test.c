@@ -271,6 +271,27 @@ static void test_vector_from_point_to_point_1() {
     point_release(b);
 }
 
+static void test_vector_from_origin_to_point_1() {
+    CGPoint point = point_new(1, 2);
+    CGVector vector = vector_from_origin_to_point(point);
+    g_assert(double_equals(vector->x, 1));
+    g_assert(double_equals(vector->y, 2));
+    point_release(point);
+    vector_release(vector);
+}
+
+static void test_vector_from_origin_to_point_2() {
+    CGPoint point = memalloc(sizeof(*point));
+    point->x = 2;
+    point->y = 4;
+    point->w = 2;
+    CGVector vector = vector_from_origin_to_point(point);
+    g_assert(double_equals(vector->x, 1));
+    g_assert(double_equals(vector->y, 2));
+    point_release(point);
+    vector_release(vector);
+}
+
 static void test_vector_release_1() {
     CGVector vector = vector_new(2, 3);
     vector_release(vector);
@@ -764,27 +785,6 @@ static void test_point_y_2() {
     point->w = 2;
     g_assert(double_equals(point_y(point), 1));
     point_release(point);
-}
-
-static void test_point_vector_from_origin_1() {
-    CGPoint point = point_new(1, 2);
-    CGVector vector = point_vector_from_origin(point);
-    g_assert(double_equals(vector->x, 1));
-    g_assert(double_equals(vector->y, 2));
-    point_release(point);
-    vector_release(vector);
-}
-
-static void test_point_vector_from_origin_2() {
-    CGPoint point = memalloc(sizeof(*point));
-    point->x = 2;
-    point->y = 4;
-    point->w = 2;
-    CGVector vector = point_vector_from_origin(point);
-    g_assert(double_equals(vector->x, 1));
-    g_assert(double_equals(vector->y, 2));
-    point_release(point);
-    vector_release(vector);
 }
 
 static void test_point_projection_on_axis_1() {
@@ -2763,6 +2763,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/angle_in_degrees", test_angle_in_degrees_1);
     g_test_add_func("/gc/vector_new", test_vector_new_1);
     g_test_add_func("/gc/vector_from_point_to_point", test_vector_from_point_to_point_1);
+    g_test_add_func("/gc/vector_from_origin_to_point", test_vector_from_origin_to_point_1);
+    g_test_add_func("/gc/vector_from_origin_to_point", test_vector_from_origin_to_point_2);
     g_test_add_func("/gc/vector_release", test_vector_release_1);
     g_test_add_func("/gc/vector_equals", test_vector_equals_1);
     g_test_add_func("/gc/vector_equals", test_vector_equals_2);
@@ -2824,8 +2826,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_x", test_point_x_2);
     g_test_add_func("/gc/point_y", test_point_y_1);
     g_test_add_func("/gc/point_y", test_point_y_2);
-    g_test_add_func("/gc/point_vector_from_origin", test_point_vector_from_origin_1);
-    g_test_add_func("/gc/point_vector_from_origin", test_point_vector_from_origin_2);
     g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_1);
     g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_2);
     g_test_add_func("/gc/point_projection_on_axis", test_point_projection_on_axis_3);

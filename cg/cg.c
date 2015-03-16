@@ -100,6 +100,10 @@ CGVector vector_from_point_to_point(CGPoint a, CGPoint b) {
     return vector_new(x, y);
 }
 
+CGVector vector_from_origin_to_point(CGPoint point) {
+    return vector_new(point_x(point), point_y(point));
+}
+
 void vector_release(CGVector vector) {
     free(vector);
 }
@@ -275,13 +279,9 @@ double point_y(CGPoint point) {
     return point->y / point->w;
 }
 
-CGVector point_vector_from_origin(CGPoint point) {
-    return vector_new(point_x(point), point_y(point));
-}
-
 CGVector point_projection_on_axis(CGPoint point, CGVector axis) {
     CGVector projection = vector_dup(axis);
-    CGVector vector = point_vector_from_origin(point);
+    CGVector vector = vector_from_origin_to_point(point);
     double projection_magnitude = vector_dot(vector, projection);
     vector_multiply(projection, projection_magnitude);
     vector_release(vector);
@@ -294,7 +294,7 @@ void point_translate(CGPoint point, CGVector vector) {
 }
 
 void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle) {
-    CGVector center_vector = point_vector_from_origin(center);
+    CGVector center_vector = vector_from_origin_to_point(center);
     vector_reverse(center_vector);
     point_translate(point, center_vector);
     double point_x = point->x;
