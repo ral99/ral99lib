@@ -312,24 +312,6 @@ double point_distance_to_point(CGPoint point1, CGPoint point2) {
     return sqrt(x_dist * x_dist + y_dist * y_dist);
 }
 
-double point_distance_to_line(CGPoint point, CGLine line) {
-    CGPoint normalized_point = point_dup(point);
-    normalized_point->x /= point->w;
-    normalized_point->y /= point->w;
-    normalized_point->w = 1;
-    CGLine normalized_line = line_dup(line);
-    double normalized_line_divisor = sqrt(line->x * line->x + line->y * line->y);
-    normalized_line->w /= normalized_line_divisor;
-    normalized_line->x /= normalized_line_divisor;
-    normalized_line->y /= normalized_line_divisor;
-    double dist = fabs(normalized_point->w * normalized_line->w +
-                       normalized_point->x * normalized_line->x +
-                       normalized_point->y * normalized_line->y);
-    line_release(normalized_line);
-    point_release(normalized_point);
-    return dist;
-}
-
 int point_is_in_line(CGPoint point, CGLine line) {
     return double_equals(line->w * point->w + line->x * point->x + line->y * point->y, 0);
 }

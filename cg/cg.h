@@ -201,9 +201,6 @@ void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle);
 /* Return distance between two points. */
 double point_distance_to_point(CGPoint point1, CGPoint point2);
 
-/* Return distance between a point and a line. */
-double point_distance_to_line(CGPoint point, CGLine line);
-
 /* Return 1 if point is in line. 0, otherwise. */
 int point_is_in_line(CGPoint point, CGLine line);
 

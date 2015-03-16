@@ -1028,42 +1028,6 @@ static void test_point_distance_to_point_1() {
     point_release(point4);
 }
 
-static void test_point_distance_to_line_1() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(0, 1);
-    CGPoint c = point_new(1, 1);
-    CGLine line = line_new(a, b);
-    g_assert(double_equals(point_distance_to_line(c, line), 1));
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    line_release(line);
-}
-
-static void test_point_distance_to_line_2() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(2, 2);
-    CGPoint c = point_new(1, 1);
-    CGLine line = line_new(a, b);
-    g_assert(double_equals(point_distance_to_line(c, line), 0));
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    line_release(line);
-}
-
-static void test_point_distance_to_line_3() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 1);
-    CGPoint c = point_new(1, 0);
-    CGLine line = line_new(a, b);
-    g_assert(double_equals(point_distance_to_line(c, line), sqrt(2) / 2));
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    line_release(line);
-}
-
 static void test_point_is_in_line_1() {
     CGPoint a = point_new(1, 0);
     CGPoint b = point_new(1, 2);
@@ -2813,9 +2777,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_6);
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_7);
     g_test_add_func("/gc/point_distance_to_point", test_point_distance_to_point_1);
-    g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_1);
-    g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_2);
-    g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_3);
     g_test_add_func("/gc/point_is_in_line", test_point_is_in_line_1);
     g_test_add_func("/gc/point_is_in_line", test_point_is_in_line_2);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_1);
