@@ -198,9 +198,6 @@ void point_translate(CGPoint point, CGVector vector);
 /* Rotate point around a center point in counter-clockwise direction. */
 void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle);
 
-/* Normalize point. */
-void point_normalize(CGPoint point);
-
 /* Return distance between two points. */
 double point_distance_to_point(CGPoint point1, CGPoint point2);
 

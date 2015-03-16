@@ -306,12 +306,6 @@ void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle) {
     vector_release(center_vector);
 }
 
-void point_normalize(CGPoint point) {
-    point->x /= point->w;
-    point->y /= point->w;
-    point->w = 1;
-}
-
 double point_distance_to_point(CGPoint point1, CGPoint point2) {
     double x_dist = point_x(point1) - point_x(point2);
     double y_dist = point_y(point1) - point_y(point2);
@@ -320,8 +314,10 @@ double point_distance_to_point(CGPoint point1, CGPoint point2) {
 
 double point_distance_to_line(CGPoint point, CGLine line) {
     CGPoint normalized_point = point_dup(point);
+    normalized_point->x /= point->w;
+    normalized_point->y /= point->w;
+    normalized_point->w = 1;
     CGLine normalized_line = line_dup(line);
-    point_normalize(normalized_point);
     line_normalize(normalized_line);
     double dist = fabs(normalized_point->w * normalized_line->w +
                        normalized_point->x * normalized_line->x +

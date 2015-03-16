@@ -995,18 +995,6 @@ static void test_point_rotate_around_7() {
     angle_release(angle);
 }
 
-static void test_point_normalize_1() {
-    CGPoint point = (CGPoint) memalloc(sizeof(*point));
-    point->w = 2;
-    point->x = 2;
-    point->y = 4;
-    point_normalize(point);
-    g_assert(double_equals(point->w, 1));
-    g_assert(double_equals(point->x, 1));
-    g_assert(double_equals(point->y, 2));
-    point_release(point);
-}
-
 static void test_point_distance_to_point_1() {
     CGPoint point1 = point_new(0, 0);
     CGPoint point2 = point_new(1, 0);
@@ -2868,7 +2856,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_5);
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_6);
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_7);
-    g_test_add_func("/gc/point_normalize", test_point_normalize_1);
     g_test_add_func("/gc/point_distance_to_point", test_point_distance_to_point_1);
     g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_1);
     g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_2);
