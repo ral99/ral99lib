@@ -273,27 +273,16 @@ static void test_vector_from_point_to_point_1() {
     g_assert(vector2 != NULL);
     g_assert(double_equals(vector2->x, -1));
     g_assert(double_equals(vector2->y, -1));
-    vector_release(vector1);
-    vector_release(vector2);
     point_release(a);
     point_release(b);
+    vector_release(vector1);
+    vector_release(vector2);
 }
 
 static void test_vector_from_origin_to_point_1() {
     CGPoint point = point_new(1, 2);
     CGVector vector = vector_from_origin_to_point(point);
-    g_assert(double_equals(vector->x, 1));
-    g_assert(double_equals(vector->y, 2));
-    point_release(point);
-    vector_release(vector);
-}
-
-static void test_vector_from_origin_to_point_2() {
-    CGPoint point = memalloc(sizeof(*point));
-    point->x = 2;
-    point->y = 4;
-    point->w = 2;
-    CGVector vector = vector_from_origin_to_point(point);
+    g_assert(vector != NULL);
     g_assert(double_equals(vector->x, 1));
     g_assert(double_equals(vector->y, 2));
     point_release(point);
@@ -693,6 +682,7 @@ static void test_midpoint_between_1() {
     CGPoint point1 = point_new(0, 0);
     CGPoint point2= point_new(2, 2);
     CGPoint midpoint = midpoint_between(point1, point2);
+    g_assert(midpoint != NULL);
     g_assert(double_equals(point_x(midpoint), 1));
     g_assert(double_equals(point_y(midpoint), 1));
     point_release(point1);
@@ -2612,7 +2602,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_new", test_vector_new_1);
     g_test_add_func("/gc/vector_from_point_to_point", test_vector_from_point_to_point_1);
     g_test_add_func("/gc/vector_from_origin_to_point", test_vector_from_origin_to_point_1);
-    g_test_add_func("/gc/vector_from_origin_to_point", test_vector_from_origin_to_point_2);
     g_test_add_func("/gc/vector_release", test_vector_release_1);
     g_test_add_func("/gc/vector_equals", test_vector_equals_1);
     g_test_add_func("/gc/vector_equals", test_vector_equals_2);
