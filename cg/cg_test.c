@@ -1310,94 +1310,6 @@ static void test_point_intersection_of_lines_3() {
     line_release(line2);
 }
 
-static void test_point_intersection_of_segments_1() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(2, 0);
-    CGPoint d = point_new(3, 0);
-    CGSegment segment1 = segment_new(a, b);
-    CGSegment segment2 = segment_new(c, d);
-    CGPoint intersection = point_intersection_of_segments(segment1, segment2);
-    g_assert(intersection == NULL);
-    segment_release(segment1);
-    segment_release(segment2);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    point_release(d);
-}
-
-static void test_point_intersection_of_segments_2() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(2, 0);
-    CGSegment segment1 = segment_new(a, b);
-    CGSegment segment2 = segment_new(b, c);
-    CGPoint intersection = point_intersection_of_segments(segment1, segment2);
-    g_assert(double_equals(point_x(intersection), 1));
-    g_assert(double_equals(point_y(intersection), 0));
-    point_release(intersection);
-    segment_release(segment1);
-    segment_release(segment2);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-}
-
-
-static void test_point_intersection_of_segments_3() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(2, 0);
-    CGPoint d = point_new(3, 0);
-    CGSegment segment1 = segment_new(a, c);
-    CGSegment segment2 = segment_new(b, d);
-    CGPoint intersection = point_intersection_of_segments(segment1, segment2);
-    g_assert(intersection == NULL);
-    segment_release(segment1);
-    segment_release(segment2);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    point_release(d);
-}
-
-static void test_point_intersection_of_segments_4() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 0);
-    CGPoint c = point_new(1, 1);
-    CGSegment segment1 = segment_new(a, b);
-    CGSegment segment2 = segment_new(b, c);
-    CGPoint intersection = point_intersection_of_segments(segment1, segment2);
-    g_assert(double_equals(point_x(intersection), 1));
-    g_assert(double_equals(point_y(intersection), 0));
-    point_release(intersection);
-    segment_release(segment1);
-    segment_release(segment2);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-}
-
-static void test_point_intersection_of_segments_5() {
-    CGPoint a = point_new(0, 0);
-    CGPoint b = point_new(1, 1);
-    CGPoint c = point_new(1, 0);
-    CGPoint d = point_new(0, 1);
-    CGSegment segment1 = segment_new(a, b);
-    CGSegment segment2 = segment_new(c, d);
-    CGPoint intersection = point_intersection_of_segments(segment1, segment2);
-    g_assert(double_equals(point_x(intersection), 0.5));
-    g_assert(double_equals(point_y(intersection), 0.5));
-    point_release(intersection);
-    segment_release(segment1);
-    segment_release(segment2);
-    point_release(a);
-    point_release(b);
-    point_release(c);
-    point_release(d);
-}
-
 /**********************************************************************************************
  ******************************************* CGLine *******************************************
  *********************************************************************************************/
@@ -2895,16 +2807,6 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_intersection_of_lines", test_point_intersection_of_lines_1);
     g_test_add_func("/gc/point_intersection_of_lines", test_point_intersection_of_lines_2);
     g_test_add_func("/gc/point_intersection_of_lines", test_point_intersection_of_lines_3);
-    g_test_add_func("/gc/point_intersection_of_segments",
-                    test_point_intersection_of_segments_1);
-    g_test_add_func("/gc/point_intersection_of_segments",
-                    test_point_intersection_of_segments_2);
-    g_test_add_func("/gc/point_intersection_of_segments",
-                    test_point_intersection_of_segments_3);
-    g_test_add_func("/gc/point_intersection_of_segments",
-                    test_point_intersection_of_segments_4);
-    g_test_add_func("/gc/point_intersection_of_segments",
-                    test_point_intersection_of_segments_5);
     g_test_add_func("/gc/line_new", test_line_new_1);
     g_test_add_func("/gc/line_new", test_line_new_2);
     g_test_add_func("/gc/line_new", test_line_new_3);

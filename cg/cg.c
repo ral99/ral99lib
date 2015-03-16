@@ -422,40 +422,6 @@ CGPoint point_intersection_of_lines(CGLine line1, CGLine line2) {
     return intersection;
 }
 
-CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2) {
-    CGLine line1 = segment_line(segment1);
-    CGLine line2 = segment_line(segment2);
-    CGPoint intersection = point_intersection_of_lines(line1, line2);
-    if (intersection != NULL) {
-        if (!point_is_in_segment(intersection, segment1) ||
-            !point_is_in_segment(intersection, segment2)) {
-            point_release(intersection);
-            intersection = NULL;
-        }
-    }
-    else {
-        if (point_equals(segment1->a, segment2->a) &&
-            !point_is_in_segment(segment1->b, segment2) &&
-            !point_is_in_segment(segment2->b, segment1))
-            intersection = point_dup(segment1->a);
-        else if (point_equals(segment1->a, segment2->b) &&
-                 !point_is_in_segment(segment1->b, segment2) &&
-                 !point_is_in_segment(segment2->a, segment1))
-            intersection = point_dup(segment1->a);
-        else if (point_equals(segment1->b, segment2->a) &&
-                 !point_is_in_segment(segment1->a, segment2) &&
-                 !point_is_in_segment(segment2->b, segment1))
-            intersection = point_dup(segment1->b);
-        else if (point_equals(segment1->b, segment2->b) &&
-                 !point_is_in_segment(segment1->a, segment2) &&
-                 !point_is_in_segment(segment2->a, segment1))
-            intersection = point_dup(segment1->b);
-    }
-    line_release(line1);
-    line_release(line2);
-    return intersection;
-}
-
 /**********************************************************************************************
  ******************************************* CGLine *******************************************
  *********************************************************************************************/

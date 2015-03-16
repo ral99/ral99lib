@@ -222,10 +222,6 @@ int point_is_in_circle(CGPoint point, CGCircle circle);
 /* Return the point of intersection between two lines, or NULL if lines are parallel. */
 CGPoint point_intersection_of_lines(CGLine line1, CGLine line2);
 
-/* Return the point of intersection between two segments, or NULL if there are zero or an
- * infinite number of intersection points. */
-CGPoint point_intersection_of_segments(CGSegment segment1, CGSegment segment2);
-
 /**********************************************************************************************
  ******************************************* CGLine *******************************************
  *********************************************************************************************/
