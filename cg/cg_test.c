@@ -1051,12 +1051,18 @@ static void test_point_is_in_triangle_1() {
     CGPoint b = point_new(1, 0);
     CGPoint c = point_new(0, 1);
     CGPoint d = point_new(1, 1);
+    CGPoint e = point_new(0, 2);
+    CGPoint f = point_new(2, 0);
     CGTriangle triangle = triangle_new(a, b, c);
     g_assert_cmpint(point_is_in_triangle(d, triangle), ==, 0);
+    g_assert_cmpint(point_is_in_triangle(e, triangle), ==, 0);
+    g_assert_cmpint(point_is_in_triangle(f, triangle), ==, 0);
     point_release(a);
     point_release(b);
     point_release(c);
     point_release(d);
+    point_release(e);
+    point_release(f);
     triangle_release(triangle);
 }
 
@@ -1119,7 +1125,9 @@ static void test_point_is_in_polygon_1() {
     CGPoint b = point_new(1, 0);
     CGPoint c = point_new(0, 1);
     CGPoint d = point_new(1, 1);
-    CGPoint e = point_new(2, 2);
+    CGPoint e = point_new(2, 1);
+    CGPoint f = point_new(1, 2);
+    CGPoint g = point_new(2, 2);
     ADTList vertices = list_new();
     list_append(vertices, a);
     list_append(vertices, b);
@@ -1127,11 +1135,15 @@ static void test_point_is_in_polygon_1() {
     list_append(vertices, d);
     CGPolygon polygon = polygon_new(vertices);
     g_assert_cmpint(point_is_in_polygon(e, polygon), ==, 0);
+    g_assert_cmpint(point_is_in_polygon(f, polygon), ==, 0);
+    g_assert_cmpint(point_is_in_polygon(g, polygon), ==, 0);
     point_release(a);
     point_release(b);
     point_release(c);
     point_release(d);
     point_release(e);
+    point_release(f);
+    point_release(g);
     list_release(vertices);
     polygon_release(polygon);
 }
@@ -1168,9 +1180,18 @@ static void test_point_is_in_polygon_2() {
 static void test_point_is_in_circle_1() {
     CGPoint center = point_new(1, 1);
     CGCircle circle = circle_new(center, 1);
-    CGPoint point = point_new(2, 2);
-    g_assert_cmpint(point_is_in_circle(point, circle), ==, 0);
-    point_release(point);
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(2, 0);
+    CGPoint c = point_new(2, 2);
+    CGPoint d = point_new(0, 2);
+    g_assert_cmpint(point_is_in_circle(a, circle), ==, 0);
+    g_assert_cmpint(point_is_in_circle(b, circle), ==, 0);
+    g_assert_cmpint(point_is_in_circle(c, circle), ==, 0);
+    g_assert_cmpint(point_is_in_circle(d, circle), ==, 0);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
     point_release(center);
     circle_release(circle);
 }
@@ -1393,9 +1414,11 @@ static void test_segment_new_1() {
     CGPoint b = point_new(1, 1);
     CGSegment segment = segment_new(a, b);
     g_assert(segment != NULL);
+    g_assert(segment->a != NULL);
     g_assert(segment->a != a);
-    g_assert(segment->b != b);
     g_assert(point_equals(segment->a, a));
+    g_assert(segment->b != NULL);
+    g_assert(segment->b != b);
     g_assert(point_equals(segment->b, b));
     point_release(a);
     point_release(b);
@@ -1407,9 +1430,11 @@ static void test_segment_new_2() {
     CGPoint b = point_new(1, 1);
     CGSegment segment = segment_new(a, b);
     g_assert(segment != NULL);
+    g_assert(segment->a != NULL);
     g_assert(segment->a != a);
-    g_assert(segment->b != b);
     g_assert(point_equals(segment->a, a));
+    g_assert(segment->b != NULL);
+    g_assert(segment->b != b);
     g_assert(point_equals(segment->b, b));
     point_release(a);
     point_release(b);
@@ -1450,9 +1475,11 @@ static void test_segment_dup_1() {
     CGSegment dup = segment_dup(segment);
     g_assert(dup != NULL);
     g_assert(dup != segment);
+    g_assert(dup->a != NULL);
     g_assert(dup->a != segment->a);
-    g_assert(dup->b != segment->b);
     g_assert(point_equals(dup->a, segment->a));
+    g_assert(dup->b != NULL);
+    g_assert(dup->b != segment->b);
     g_assert(point_equals(dup->b, segment->b));
     point_release(a);
     point_release(b);
@@ -1636,12 +1663,15 @@ static void test_triangle_new_1() {
     CGPoint c = point_new(0, 1);
     CGTriangle triangle = triangle_new(a, b, c);
     g_assert(triangle != NULL);
-    g_assert(a != triangle->a);
-    g_assert(b != triangle->b);
-    g_assert(c != triangle->c);
-    g_assert(point_equals(a, triangle->a));
-    g_assert(point_equals(b, triangle->b));
-    g_assert(point_equals(c, triangle->c));
+    g_assert(triangle->a != NULL);
+    g_assert(triangle->a != a);
+    g_assert(point_equals(triangle->a, a));
+    g_assert(triangle->b != NULL);
+    g_assert(triangle->b != b);
+    g_assert(point_equals(triangle->b, b));
+    g_assert(triangle->c != NULL);
+    g_assert(triangle->c != c);
+    g_assert(point_equals(triangle->c, c));
     point_release(a);
     point_release(b);
     point_release(c);
@@ -1654,12 +1684,15 @@ static void test_triangle_new_2() {
     CGPoint c = point_new(0, 1);
     CGTriangle triangle = triangle_new(a, b, c);
     g_assert(triangle != NULL);
-    g_assert(a != triangle->a);
-    g_assert(b != triangle->b);
-    g_assert(c != triangle->c);
-    g_assert(point_equals(a, triangle->a));
-    g_assert(point_equals(b, triangle->b));
-    g_assert(point_equals(c, triangle->c));
+    g_assert(triangle->a != NULL);
+    g_assert(triangle->a != a);
+    g_assert(point_equals(triangle->a, a));
+    g_assert(triangle->b != NULL);
+    g_assert(triangle->b != b);
+    g_assert(point_equals(triangle->b, b));
+    g_assert(triangle->c != NULL);
+    g_assert(triangle->c != c);
+    g_assert(point_equals(triangle->c, c));
     point_release(a);
     point_release(b);
     point_release(c);
@@ -1672,12 +1705,15 @@ static void test_triangle_new_3() {
     CGPoint c = point_new(0, 0);
     CGTriangle triangle = triangle_new(a, b, c);
     g_assert(triangle != NULL);
-    g_assert(a != triangle->a);
-    g_assert(b != triangle->b);
-    g_assert(c != triangle->c);
-    g_assert(point_equals(a, triangle->a));
-    g_assert(point_equals(b, triangle->b));
-    g_assert(point_equals(c, triangle->c));
+    g_assert(triangle->a != NULL);
+    g_assert(triangle->a != a);
+    g_assert(point_equals(triangle->a, a));
+    g_assert(triangle->b != NULL);
+    g_assert(triangle->b != b);
+    g_assert(point_equals(triangle->b, b));
+    g_assert(triangle->c != NULL);
+    g_assert(triangle->c != c);
+    g_assert(point_equals(triangle->c, c));
     point_release(a);
     point_release(b);
     point_release(c);
@@ -1746,11 +1782,14 @@ static void test_triangle_dup_1() {
     CGTriangle dup = triangle_dup(triangle);
     g_assert(dup != NULL);
     g_assert(dup != triangle);
+    g_assert(dup->a != NULL);
     g_assert(dup->a != triangle->a);
-    g_assert(dup->b != triangle->b);
-    g_assert(dup->c != triangle->c);
     g_assert(point_equals(dup->a, triangle->a));
+    g_assert(dup->b != NULL);
+    g_assert(dup->b != triangle->b);
     g_assert(point_equals(dup->b, triangle->b));
+    g_assert(dup->c != NULL);
+    g_assert(dup->c != triangle->c);
     g_assert(point_equals(dup->c, triangle->c));
     point_release(a);
     point_release(b);
@@ -1830,12 +1869,12 @@ static void test_triangle_translate_1() {
     CGTriangle triangle = triangle_new(a, b, c);
     CGVector vector = vector_new(1, 2);
     triangle_translate(triangle, vector);
-    g_assert(double_equals(point_x(a) + 1, point_x(triangle->a)));
-    g_assert(double_equals(point_y(a) + 2, point_y(triangle->a)));
-    g_assert(double_equals(point_x(b) + 1, point_x(triangle->b)));
-    g_assert(double_equals(point_y(b) + 2, point_y(triangle->b)));
-    g_assert(double_equals(point_x(c) + 1, point_x(triangle->c)));
-    g_assert(double_equals(point_y(c) + 2, point_y(triangle->c)));
+    g_assert(double_equals(point_x(triangle->a), 1));
+    g_assert(double_equals(point_y(triangle->a), 2));
+    g_assert(double_equals(point_x(triangle->b), 2));
+    g_assert(double_equals(point_y(triangle->b), 2));
+    g_assert(double_equals(point_x(triangle->c), 1));
+    g_assert(double_equals(point_y(triangle->c), 3));
     vector_release(vector);
     triangle_release(triangle);
     point_release(a);
@@ -2113,6 +2152,17 @@ static void test_polygon_new_triangle_2() {
 
 static void test_polygon_new_triangle_3() {
     CGPoint a = point_new(1, 0);
+    CGPoint b = point_new(2, 0);
+    CGPoint c = point_new(3, 0);
+    CGPolygon polygon = polygon_new_triangle(a, b, c);
+    g_assert(polygon == NULL);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_polygon_new_triangle_4() {
+    CGPoint a = point_new(1, 0);
     CGPoint b = point_new(0, 0);
     CGPoint c = point_new(0, 1);
     CGPolygon polygon = polygon_new_triangle(a, b, c);
@@ -2232,8 +2282,8 @@ static void test_polygon_dup_1() {
     CGPolygon polygon = polygon_new_square(lower_left, 1);
     CGPolygon dup = polygon_dup(polygon);
     g_assert(dup != NULL);
-    g_assert(dup->vertices != NULL);
     g_assert(dup != polygon);
+    g_assert(dup->vertices != NULL);
     g_assert(dup->vertices != polygon->vertices);
     g_assert(list_equals_cmp(polygon->vertices, dup->vertices,
                              (int (*)(void *, void *)) point_equals));
@@ -2409,31 +2459,45 @@ static void test_polygon_area_2() {
     point_release(c);
 }
 
+static void test_polygon_area_3() {
+    CGPoint lower_left = point_new(0, 0);
+    CGPolygon polygon = polygon_new_rectangle(lower_left, 1, 2);
+    g_assert(double_equals(polygon_area(polygon), 2));
+    polygon_release(polygon);
+    point_release(lower_left);
+}
+
 /**********************************************************************************************
  ****************************************** CGCircle ******************************************
  *********************************************************************************************/
 
 static void test_circle_new_1() {
-    CGPoint center = point_new(1, 1);
-    CGCircle circle = circle_new(center, 1);
+    CGPoint center = point_new(1, 2);
+    CGCircle circle = circle_new(center, 3);
     g_assert(circle != NULL);
     g_assert(circle->center != NULL);
     g_assert(circle->center != center);
     g_assert(point_equals(circle->center, center));
-    g_assert(double_equals(circle->radius, 1));
+    g_assert(double_equals(circle->radius, 3));
     point_release(center);
     circle_release(circle);
 }
 
 static void test_circle_new_2() {
-    CGPoint center = point_new(1, 1);
+    CGPoint center = point_new(1, 2);
     g_assert(circle_new(center, 0) == NULL);
     point_release(center);
 }
 
+static void test_circle_new_3() {
+    CGPoint center = point_new(1, 2);
+    g_assert(circle_new(center, -1) == NULL);
+    point_release(center);
+}
+
 static void test_circle_release_1() {
-    CGPoint center = point_new(1, 1);
-    CGCircle circle = circle_new(center, 1);
+    CGPoint center = point_new(1, 2);
+    CGCircle circle = circle_new(center, 3);
     point_release(center);
     circle_release(circle);
 }
@@ -2449,8 +2513,8 @@ static void test_circle_equals_1() {
 }
 
 static void test_circle_equals_2() {
-    CGPoint center1 = point_new(1, 1);
-    CGPoint center2 = point_new(1, 2);
+    CGPoint center1 = point_new(1, 2);
+    CGPoint center2 = point_new(1, 1);
     CGCircle circle1 = circle_new(center1, 1);
     CGCircle circle2 = circle_new(center2, 1);
     g_assert_cmpint(circle_equals(circle1, circle2), ==, 0);
@@ -2461,8 +2525,8 @@ static void test_circle_equals_2() {
 }
 
 static void test_circle_equals_3() {
-    CGPoint center1 = point_new(1, 1);
-    CGPoint center2 = point_new(1, 1);
+    CGPoint center1 = point_new(1, 2);
+    CGPoint center2 = point_new(1, 2);
     CGCircle circle1 = circle_new(center1, 1);
     CGCircle circle2 = circle_new(center2, 1);
     g_assert_cmpint(circle_equals(circle1, circle2), ==, 1);
@@ -2477,8 +2541,9 @@ static void test_circle_dup_1() {
     CGCircle circle = circle_new(center, 3);
     CGCircle dup = circle_dup(circle);
     g_assert(dup != NULL);
-    g_assert(dup->center != NULL);
     g_assert(dup != circle);
+    g_assert(dup->center != NULL);
+    g_assert(dup->center != circle->center);
     g_assert(point_equals(dup->center, circle->center));
     g_assert(double_equals(dup->radius, circle->radius));
     point_release(center);
@@ -2491,6 +2556,7 @@ static void test_circle_to_str_1() {
     CGPoint center = point_new(1, 2);
     CGCircle circle = circle_new(center, 3);
     char *str = circle_to_str(circle, 2);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, circle_str);
     free(str);
     point_release(center);
@@ -2534,29 +2600,27 @@ static void test_circle_radius_1() {
 }
 
 static void test_circle_translate_1() {
-    CGPoint center = point_new(1, 1);
-    CGPoint new_center = point_new(2, 2);
-    CGVector vector = vector_new(1, 1);
+    CGPoint center = point_new(1, 2);
+    CGVector vector = vector_new(1, 2);
     CGCircle circle = circle_new(center, 1);
     circle_translate(circle, vector);
-    g_assert(point_equals(circle->center, new_center));
+    g_assert(double_equals(point_x(circle->center), 2));
+    g_assert(double_equals(point_y(circle->center), 4));
     g_assert(double_equals(circle->radius, 1));
     point_release(center);
-    point_release(new_center);
     vector_release(vector);
     circle_release(circle);
 }
 
 static void test_circle_translate_2() {
-    CGPoint center = point_new(1, 1);
-    CGPoint new_center = point_new(1, 1);
+    CGPoint center = point_new(1, 2);
     CGVector vector = vector_new(0, 0);
     CGCircle circle = circle_new(center, 1);
     circle_translate(circle, vector);
-    g_assert(point_equals(circle->center, new_center));
+    g_assert(double_equals(point_x(circle->center), 1));
+    g_assert(double_equals(point_y(circle->center), 2));
     g_assert(double_equals(circle->radius, 1));
     point_release(center);
-    point_release(new_center);
     vector_release(vector);
     circle_release(circle);
 }
@@ -2568,6 +2632,7 @@ static void test_circle_rotate_around_1() {
     circle_rotate_around(circle, center, angle);
     g_assert(double_equals(point_x(circle->center), 1));
     g_assert(double_equals(point_y(circle->center), 1));
+    g_assert(double_equals(circle->radius, 1));
     angle_release(angle);
     point_release(center);
     circle_release(circle);
@@ -2581,6 +2646,7 @@ static void test_circle_rotate_around_2() {
     circle_rotate_around(circle, point, angle);
     g_assert(double_equals(point_x(circle->center), 1));
     g_assert(double_equals(point_y(circle->center), 1));
+    g_assert(double_equals(circle->radius, 1));
     angle_release(angle);
     point_release(center);
     point_release(point);
@@ -2595,6 +2661,7 @@ static void test_circle_rotate_around_3() {
     circle_rotate_around(circle, point, angle);
     g_assert(double_equals(point_x(circle->center), 3));
     g_assert(double_equals(point_y(circle->center), 1));
+    g_assert(double_equals(circle->radius, 1));
     angle_release(angle);
     point_release(center);
     point_release(point);
@@ -2802,6 +2869,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_1);
     g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_2);
     g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_3);
+    g_test_add_func("/gc/polygon_new_triangle", test_polygon_new_triangle_4);
     g_test_add_func("/gc/polygon_new_rectangle", test_polygon_new_rectangle_1);
     g_test_add_func("/gc/polygon_new_rectangle", test_polygon_new_rectangle_2);
     g_test_add_func("/gc/polygon_new_square", test_polygon_new_square_1);
@@ -2820,8 +2888,10 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_rotate_around", test_polygon_rotate_around_3);
     g_test_add_func("/gc/polygon_area", test_polygon_area_1);
     g_test_add_func("/gc/polygon_area", test_polygon_area_2);
+    g_test_add_func("/gc/polygon_area", test_polygon_area_3);
     g_test_add_func("/gc/circle_new", test_circle_new_1);
     g_test_add_func("/gc/circle_new", test_circle_new_2);
+    g_test_add_func("/gc/circle_new", test_circle_new_3);
     g_test_add_func("/gc/circle_release", test_circle_release_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_2);
