@@ -325,10 +325,8 @@ int point_is_in_segment(CGPoint point, CGSegment segment) {
             is_in = 1;
         line_release(line);
     }
-    else {
-        if (point_equals(point, segment->a))
+    else if (point_equals(point, segment->a))
             is_in = 1;
-    }
     return is_in;
 }
 
@@ -372,15 +370,13 @@ int point_is_in_polygon(CGPoint point, CGPolygon polygon) {
             is_in = 0;
         triangle_release(triangle);
     }
-    if (!is_in) {
-        for (int i = 0; i < n_vertices && !is_in; i++) {
-            CGPoint vertex1 = (CGPoint) list_at(polygon->vertices, i);
-            CGPoint vertex2 = (CGPoint) list_at(polygon->vertices, (i + 1) % n_vertices);
-            CGSegment segment = segment_new(vertex1, vertex2);
-            if (point_is_in_segment(point, segment))
-                is_in = 1;
-            segment_release(segment);
-        }
+    for (int i = 0; i < n_vertices && !is_in; i++) {
+        CGPoint vertex1 = (CGPoint) list_at(polygon->vertices, i);
+        CGPoint vertex2 = (CGPoint) list_at(polygon->vertices, (i + 1) % n_vertices);
+        CGSegment segment = segment_new(vertex1, vertex2);
+        if (point_is_in_segment(point, segment))
+            is_in = 1;
+        segment_release(segment);
     }
     return is_in;
 }
