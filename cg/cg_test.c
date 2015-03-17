@@ -193,6 +193,7 @@ static void test_angle_to_str_1() {
     char *angle_str = (char *) "<< Angle: 3.14 >>";
     CGAngle angle = angle_in_radians_new(M_PI);
     char *str = angle_to_str(angle, 2);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, angle_str);
     free(str);
     angle_release(angle);
@@ -266,10 +267,10 @@ static void test_vector_from_point_to_point_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 1);
     CGVector vector1 = vector_from_point_to_point(a, b);
-    CGVector vector2 = vector_from_point_to_point(b, a);
     g_assert(vector1 != NULL);
     g_assert(double_equals(vector1->x, 1));
     g_assert(double_equals(vector1->y, 1));
+    CGVector vector2 = vector_from_point_to_point(b, a);
     g_assert(vector2 != NULL);
     g_assert(double_equals(vector2->x, -1));
     g_assert(double_equals(vector2->y, -1));
@@ -341,6 +342,7 @@ static void test_vector_to_str_1() {
     char *vector_str = (char *) "<< Vector: (1.25, 2.00) >>";
     CGVector vector = vector_new(1.25, 2);
     char *str = vector_to_str(vector, 2);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, vector_str);
     free(str);
     vector_release(vector);
@@ -361,6 +363,7 @@ static void test_vector_y_1() {
 static void test_vector_right_perpendicular_axis_1() {
     CGVector vector = vector_new(3, 4);
     CGVector axis = vector_right_perpendicular_axis(vector);
+    g_assert(axis != NULL);
     g_assert(double_equals(axis->x, 4 / 5.0));
     g_assert(double_equals(axis->y, -3 / 5.0));
     vector_release(vector);
@@ -376,6 +379,7 @@ static void test_vector_right_perpendicular_axis_2() {
 static void test_vector_left_perpendicular_axis_1() {
     CGVector vector = vector_new(3, 4);
     CGVector axis = vector_left_perpendicular_axis(vector);
+    g_assert(axis != NULL);
     g_assert(double_equals(axis->x, -4 / 5.0));
     g_assert(double_equals(axis->y, 3 / 5.0));
     vector_release(vector);
@@ -485,7 +489,7 @@ static void test_vector_subtract_2() {
 }
 
 static void test_vector_multiply_1() {
-    CGVector vector = vector_new(1, 1);
+    CGVector vector = vector_new(1, 2);
     vector_multiply(vector, 0);
     g_assert(double_equals(vector->x, 0));
     g_assert(double_equals(vector->y, 0));
@@ -493,10 +497,10 @@ static void test_vector_multiply_1() {
 }
 
 static void test_vector_multiply_2() {
-    CGVector vector = vector_new(1, 1);
+    CGVector vector = vector_new(1, 2);
     vector_multiply(vector, 2);
     g_assert(double_equals(vector->x, 2));
-    g_assert(double_equals(vector->y, 2));
+    g_assert(double_equals(vector->y, 4));
     vector_release(vector);
 }
 
@@ -549,6 +553,7 @@ static void test_vector_dot_4() {
 static void test_vector_angle_to_1() {
     CGVector vector = vector_new(1, 1);
     CGAngle angle = vector_angle_to(vector, vector);
+    g_assert(angle != NULL);
     g_assert(double_equals(angle_in_radians(angle), 0));
     angle_release(angle);
     vector_release(vector);
@@ -558,8 +563,10 @@ static void test_vector_angle_to_2() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 0);
     CGAngle angle1 = vector_angle_to(vector1, vector2);
-    CGAngle angle2 = vector_angle_to(vector2, vector1);
+    g_assert(angle1 != NULL);
     g_assert(double_equals(angle_in_radians(angle1), 3 * M_PI / 2));
+    CGAngle angle2 = vector_angle_to(vector2, vector1);
+    g_assert(angle2 != NULL);
     g_assert(double_equals(angle_in_radians(angle2), M_PI / 2));
     angle_release(angle1);
     angle_release(angle2);
@@ -571,8 +578,10 @@ static void test_vector_angle_to_3() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 0);
     CGAngle angle1 = vector_angle_to(vector1, vector2);
-    CGAngle angle2 = vector_angle_to(vector2, vector1);
+    g_assert(angle1 != NULL);
     g_assert(double_equals(angle_in_radians(angle1), M_PI));
+    CGAngle angle2 = vector_angle_to(vector2, vector1);
+    g_assert(angle2 != NULL);
     g_assert(double_equals(angle_in_radians(angle2), M_PI));
     angle_release(angle1);
     angle_release(angle2);
@@ -584,8 +593,10 @@ static void test_vector_angle_to_4() {
     CGVector vector1 = vector_new(0, 1);
     CGVector vector2 = vector_new(1, 1);
     CGAngle angle1 = vector_angle_to(vector1, vector2);
-    CGAngle angle2 = vector_angle_to(vector2, vector1);
+    g_assert(angle1 != NULL);
     g_assert(double_equals(angle_in_radians(angle1), 7 * M_PI / 4));
+    CGAngle angle2 = vector_angle_to(vector2, vector1);
+    g_assert(angle2 != NULL);
     g_assert(double_equals(angle_in_radians(angle2), M_PI / 4));
     angle_release(angle1);
     angle_release(angle2);
@@ -597,9 +608,11 @@ static void test_vector_angle_to_5() {
     CGVector vector1 = vector_new(1, 0);
     CGVector vector2 = vector_new(-1, 1);
     CGAngle angle1 = vector_angle_to(vector1, vector2);
+    g_assert(angle1 != NULL);
+    g_assert(double_equals(angle_in_radians(angle1), 3 * M_PI / 4));
     CGAngle angle2 = vector_angle_to(vector2, vector1);
-    g_assert(double_equals(angle_in_degrees(angle1), 135));
-    g_assert(double_equals(angle_in_degrees(angle2), 225));
+    g_assert(angle2 != NULL);
+    g_assert(double_equals(angle_in_radians(angle2), 5 * M_PI / 4));
     angle_release(angle1);
     angle_release(angle2);
     vector_release(vector1);
@@ -661,6 +674,16 @@ static void test_vector_rotate_5() {
     vector_rotate(vector, angle);
     g_assert(double_equals(vector->x, 1));
     g_assert(double_equals(vector->y, 0));
+    angle_release(angle);
+    vector_release(vector);
+}
+
+static void test_vector_rotate_6() {
+    CGVector vector = vector_new(1, 0);
+    CGAngle angle = angle_in_degrees_new(45);
+    vector_rotate(vector, angle);
+    g_assert(double_equals(vector->x, sqrt(2) / 2));
+    g_assert(double_equals(vector->y, sqrt(2) / 2));
     angle_release(angle);
     vector_release(vector);
 }
@@ -754,6 +777,7 @@ static void test_point_to_str_1() {
     char *point_str = (char *) "<< Point: (1.25, 2.00) >>";
     CGPoint point = point_new(1.25, 2);
     char *str = point_to_str(point, 2);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, point_str);
     free(str);
     point_release(point);
@@ -768,7 +792,6 @@ static void test_point_x_1() {
 static void test_point_x_2() {
     CGPoint point = memalloc(sizeof(*point));
     point->x = 1;
-    point->y = 2;
     point->w = 2;
     g_assert(double_equals(point_x(point), 0.5));
     point_release(point);
@@ -782,7 +805,6 @@ static void test_point_y_1() {
 
 static void test_point_y_2() {
     CGPoint point = memalloc(sizeof(*point));
-    point->x = 1;
     point->y = 2;
     point->w = 2;
     g_assert(double_equals(point_y(point), 1));
@@ -1186,6 +1208,7 @@ static void test_line_new_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 1);
     CGLine line = line_new(a, b);
+    g_assert(line != NULL);
     g_assert(double_equals(line->w, 0));
     g_assert(double_equals(line->x, -1));
     g_assert(double_equals(line->y, 1));
@@ -1198,6 +1221,7 @@ static void test_line_new_2() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 0);
     CGLine line = line_new(a, b);
+    g_assert(line != NULL);
     g_assert(double_equals(line->w, 0));
     g_assert(double_equals(line->x, 0));
     g_assert(double_equals(line->y, 1));
@@ -1210,6 +1234,7 @@ static void test_line_new_3() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(0, 1);
     CGLine line = line_new(a, b);
+    g_assert(line != NULL);
     g_assert(double_equals(line->w, 0));
     g_assert(double_equals(line->x, -1));
     g_assert(double_equals(line->y, 0));
@@ -1285,6 +1310,7 @@ static void test_line_to_str_1() {
     CGPoint b = point_new(1, 1);
     CGLine line = line_new(a, b);
     char *str = line_to_str(line, 2);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, line_str);
     free(str);
     point_release(a);
@@ -1295,15 +1321,16 @@ static void test_line_to_str_1() {
 static void test_line_perpendicular_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 1);
-    CGLine line1 = line_new(a, b);
-    CGLine line2 = line_perpendicular(line1, a);
-    g_assert(double_equals(line2->w, 0));
-    g_assert(double_equals(line2->x, -1));
-    g_assert(double_equals(line2->y, -1));
+    CGLine line = line_new(a, b);
+    CGLine perpendicular = line_perpendicular(line, a);
+    g_assert(perpendicular != NULL);
+    g_assert(double_equals(perpendicular->w, 0));
+    g_assert(double_equals(perpendicular->x, -1));
+    g_assert(double_equals(perpendicular->y, -1));
     point_release(a);
     point_release(b);
-    line_release(line1);
-    line_release(line2);
+    line_release(line);
+    line_release(perpendicular);
 }
 
 static void test_line_intersection_1() {
@@ -1347,6 +1374,7 @@ static void test_line_intersection_3() {
     CGLine line1 = line_new(a, c);
     CGLine line2 = line_new(b, c);
     CGPoint intersection = line_intersection(line1, line2);
+    g_assert(intersection != NULL);
     g_assert(point_equals(intersection, c));
     point_release(a);
     point_release(b);
@@ -1438,6 +1466,7 @@ static void test_segment_to_str_1() {
     CGPoint b = point_new(3, 4);
     CGSegment segment = segment_new(a, b);
     char *str = segment_to_str(segment, 2);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, segment_str);
     free(str);
     point_release(a);
@@ -1450,6 +1479,7 @@ static void test_segment_a_1() {
     CGPoint b = point_new(3, 4);
     CGSegment segment = segment_new(a, b);
     CGPoint a_copy = segment_a(segment);
+    g_assert(a_copy != NULL);
     g_assert(a_copy != a);
     g_assert(point_equals(a_copy, a));
     point_release(a_copy);
@@ -1463,6 +1493,7 @@ static void test_segment_b_1() {
     CGPoint b = point_new(3, 4);
     CGSegment segment = segment_new(a, b);
     CGPoint b_copy = segment_b(segment);
+    g_assert(b_copy != NULL);
     g_assert(b_copy != b);
     g_assert(point_equals(b_copy, b));
     point_release(b_copy);
@@ -1735,6 +1766,7 @@ static void test_triangle_to_str_1() {
     CGPoint c = point_new(7, 8);
     CGTriangle triangle = triangle_new(a, b, c);
     char *str = triangle_to_str(triangle, 1);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, triangle_str);
     free(str);
     point_release(a);
@@ -1749,6 +1781,7 @@ static void test_triangle_a_1() {
     CGPoint c = point_new(0, 1);
     CGTriangle triangle = triangle_new(a, b, c);
     CGPoint a_copy = triangle_a(triangle);
+    g_assert(a_copy != NULL);
     g_assert(a_copy != a);
     g_assert(point_equals(a_copy, a));
     point_release(a_copy);
@@ -1764,6 +1797,7 @@ static void test_triangle_b_1() {
     CGPoint c = point_new(0, 1);
     CGTriangle triangle = triangle_new(a, b, c);
     CGPoint b_copy = triangle_b(triangle);
+    g_assert(b_copy != NULL);
     g_assert(b_copy != b);
     g_assert(point_equals(b_copy, b));
     point_release(b_copy);
@@ -1779,6 +1813,7 @@ static void test_triangle_c_1() {
     CGPoint c = point_new(0, 1);
     CGTriangle triangle = triangle_new(a, b, c);
     CGPoint c_copy = triangle_c(triangle);
+    g_assert(c_copy != NULL);
     g_assert(c_copy != c);
     g_assert(point_equals(c_copy, c));
     point_release(c_copy);
@@ -1815,12 +1850,9 @@ static void test_triangle_translate_2() {
     CGTriangle triangle = triangle_new(a, b, c);
     CGVector vector = vector_new(0, 0);
     triangle_translate(triangle, vector);
-    g_assert(double_equals(point_x(a), point_x(triangle->a)));
-    g_assert(double_equals(point_y(a), point_y(triangle->a)));
-    g_assert(double_equals(point_x(b), point_x(triangle->b)));
-    g_assert(double_equals(point_y(b), point_y(triangle->b)));
-    g_assert(double_equals(point_x(c), point_x(triangle->c)));
-    g_assert(double_equals(point_y(c), point_y(triangle->c)));
+    g_assert(point_equals(triangle->a, a));
+    g_assert(point_equals(triangle->b, b));
+    g_assert(point_equals(triangle->c, c));
     vector_release(vector);
     triangle_release(triangle);
     point_release(a);
@@ -2084,6 +2116,8 @@ static void test_polygon_new_triangle_3() {
     CGPoint b = point_new(0, 0);
     CGPoint c = point_new(0, 1);
     CGPolygon polygon = polygon_new_triangle(a, b, c);
+    g_assert(polygon != NULL);
+    g_assert(polygon->vertices != NULL);
     g_assert_cmpint(list_size(polygon->vertices), ==, 3);
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 0), b));
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 1), a));
@@ -2107,6 +2141,8 @@ static void test_polygon_new_rectangle_2() {
     CGPoint c = point_new(1, 2);
     CGPoint d = point_new(0, 2);
     CGPolygon polygon = polygon_new_rectangle(a, 1, 2);
+    g_assert(polygon != NULL);
+    g_assert(polygon->vertices != NULL);
     g_assert_cmpint(list_size(polygon->vertices), ==, 4);
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 0), a));
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 1), b));
@@ -2132,6 +2168,8 @@ static void test_polygon_new_square_2() {
     CGPoint c = point_new(1, 1);
     CGPoint d = point_new(0, 1);
     CGPolygon polygon = polygon_new_square(a, 1);
+    g_assert(polygon != NULL);
+    g_assert(polygon->vertices != NULL);
     g_assert_cmpint(list_size(polygon->vertices), ==, 4);
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 0), a));
     g_assert(point_equals((CGPoint) list_at(polygon->vertices, 1), b));
@@ -2194,6 +2232,7 @@ static void test_polygon_dup_1() {
     CGPolygon polygon = polygon_new_square(lower_left, 1);
     CGPolygon dup = polygon_dup(polygon);
     g_assert(dup != NULL);
+    g_assert(dup->vertices != NULL);
     g_assert(dup != polygon);
     g_assert(dup->vertices != polygon->vertices);
     g_assert(list_equals_cmp(polygon->vertices, dup->vertices,
@@ -2209,6 +2248,7 @@ static void test_polygon_to_str_1() {
     CGPoint lower_left = point_new(0, 0);
     CGPolygon polygon = polygon_new_square(lower_left, 1);
     char *str = polygon_to_str(polygon, 1);
+    g_assert(str != NULL);
     g_assert_cmpstr(str, ==, polygon_str);
     free(str);
     polygon_release(polygon);
@@ -2245,6 +2285,7 @@ static void test_polygon_edges_1() {
     list_append(segments, segment_new(c, d));
     list_append(segments, segment_new(d, a));
     ADTList edges = polygon_edges(polygon);
+    g_assert(edges != NULL);
     g_assert(list_equals_cmp(segments, edges, (int (*)(void *, void *)) segment_equals));
     list_full_release(segments, (void (*)(void *)) segment_release);
     list_full_release(edges, (void (*)(void *)) segment_release);
@@ -2436,6 +2477,7 @@ static void test_circle_dup_1() {
     CGCircle circle = circle_new(center, 3);
     CGCircle dup = circle_dup(circle);
     g_assert(dup != NULL);
+    g_assert(dup->center != NULL);
     g_assert(dup != circle);
     g_assert(point_equals(dup->center, circle->center));
     g_assert(double_equals(dup->radius, circle->radius));
@@ -2456,14 +2498,14 @@ static void test_circle_to_str_1() {
 }
 
 static void test_circle_center_1() {
-    CGPoint center1 = point_new(1, 1);
-    CGCircle circle = circle_new(center1, 1);
-    CGPoint center2 = circle_center(circle);
-    g_assert(center2 != NULL);
-    g_assert(center1 != center2);
-    g_assert(point_equals(center1, center2));
-    point_release(center1);
-    point_release(center2);
+    CGPoint center = point_new(1, 1);
+    CGCircle circle = circle_new(center, 1);
+    CGPoint center_copy = circle_center(circle);
+    g_assert(center_copy != NULL);
+    g_assert(center_copy != center);
+    g_assert(point_equals(center, center_copy));
+    point_release(center);
+    point_release(center_copy);
     circle_release(circle);
 }
 
@@ -2567,6 +2609,14 @@ static void test_circle_area_1() {
     circle_release(circle);
 }
 
+static void test_circle_area_2() {
+    CGPoint center = point_new(1, 1);
+    CGCircle circle = circle_new(center, 2);
+    g_assert(double_equals(circle_area(circle), 4 * M_PI));
+    point_release(center);
+    circle_release(circle);
+}
+
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
     g_test_add_func("/gc/angle_in_radians_new", test_angle_in_radians_new_1);
@@ -2649,6 +2699,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_3);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_4);
     g_test_add_func("/gc/vector_rotate", test_vector_rotate_5);
+    g_test_add_func("/gc/vector_rotate", test_vector_rotate_6);
     g_test_add_func("/gc/point_new", test_point_new_1);
     g_test_add_func("/gc/midpoint_between", test_midpoint_between_1);
     g_test_add_func("/gc/point_release", test_point_release_1);
@@ -2787,6 +2838,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_rotate_around", test_circle_rotate_around_2);
     g_test_add_func("/gc/circle_rotate_around", test_circle_rotate_around_3);
     g_test_add_func("/gc/circle_area", test_circle_area_1);
+    g_test_add_func("/gc/circle_area", test_circle_area_2);
     return g_test_run();
 }
 
