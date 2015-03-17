@@ -7,6 +7,41 @@
     #define M_PI 3.14159265358979323846
 #endif
 
+/**********************************************************************************************
+ **************************************** DESIGN NOTES ****************************************
+ **********************************************************************************************
+
+ => CGAngle:
+    Represents angle values. Positive angles represent left angles, negative angles represent
+    right angles.
+
+ => CGVector:
+    Represents vectors in a two-dimensional space.
+
+ => CGPoint:
+    Represents points in a two-dimensional space.
+
+ => CGLine:
+    Represents lines in a two-dimensional space. A CGLine is defined by two distinct points.
+
+ => CGSegment:
+    Represents a line segment in a two-dimensional space. A CGSegment is defined by any two
+    points.
+
+ => CGTriangle:
+    Represents a triangle in a two-dimensional space. A CGTriangle is defined by any three
+    points.
+
+ => CGPolygon:
+    Represents a convex polygon in a two-dimensional space. A CGPolygon does not have three
+    collinear points or any two coincident points.
+
+ => CGCircle:
+    Represents a circle in a two-dimensional space. A CGCircle is defined by a center point
+    and a positive radius.
+
+ *********************************************************************************************/
+
 typedef struct _CGAngle *CGAngle;
 struct _CGAngle {
     double rad;
