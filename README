@@ -1,6 +1,6 @@
 C and C++ utilities library.
 
------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 adt     -- Abstract data structures in C.
 cg      -- Computational geometry structures and functions in C.
