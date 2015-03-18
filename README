@@ -1,1 +1,11 @@
-C utilities library.
+C and C++ utilities library.
+
+-----------------------------------------------------------------------------------------------
+
+adt     -- Abstract data structures in C.
+cg      -- Computational geometry structures and functions in C.
+cgpp    -- C++ wrapper of cg structures and functions.
+mem     -- Memory management functions in C.
+net     -- Network structures and functions in C.
+num     -- Numeric functions in C.
+str     -- String manipulation routines in C.
