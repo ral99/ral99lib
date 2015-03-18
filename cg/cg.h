@@ -160,12 +160,12 @@ double vector_x(CGVector vector);
 /* Return vector y component. */
 double vector_y(CGVector vector);
 
-/* Return a normalized perpendicular vector using the right hand rule, or NULL if vector has
- * magnitude 0. */
+/* Return a normalized perpendicular vector using the right hand rule, or NULL if it is a null
+ * vector. */
 CGVector vector_right_perpendicular_axis(CGVector vector);
 
-/* Return a normalized perpendicular vector using the left hand rule, or NULL if vector has
- * magnitude 0. */
+/* Return a normalized perpendicular vector using the left hand rule, or NULL if it is a null
+ * vector. */
 CGVector vector_left_perpendicular_axis(CGVector vector);
 
 /* Normalize vector. */
@@ -189,8 +189,8 @@ double vector_magnitude(CGVector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(CGVector vector1, CGVector vector2);
 
-/* Return the angle from vector1 to vector2 in counter-clockwise direction, or NULL if the
- * product of the magnitudes of the vectors is 0. */
+/* Return the angle from vector1 to vector2 in counter-clockwise direction, or NULL if one or 
+ * both vectors are null vectors. */
 CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
 /* Rotate vector in counter-clockwise direction. */
@@ -359,10 +359,10 @@ CGPolygon polygon_new(ADTList vertices);
 /* Return a new triangle polygon, or NULL if two or more points are coincidents. */
 CGPolygon polygon_new_triangle(CGPoint a, CGPoint b, CGPoint c);
 
-/* Return a new rectangle polygon, or NULL if width or height is 0. */
+/* Return a new rectangle polygon, or NULL if width or height is equal to 0. */
 CGPolygon polygon_new_rectangle(CGPoint lower_left, double width, double height);
 
-/* Return a new square polygon, or NULL if side is 0. */
+/* Return a new square polygon, or NULL if side is equal to 0. */
 CGPolygon polygon_new_square(CGPoint lower_left, double side);
 
 /* Free the memory used by polygon. */
