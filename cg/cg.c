@@ -303,6 +303,68 @@ double point_distance_to_point(CGPoint point1, CGPoint point2) {
     return sqrt(x_dist * x_dist + y_dist * y_dist);
 }
 
+double point_distance_to_line(CGPoint point, CGLine line) {
+    CGPoint normalized_point = point_dup(point);
+    normalized_point->x /= point->w;
+    normalized_point->y /= point->w;
+    normalized_point->w = 1;
+    CGLine normalized_line = line_dup(line);
+    double normalized_line_divisor = sqrt(line->x * line->x + line->y * line->y);
+    normalized_line->w /= normalized_line_divisor;
+    normalized_line->x /= normalized_line_divisor;
+    normalized_line->y /= normalized_line_divisor;
+    double dist = fabs(normalized_point->w * normalized_line->w +
+                       normalized_point->x * normalized_line->x +
+                       normalized_point->y * normalized_line->y);
+    line_release(normalized_line);
+    point_release(normalized_point);
+    return dist;
+}
+
+double point_distance_to_segment(CGPoint point, CGSegment segment) {
+    double dist = double_min(point_distance_to_point(point, segment->a),
+                             point_distance_to_point(point, segment->b));
+    if (!point_equals(segment->a, segment->b)) {
+        CGLine segment_line = line_new(segment->a, segment->b);
+        CGLine perpendicular_segment_line = line_perpendicular(segment_line, point);
+        CGPoint closest_point = line_intersection(segment_line, perpendicular_segment_line);
+        if (point_is_in_segment(closest_point, segment))
+            dist = double_min(dist, point_distance_to_point(point, closest_point));
+        line_release(segment_line);
+        line_release(perpendicular_segment_line);
+        point_release(closest_point);
+    }
+    return dist;
+}
+
+double point_distance_to_triangle(CGPoint point, CGTriangle triangle) {
+    CGSegment segment1 = segment_new(triangle->a, triangle->b);
+    CGSegment segment2 = segment_new(triangle->b, triangle->c);
+    CGSegment segment3 = segment_new(triangle->c, triangle->a);
+    double dist = double_min(point_distance_to_segment(point, segment1),
+                             double_min(point_distance_to_segment(point, segment2),
+                                        point_distance_to_segment(point, segment3)));
+    return (!point_is_in_triangle(point, triangle)) ? dist : -dist;
+}
+
+double point_distance_to_polygon(CGPoint point, CGPolygon polygon) {
+    double dist;
+    ADTList edges = polygon_edges(polygon);
+    for (ADTListItem it = list_head(edges); it; it = list_next(it)) {
+        CGSegment edge = (CGSegment) list_value(it);
+        if (it == list_head(edges))
+            dist = point_distance_to_segment(point, edge);
+        else
+            dist = double_min(dist, point_distance_to_segment(point, edge));
+    }
+    list_full_release(edges, (void (*)(void *)) segment_release);
+    return (!point_is_in_polygon(point, polygon)) ? dist : -dist;
+}
+
+double point_distance_to_circle(CGPoint point, CGCircle circle) {
+    return point_distance_to_point(point, circle->center) - circle->radius;
+}
+
 int point_is_in_line(CGPoint point, CGLine line) {
     return double_equals(line->w * point->w + line->x * point->x + line->y * point->y, 0);
 }

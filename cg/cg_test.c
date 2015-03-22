@@ -956,6 +956,392 @@ static void test_point_distance_to_point_1() {
     point_release(point4);
 }
 
+static void test_point_distance_to_line_1() {
+    CGPoint a = point_new(1, 1);
+    CGPoint b = point_new(2, 2);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(3, 3);
+    CGPoint e = point_new(1, 0);
+    CGPoint f = point_new(0, 1);
+    CGPoint g = point_new(-2, 0);
+    CGPoint h = point_new(0, -2);
+    CGLine line = line_new(a, b);
+    g_assert(double_equals(point_distance_to_line(a, line), 0));
+    g_assert(double_equals(point_distance_to_line(b, line), 0));
+    g_assert(double_equals(point_distance_to_line(c, line), 0));
+    g_assert(double_equals(point_distance_to_line(d, line), 0));
+    g_assert(double_equals(point_distance_to_line(e, line), sqrt(2) / 2));
+    g_assert(double_equals(point_distance_to_line(f, line), sqrt(2) / 2));
+    g_assert(double_equals(point_distance_to_line(g, line), sqrt(8) / 2));
+    g_assert(double_equals(point_distance_to_line(h, line), sqrt(8) / 2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    line_release(line);
+}
+
+static void test_point_distance_to_line_2() {
+    CGPoint a = point_new(1, 0);
+    CGPoint b = point_new(2, 0);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(3, 0);
+    CGPoint e = point_new(0, 1);
+    CGPoint f = point_new(0, 2);
+    CGPoint g = point_new(-1, 0);
+    CGPoint h = point_new(0, -1);
+    CGLine line = line_new(a, b);
+    g_assert(double_equals(point_distance_to_line(a, line), 0));
+    g_assert(double_equals(point_distance_to_line(b, line), 0));
+    g_assert(double_equals(point_distance_to_line(c, line), 0));
+    g_assert(double_equals(point_distance_to_line(d, line), 0));
+    g_assert(double_equals(point_distance_to_line(e, line), 1));
+    g_assert(double_equals(point_distance_to_line(f, line), 2));
+    g_assert(double_equals(point_distance_to_line(g, line), 0));
+    g_assert(double_equals(point_distance_to_line(h, line), 1));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    line_release(line);
+}
+
+static void test_point_distance_to_line_3() {
+    CGPoint a = point_new(0, 1);
+    CGPoint b = point_new(0, 2);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(0, 3);
+    CGPoint e = point_new(1, 0);
+    CGPoint f = point_new(2, 0);
+    CGPoint g = point_new(-1, 0);
+    CGPoint h = point_new(0, -1);
+    CGLine line = line_new(a, b);
+    g_assert(double_equals(point_distance_to_line(a, line), 0));
+    g_assert(double_equals(point_distance_to_line(b, line), 0));
+    g_assert(double_equals(point_distance_to_line(c, line), 0));
+    g_assert(double_equals(point_distance_to_line(d, line), 0));
+    g_assert(double_equals(point_distance_to_line(e, line), 1));
+    g_assert(double_equals(point_distance_to_line(f, line), 2));
+    g_assert(double_equals(point_distance_to_line(g, line), 1));
+    g_assert(double_equals(point_distance_to_line(h, line), 0));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    line_release(line);
+}
+
+static void test_point_distance_to_segment_1() {
+    CGPoint a = point_new(1, 1);
+    CGPoint b = point_new(2, 2);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(3, 3);
+    CGPoint e = point_new(1, 0);
+    CGPoint f = point_new(0, 1);
+    CGPoint g = point_new(2, 0);
+    CGPoint h = point_new(2, 1);
+    CGPoint i = point_new(-1, 1);
+    CGSegment segment = segment_new(a, b);
+    g_assert(double_equals(point_distance_to_segment(a, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(b, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(c, segment), sqrt(2)));
+    g_assert(double_equals(point_distance_to_segment(d, segment), sqrt(2)));
+    g_assert(double_equals(point_distance_to_segment(e, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(f, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(g, segment), sqrt(2)));
+    g_assert(double_equals(point_distance_to_segment(h, segment), sqrt(2) / 2));
+    g_assert(double_equals(point_distance_to_segment(i, segment), 2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    point_release(i);
+    segment_release(segment);
+}
+
+static void test_point_distance_to_segment_2() {
+    CGPoint a = point_new(1, 0);
+    CGPoint b = point_new(2, 0);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(3, 0);
+    CGPoint e = point_new(0, 1);
+    CGPoint f = point_new(1, 1);
+    CGPoint g = point_new(2, 1);
+    CGPoint h = point_new(0, -1);
+    CGPoint i = point_new(-1, 0);
+    CGSegment segment = segment_new(a, b);
+    g_assert(double_equals(point_distance_to_segment(a, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(b, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(c, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(d, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(e, segment), sqrt(2)));
+    g_assert(double_equals(point_distance_to_segment(f, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(g, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(h, segment), sqrt(2)));
+    g_assert(double_equals(point_distance_to_segment(i, segment), 2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    point_release(i);
+    segment_release(segment);
+}
+
+static void test_point_distance_to_segment_3() {
+    CGPoint a = point_new(0, 1);
+    CGPoint b = point_new(0, 2);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(0, 3);
+    CGPoint e = point_new(1, 0);
+    CGPoint f = point_new(1, 1);
+    CGPoint g = point_new(1, 2);
+    CGPoint h = point_new(0, -1);
+    CGPoint i = point_new(-1, 0);
+    CGSegment segment = segment_new(a, b);
+    g_assert(double_equals(point_distance_to_segment(a, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(b, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(c, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(d, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(e, segment), sqrt(2)));
+    g_assert(double_equals(point_distance_to_segment(f, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(g, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(h, segment), 2));
+    g_assert(double_equals(point_distance_to_segment(i, segment), sqrt(2)));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    point_release(i);
+    segment_release(segment);
+}
+
+static void test_point_distance_to_segment_4() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGPoint d = point_new(-1, 0);
+    CGPoint e = point_new(0, -1);
+    CGPoint f = point_new(2, 0);
+    CGPoint g = point_new(0, 2);
+    CGPoint h = point_new(-2, 0);
+    CGPoint i = point_new(0, -2);
+    CGSegment segment = segment_new(a, a);
+    g_assert(double_equals(point_distance_to_segment(a, segment), 0));
+    g_assert(double_equals(point_distance_to_segment(b, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(c, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(d, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(e, segment), 1));
+    g_assert(double_equals(point_distance_to_segment(f, segment), 2));
+    g_assert(double_equals(point_distance_to_segment(g, segment), 2));
+    g_assert(double_equals(point_distance_to_segment(h, segment), 2));
+    g_assert(double_equals(point_distance_to_segment(i, segment), 2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    point_release(i);
+    segment_release(segment);
+}
+
+static void test_point_distance_to_triangle_1() {
+    CGPoint a = point_new(1, 1);
+    CGPoint b = point_new(3, 1);
+    CGPoint c = point_new(1, 3);
+    CGPoint d = point_new(2, 1);
+    CGPoint e = point_new(1, 2);
+    CGPoint f = point_new(2, 2);
+    CGPoint g = point_new(3, 3);
+    CGPoint h = point_new(3, 2);
+    CGPoint i = point_new(0, 0);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(double_equals(point_distance_to_triangle(a, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(b, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(c, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(d, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(e, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(f, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(g, triangle), sqrt(2)));
+    g_assert(double_equals(point_distance_to_triangle(h, triangle), sqrt(2) / 2));
+    g_assert(double_equals(point_distance_to_triangle(i, triangle), sqrt(2)));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    point_release(i);
+    triangle_release(triangle);
+}
+
+static void test_point_distance_to_triangle_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(4, 0);
+    CGPoint c = point_new(0, 4);
+    CGPoint d = point_new(1, 1);
+    CGPoint e = point_new(1.9, 1.9);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(double_equals(point_distance_to_triangle(d, triangle), -1));
+    g_assert(double_equals(point_distance_to_triangle(e, triangle), -sqrt(0.02)));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    triangle_release(triangle);
+}
+
+static void test_point_distance_to_triangle_3() {
+    CGPoint a = point_new(1, 1);
+    CGPoint b = point_new(2, 2);
+    CGPoint c = point_new(2, 2);
+    CGPoint d = point_new(0, 0);
+    CGPoint e = point_new(3, 3);
+    CGPoint f = point_new(1, 0);
+    CGPoint g = point_new(0, 1);
+    CGPoint h = point_new(1, -1);
+    CGPoint i = point_new(-1, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(double_equals(point_distance_to_triangle(a, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(b, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(c, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(d, triangle), sqrt(2)));
+    g_assert(double_equals(point_distance_to_triangle(e, triangle), sqrt(2)));
+    g_assert(double_equals(point_distance_to_triangle(f, triangle), 1));
+    g_assert(double_equals(point_distance_to_triangle(g, triangle), 1));
+    g_assert(double_equals(point_distance_to_triangle(h, triangle), 2));
+    g_assert(double_equals(point_distance_to_triangle(i, triangle), 2));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    point_release(i);
+    triangle_release(triangle);
+}
+
+static void test_point_distance_to_triangle_4() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(0, 0);
+    CGPoint c = point_new(0, 0);
+    CGPoint d = point_new(1, 0);
+    CGPoint e = point_new(0, 1);
+    CGPoint f = point_new(-1, 0);
+    CGPoint g = point_new(0, -1);
+    CGPoint h = point_new(1, 1);
+    CGTriangle triangle = triangle_new(a, b, c);
+    g_assert(double_equals(point_distance_to_triangle(a, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(b, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(c, triangle), 0));
+    g_assert(double_equals(point_distance_to_triangle(d, triangle), 1));
+    g_assert(double_equals(point_distance_to_triangle(e, triangle), 1));
+    g_assert(double_equals(point_distance_to_triangle(f, triangle), 1));
+    g_assert(double_equals(point_distance_to_triangle(g, triangle), 1));
+    g_assert(double_equals(point_distance_to_triangle(h, triangle), sqrt(2)));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    triangle_release(triangle);
+}
+
+static void test_point_distance_to_polygon_1() {
+    CGPoint a = point_new(1, 1);
+    CGPoint b = point_new(3, 1);
+    CGPoint c = point_new(3, 3);
+    CGPoint d = point_new(1, 3);
+    CGPoint e = point_new(2, 1);
+    CGPoint f = point_new(0, 0);
+    CGPoint g = point_new(2, 2);
+    ADTList vertices = list_new();
+    list_append(vertices, a);
+    list_append(vertices, b);
+    list_append(vertices, c);
+    list_append(vertices, d);
+    CGPolygon polygon = polygon_new(vertices);
+    g_assert(double_equals(point_distance_to_polygon(a, polygon), 0));
+    g_assert(double_equals(point_distance_to_polygon(b, polygon), 0));
+    g_assert(double_equals(point_distance_to_polygon(c, polygon), 0));
+    g_assert(double_equals(point_distance_to_polygon(d, polygon), 0));
+    g_assert(double_equals(point_distance_to_polygon(e, polygon), 0));
+    g_assert(double_equals(point_distance_to_polygon(f, polygon), sqrt(2)));
+    g_assert(double_equals(point_distance_to_polygon(g, polygon), -1));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    list_release(vertices);
+    polygon_release(polygon);
+}
+
+static void test_point_distance_to_circle_1() {
+    CGPoint a = point_new(1, 1);
+    CGPoint b = point_new(2, 1);
+    CGPoint c = point_new(0, 1);
+    CGPoint d = point_new(1, 0);
+    CGPoint e = point_new(1, 2);
+    CGPoint f = point_new(0, 0);
+    CGPoint g = point_new(2, 2);
+    CGPoint h = point_new(-1, 1);
+    CGCircle circle = circle_new(a, 1);
+    g_assert(double_equals(point_distance_to_circle(a, circle), -1));
+    g_assert(double_equals(point_distance_to_circle(b, circle), 0));
+    g_assert(double_equals(point_distance_to_circle(c, circle), 0));
+    g_assert(double_equals(point_distance_to_circle(d, circle), 0));
+    g_assert(double_equals(point_distance_to_circle(e, circle), 0));
+    g_assert(double_equals(point_distance_to_circle(f, circle), sqrt(2) - 1));
+    g_assert(double_equals(point_distance_to_circle(g, circle), sqrt(2) - 1));
+    g_assert(double_equals(point_distance_to_circle(h, circle), 1));
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+    point_release(e);
+    point_release(f);
+    point_release(g);
+    point_release(h);
+    circle_release(circle);
+}
+
 static void test_point_is_in_line_1() {
     CGPoint a = point_new(1, 0);
     CGPoint b = point_new(1, 2);
@@ -2793,6 +3179,19 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_6);
     g_test_add_func("/gc/point_rotate_around", test_point_rotate_around_7);
     g_test_add_func("/gc/point_distance_to_point", test_point_distance_to_point_1);
+    g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_1);
+    g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_2);
+    g_test_add_func("/gc/point_distance_to_line", test_point_distance_to_line_3);
+    g_test_add_func("/gc/point_distance_to_segment", test_point_distance_to_segment_1);
+    g_test_add_func("/gc/point_distance_to_segment", test_point_distance_to_segment_2);
+    g_test_add_func("/gc/point_distance_to_segment", test_point_distance_to_segment_3);
+    g_test_add_func("/gc/point_distance_to_segment", test_point_distance_to_segment_4);
+    g_test_add_func("/gc/point_distance_to_triangle", test_point_distance_to_triangle_1);
+    g_test_add_func("/gc/point_distance_to_triangle", test_point_distance_to_triangle_2);
+    g_test_add_func("/gc/point_distance_to_triangle", test_point_distance_to_triangle_3);
+    g_test_add_func("/gc/point_distance_to_triangle", test_point_distance_to_triangle_4);
+    g_test_add_func("/gc/point_distance_to_polygon", test_point_distance_to_polygon_1);
+    g_test_add_func("/gc/point_distance_to_circle", test_point_distance_to_circle_1);
     g_test_add_func("/gc/point_is_in_line", test_point_is_in_line_1);
     g_test_add_func("/gc/point_is_in_line", test_point_is_in_line_2);
     g_test_add_func("/gc/point_is_in_segment", test_point_is_in_segment_1);

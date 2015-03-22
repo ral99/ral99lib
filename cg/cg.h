@@ -230,8 +230,26 @@ void point_translate(CGPoint point, CGVector vector);
 /* Rotate point around a center point in counter-clockwise direction. */
 void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle);
 
-/* Return distance between two points. */
+/* Return the distance between two points. */
 double point_distance_to_point(CGPoint point1, CGPoint point2);
+
+/* Return the distance from a point to a line. */
+double point_distance_to_line(CGPoint point, CGLine line);
+
+/* Return the distance from a point to a segment. */
+double point_distance_to_segment(CGPoint point, CGSegment segment);
+
+/* Return the distance from a point to a triangle. Points inside triangle return a negative
+ * value. */
+double point_distance_to_triangle(CGPoint point, CGTriangle triangle);
+
+/* Return the distance from a point to a polygon. Points inside polygon return a negative
+ * value. */
+double point_distance_to_polygon(CGPoint point, CGPolygon polygon);
+
+/* Return the distance from a point to a circle. Points inside circle return a negative
+ * value. */
+double point_distance_to_circle(CGPoint point, CGCircle circle);
 
 /* Return 1 if point is in line. 0, otherwise. */
 int point_is_in_line(CGPoint point, CGLine line);
