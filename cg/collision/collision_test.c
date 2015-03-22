@@ -297,6 +297,78 @@ static void test_circle_is_in_contact_with_circle_6() {
     circle_release(circle2);
 }
 
+static void test_polygon_is_colliding_with_polygon_1() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 1);
+    CGPoint lower_left2 = point_new(2, 0);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 1);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 0);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
+static void test_polygon_is_colliding_with_polygon_2() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 1);
+    CGPoint lower_left2 = point_new(1, 0);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 1);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 0);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
+static void test_polygon_is_colliding_with_polygon_3() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 2);
+    CGPoint lower_left2 = point_new(1, 0);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 2);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 1);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
+static void test_polygon_is_colliding_with_polygon_4() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 2);
+    CGPoint lower_left2 = point_new(0, 1);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 2);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 1);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
+static void test_polygon_is_colliding_with_polygon_5() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 2);
+    CGPoint lower_left2 = point_new(-1, 0);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 2);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 1);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
+static void test_polygon_is_colliding_with_polygon_6() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 2);
+    CGPoint lower_left2 = point_new(0, -1);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 2);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 1);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
 static void test_polygon_min_projection_on_axis_1() {
     ADTList vertices = list_new();
     list_append(vertices, point_new(0, 0));
@@ -852,6 +924,18 @@ int main(int argc, char *argv[]) {
                     test_circle_is_in_contact_with_circle_5);
     g_test_add_func("/gc/circle_is_in_contact_with_circle",
                     test_circle_is_in_contact_with_circle_6);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
+                    test_polygon_is_colliding_with_polygon_1);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
+                    test_polygon_is_colliding_with_polygon_2);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
+                    test_polygon_is_colliding_with_polygon_3);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
+                    test_polygon_is_colliding_with_polygon_4);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
+                    test_polygon_is_colliding_with_polygon_5);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
+                    test_polygon_is_colliding_with_polygon_6);
     g_test_add_func("/gc/polygon_min_projection_on_axis",
                     test_polygon_min_projection_on_axis_1);
     g_test_add_func("/gc/polygon_min_projection_on_axis",

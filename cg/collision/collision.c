@@ -62,6 +62,28 @@ int circle_is_in_contact_with_circle(CGCircle circle1, CGCircle circle2) {
                          circle1->radius + circle2->radius);
 }
 
+int polygon_is_colliding_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
+    ADTList axes = list_new();
+    ADTList axes1 = polygon_perpendicular_axes(polygon1);
+    ADTList axes2 = polygon_perpendicular_axes(polygon2);
+    list_extend(axes, axes1);
+    list_extend(axes, axes2);
+    int is_colliding = 1;
+    for (ADTListItem it = list_head(axes); it && is_colliding; it = list_next(it)) {
+        CGVector axis = (CGVector) list_value(it);
+        if (double_lte(polygon_max_projection_on_axis(polygon1, axis) -
+                       polygon_min_projection_on_axis(polygon2, axis), 0))
+            is_colliding = 0;
+        if (double_gte(polygon_min_projection_on_axis(polygon1, axis) -
+                       polygon_max_projection_on_axis(polygon2, axis), 0))
+            is_colliding = 0;
+    }
+    list_release(axes);
+    list_full_release(axes1, (void (*)(void *)) vector_release);
+    list_full_release(axes2, (void (*)(void *)) vector_release);
+    return is_colliding;
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);
