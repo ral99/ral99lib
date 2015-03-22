@@ -18,6 +18,9 @@ int polygon_is_in_contact_with_circle(CGPolygon polygon, CGCircle circle);
 /* Return 1 if circle is in contact with a polygon. 0, otherwise. */
 int circle_is_in_contact_with_polygon(CGCircle circle, CGPolygon polygon);
 
+/* Return 1 if circle is in contact with another circle. 0, otherwise. */
+int circle_is_in_contact_with_circle(CGCircle circle1, CGCircle circle2);
+
 /* Return minimum projection of polygon on axis. */
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis);
 

@@ -57,6 +57,11 @@ int circle_is_in_contact_with_polygon(CGCircle circle, CGPolygon polygon) {
     return polygon_is_in_contact_with_circle(polygon, circle);
 }
 
+int circle_is_in_contact_with_circle(CGCircle circle1, CGCircle circle2) {
+    return double_equals(point_distance_to_point(circle1->center, circle2->center),
+                         circle1->radius + circle2->radius);
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);
