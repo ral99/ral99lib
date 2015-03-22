@@ -53,6 +53,10 @@ int polygon_is_in_contact_with_circle(CGPolygon polygon, CGCircle circle) {
     return is_in_contact;
 }
 
+int circle_is_in_contact_with_polygon(CGCircle circle, CGPolygon polygon) {
+    return polygon_is_in_contact_with_circle(polygon, circle);
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);
