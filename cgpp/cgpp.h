@@ -227,6 +227,18 @@ class Point {
         // Return distance from this to another point.
         double distanceTo(const Point& other) const;
 
+        // Return distance from this to a segment.
+        double distanceTo(const Segment& other) const;
+
+        // Return distance from this to a triangle.
+        double distanceTo(const Triangle& other) const;
+
+        // Return distance from this to a polygon.
+        double distanceTo(const Polygon& other) const;
+
+        // Return distance from this to a circle.
+        double distanceTo(const Circle& other) const;
+
         // Return true if point is in segment. false, otherwise.
         bool isIn(const Segment& segment) const;
 

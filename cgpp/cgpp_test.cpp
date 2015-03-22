@@ -402,10 +402,116 @@ TEST(Point, RotateAround) {
     EXPECT_TRUE(Point(0, 1) == point4);
 }
 
-TEST(Point, DistanceTo) {
+TEST(Point, DistanceToPoint) {
     EXPECT_DOUBLE_EQ(0, Point(0, 0).distanceTo(Point(0, 0)));
     EXPECT_DOUBLE_EQ(5, Point(0, 0).distanceTo(Point(3, 4)));
     EXPECT_DOUBLE_EQ(5, Point(0, 0).distanceTo(Point(-3, -4)));
+}
+
+TEST(Point, DistanceToSegment) {
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(2, 2).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(3, 3).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(4, 4).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(2, 0).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 2).distanceTo(Segment(Point(1, 1), Point(3, 3))));
+
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Segment(Point(1, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Segment(Point(1, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 3).distanceTo(Segment(Point(1, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Segment(Point(1, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 4).distanceTo(Segment(Point(1, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Segment(Point(1, 1), Point(1, 3))));
+
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Segment(Point(1, 1), Point(3, 1))));
+    EXPECT_DOUBLE_EQ(0, Point(2, 1).distanceTo(Segment(Point(1, 1), Point(3, 1))));
+    EXPECT_DOUBLE_EQ(0, Point(3, 1).distanceTo(Segment(Point(1, 1), Point(3, 1))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Segment(Point(1, 1), Point(3, 1))));
+    EXPECT_DOUBLE_EQ(1, Point(4, 1).distanceTo(Segment(Point(1, 1), Point(3, 1))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Segment(Point(1, 1), Point(3, 1))));
+
+    EXPECT_DOUBLE_EQ(0, Point(0, 0).distanceTo(Segment(Point(0, 0), Point(0, 0))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Segment(Point(0, 0), Point(0, 0))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Segment(Point(0, 0), Point(0, 0))));
+    EXPECT_DOUBLE_EQ(1, Point(-1, 0).distanceTo(Segment(Point(0, 0), Point(0, 0))));
+    EXPECT_DOUBLE_EQ(1, Point(0, -1).distanceTo(Segment(Point(0, 0), Point(0, 0))));
+}
+
+TEST(Point, DistanceToTriangle) {
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(3, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 3).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(2, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(2, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                        Point(1, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                              Point(1, 3))));
+    EXPECT_DOUBLE_EQ(-0.5, Point(1.5, 1.5).distanceTo(Triangle(Point(1, 1), Point(3, 1),
+                                                               Point(1, 3))));
+
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 3).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(1, 2),
+                                                        Point(1, 2))));
+
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(1, 1),
+                                                        Point(1, 1))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(1, 1),
+                                                        Point(1, 1))));
+    EXPECT_DOUBLE_EQ(1, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(1, 1),
+                                                        Point(1, 1))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(1, 1),
+                                                              Point(1, 1))));
+}
+
+TEST(Point, DistanceToPolygon) {
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(3, 1).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(3, 3).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(1, 3).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(2, 1).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(3, 2).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(0, Point(2, 3).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(-1, Point(2, 2).distanceTo(Polygon::square(Point(1, 1), 2)));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Polygon::square(Point(1, 1), 2)));
+}
+
+TEST(Point, DistanceToCircle) {
+    EXPECT_DOUBLE_EQ(-1, Point(1, 1).distanceTo(Circle(Point(1, 1), 1)));
+    EXPECT_DOUBLE_EQ(0, Point(0, 1).distanceTo(Circle(Point(1, 1), 1)));
+    EXPECT_DOUBLE_EQ(0, Point(2, 1).distanceTo(Circle(Point(1, 1), 1)));
+    EXPECT_DOUBLE_EQ(0, Point(1, 0).distanceTo(Circle(Point(1, 1), 1)));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Circle(Point(1, 1), 1)));
+    EXPECT_DOUBLE_EQ(sqrt(2) - 1, Point(0, 0).distanceTo(Circle(Point(1, 1), 1)));
+    EXPECT_DOUBLE_EQ(sqrt(2) - 1, Point(2, 2).distanceTo(Circle(Point(1, 1), 1)));
 }
 
 TEST(Point, IsInSegment) {

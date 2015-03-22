@@ -321,6 +321,22 @@ double Point::distanceTo(const Point& other) const {
     return point_distance_to_point(_point, other._point);
 }
 
+double Point::distanceTo(const Segment& other) const {
+    return point_distance_to_segment(_point, other._segment);
+}
+
+double Point::distanceTo(const Triangle& other) const {
+    return point_distance_to_triangle(_point, other._triangle);
+}
+
+double Point::distanceTo(const Polygon& other) const {
+    return point_distance_to_polygon(_point, other._polygon);
+}
+
+double Point::distanceTo(const Circle& other) const {
+    return point_distance_to_circle(_point, other._circle);
+}
+
 bool Point::isIn(const Segment& segment) const {
     return (point_is_in_segment(_point, segment._segment) == 1) ? true : false;
 }
