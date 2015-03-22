@@ -390,6 +390,15 @@ class Shape {
         // Return shape rectangle hull.
         virtual Polygon rectangleHull() const = 0;
 
+        // Return true if shape is in contact with another shape. false, otherwise.
+        bool isInContactWithShape(const Shape& other) const;
+
+        // Return true if shape is in contact with a polygon. false, otherwise.
+        virtual bool isInContactWith(const Polygon& other) const = 0;
+
+        // Return true if shape is in contact with a circle. false, otherwise.
+        virtual bool isInContactWith(const Circle& other) const = 0;
+
         // Return a collision with another shape or NULL.
         Collision* collisionWithShape(const Shape& other) const;
 
@@ -437,6 +446,8 @@ class Polygon : public Shape {
         void operator%=(const Angle& angle);
         void rotateAround(const Point& center, const Angle& angle);
         Polygon rectangleHull() const;
+        bool isInContactWith(const Polygon& other) const;
+        bool isInContactWith(const Circle& other) const;
         Collision* collisionWith(const Polygon& other) const;
         Collision* collisionWith(const Circle& other) const;
 
@@ -484,6 +495,8 @@ class Circle : public Shape {
         void operator%=(const Angle& angle);
         void rotateAround(const Point& center, const Angle& angle);
         Polygon rectangleHull() const;
+        bool isInContactWith(const Polygon& other) const;
+        bool isInContactWith(const Circle& other) const;
         Collision* collisionWith(const Polygon& other) const;
         Collision* collisionWith(const Circle& other) const;
 

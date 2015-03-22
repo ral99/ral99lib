@@ -505,6 +505,13 @@ double Triangle::area() const {
 
 // ::: Shape :::
 
+bool Shape::isInContactWithShape(const Shape& other) const {
+    if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
+        return isInContactWith(*polygon);
+    const Circle *circle = dynamic_cast<const Circle*>(&other);
+    return isInContactWith(*circle);
+}
+
 Collision* Shape::collisionWithShape(const Shape& other) const {
     if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
         return collisionWith(*polygon);
@@ -613,6 +620,14 @@ Polygon Polygon::rectangleHull() const {
         }
     }
     return Polygon::rectangle(Point(minX, minY), maxX - minX, maxY - minY);
+}
+
+bool Polygon::isInContactWith(const Polygon& other) const {
+    return polygon_is_in_contact_with_polygon(_polygon, other._polygon);
+}
+
+bool Polygon::isInContactWith(const Circle& other) const {
+    return polygon_is_in_contact_with_circle(_polygon, other._circle);
 }
 
 Collision* Polygon::collisionWith(const Polygon& other) const {
@@ -728,6 +743,14 @@ Polygon Circle::rectangleHull() const {
     double minY = center().y() - radius();
     double maxY = center().y() + radius();
     return Polygon::rectangle(Point(minX, minY), maxX - minX, maxY - minY);
+}
+
+bool Circle::isInContactWith(const Polygon& other) const {
+    return circle_is_in_contact_with_polygon(_circle, other._polygon);
+}
+
+bool Circle::isInContactWith(const Circle& other) const {
+    return circle_is_in_contact_with_circle(_circle, other._circle);
 }
 
 Collision* Circle::collisionWith(const Polygon& other) const {

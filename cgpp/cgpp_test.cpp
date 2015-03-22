@@ -800,6 +800,18 @@ TEST(Triangle, Area) {
 
 // ::: Shape :::
 
+TEST(Shape, IsInContactWithShape) {
+    const Shape& shape = Polygon::square(Point(0, 0), 2);
+
+    EXPECT_FALSE(shape.isInContactWithShape(Polygon::square(Point(1, 0), 1)));
+    EXPECT_TRUE(shape.isInContactWithShape(Polygon::square(Point(2, 0), 1)));
+    EXPECT_FALSE(shape.isInContactWithShape(Polygon::square(Point(3, 0), 1)));
+
+    EXPECT_FALSE(shape.isInContactWithShape(Circle(Point(2, 1), 1)));
+    EXPECT_TRUE(shape.isInContactWithShape(Circle(Point(3, 1), 1)));
+    EXPECT_FALSE(shape.isInContactWithShape(Circle(Point(4, 1), 1)));
+}
+
 TEST(Shape, CollisionWithShape) {
     Collision *collision;
     const Shape& shape = Polygon::square(Point(0, 0), 1);
@@ -954,6 +966,39 @@ TEST(Polygon, RectangleHull) {
     vertices.push_back(Point(2, 1));
     vertices.push_back(Point(1, 2));
     EXPECT_TRUE(Polygon::rectangle(Point(0, 0), 2, 2) == Polygon(vertices).rectangleHull());
+}
+
+TEST(Polygon, IsInContactWithPolygon) {
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(1, 0),
+                                                                                 2)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(3, 0),
+                                                                                 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, 0),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, 2),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, 2),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, 2),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, 0),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, -2),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, -2),
+                                                                                2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, -2),
+                                                                                2)));
+}
+
+TEST(Polygon, IsInContactWithCircle) {
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(1, 1), 1)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(2, 1), 1)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(4, 1), 1)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(3, 1), 1)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(1, 3), 1)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(-1, 1), 1)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(1, -1), 1)));
 }
 
 TEST(Polygon, CollisionWithPolygon) {
@@ -1194,6 +1239,24 @@ TEST(Circle, RotateAround) {
 TEST(Circle, RectangleHull) {
     EXPECT_TRUE(Polygon::rectangle(Point(0, 0), 2, 2) ==
                 Circle(Point(1, 1), 1).rectangleHull());
+}
+
+TEST(Circle, IsInContactWithPolygon) {
+    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(1, 0), 2)));
+    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(3, 0), 2)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(2, 0), 2)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(0, 2), 2)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(-2, 0), 2)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(0, -2), 2)));
+}
+
+TEST(Circle, IsInContactWithCircle) {
+    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(2, 1), 1)));
+    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(4, 1), 1)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(3, 1), 1)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(1, 3), 1)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(-1, 1), 1)));
+    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(1, -1), 1)));
 }
 
 TEST(Circle, CollisionWithPolygon) {
