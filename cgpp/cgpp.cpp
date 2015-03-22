@@ -512,6 +512,13 @@ bool Shape::isInContactWithShape(const Shape& other) const {
     return isInContactWith(*circle);
 }
 
+bool Shape::isCollidingWithShape(const Shape& other) const {
+    if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
+        return isCollidingWith(*polygon);
+    const Circle *circle = dynamic_cast<const Circle*>(&other);
+    return isCollidingWith(*circle);
+}
+
 Collision* Shape::collisionWithShape(const Shape& other) const {
     if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
         return collisionWith(*polygon);
@@ -628,6 +635,14 @@ bool Polygon::isInContactWith(const Polygon& other) const {
 
 bool Polygon::isInContactWith(const Circle& other) const {
     return polygon_is_in_contact_with_circle(_polygon, other._circle);
+}
+
+bool Polygon::isCollidingWith(const Polygon& other) const {
+    return polygon_is_colliding_with_polygon(_polygon, other._polygon);
+}
+
+bool Polygon::isCollidingWith(const Circle& other) const {
+    return polygon_is_colliding_with_circle(_polygon, other._circle);
 }
 
 Collision* Polygon::collisionWith(const Polygon& other) const {
@@ -751,6 +766,14 @@ bool Circle::isInContactWith(const Polygon& other) const {
 
 bool Circle::isInContactWith(const Circle& other) const {
     return circle_is_in_contact_with_circle(_circle, other._circle);
+}
+
+bool Circle::isCollidingWith(const Polygon& other) const {
+    return circle_is_colliding_with_polygon(_circle, other._polygon);
+}
+
+bool Circle::isCollidingWith(const Circle& other) const {
+    return circle_is_colliding_with_circle(_circle, other._circle);
 }
 
 Collision* Circle::collisionWith(const Polygon& other) const {
