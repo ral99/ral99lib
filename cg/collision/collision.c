@@ -141,6 +141,35 @@ CGPoint polygon_point_of_contact_with_polygon(CGPolygon polygon1, CGPolygon poly
     return point_of_contact;
 }
 
+CGPoint polygon_point_of_contact_with_circle(CGPolygon polygon, CGCircle circle) {
+    if (!polygon_is_in_contact_with_circle(polygon, circle))
+        return NULL;
+    ADTList vertices = polygon_vertices(polygon);
+    CGPoint point_of_contact = NULL;
+    for (ADTListItem it = list_head(vertices); it && !point_of_contact; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        if (point_is_in_circle(vertex, circle))
+            point_of_contact = point_dup(vertex);
+    }
+    if (!point_of_contact) {
+        ADTList edges = polygon_edges(polygon);
+        for (ADTListItem it = list_head(edges); it && !point_of_contact; it = list_next(it)) {
+            CGSegment edge = (CGSegment) list_value(it);
+            CGLine edge_line = line_new(edge->a, edge->b);
+            CGLine perpendicular_edge_line = line_perpendicular(edge_line, circle->center);
+            CGPoint point = line_intersection(edge_line, perpendicular_edge_line);
+            if (point_is_in_circle(point, circle) && point_is_in_polygon(point, polygon))
+                point_of_contact = point_dup(point);
+            line_release(edge_line);
+            line_release(perpendicular_edge_line);
+            point_release(point);
+        }
+        list_full_release(edges, (void (*)(void *)) segment_release);
+    }
+    list_full_release(vertices, (void (*)(void *)) point_release);
+    return point_of_contact;
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);

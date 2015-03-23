@@ -33,8 +33,12 @@ int circle_is_colliding_with_polygon(CGCircle circle, CGPolygon polygon);
 /* Return 1 if circle is colliding with another circle. 0, otherwise. */
 int circle_is_colliding_with_circle(CGCircle circle1, CGCircle circle2);
 
-/* Return the point of contact between two polygons or NULL if polygons are not in contact. */
+/* Return the point of contact between two polygons or NULL if they are not in contact. */
 CGPoint polygon_point_of_contact_with_polygon(CGPolygon polygon1, CGPolygon polygon2);
+
+/* Return the point of contact between a polygon and a circle or NULL if they are not in
+ * contact. */
+CGPoint polygon_point_of_contact_with_circle(CGPolygon polygon, CGCircle circle);
 
 /* Return minimum projection of polygon on axis. */
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis);
