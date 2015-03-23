@@ -180,6 +180,29 @@ CGPoint circle_point_of_contact_with_circle(CGCircle circle1, CGCircle circle2) 
     return midpoint_between(circle1->center, circle2->center);
 }
 
+CGVector circle_minimum_translation_vector_with_circle(CGCircle circle1, CGCircle circle2,
+                                                       CGVector axis) {
+    if (double_equals(vector_x(axis), 0) && double_equals(vector_y(axis), 0))
+        return NULL;
+    double a = vector_x(axis) * vector_x(axis) + vector_y(axis) * vector_y(axis);
+    double b = 2 * (vector_x(axis) * point_x(circle2->center) -
+                    vector_x(axis) * point_x(circle1->center) +
+                    vector_y(axis) * point_y(circle2->center) -
+                    vector_y(axis) * point_y(circle1->center));
+    double c = point_x(circle1->center) * point_x(circle1->center) +
+               point_x(circle2->center) * point_x(circle2->center) +
+               point_y(circle1->center) * point_y(circle1->center) +
+               point_y(circle2->center) * point_y(circle2->center) -
+               2 * point_x(circle1->center) * point_x(circle2->center) -
+               2 * point_y(circle1->center) * point_y(circle2->center) -
+               ((circle1->radius + circle2->radius) * (circle1->radius + circle2->radius));
+    double delta = b * b - 4 * a * c;
+    double k = double_max((-b + sqrt(delta)) / (2 * a), (-b - sqrt(delta)) / (2 * a));
+    CGVector mtv = vector_dup(axis);
+    vector_multiply(mtv, double_max(k, 0));
+    return mtv;
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);

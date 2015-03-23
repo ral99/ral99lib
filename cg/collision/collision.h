@@ -47,6 +47,11 @@ CGPoint circle_point_of_contact_with_polygon(CGCircle circle, CGPolygon polygon)
 /* Return the point of contact between two circles or NULL if they are not in contact. */
 CGPoint circle_point_of_contact_with_circle(CGCircle circle1, CGCircle circle2);
 
+/* Return the minimum translation vector between two circles in axis direction or NULL if axis
+ * is a null vector. */
+CGVector circle_minimum_translation_vector_with_circle(CGCircle circle1, CGCircle circle2,
+                                                       CGVector axis);
+
 /* Return minimum projection of polygon on axis. */
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis);
 
