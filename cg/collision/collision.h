@@ -44,6 +44,9 @@ CGPoint polygon_point_of_contact_with_circle(CGPolygon polygon, CGCircle circle)
  * contact. */
 CGPoint circle_point_of_contact_with_polygon(CGCircle circle, CGPolygon polygon);
 
+/* Return the point of contact between two circles or NULL if they are not in contact. */
+CGPoint circle_point_of_contact_with_circle(CGCircle circle1, CGCircle circle2);
+
 /* Return minimum projection of polygon on axis. */
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis);
 

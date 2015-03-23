@@ -852,6 +852,90 @@ static void test_circle_point_of_contact_with_polygon_6() {
     circle_release(circle);
 }
 
+static void test_circle_point_of_contact_with_circle_1() {
+    CGPoint center1 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGPoint center2 = point_new(4, 1);
+    CGCircle circle2 = circle_new(center2, 1);
+    g_assert(circle_point_of_contact_with_circle(circle1, circle2) == NULL);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_point_of_contact_with_circle_2() {
+    CGPoint center1 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGPoint center2 = point_new(2, 1);
+    CGCircle circle2 = circle_new(center2, 1);
+    g_assert(circle_point_of_contact_with_circle(circle1, circle2) == NULL);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_point_of_contact_with_circle_3() {
+    CGPoint center1 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGPoint center2 = point_new(3, 1);
+    CGCircle circle2 = circle_new(center2, 1);
+    CGPoint point_of_contact = circle_point_of_contact_with_circle(circle1, circle2);
+    g_assert(double_equals(point_x(point_of_contact), 2));
+    g_assert(double_equals(point_y(point_of_contact), 1));
+    point_release(point_of_contact);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_point_of_contact_with_circle_4() {
+    CGPoint center1 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGPoint center2 = point_new(1, 3);
+    CGCircle circle2 = circle_new(center2, 1);
+    CGPoint point_of_contact = circle_point_of_contact_with_circle(circle1, circle2);
+    g_assert(double_equals(point_x(point_of_contact), 1));
+    g_assert(double_equals(point_y(point_of_contact), 2));
+    point_release(point_of_contact);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_point_of_contact_with_circle_5() {
+    CGPoint center1 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGPoint center2 = point_new(-1, 1);
+    CGCircle circle2 = circle_new(center2, 1);
+    CGPoint point_of_contact = circle_point_of_contact_with_circle(circle1, circle2);
+    g_assert(double_equals(point_x(point_of_contact), 0));
+    g_assert(double_equals(point_y(point_of_contact), 1));
+    point_release(point_of_contact);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_point_of_contact_with_circle_6() {
+    CGPoint center1 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGPoint center2 = point_new(1, -1);
+    CGCircle circle2 = circle_new(center2, 1);
+    CGPoint point_of_contact = circle_point_of_contact_with_circle(circle1, circle2);
+    g_assert(double_equals(point_x(point_of_contact), 1));
+    g_assert(double_equals(point_y(point_of_contact), 0));
+    point_release(point_of_contact);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
 static void test_polygon_min_projection_on_axis_1() {
     ADTList vertices = list_new();
     list_append(vertices, point_new(0, 0));
@@ -1493,6 +1577,18 @@ int main(int argc, char *argv[]) {
                     test_circle_point_of_contact_with_polygon_5);
     g_test_add_func("/gc/circle_point_of_contact_with_polygon",
                     test_circle_point_of_contact_with_polygon_6);
+    g_test_add_func("/gc/circle_point_of_contact_with_circle",
+                    test_circle_point_of_contact_with_circle_1);
+    g_test_add_func("/gc/circle_point_of_contact_with_circle",
+                    test_circle_point_of_contact_with_circle_2);
+    g_test_add_func("/gc/circle_point_of_contact_with_circle",
+                    test_circle_point_of_contact_with_circle_3);
+    g_test_add_func("/gc/circle_point_of_contact_with_circle",
+                    test_circle_point_of_contact_with_circle_4);
+    g_test_add_func("/gc/circle_point_of_contact_with_circle",
+                    test_circle_point_of_contact_with_circle_5);
+    g_test_add_func("/gc/circle_point_of_contact_with_circle",
+                    test_circle_point_of_contact_with_circle_6);
     g_test_add_func("/gc/polygon_min_projection_on_axis",
                     test_polygon_min_projection_on_axis_1);
     g_test_add_func("/gc/polygon_min_projection_on_axis",

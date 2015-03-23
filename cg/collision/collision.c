@@ -174,6 +174,12 @@ CGPoint circle_point_of_contact_with_polygon(CGCircle circle, CGPolygon polygon)
     return polygon_point_of_contact_with_circle(polygon, circle);
 }
 
+CGPoint circle_point_of_contact_with_circle(CGCircle circle1, CGCircle circle2) {
+    if (!circle_is_in_contact_with_circle(circle1, circle2))
+        return NULL;
+    return midpoint_between(circle1->center, circle2->center);
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);
