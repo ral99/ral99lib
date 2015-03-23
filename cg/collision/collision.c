@@ -117,6 +117,30 @@ int circle_is_colliding_with_circle(CGCircle circle1, CGCircle circle2) {
                       circle1->radius + circle2->radius));
 }
 
+CGPoint polygon_point_of_contact_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
+    if (!polygon_is_in_contact_with_polygon(polygon1, polygon2))
+        return NULL;
+    ADTList vertices = list_new();
+    ADTList vertices1 = polygon_vertices(polygon1);
+    ADTList vertices2 = polygon_vertices(polygon2);
+    list_extend(vertices, vertices1);
+    list_extend(vertices, vertices2);
+    CGPoint point1 = NULL;
+    CGPoint point2 = NULL;
+    for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        if (point_is_in_polygon(vertex, polygon1) && point_is_in_polygon(vertex, polygon2)) {
+            point1 = (point1 == NULL) ? vertex : point1;
+            point2 = (point2 == NULL || point_equals(point1, point2)) ? vertex : point2;
+        }
+    }
+    CGPoint point_of_contact = midpoint_between(point1, point2);
+    list_full_release(vertices1, (void (*)(void *)) point_release);
+    list_full_release(vertices2, (void (*)(void *)) point_release);
+    list_release(vertices);
+    return point_of_contact;
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);
