@@ -440,6 +440,7 @@ class Polygon : public Shape {
         static Polygon triangle(const Point& a, const Point& b, const Point& c);
         static Polygon rectangle(const Point& lowerLeft, double width, double height);
         static Polygon square(const Point& lowerLeft, double side);
+        static Polygon circle(const Point& center, double radius, int nVertices);
         ~Polygon();
  
         // Polygon assignment operator.

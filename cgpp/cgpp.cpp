@@ -571,6 +571,13 @@ Polygon Polygon::square(const Point& lowerLeft, double side) {
     return polygon;
 }
 
+Polygon Polygon::circle(const Point& center, double radius, int nVertices) {
+    Polygon polygon;
+    if ((polygon._polygon = polygon_new_circle(center._point, radius, nVertices)) == NULL)
+        throw std::invalid_argument("Invalid arguments.");
+    return polygon;
+}
+
 Polygon::~Polygon() {
     if (_polygon != NULL)
         polygon_release(_polygon);

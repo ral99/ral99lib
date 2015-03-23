@@ -906,6 +906,20 @@ TEST(Polygon, SquareConstructor) {
     EXPECT_ANY_THROW(Polygon::square(Point(0, 0), 0));
 }
 
+TEST(Polygon, CircleConstructor) {
+    std::vector<Point> vertices;
+    vertices.push_back(Point(1, 0));
+    vertices.push_back(Point(2, 1));
+    vertices.push_back(Point(1, 2));
+    vertices.push_back(Point(0, 1));
+    Polygon polygon = Polygon::circle(Point(1, 1), 1, 4);
+    EXPECT_TRUE(vertices == polygon.vertices());
+
+    EXPECT_ANY_THROW(Polygon::circle(Point(1, 1), -1, 4));
+    EXPECT_ANY_THROW(Polygon::circle(Point(1, 1), 0, 4));
+    EXPECT_ANY_THROW(Polygon::circle(Point(1, 1), 1, 3));
+}
+
 TEST(Polygon, Destructor) {
     delete (new Polygon(Polygon::square(Point(0, 0), 1)));
 }
