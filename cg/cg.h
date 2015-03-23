@@ -383,6 +383,10 @@ CGPolygon polygon_new_rectangle(CGPoint lower_left, double width, double height)
 /* Return a new square polygon, or NULL if side is equal to 0. */
 CGPolygon polygon_new_square(CGPoint lower_left, double side);
 
+/* Return a new circle polygon, or NULL if radius is lower than or equal to 0, or if n_vertices
+ * is lower than 4. */
+CGPolygon polygon_new_circle(CGPoint center, double radius, int n_vertices);
+
 /* Free the memory used by polygon. */
 void polygon_release(CGPolygon polygon);
 

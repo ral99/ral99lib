@@ -785,6 +785,25 @@ CGPolygon polygon_new_square(CGPoint lower_left, double side) {
     return polygon;
 }
 
+CGPolygon polygon_new_circle(CGPoint center, double radius, int n_vertices) {
+    if (double_lte(radius, 0) || n_vertices < 4)
+        return NULL;
+    ADTList vertices = list_new();
+    CGAngle angle = angle_in_radians_new((2 * M_PI) / n_vertices);
+    CGVector vector = vector_new(radius, 0);
+    for (int i = 0; i < n_vertices; i++) {
+        CGPoint vertex = point_dup(center);
+        point_translate(vertex, vector);
+        list_append(vertices, vertex);
+        vector_rotate(vector, angle);
+    }
+    CGPolygon polygon = polygon_new(vertices);
+    angle_release(angle);
+    vector_release(vector);
+    list_full_release(vertices, (void (*)(void *)) point_release);
+    return polygon;
+}
+
 void polygon_release(CGPolygon polygon) {
     list_full_release(polygon->vertices, (void (*)(void *)) point_release);
     free(polygon);
