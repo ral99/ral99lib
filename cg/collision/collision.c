@@ -170,6 +170,10 @@ CGPoint polygon_point_of_contact_with_circle(CGPolygon polygon, CGCircle circle)
     return point_of_contact;
 }
 
+CGPoint circle_point_of_contact_with_polygon(CGCircle circle, CGPolygon polygon) {
+    return polygon_point_of_contact_with_circle(polygon, circle);
+}
+
 double polygon_min_projection_on_axis(CGPolygon polygon, CGVector axis) {
     double min;
     ADTList vertices = polygon_vertices(polygon);
