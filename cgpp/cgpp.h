@@ -28,10 +28,6 @@
 //    Represents a triangle in a two-dimensional space. A Triangle is defined by any three
 //    points.
 //
-// => Shape:
-//    An abstract class that represents a shape in a two-dimensional space. Its subclasses
-//    are Polygon and Circle.
-//
 // => Polygon:
 //    Represents a convex polygon in a two-dimensional space. A Polygon does not have three
 //    collinear points or any two coincident points.
@@ -39,11 +35,6 @@
 // => Circle:
 //    Represents a circle in a two-dimensional space. A Circle is defined by a center point
 //    and a positive radius.
-//
-// => Collision:
-//    Represents a collision between two shapes in a two-dimensional space. Collision objects
-//    have a minimum translation vector (a vector to be applied on to one of the shapes to
-//    separate them) and a point of collision.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,20 +45,16 @@ class Vector;
 class Point;
 class Segment;
 class Triangle;
-class Shape;
 class Polygon;
 class Circle;
-class Collision;
 
 class Angle {
     friend class Vector;
     friend class Point;
     friend class Segment;
     friend class Triangle;
-    friend class Shape;
     friend class Polygon;
     friend class Circle;
-    friend class Collision;
 
     private:
         CGAngle _angle;
@@ -111,10 +98,8 @@ class Vector {
     friend class Point;
     friend class Segment;
     friend class Triangle;
-    friend class Shape;
     friend class Polygon;
     friend class Circle;
-    friend class Collision;
 
     private:
         CGVector _vector;
@@ -180,10 +165,8 @@ class Point {
     friend class Vector;
     friend class Segment;
     friend class Triangle;
-    friend class Shape;
     friend class Polygon;
     friend class Circle;
-    friend class Collision;
 
     private:
         CGPoint _point;
@@ -257,10 +240,8 @@ class Segment {
     friend class Vector;
     friend class Point;
     friend class Triangle;
-    friend class Shape;
     friend class Polygon;
     friend class Circle;
-    friend class Collision;
 
     private:
         CGSegment _segment;
@@ -304,10 +285,8 @@ class Triangle {
     friend class Vector;
     friend class Point;
     friend class Segment;
-    friend class Shape;
     friend class Polygon;
     friend class Circle;
-    friend class Collision;
 
     private:
         CGTriangle _triangle;
@@ -353,80 +332,13 @@ class Triangle {
         double area() const;
 };
 
-class Shape {
+class Polygon {
     friend class Angle;
     friend class Vector;
     friend class Point;
     friend class Segment;
     friend class Triangle;
-    friend class Polygon;
     friend class Circle;
-    
-    private:
-        Shape& operator=(const Shape& other) = delete;
-
-    protected:
-        // Constructor.
-        Shape() {}
-        Shape(const Shape& other) {}
-
-    public:
-        // Destructor.
-        virtual ~Shape() {}
-
-        // Return a heap allocated shape copy.
-        virtual Shape* copy() const = 0;
-
-        // Shape translation operator.
-        virtual void operator+=(const Vector& vector) = 0;
-        virtual void operator-=(const Vector& vector) = 0;
-
-        // Shape rotation around origin in counter-clockwise direction operator.
-        virtual void operator%=(const Angle& angle) = 0;
-
-        // Rotate shape around a center point in counter-clockwise direction.
-        virtual void rotateAround(const Point& center, const Angle& angle) = 0;
-
-        // Return shape rectangle hull.
-        virtual Polygon rectangleHull() const = 0;
-
-        // Return true if shape is in contact with another shape. false, otherwise.
-        bool isInContactWithShape(const Shape& other) const;
-
-        // Return true if shape is in contact with a polygon. false, otherwise.
-        virtual bool isInContactWith(const Polygon& other) const = 0;
-
-        // Return true if shape is in contact with a circle. false, otherwise.
-        virtual bool isInContactWith(const Circle& other) const = 0;
-
-        // Return true if shape is colliding with another shape. false, otherwise.
-        bool isCollidingWithShape(const Shape& other) const;
-
-        // Return true if shape is colliding with a polygon. false, otherwise.
-        virtual bool isCollidingWith(const Polygon& other) const = 0;
-
-        // Return true if shape is colliding with a circle. false, otherwise.
-        virtual bool isCollidingWith(const Circle& other) const = 0;
-
-        // Return a collision with another shape or NULL.
-        Collision* collisionWithShape(const Shape& other) const;
-
-        // Return a collision with a polygon.
-        virtual Collision* collisionWith(const Polygon& other) const = 0;
-
-        // Return a collision with a circle.
-        virtual Collision* collisionWith(const Circle& other) const = 0;
-};
-
-class Polygon : public Shape {
-    friend class Angle;
-    friend class Vector;
-    friend class Point;
-    friend class Segment;
-    friend class Triangle;
-    friend class Shape;
-    friend class Circle;
-    friend class Collision;
 
     private:
         CGPolygon _polygon;
@@ -449,19 +361,21 @@ class Polygon : public Shape {
         // Polygon comparison operator.
         bool operator==(const Polygon& other) const;
 
-        // Shape interface.
-        Shape* copy() const;
+        // Polygon translation operator.
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
+
+        // Polygon rotation around origin in counter-clockwise direction operator.
         void operator%=(const Angle& angle);
+
+        // Rotate polygon around a center point in counter-clockwise direction.
         void rotateAround(const Point& center, const Angle& angle);
-        Polygon rectangleHull() const;
+
+        // Return true if polygon is in contact with another polygon. false, otherwise.
         bool isInContactWith(const Polygon& other) const;
-        bool isInContactWith(const Circle& other) const;
+
+        // Return true if polygon is colliding with another polygon. false, otherwise.
         bool isCollidingWith(const Polygon& other) const;
-        bool isCollidingWith(const Circle& other) const;
-        Collision* collisionWith(const Polygon& other) const;
-        Collision* collisionWith(const Circle& other) const;
 
         // Return polygon vertices.
         std::vector<Point> vertices() const;
@@ -473,15 +387,13 @@ class Polygon : public Shape {
         double area() const;
 };
 
-class Circle : public Shape {
+class Circle {
     friend class Angle;
     friend class Vector;
     friend class Point;
     friend class Segment;
     friend class Triangle;
-    friend class Shape;
     friend class Polygon;
-    friend class Collision;
 
     private:
         CGCircle _circle;
@@ -500,19 +412,15 @@ class Circle : public Shape {
         // Circle comparison operator.
         bool operator==(const Circle& other) const;
 
-        // Shape interface.
-        Shape* copy() const;
+        // Circle translation operator.
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
+
+        // Circle rotation around origin in counter-clockwise direction operator.
         void operator%=(const Angle& angle);
+
+        // Rotate circle around a center point in counter-clockwise direction.
         void rotateAround(const Point& center, const Angle& angle);
-        Polygon rectangleHull() const;
-        bool isInContactWith(const Polygon& other) const;
-        bool isInContactWith(const Circle& other) const;
-        bool isCollidingWith(const Polygon& other) const;
-        bool isCollidingWith(const Circle& other) const;
-        Collision* collisionWith(const Polygon& other) const;
-        Collision* collisionWith(const Circle& other) const;
 
         // Return circle center.
         Point center() const;
@@ -522,39 +430,6 @@ class Circle : public Shape {
 
         // Return circle area.
         double area() const;
-};
-
-class Collision {
-    friend class Angle;
-    friend class Vector;
-    friend class Point;
-    friend class Segment;
-    friend class Triangle;
-    friend class Shape;
-    friend class Polygon;
-    friend class Circle;
-
-    private:
-        CGCollision _collision;
-        Collision();
-
-    public:
-        // Constructor and destructor.
-        Collision(const Collision& other);
-        Collision(const CGCollision cgcollision);
-        ~Collision();
-
-        // Collision assignment operator.
-        Collision& operator=(const Collision& other);
-
-        // Collision comparison operator.
-        bool operator==(const Collision& other) const;
-
-        // Return collision minimum translation vector.
-        Vector minimumTranslationVector() const;
-
-        // Return collision point.
-        Point point() const;
 };
 
 }

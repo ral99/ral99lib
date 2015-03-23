@@ -503,29 +503,6 @@ double Triangle::area() const {
     return triangle_area(_triangle);
 }
 
-// ::: Shape :::
-
-bool Shape::isInContactWithShape(const Shape& other) const {
-    if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
-        return isInContactWith(*polygon);
-    const Circle *circle = dynamic_cast<const Circle*>(&other);
-    return isInContactWith(*circle);
-}
-
-bool Shape::isCollidingWithShape(const Shape& other) const {
-    if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
-        return isCollidingWith(*polygon);
-    const Circle *circle = dynamic_cast<const Circle*>(&other);
-    return isCollidingWith(*circle);
-}
-
-Collision* Shape::collisionWithShape(const Shape& other) const {
-    if (const Polygon *polygon = dynamic_cast<const Polygon*>(&other))
-        return collisionWith(*polygon);
-    const Circle *circle = dynamic_cast<const Circle*>(&other);
-    return collisionWith(*circle);
-}
-
 // ::: Polygon :::
 
 Polygon::Polygon() {
@@ -596,10 +573,6 @@ bool Polygon::operator==(const Polygon& other) const {
     return (polygon_equals(_polygon, other._polygon)) ? true : false;
 }
 
-Shape* Polygon::copy() const {
-    return new Polygon(*this);
-}
-
 void Polygon::operator+=(const Vector& vector) {
     polygon_translate(_polygon, vector._vector);
 }
@@ -618,58 +591,12 @@ void Polygon::rotateAround(const Point& center, const Angle& angle) {
     polygon_rotate_around(_polygon, center._point, angle._angle);
 }
 
-Polygon Polygon::rectangleHull() const {
-    double minX, maxX, minY, maxY;
-    std::vector<Point> vertices = this->vertices();
-    for (std::vector<Point>::iterator it = vertices.begin(); it != vertices.end(); it++) {
-        if (it == vertices.begin()) {
-            minX = maxX = it->x();
-            minY = maxY = it->y();
-        }
-        else {
-            minX = double_min(minX, it->x());
-            maxX = double_max(maxX, it->x());
-            minY = double_min(minY, it->y());
-            maxY = double_max(maxY, it->y());
-        }
-    }
-    return Polygon::rectangle(Point(minX, minY), maxX - minX, maxY - minY);
-}
-
 bool Polygon::isInContactWith(const Polygon& other) const {
     return polygon_is_in_contact_with_polygon(_polygon, other._polygon);
 }
 
-bool Polygon::isInContactWith(const Circle& other) const {
-    return polygon_is_in_contact_with_circle(_polygon, other._circle);
-}
-
 bool Polygon::isCollidingWith(const Polygon& other) const {
     return polygon_is_colliding_with_polygon(_polygon, other._polygon);
-}
-
-bool Polygon::isCollidingWith(const Circle& other) const {
-    return polygon_is_colliding_with_circle(_polygon, other._circle);
-}
-
-Collision* Polygon::collisionWith(const Polygon& other) const {
-    Collision *collision = NULL;
-    CGCollision cgcollision = polygon_and_polygon_collision(_polygon, other._polygon);
-    if (cgcollision != NULL) {
-        collision = new Collision(cgcollision);
-        collision_release(cgcollision);
-    }
-    return collision;
-}
-
-Collision* Polygon::collisionWith(const Circle& other) const {
-    Collision *collision = NULL;
-    CGCollision cgcollision = polygon_and_circle_collision(_polygon, other._circle);
-    if (cgcollision != NULL) {
-        collision = new Collision(cgcollision);
-        collision_release(cgcollision);
-    }
-    return collision;
 }
 
 std::vector<Point> Polygon::vertices() const {
@@ -737,10 +664,6 @@ bool Circle::operator==(const Circle& other) const {
     return (circle_equals(_circle, other._circle) == 1) ? true : false;
 }
 
-Shape* Circle::copy() const {
-    return new Circle(*this);
-}
-
 void Circle::operator+=(const Vector& vector) {
     circle_translate(_circle, vector._vector);
 }
@@ -759,50 +682,6 @@ void Circle::rotateAround(const Point& center, const Angle& angle) {
     circle_rotate_around(_circle, center._point, angle._angle);
 }
 
-Polygon Circle::rectangleHull() const {
-    double minX = center().x() - radius();
-    double maxX = center().x() + radius();
-    double minY = center().y() - radius();
-    double maxY = center().y() + radius();
-    return Polygon::rectangle(Point(minX, minY), maxX - minX, maxY - minY);
-}
-
-bool Circle::isInContactWith(const Polygon& other) const {
-    return circle_is_in_contact_with_polygon(_circle, other._polygon);
-}
-
-bool Circle::isInContactWith(const Circle& other) const {
-    return circle_is_in_contact_with_circle(_circle, other._circle);
-}
-
-bool Circle::isCollidingWith(const Polygon& other) const {
-    return circle_is_colliding_with_polygon(_circle, other._polygon);
-}
-
-bool Circle::isCollidingWith(const Circle& other) const {
-    return circle_is_colliding_with_circle(_circle, other._circle);
-}
-
-Collision* Circle::collisionWith(const Polygon& other) const {
-    Collision *collision = NULL;
-    CGCollision cgcollision = circle_and_polygon_collision(_circle, other._polygon);
-    if (cgcollision != NULL) {
-        collision = new Collision(cgcollision);
-        collision_release(cgcollision);
-    }
-    return collision;
-}
-
-Collision* Circle::collisionWith(const Circle& other) const {
-    Collision *collision = NULL;
-    CGCollision cgcollision = circle_and_circle_collision(_circle, other._circle);
-    if (cgcollision != NULL) {
-        collision = new Collision(cgcollision);
-        collision_release(cgcollision);
-    }
-    return collision;
-}
-
 Point Circle::center() const {
     Point center;
     center._point = circle_center(_circle);
@@ -815,49 +694,5 @@ double Circle::radius() const {
 
 double Circle::area() const {
     return circle_area(_circle);
-}
-
-// ::: Collision :::
-
-Collision::Collision() {
-    _collision = NULL;
-}
-
-Collision::Collision(const Collision& other) {
-    _collision = collision_dup(other._collision);
-}
-
-Collision::Collision(const CGCollision cgcollision) {
-    _collision = collision_dup(cgcollision);
-}
-
-Collision::~Collision() {
-    if (_collision != NULL)
-        collision_release(_collision);
-}
-
-Collision& Collision::operator=(const Collision& other) {
-    if (this != &other) {
-        if (_collision != NULL)
-            collision_release(_collision);
-        _collision = collision_dup(other._collision);
-    }
-    return *this;
-}
-
-bool Collision::operator==(const Collision& other) const {
-    return (collision_equals(_collision, other._collision)) ? true : false;
-}
-
-Vector Collision::minimumTranslationVector() const {
-    Vector mtv;
-    mtv._vector = collision_minimum_translation_vector(_collision);
-    return mtv;
-}
-
-Point Collision::point() const {
-    Point point;
-    point._point = collision_point(_collision);
-    return point;
 }
 

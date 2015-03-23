@@ -798,50 +798,6 @@ TEST(Triangle, Area) {
     EXPECT_EQ(1, Triangle(Point(0, 0), Point(1, 1), Point(2, 0)).area());
 }
 
-// ::: Shape :::
-
-TEST(Shape, IsInContactWithShape) {
-    const Shape& shape = Polygon::square(Point(0, 0), 2);
-
-    EXPECT_FALSE(shape.isInContactWithShape(Polygon::square(Point(0, 0), 1)));
-    EXPECT_FALSE(shape.isInContactWithShape(Polygon::square(Point(1, 0), 1)));
-    EXPECT_TRUE(shape.isInContactWithShape(Polygon::square(Point(2, 0), 1)));
-    EXPECT_FALSE(shape.isInContactWithShape(Polygon::square(Point(3, 0), 1)));
-
-    EXPECT_FALSE(shape.isInContactWithShape(Circle(Point(2, 1), 1)));
-    EXPECT_TRUE(shape.isInContactWithShape(Circle(Point(3, 1), 1)));
-    EXPECT_FALSE(shape.isInContactWithShape(Circle(Point(4, 1), 1)));
-}
-
-TEST(Shape, IsCollidingWithShape) {
-    const Shape& shape = Polygon::square(Point(0, 0), 2);
-
-    EXPECT_TRUE(shape.isCollidingWithShape(Polygon::square(Point(0, 0), 2)));
-    EXPECT_TRUE(shape.isCollidingWithShape(Polygon::square(Point(1, 0), 2)));
-    EXPECT_FALSE(shape.isCollidingWithShape(Polygon::square(Point(2, 0), 2)));
-    EXPECT_FALSE(shape.isCollidingWithShape(Polygon::square(Point(3, 0), 2)));
-
-    EXPECT_TRUE(shape.isCollidingWithShape(Circle(Point(1, 1), 1)));
-    EXPECT_TRUE(shape.isCollidingWithShape(Circle(Point(2, 1), 1)));
-    EXPECT_FALSE(shape.isCollidingWithShape(Circle(Point(3, 1), 1)));
-    EXPECT_FALSE(shape.isCollidingWithShape(Circle(Point(4, 1), 1)));
-}
-
-TEST(Shape, CollisionWithShape) {
-    Collision *collision;
-    const Shape& shape = Polygon::square(Point(0, 0), 1);
-
-    collision = shape.collisionWithShape(Polygon::square(Point(0.9, 0), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0.5) == collision->point());
-    delete collision;
-
-    collision = shape.collisionWithShape(Circle(Point(1.9, 1), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 1) == collision->point());
-    delete collision;
-}
-
 // ::: Polygon :::
 
 TEST(Polygon, ListOfVerticesConstructor) {
@@ -937,13 +893,6 @@ TEST(Polygon, ComparisonOperator) {
     EXPECT_FALSE(Polygon::square(Point(0, 0), 1) == Polygon::square(Point(1, 1), 1));
 }
 
-TEST(Polygon, Copy) {
-    Polygon polygon = Polygon::square(Point(0, 0), 1);
-    Shape *shape = polygon.copy();
-    EXPECT_TRUE(polygon == *(static_cast<Polygon*>(shape)));
-    delete shape;
-}
-
 TEST(Polygon, VectorSumOperator) {
     Polygon polygon = Polygon::square(Point(0, 0), 1);
     polygon += Vector(1, 2);
@@ -988,15 +937,6 @@ TEST(Polygon, RotateAround) {
     EXPECT_TRUE(Polygon::square(Point(0, 0), 1) == polygon);
 }
 
-TEST(Polygon, RectangleHull) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(0, 1));
-    vertices.push_back(Point(1, 0));
-    vertices.push_back(Point(2, 1));
-    vertices.push_back(Point(1, 2));
-    EXPECT_TRUE(Polygon::rectangle(Point(0, 0), 2, 2) == Polygon(vertices).rectangleHull());
-}
-
 TEST(Polygon, IsInContactWithPolygon) {
     EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, 0),
                                                                                  2)));
@@ -1022,16 +962,6 @@ TEST(Polygon, IsInContactWithPolygon) {
                                                                                 2)));
 }
 
-TEST(Polygon, IsInContactWithCircle) {
-    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(1, 1), 1)));
-    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(2, 1), 1)));
-    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(4, 1), 1)));
-    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(3, 1), 1)));
-    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(1, 3), 1)));
-    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(-1, 1), 1)));
-    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Circle(Point(1, -1), 1)));
-}
-
 TEST(Polygon, IsCollidingWithPolygon) {
     EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(0, 0),
                                                                                 2)));
@@ -1041,134 +971,6 @@ TEST(Polygon, IsCollidingWithPolygon) {
                                                                                 2)));
     EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(3, 0),
                                                                                 2)));
-}
-
-TEST(Polygon, IsCollidingWithCircle) {
-    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isCollidingWith(Circle(Point(1, 1), 1)));
-    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isCollidingWith(Circle(Point(2, 1), 1)));
-    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isCollidingWith(Circle(Point(3, 1), 1)));
-    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isCollidingWith(Circle(Point(4, 1), 1)));
-}
-
-TEST(Polygon, CollisionWithPolygon) {
-    Collision *collision;
-
-    Polygon triangle = Polygon::triangle(Point(0, 0), Point(1, 0), Point(0, 1));
-    EXPECT_TRUE(NULL == triangle.collisionWith(Polygon::square(Point(2, 0), 1)));
-
-    collision = triangle.collisionWith(Polygon::square(Point(1, 0), 1));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0) == collision->point());
-    delete collision;
-
-    collision = triangle.collisionWith(Polygon::square(Point(-0.9, 0), 1));
-    EXPECT_TRUE(Vector(-0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 0.5) == collision->point());
-    delete collision;
-
-    collision = triangle.collisionWith(Polygon::square(Point(-0.5, 0.9), 1));
-    EXPECT_TRUE(Vector(0, 0.1) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 1) == collision->point());
-    delete collision;
-
-    collision = triangle.collisionWith(Polygon::square(Point(0, 0), 1));
-    EXPECT_TRUE(Vector(0.5, 0.5) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0.5, 0.5) == collision->point());
-    delete collision;
-
-    Polygon rectangle = Polygon::rectangle(Point(0, 0), 2, 1);
-    EXPECT_TRUE(NULL == rectangle.collisionWith(Polygon::square(Point(3, 0), 1)));
-
-    collision = rectangle.collisionWith(Polygon::square(Point(2, 0), 1));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 0.5) == collision->point());
-    delete collision;
-
-    collision = rectangle.collisionWith(Polygon::square(Point(1.9, 0), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 0.5) == collision->point());
-    delete collision;
-
-    collision = rectangle.collisionWith(Polygon::square(Point(1.9, 0.5), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 0.75) == collision->point());
-    delete collision;
-
-    Polygon square = Polygon::square(Point(0, 0), 1);
-    EXPECT_TRUE(NULL == square.collisionWith(Polygon::square(Point(2, 0), 1)));
-
-    collision = square.collisionWith(Polygon::square(Point(1, 0), 1));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0.5) == collision->point());
-    delete collision;
-
-    collision = square.collisionWith(Polygon::square(Point(0.9, 0), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0.5) == collision->point());
-    delete collision;
-
-    collision = square.collisionWith(Polygon::square(Point(0.9, 0.5), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0.75) == collision->point());
-    delete collision;
-}
-
-TEST(Polygon, CollisionWithCircle) {
-    Collision *collision;
-
-    Polygon triangle = Polygon::triangle(Point(0, 0), Point(1, 0), Point(0, 1));
-    EXPECT_TRUE(NULL == triangle.collisionWith(Circle(Point(2, 0.5), 1)));
-
-    collision = triangle.collisionWith(Circle(Point(-1, 1), 1));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 1) == collision->point());
-    delete collision;
-
-    collision = triangle.collisionWith(Circle(Point(-0.4, 0.5), 0.5));
-    EXPECT_TRUE(Vector(-0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 0.5) == collision->point());
-    delete collision;
-
-    collision = triangle.collisionWith(Circle(Point(0, 1.4), 0.5));
-    EXPECT_TRUE(Vector(0, 0.1) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 1) == collision->point());
-    delete collision;
-
-    Polygon rectangle = Polygon::rectangle(Point(0, 0), 2, 1);
-    EXPECT_TRUE(NULL == rectangle.collisionWith(Circle(Point(4, 0.5), 1)));
-
-    collision = rectangle.collisionWith(Circle(Point(-1, 1), 1));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 1) == collision->point());
-    delete collision;
-
-    collision = rectangle.collisionWith(Circle(Point(-0.4, 0.5), 0.5));
-    EXPECT_TRUE(Vector(-0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 0.5) == collision->point());
-    delete collision;
-
-    collision = rectangle.collisionWith(Circle(Point(0, 1.4), 0.5));
-    EXPECT_TRUE(Vector(0, 0.1) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 1) == collision->point());
-    delete collision;
-
-    Polygon square = Polygon::square(Point(0, 0), 1);
-    EXPECT_TRUE(NULL == square.collisionWith(Circle(Point(3, 0.5), 1)));
-
-    collision = square.collisionWith(Circle(Point(1.5, 0.5), 0.5));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0.5) == collision->point());
-    delete collision;
-
-    collision = square.collisionWith(Circle(Point(1.4, 0.5), 0.5));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 0.5) == collision->point());
-    delete collision;
-
-    collision = square.collisionWith(Circle(Point(0, 1.4), 0.5));
-    EXPECT_TRUE(Vector(0, 0.1) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(0, 1) == collision->point());
-    delete collision;
 }
 
 TEST(Polygon, Vertices) {
@@ -1234,13 +1036,6 @@ TEST(Circle, ComparisonOperator) {
     EXPECT_FALSE(Circle(Point(1, 1), 1) == Circle(Point(1, 1), 2));
 }
 
-TEST(Circle, Copy) {
-    Circle circle(Point(1, 2), 3);
-    Shape *shape = circle.copy();
-    EXPECT_TRUE(circle == *(static_cast<Circle*>(shape)));
-    delete shape;
-}
-
 TEST(Circle, VectorSumOperator) {
     Circle circle(Point(1, 2), 3);
     circle += Vector(1, 2);
@@ -1285,88 +1080,6 @@ TEST(Circle, RotateAround) {
     EXPECT_TRUE(Circle(Point(1, 1), 1) == circle);
 }
 
-TEST(Circle, RectangleHull) {
-    EXPECT_TRUE(Polygon::rectangle(Point(0, 0), 2, 2) ==
-                Circle(Point(1, 1), 1).rectangleHull());
-}
-
-TEST(Circle, IsInContactWithPolygon) {
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(1, 0), 2)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(3, 0), 2)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(2, 0), 2)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(0, 2), 2)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(-2, 0), 2)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Polygon::square(Point(0, -2), 2)));
-}
-
-TEST(Circle, IsInContactWithCircle) {
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(1, 1), 1)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(2, 1), 1)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(4, 1), 1)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(3, 1), 1)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(1, 3), 1)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(-1, 1), 1)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isInContactWith(Circle(Point(1, -1), 1)));
-}
-
-TEST(Circle, IsCollidingWithPolygon) {
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isCollidingWith(Polygon::square(Point(0, 0), 2)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isCollidingWith(Polygon::square(Point(1, 0), 2)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isCollidingWith(Polygon::square(Point(2, 0), 2)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isCollidingWith(Polygon::square(Point(3, 0), 2)));
-}
-
-TEST(Circle, IsCollidingWithCircle) {
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isCollidingWith(Circle(Point(1, 1), 1)));
-    EXPECT_TRUE(Circle(Point(1, 1), 1).isCollidingWith(Circle(Point(2, 1), 1)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isCollidingWith(Circle(Point(3, 1), 1)));
-    EXPECT_FALSE(Circle(Point(1, 1), 1).isCollidingWith(Circle(Point(4, 1), 1)));
-}
-
-TEST(Circle, CollisionWithPolygon) {
-    Collision *collision;
-
-    Circle circle = Circle(Point(1, 1), 1);
-    EXPECT_TRUE(NULL == circle.collisionWith(Polygon::square(Point(3, 0), 2)));
-
-    collision = circle.collisionWith(Polygon::square(Point(2, 0), 2));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 1) == collision->point());
-    delete collision;
-
-    collision = circle.collisionWith(Polygon::square(Point(1.9, 0), 2));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 1) == collision->point());
-    delete collision;
-
-    collision = circle.collisionWith(Polygon::square(Point(0, 1.9), 2));
-    EXPECT_TRUE(Vector(0, 0.1) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 2) == collision->point());
-    delete collision;
-}
-
-TEST(Circle, CollisionWithCircle) {
-    Collision *collision;
-
-    Circle circle = Circle(Point(1, 1), 1);
-    EXPECT_TRUE(NULL == circle.collisionWith(Circle(Point(4, 1), 1)));
-
-    collision = circle.collisionWith(Circle(Point(3, 1), 1));
-    EXPECT_TRUE(Vector(0, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 1) == collision->point());
-    delete collision;
-
-    collision = circle.collisionWith(Circle(Point(2.9, 1), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(2, 1) == collision->point());
-    delete collision;
-
-    collision = circle.collisionWith(Circle(Point(1, 2.9), 1));
-    EXPECT_TRUE(Vector(0, 0.1) == collision->minimumTranslationVector());
-    EXPECT_TRUE(Point(1, 2) == collision->point());
-    delete collision;
-}
-
 TEST(Circle, Center) {
     EXPECT_TRUE(Point(1, 2) == Circle(Point(1, 2), 3).center());
 }
@@ -1384,63 +1097,5 @@ TEST(Circle, Area) {
     EXPECT_DOUBLE_EQ(M_PI * 4, Circle(Point(-1, 1), 2).area());
     EXPECT_DOUBLE_EQ(M_PI * 4, Circle(Point(1, -1), 2).area());
     EXPECT_DOUBLE_EQ(M_PI * 4, Circle(Point(-1, -1), 2).area());
-}
-
-// ::: Collision :::
-
-TEST(Collision, CopyConstructor) {
-    Polygon polygon = Polygon::square(Point(0, 0), 1);
-    Collision *collisionPtr = polygon.collisionWith(Polygon::square(Point(0.9, 0), 1));
-    EXPECT_TRUE(*collisionPtr == Collision(*collisionPtr));
-    delete collisionPtr;
-}
-
-TEST(Collision, CopyStructConstructor) {
-    CGVector cgmtv = vector_new(1, 2);
-    CGPoint cgpoint = point_new(3, 4);
-    CGCollision cgcollision = collision_new(cgmtv, cgpoint);
-    Collision collision(cgcollision);
-    EXPECT_TRUE(Vector(1, 2) == collision.minimumTranslationVector());
-    EXPECT_TRUE(Point(3, 4) == collision.point());
-    vector_release(cgmtv);
-    point_release(cgpoint);
-    collision_release(cgcollision);
-}
-
-TEST(Collision, Destructor) {
-    delete Polygon::square(Point(0, 0), 1).collisionWith(Polygon::square(Point(0.9, 0), 1));
-}
-
-TEST(Collision, AssignmentOperator) {
-    Polygon polygon = Polygon::square(Point(0, 0), 1);
-    Collision *collisionPtr = polygon.collisionWith(Polygon::square(Point(0.9, 0), 1));
-    Collision collision = *collisionPtr;
-    EXPECT_TRUE(*collisionPtr == collision);
-    delete collisionPtr;
-}
-
-TEST(Collision, ComparisonOperator) {
-    Polygon polygon1 = Polygon::square(Point(0, 0), 1);
-    Polygon polygon2 = Polygon::square(Point(0.9, 0), 1);
-    Collision *collisionPtr1 = polygon1.collisionWith(polygon2);
-    Collision *collisionPtr2 = polygon2.collisionWith(polygon1);
-    EXPECT_TRUE(*collisionPtr1 == *collisionPtr1);
-    EXPECT_FALSE(*collisionPtr2 == *collisionPtr1);
-    delete collisionPtr1;
-    delete collisionPtr2;
-}
-
-TEST(Collision, MinimumTranslationVector) {
-    Polygon polygon = Polygon::square(Point(0, 0), 1);
-    Collision *collisionPtr = polygon.collisionWith(Polygon::square(Point(0.9, 0), 1));
-    EXPECT_TRUE(Vector(0.1, 0) == collisionPtr->minimumTranslationVector());
-    delete collisionPtr;
-}
-
-TEST(Collision, Point) {
-    Polygon polygon = Polygon::square(Point(0, 0), 1);
-    Collision *collisionPtr = polygon.collisionWith(Polygon::square(Point(0.9, 0), 1));
-    EXPECT_TRUE(Point(1, 0.5) == collisionPtr->point());
-    delete collisionPtr;
 }
 
