@@ -21,5 +21,9 @@ int polygon_is_colliding_with_polygon(CGPolygon polygon1, CGPolygon polygon2);
 /* Return the point of contact between two polygons, or NULL if they are not in contact. */
 CGPoint polygon_point_of_contact_with_polygon(CGPolygon polygon1, CGPolygon polygon2);
 
+/* Return the minimum translation vector of polygon1 from polygon2 in axis direction, or NULL
+ * if axis is a null vector. */
+CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVector axis);
+
 #endif
 

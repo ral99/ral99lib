@@ -116,3 +116,115 @@ CGPoint polygon_point_of_contact_with_polygon(CGPolygon polygon1, CGPolygon poly
     list_release(vertices);
     return point_of_contact;
 }
+
+CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVector axis) {
+    if (double_equals(vector_x(axis), 0) && double_equals(vector_y(axis), 0))
+        return NULL;
+    ADTList vertices1 = polygon_vertices(polygon1);
+    ADTList vertices2 = polygon_vertices(polygon2);
+    ADTList edges1 = polygon_edges(polygon1);
+    ADTList edges2 = polygon_edges(polygon2);
+    CGVector mtv = vector_new(0, 0);
+    for (ADTListItem it = list_head(vertices1); it; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        CGPoint aux_point = point_dup(vertex);
+        point_translate(aux_point, axis);
+        CGLine vertex_line = line_new(vertex, aux_point);
+        for (ADTListItem jt = list_head(edges2); jt; jt = list_next(jt)) {
+            CGSegment edge = (CGSegment) list_value(jt);
+            CGLine edge_line = line_new(edge->a, edge->b);
+            CGPoint intersection = line_intersection(vertex_line, edge_line);
+            if (intersection == NULL && point_is_in_line(edge->a, vertex_line)) {
+                CGVector tv1 = vector_from_point_to_point(vertex, edge->a);
+                CGAngle angle1 = vector_angle_to(axis, tv1);
+                CGVector tv2 = vector_from_point_to_point(vertex, edge->b);
+                CGAngle angle2 = vector_angle_to(axis, tv2);
+                if (angle1 != NULL && double_equals(angle_in_radians(angle1), 0) &&
+                    double_gt(vector_magnitude(tv1), vector_magnitude(mtv))) {
+                    vector_release(mtv);
+                    mtv = vector_dup(tv1);
+                    angle_release(angle1);
+                }
+                if (angle2 != NULL && double_equals(angle_in_radians(angle2), 0) &&
+                    double_gt(vector_magnitude(tv2), vector_magnitude(mtv))) {
+                    vector_release(mtv);
+                    mtv = vector_dup(tv2);
+                    angle_release(angle2);
+                }
+                vector_release(tv1);
+                vector_release(tv2);
+            }
+            else if (intersection != NULL) {
+                if (point_is_in_segment(intersection, edge)) {
+                    CGVector tv = vector_from_point_to_point(vertex, intersection);
+                    CGAngle angle = vector_angle_to(axis, tv);
+                    if (angle != NULL && double_equals(angle_in_radians(angle), 0) &&
+                        double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
+                        vector_release(mtv);
+                        mtv = vector_dup(tv);
+                        angle_release(angle);
+                    }
+                    vector_release(tv);
+                }
+                point_release(intersection);
+            }
+            line_release(edge_line);
+        }
+        point_release(aux_point);
+        line_release(vertex_line);
+    }
+    for (ADTListItem it = list_head(vertices2); it; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        CGPoint aux_point = point_dup(vertex);
+        point_translate(aux_point, axis);
+        CGLine vertex_line = line_new(vertex, aux_point);
+        for (ADTListItem jt = list_head(edges1); jt; jt = list_next(jt)) {
+            CGSegment edge = (CGSegment) list_value(jt);
+            CGLine edge_line = line_new(edge->a, edge->b);
+            CGPoint intersection = line_intersection(vertex_line, edge_line);
+            if (intersection == NULL && point_is_in_line(edge->a, vertex_line)) {
+                CGVector tv1 = vector_from_point_to_point(vertex, edge->a);
+                CGAngle angle1 = vector_angle_to(axis, tv1);
+                CGVector tv2 = vector_from_point_to_point(vertex, edge->b);
+                CGAngle angle2 = vector_angle_to(axis, tv2);
+                if (angle1 != NULL && double_equals(angle_in_radians(angle1), M_PI) &&
+                    double_gt(vector_magnitude(tv1), vector_magnitude(mtv))) {
+                    vector_release(mtv);
+                    mtv = vector_dup(tv1);
+                    angle_release(angle1);
+                }
+                if (angle2 != NULL && double_equals(angle_in_radians(angle2), M_PI) &&
+                    double_gt(vector_magnitude(tv2), vector_magnitude(mtv))) {
+                    vector_release(mtv);
+                    mtv = vector_dup(tv2);
+                    angle_release(angle2);
+                }
+                vector_release(tv1);
+                vector_release(tv2);
+            }
+            else if (intersection != NULL) {
+                if (point_is_in_segment(intersection, edge)) {
+                    CGVector tv = vector_from_point_to_point(vertex, intersection);
+                    CGAngle angle = vector_angle_to(axis, tv);
+                    if (angle != NULL && double_equals(angle_in_radians(angle), M_PI) &&
+                        double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
+                        vector_release(mtv);
+                        mtv = vector_dup(tv);
+                        angle_release(angle);
+                    }
+                    vector_release(tv);
+                }
+                point_release(intersection);
+            }
+            line_release(edge_line);
+        }
+        point_release(aux_point);
+        line_release(vertex_line);
+    }
+    list_full_release(vertices1, (void (*)(void *)) point_release);
+    list_full_release(vertices2, (void (*)(void *)) point_release);
+    list_full_release(edges1, (void (*)(void *)) segment_release);
+    list_full_release(edges2, (void (*)(void *)) segment_release);
+    return mtv;
+}
+
