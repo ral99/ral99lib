@@ -595,6 +595,15 @@ bool Polygon::isInContactWith(const Polygon& other) const {
     return polygon_is_in_contact_with_polygon(_polygon, other._polygon);
 }
 
+Point* Polygon::pointOfContactWith(const Polygon& other) const {
+    CGPoint cgpoint = polygon_point_of_contact_with_polygon(_polygon, other._polygon);
+    if (cgpoint == NULL)
+        return NULL;
+    Point *point = new Point;
+    point->_point = cgpoint;
+    return point;
+}
+
 bool Polygon::isCollidingWith(const Polygon& other) const {
     return polygon_is_colliding_with_polygon(_polygon, other._polygon);
 }

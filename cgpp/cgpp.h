@@ -374,6 +374,10 @@ class Polygon {
         // Return true if polygon is in contact with another polygon. false, otherwise.
         bool isInContactWith(const Polygon& other) const;
 
+        // Return the point of contact between this and another polygon, or NULL if they are
+        // not in contact.
+        Point* pointOfContactWith(const Polygon& other) const;
+
         // Return true if polygon is colliding with another polygon. false, otherwise.
         bool isCollidingWith(const Polygon& other) const;
 

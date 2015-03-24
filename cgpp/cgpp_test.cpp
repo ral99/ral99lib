@@ -962,6 +962,45 @@ TEST(Polygon, IsInContactWithPolygon) {
                                                                                 2)));
 }
 
+TEST(Polygon, PointOfContactWithPolygon) {
+    EXPECT_TRUE(
+        NULL ==
+        Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(2, 0), 1))
+    );
+    EXPECT_TRUE(
+        NULL ==
+        Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(0.5, 0), 1))
+    );
+    EXPECT_TRUE(
+        Point(1, 0.5) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(1, 0), 1)))
+    );
+    EXPECT_TRUE(
+        Point(1, 1) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(1, 1), 1)))
+    );
+    EXPECT_TRUE(
+        Point(0.5, 1) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(0, 1), 1)))
+    );
+    EXPECT_TRUE(
+        Point(0, 1) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(-1, 1), 1)))
+    );
+    EXPECT_TRUE(
+        Point(0, 0.5) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(-1, 0), 1)))
+    );
+    EXPECT_TRUE(
+        Point(0.5, 0) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(0, -1), 1)))
+    );
+    EXPECT_TRUE(
+        Point(1, 0) ==
+        *(Polygon::square(Point(0, 0), 1).pointOfContactWith(Polygon::square(Point(1, -1), 1)))
+    );
+}
+
 TEST(Polygon, IsCollidingWithPolygon) {
     EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(0, 0),
                                                                                 2)));
