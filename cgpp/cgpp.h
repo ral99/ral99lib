@@ -382,7 +382,7 @@ class Polygon {
         bool isCollidingWith(const Polygon& other) const;
 
         // Return the minimum translation vector of this polygon from another one in the given
-        // direction, or NULL if axis is a null vector.
+        // direction, or raise an exception if axis is a null vector.
         Vector minimumTranslationVectorFrom(const Polygon& other, const Vector& axis);
 
         // Return polygon vertices.
