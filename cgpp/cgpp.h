@@ -381,6 +381,10 @@ class Polygon {
         // Return true if polygon is colliding with another polygon. false, otherwise.
         bool isCollidingWith(const Polygon& other) const;
 
+        // Return the minimum translation vector of this polygon from another one in the given
+        // direction, or NULL if axis is a null vector.
+        Vector minimumTranslationVectorFrom(const Polygon& other, const Vector& axis);
+
         // Return polygon vertices.
         std::vector<Point> vertices() const;
 

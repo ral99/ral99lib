@@ -608,6 +608,15 @@ bool Polygon::isCollidingWith(const Polygon& other) const {
     return polygon_is_colliding_with_polygon(_polygon, other._polygon);
 }
 
+Vector Polygon::minimumTranslationVectorFrom(const Polygon& other, const Vector& axis) {
+    CGVector cgvector = polygon_mtv_from_polygon(_polygon, other._polygon, axis._vector);
+    if (cgvector == NULL)
+        throw std::invalid_argument("Invalid null vector axis.");
+    Vector vector;
+    vector._vector = cgvector;
+    return vector;
+}
+
 std::vector<Point> Polygon::vertices() const {
     std::vector<Point> vertices;
     ADTList cgvertices = polygon_vertices(_polygon);

@@ -1012,6 +1012,30 @@ TEST(Polygon, IsCollidingWithPolygon) {
                                                                                 2)));
 }
 
+TEST(Polygon, MinimumTranslationVectorFromPolygon) {
+    Polygon poly0 = Polygon::square(Point(0, 0), 2);
+    Polygon poly1 = Polygon::square(Point(1, 0), 2);
+    Polygon poly2 = Polygon::square(Point(2, 0), 2);
+    Polygon poly3 = Polygon::square(Point(3, 0), 2);
+
+    EXPECT_ANY_THROW(poly0.minimumTranslationVectorFrom(poly1, Vector(0, 0)));
+
+    EXPECT_TRUE(Vector(5, 0) == poly0.minimumTranslationVectorFrom(poly3, Vector(1, 0)));
+    EXPECT_TRUE(Vector(0, 0) == poly0.minimumTranslationVectorFrom(poly3, Vector(-1, 0)));
+    EXPECT_TRUE(Vector(0, 0) == poly0.minimumTranslationVectorFrom(poly3, Vector(0, 1)));
+    EXPECT_TRUE(Vector(0, 0) == poly0.minimumTranslationVectorFrom(poly3, Vector(0, -1)));
+
+    EXPECT_TRUE(Vector(4, 0) == poly0.minimumTranslationVectorFrom(poly2, Vector(1, 0)));
+    EXPECT_TRUE(Vector(0, 0) == poly0.minimumTranslationVectorFrom(poly2, Vector(-1, 0)));
+    EXPECT_TRUE(Vector(0, 2) == poly0.minimumTranslationVectorFrom(poly2, Vector(0, 1)));
+    EXPECT_TRUE(Vector(0, -2) == poly0.minimumTranslationVectorFrom(poly2, Vector(0, -1)));
+
+    EXPECT_TRUE(Vector(3, 0) == poly0.minimumTranslationVectorFrom(poly1, Vector(1, 0)));
+    EXPECT_TRUE(Vector(-1, 0) == poly0.minimumTranslationVectorFrom(poly1, Vector(-1, 0)));
+    EXPECT_TRUE(Vector(0, 2) == poly0.minimumTranslationVectorFrom(poly1, Vector(0, 1)));
+    EXPECT_TRUE(Vector(0, -2) == poly0.minimumTranslationVectorFrom(poly1, Vector(0, -1)));
+}
+
 TEST(Polygon, Vertices) {
     std::vector<Point> vertices;
     vertices.push_back(Point(0, 0));
