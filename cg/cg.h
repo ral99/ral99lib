@@ -189,11 +189,11 @@ double vector_magnitude(CGVector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(CGVector vector1, CGVector vector2);
 
-/* Return the angle from vector1 to vector2 in counter-clockwise direction, or NULL if one or 
- * both vectors are null vectors. */
+/* Return the angle from vector1 to vector2, or NULL if one or both vectors are null
+ * vectors. */
 CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
-/* Rotate vector in counter-clockwise direction. */
+/* Rotate vector. */
 void vector_rotate(CGVector vector, CGAngle angle);
 
 /**********************************************************************************************
@@ -227,7 +227,7 @@ double point_y(CGPoint point);
 /* Translate point by vector. */
 void point_translate(CGPoint point, CGVector vector);
 
-/* Rotate point around a center point in counter-clockwise direction. */
+/* Rotate point around a center point. */
 void point_rotate_around(CGPoint point, CGPoint center, CGAngle angle);
 
 /* Return the distance between two points. */
@@ -319,7 +319,7 @@ CGPoint segment_b(CGSegment segment);
 /* Translate segment by a vector. */
 void segment_translate(CGSegment segment, CGVector vector);
 
-/* Rotate segment around a center point in counter-clockwise direction. */
+/* Rotate segment around a center point. */
 void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
 
 /* Return segment length. */
@@ -356,7 +356,7 @@ CGPoint triangle_c(CGTriangle triangle);
 /* Translate triangle by a vector. */
 void triangle_translate(CGTriangle triangle, CGVector vector);
 
-/* Rotate triangle around a center in counter-clockwise direction. */
+/* Rotate triangle around a center point. */
 void triangle_rotate_around(CGTriangle triangle, CGPoint center, CGAngle angle);
 
 /* Return 1 if triangle is in counter-clockwise orientation. -1, if in clockwise orientation.
@@ -408,7 +408,7 @@ ADTList polygon_edges(CGPolygon polygon);
 /* Translate polygon by vector. */
 void polygon_translate(CGPolygon polygon, CGVector vector);
 
-/* Rotate polygon around a center point in counter-clockwise direction. */
+/* Rotate polygon around a center point. */
 void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle);
 
 /* Return polygon area. */
@@ -448,7 +448,7 @@ double circle_radius(CGCircle circle);
 /* Translate circle by a vector. */
 void circle_translate(CGCircle circle, CGVector vector);
 
-/* Rotate circle around a center point in counter-clockwise direction. */
+/* Rotate circle around a center point. */
 void circle_rotate_around(CGCircle circle, CGPoint center, CGAngle angle);
 
 /* Return circle area. */

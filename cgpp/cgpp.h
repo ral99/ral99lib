@@ -129,7 +129,7 @@ class Vector {
         void operator-=(const Vector& other);
         void operator*=(double k);
 
-        // Vector rotation in counter-clockwise direction operator.
+        // Vector rotation operator.
         void operator%=(const Angle& angle);
 
         // Normalize vector.
@@ -155,8 +155,8 @@ class Vector {
         // Return the dot product between this and another vector.
         double dot(const Vector& other) const;
 
-        // Return angle from this to another vector in counter-clockwise direction or raise an
-        // exception if one or both vectors are null vectors.
+        // Return angle from this to another vector or raise an exception if one or both
+        // vectors are null vectors.
         Angle angleTo(const Vector& other) const;
 };
 
@@ -192,7 +192,7 @@ class Point {
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
 
-        // Point rotation around origin in counter-clockwise direction operator.
+        // Point rotation around origin operator.
         void operator%=(const Angle& angle);
 
         // Return point x component.
@@ -204,7 +204,7 @@ class Point {
         // Return vector from origin to point.
         Vector vectorFromOrigin() const;
 
-        // Rotate point around a center point in counter-clockwise direction.
+        // Rotate point around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 
         // Return distance from this to another point.
@@ -264,10 +264,10 @@ class Segment {
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
 
-        // Segment rotation around origin in counter-clockwise direction operator.
+        // Segment rotation around origin operator.
         void operator%=(const Angle& angle);
 
-        // Rotate segment around a center point in counter-clockwise direction.
+        // Rotate segment around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 
         // Return segment first point.
@@ -309,10 +309,10 @@ class Triangle {
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
 
-        // Triangle rotation around origin in counter-clockwise direction operator.
+        // Triangle rotation around origin operator.
         void operator%=(const Angle& angle);
 
-        // Rotate triangle around a center point in counter-clockwise direction.
+        // Rotate triangle around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 
         // Return triangle first vertex.
@@ -365,10 +365,10 @@ class Polygon {
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
 
-        // Polygon rotation around origin in counter-clockwise direction operator.
+        // Polygon rotation around origin operator.
         void operator%=(const Angle& angle);
 
-        // Rotate polygon around a center point in counter-clockwise direction.
+        // Rotate polygon around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 
         // Return true if polygon is in contact with another polygon. false, otherwise.
@@ -416,10 +416,10 @@ class Circle {
         void operator+=(const Vector& vector);
         void operator-=(const Vector& vector);
 
-        // Circle rotation around origin in counter-clockwise direction operator.
+        // Circle rotation around origin.
         void operator%=(const Angle& angle);
 
-        // Rotate circle around a center point in counter-clockwise direction.
+        // Rotate circle around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 
         // Return circle center.
