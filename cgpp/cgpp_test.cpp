@@ -325,10 +325,20 @@ TEST(Point, AssignmentOperator) {
     EXPECT_EQ(Point(1, 2), point);
 }
 
-TEST(Point, ComparisonOperator) {
+TEST(Point, EqualsComparisonOperator) {
     EXPECT_EQ(Point(1, 2), Point(1, 2));
     EXPECT_FALSE(Point(1, 2) == Point(1, 3));
     EXPECT_FALSE(Point(1, 2) == Point(3, 2));
+}
+
+TEST(Point, LowerThanComparisonOperator) {
+    EXPECT_TRUE(Point(0, 0) < Point(1, 1));
+    EXPECT_TRUE(Point(0, 0) < Point(1, 0));
+    EXPECT_TRUE(Point(0, 0) < Point(0, 1));
+    EXPECT_FALSE(Point(1, 1) < Point(0, 0));
+    EXPECT_FALSE(Point(1, 0) < Point(0, 0));
+    EXPECT_FALSE(Point(0, 1) < Point(0, 0));
+    EXPECT_FALSE(Point(0, 0) < Point(0, 0));
 }
 
 TEST(Point, BinaryVectorSumOperator) {
@@ -611,7 +621,7 @@ TEST(Segment, AssignmentOperator) {
     EXPECT_EQ(Segment(Point(0, 1), Point(2, 3)), segment);
 }
 
-TEST(Segment, ComparisonOperator) {
+TEST(Segment, EqualsComparisonOperator) {
     EXPECT_EQ(Segment(Point(1, 1), Point(3, 3)), Segment(Point(1, 1), Point(3, 3)));
     EXPECT_EQ(Segment(Point(1, 1), Point(3, 3)), Segment(Point(3, 3), Point(1, 1)));
     EXPECT_FALSE(Segment(Point(1, 1), Point(3, 3)) == Segment(Point(0, 0), Point(1, 1)));
@@ -621,6 +631,18 @@ TEST(Segment, ComparisonOperator) {
     EXPECT_FALSE(Segment(Point(1, 1), Point(3, 3)) == Segment(Point(0, 0), Point(3, 3)));
     EXPECT_FALSE(Segment(Point(1, 1), Point(3, 3)) == Segment(Point(1, 1), Point(4, 4)));
     EXPECT_FALSE(Segment(Point(1, 1), Point(3, 3)) == Segment(Point(0, 0), Point(4, 4)));
+}
+
+TEST(Segment, LowerThanComparisonOperator) {
+    EXPECT_TRUE(Segment(Point(0, 0), Point(1, 1)) < Segment(Point(0, 1), Point(1, 1)));
+    EXPECT_TRUE(Segment(Point(0, 0), Point(1, 1)) < Segment(Point(1, 1), Point(0, 1)));
+    EXPECT_TRUE(Segment(Point(1, 1), Point(0, 0)) < Segment(Point(0, 1), Point(1, 1)));
+    EXPECT_TRUE(Segment(Point(1, 1), Point(0, 0)) < Segment(Point(1, 1), Point(0, 1)));
+    EXPECT_FALSE(Segment(Point(0, 1), Point(1, 1)) < Segment(Point(0, 0), Point(1, 1)));
+    EXPECT_FALSE(Segment(Point(1, 1), Point(0, 1)) < Segment(Point(0, 0), Point(1, 1)));
+    EXPECT_FALSE(Segment(Point(0, 1), Point(1, 1)) < Segment(Point(1, 1), Point(0, 0)));
+    EXPECT_FALSE(Segment(Point(1, 1), Point(0, 1)) < Segment(Point(1, 1), Point(0, 0)));
+    EXPECT_FALSE(Segment(Point(0, 0), Point(1, 1)) < Segment(Point(0, 0), Point(1, 1)));
 }
 
 TEST(Segment, VectorSumOperator) {
@@ -822,16 +844,16 @@ TEST(Triangle, Area) {
 
 // ::: Polygon :::
 
-TEST(Polygon, ListOfVerticesConstructor) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(0, 0));
-    vertices.push_back(Point(1, 0));
-    vertices.push_back(Point(1, 1));
-    vertices.push_back(Point(0, 1));
+TEST(Polygon, SetOfVerticesConstructor) {
+    std::set<Point> vertices;
+    vertices.insert(Point(0, 0));
+    vertices.insert(Point(1, 0));
+    vertices.insert(Point(1, 1));
+    vertices.insert(Point(0, 1));
     Polygon polygon(vertices);
     EXPECT_EQ(vertices, polygon.vertices());
 
-    EXPECT_ANY_THROW(Polygon(std::vector<Point>()));
+    EXPECT_ANY_THROW(Polygon(std::set<Point>()));
 }
 
 TEST(Polygon, CopyConstructor) {
@@ -847,10 +869,10 @@ TEST(Polygon, CopyStructConstructor) {
 }
 
 TEST(Polygon, TriangleConstructor) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(0, 0));
-    vertices.push_back(Point(1, 0));
-    vertices.push_back(Point(0, 1));
+    std::set<Point> vertices;
+    vertices.insert(Point(0, 0));
+    vertices.insert(Point(1, 0));
+    vertices.insert(Point(0, 1));
     Polygon polygon = Polygon::triangle(Point(0, 0), Point(0, 1), Point(1, 0));
     EXPECT_EQ(vertices, polygon.vertices());
 
@@ -860,11 +882,11 @@ TEST(Polygon, TriangleConstructor) {
 }
 
 TEST(Polygon, RectangleConstructor) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(0, 0));
-    vertices.push_back(Point(2, 0));
-    vertices.push_back(Point(2, 1));
-    vertices.push_back(Point(0, 1));
+    std::set<Point> vertices;
+    vertices.insert(Point(0, 0));
+    vertices.insert(Point(2, 0));
+    vertices.insert(Point(2, 1));
+    vertices.insert(Point(0, 1));
     Polygon polygon = Polygon::rectangle(Point(0, 0), 2, 1);
     EXPECT_EQ(vertices, polygon.vertices());
 
@@ -873,11 +895,11 @@ TEST(Polygon, RectangleConstructor) {
 }
 
 TEST(Polygon, SquareConstructor) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(0, 0));
-    vertices.push_back(Point(1, 0));
-    vertices.push_back(Point(1, 1));
-    vertices.push_back(Point(0, 1));
+    std::set<Point> vertices;
+    vertices.insert(Point(0, 0));
+    vertices.insert(Point(1, 0));
+    vertices.insert(Point(1, 1));
+    vertices.insert(Point(0, 1));
     Polygon polygon = Polygon::square(Point(0, 0), 1);
     EXPECT_EQ(vertices, polygon.vertices());
 
@@ -885,11 +907,11 @@ TEST(Polygon, SquareConstructor) {
 }
 
 TEST(Polygon, CircleConstructor) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(1, 0));
-    vertices.push_back(Point(2, 1));
-    vertices.push_back(Point(1, 2));
-    vertices.push_back(Point(0, 1));
+    std::set<Point> vertices;
+    vertices.insert(Point(1, 0));
+    vertices.insert(Point(2, 1));
+    vertices.insert(Point(1, 2));
+    vertices.insert(Point(0, 1));
     Polygon polygon = Polygon::circle(Point(1, 1), 1, 4);
     EXPECT_EQ(vertices, polygon.vertices());
 
@@ -1073,20 +1095,20 @@ TEST(Polygon, MinimumTranslationVectorFromPolygon) {
 }
 
 TEST(Polygon, Vertices) {
-    std::vector<Point> vertices;
-    vertices.push_back(Point(0, 0));
-    vertices.push_back(Point(1, 0));
-    vertices.push_back(Point(1, 1));
-    vertices.push_back(Point(0, 1));
+    std::set<Point> vertices;
+    vertices.insert(Point(0, 0));
+    vertices.insert(Point(1, 0));
+    vertices.insert(Point(1, 1));
+    vertices.insert(Point(0, 1));
     EXPECT_EQ(vertices, Polygon::square(Point(0, 0), 1).vertices());
 }
 
 TEST(Polygon, Edges) {
-    std::vector<Segment> edges;
-    edges.push_back(Segment(Point(0, 0), Point(1, 0)));
-    edges.push_back(Segment(Point(1, 0), Point(1, 1)));
-    edges.push_back(Segment(Point(1, 1), Point(0, 1)));
-    edges.push_back(Segment(Point(0, 1), Point(0, 0)));
+    std::set<Segment> edges;
+    edges.insert(Segment(Point(0, 0), Point(1, 0)));
+    edges.insert(Segment(Point(1, 0), Point(1, 1)));
+    edges.insert(Segment(Point(1, 1), Point(0, 1)));
+    edges.insert(Segment(Point(0, 1), Point(0, 0)));
     EXPECT_EQ(edges, Polygon::square(Point(0, 0), 1).edges());
 }
 

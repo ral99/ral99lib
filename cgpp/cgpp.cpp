@@ -273,6 +273,10 @@ bool Point::operator==(const Point& other) const {
     return (point_equals(_point, other._point)) ? true : false;
 }
 
+bool Point::operator<(const Point& other) const {
+    return (point_lt(_point, other._point)) ? true : false;
+}
+
 Point Point::operator+(const Vector& vector) const {
     Point point(_point);
     point_translate(point._point, vector._vector);
@@ -387,6 +391,10 @@ Segment& Segment::operator=(const Segment& other) {
 
 bool Segment::operator==(const Segment& other) const {
     return (segment_equals(_segment, other._segment)) ? true : false;
+}
+
+bool Segment::operator<(const Segment& other) const {
+    return (segment_lt(_segment, other._segment)) ? true : false;
 }
 
 void Segment::operator+=(const Vector& vector) {
@@ -509,9 +517,9 @@ Polygon::Polygon() {
     _polygon = NULL;
 }
 
-Polygon::Polygon(const std::vector<Point>& vertices) {
+Polygon::Polygon(const std::set<Point>& vertices) {
     ADTList cgvertices = list_new();
-    for (std::vector<const Point>::iterator it = vertices.begin(); it != vertices.end(); it++)
+    for (std::set<Point>::iterator it = vertices.begin(); it != vertices.end(); it++)
         list_append(cgvertices, it->_point);
     _polygon = polygon_new(cgvertices);
     list_release(cgvertices);
@@ -617,25 +625,25 @@ Vector Polygon::minimumTranslationVectorFrom(const Polygon& other, const Vector&
     return vector;
 }
 
-std::vector<Point> Polygon::vertices() const {
-    std::vector<Point> vertices;
+std::set<Point> Polygon::vertices() const {
+    std::set<Point> vertices;
     ADTList cgvertices = polygon_vertices(_polygon);
     for (ADTListItem it = list_head(cgvertices); it; it = list_next(it)) {
         Point vertex;
         vertex._point = (CGPoint) list_value(it);
-        vertices.push_back(vertex);
+        vertices.insert(vertex);
     }
     list_release(cgvertices);
     return vertices;
 }
 
-std::vector<Segment> Polygon::edges() const {
-    std::vector<Segment> edges;
+std::set<Segment> Polygon::edges() const {
+    std::set<Segment> edges;
     ADTList cgedges = polygon_edges(_polygon);
     for (ADTListItem it = list_head(cgedges); it; it = list_next(it)) {
         Segment edge;
         edge._segment = (CGSegment) list_value(it);
-        edges.push_back(edge);
+        edges.insert(edge);
     }
     list_release(cgedges);
     return edges;

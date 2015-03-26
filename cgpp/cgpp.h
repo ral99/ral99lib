@@ -1,7 +1,7 @@
 #ifndef __CGPP__
 #define __CGPP__
 
-#include <vector>
+#include <set>
 
 #include "cg/cg.h"
 #include "cg/collision/collision.h"
@@ -185,6 +185,7 @@ class Point {
 
         // Point comparison operator.
         bool operator==(const Point& other) const;
+        bool operator<(const Point& other) const;
 
         // Point translation operators.
         Point operator+(const Vector& vector) const;
@@ -259,6 +260,7 @@ class Segment {
 
         // Segment comparison operator.
         bool operator==(const Segment& other) const;
+        bool operator<(const Segment& other) const;
 
         // Segment translation operator.
         void operator+=(const Vector& vector);
@@ -346,7 +348,7 @@ class Polygon {
 
     public:
         // Constructor and destructor.
-        Polygon(const std::vector<Point>& vertices);
+        Polygon(const std::set<Point>& vertices);
         Polygon(const Polygon& other);
         Polygon(const CGPolygon cgpolygon);
         static Polygon triangle(const Point& a, const Point& b, const Point& c);
@@ -386,10 +388,10 @@ class Polygon {
         Vector minimumTranslationVectorFrom(const Polygon& other, const Vector& axis);
 
         // Return polygon vertices.
-        std::vector<Point> vertices() const;
+        std::set<Point> vertices() const;
 
         // Return polygon edges.
-        std::vector<Segment> edges() const;
+        std::set<Segment> edges() const;
 
         // Return polygon area.
         double area() const;
