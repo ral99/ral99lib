@@ -761,6 +761,24 @@ static void test_point_equals_5() {
     point_release(point2);
 }
 
+static void test_point_lt_1() {
+    CGPoint point00 = point_new(0, 0);
+    CGPoint point01 = point_new(0, 1);
+    CGPoint point10 = point_new(1, 0);
+    CGPoint point11 = point_new(1, 1);
+    g_assert_cmpint(point_lt(point00, point01), ==, 1);
+    g_assert_cmpint(point_lt(point00, point10), ==, 1);
+    g_assert_cmpint(point_lt(point00, point11), ==, 1);
+    g_assert_cmpint(point_lt(point01, point00), ==, 0);
+    g_assert_cmpint(point_lt(point10, point00), ==, 0);
+    g_assert_cmpint(point_lt(point11, point00), ==, 0);
+    g_assert_cmpint(point_lt(point00, point00), ==, 0);
+    point_release(point00);
+    point_release(point01);
+    point_release(point10);
+    point_release(point11);
+}
+
 static void test_point_dup_1() {
     CGPoint point = point_new(2, 3);
     CGPoint dup = point_dup(point);
@@ -1846,6 +1864,24 @@ static void test_segment_equals_1() {
     g_assert_cmpint(segment_equals(segment1, segment1), ==, 1);
     g_assert_cmpint(segment_equals(segment1, segment2), ==, 1);
     g_assert_cmpint(segment_equals(segment1, segment3), ==, 0);
+    segment_release(segment1);
+    segment_release(segment2);
+    segment_release(segment3);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+}
+
+static void test_segment_lt_1() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 1);
+    CGPoint c = point_new(2, 2);
+    CGSegment segment1 = segment_new(a, b);
+    CGSegment segment2 = segment_new(b, a);
+    CGSegment segment3 = segment_new(a, c);
+    g_assert_cmpint(segment_lt(segment1, segment1), ==, 0);
+    g_assert_cmpint(segment_lt(segment1, segment2), ==, 0);
+    g_assert_cmpint(segment_lt(segment1, segment3), ==, 1);
     segment_release(segment1);
     segment_release(segment2);
     segment_release(segment3);
@@ -3186,6 +3222,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/point_equals", test_point_equals_3);
     g_test_add_func("/gc/point_equals", test_point_equals_4);
     g_test_add_func("/gc/point_equals", test_point_equals_5);
+    g_test_add_func("/gc/point_lt", test_point_lt_1);
     g_test_add_func("/gc/point_dup", test_point_dup_1);
     g_test_add_func("/gc/point_to_str", test_point_to_str_1);
     g_test_add_func("/gc/point_x", test_point_x_1);
@@ -3249,6 +3286,7 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/segment_new", test_segment_new_2);
     g_test_add_func("/gc/segment_release", test_segment_release_1);
     g_test_add_func("/gc/segment_equals", test_segment_equals_1);
+    g_test_add_func("/gc/segment_lt", test_segment_lt_1);
     g_test_add_func("/gc/segment_dup", test_segment_dup_1);
     g_test_add_func("/gc/segment_to_str", test_segment_to_str_1);
     g_test_add_func("/gc/segment_a", test_segment_a_1);

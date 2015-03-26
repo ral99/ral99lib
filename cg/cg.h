@@ -212,6 +212,9 @@ void point_release(CGPoint point);
 /* Return 1 if point1 is equal to point2. 0, otherwise. */
 int point_equals(CGPoint point1, CGPoint point2);
 
+/* Return 1 if point1 is lower than point2. 0, otherwise. */
+int point_lt(CGPoint point1, CGPoint point2);
+
 /* Return a copy of point. */
 CGPoint point_dup(CGPoint point);
 
@@ -303,6 +306,9 @@ void segment_release(CGSegment segment);
 
 /* Return 1 if segment1 is equal to segment2. 0, otherwise. */
 int segment_equals(CGSegment segment1, CGSegment segment2);
+
+/* Return 1 if segment1 is lower than segment2. 0, otherwise. */
+int segment_lt(CGSegment segment1, CGSegment segment2);
 
 /* Return a copy of segment. */
 CGSegment segment_dup(CGSegment segment);

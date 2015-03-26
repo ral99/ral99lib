@@ -251,6 +251,12 @@ int point_equals(CGPoint point1, CGPoint point2) {
             double_equals(point1->y * point2->w, point2->y * point1->w));
 }
 
+int point_lt(CGPoint point1, CGPoint point2) {
+    return (double_lt(point_x(point1), point_x(point2)) ||
+            (double_equals(point_x(point1), point_x(point2)) &&
+             double_lt(point_y(point1), point_y(point2)))) ? 1 : 0;
+}
+
 CGPoint point_dup(CGPoint point) {
     CGPoint dup = (CGPoint) memalloc(sizeof(*dup));
     dup->w = point->w;
@@ -534,6 +540,15 @@ int segment_equals(CGSegment segment1, CGSegment segment2) {
              point_equals(segment1->b, segment2->b)) ||
             (point_equals(segment1->a, segment2->b) &&
              point_equals(segment1->b, segment2->a))) ? 1 : 0;
+}
+
+int segment_lt(CGSegment segment1, CGSegment segment2) {
+    CGPoint minPoint1 = point_lt(segment1->a, segment1->b) ? segment1->a : segment1->b;
+    CGPoint maxPoint1 = point_lt(segment1->a, segment1->b) ? segment1->b : segment1->a;
+    CGPoint minPoint2 = point_lt(segment2->a, segment2->b) ? segment2->a : segment2->b;
+    CGPoint maxPoint2 = point_lt(segment2->a, segment2->b) ? segment2->b : segment2->a;
+    return (point_lt(minPoint1, minPoint2) ||
+            (point_equals(minPoint1, minPoint2) && point_lt(maxPoint1, maxPoint2))) ? 1 : 0;
 }
 
 CGSegment segment_dup(CGSegment segment) {
