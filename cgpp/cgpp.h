@@ -362,6 +362,7 @@ class Polygon {
 
         // Polygon comparison operator.
         bool operator==(const Polygon& other) const;
+        bool operator<(const Polygon& other) const;
 
         // Polygon translation operator.
         void operator+=(const Vector& vector);

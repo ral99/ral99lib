@@ -929,12 +929,34 @@ TEST(Polygon, AssignmentOperator) {
     EXPECT_EQ(Polygon::square(Point(0, 0), 1), polygon);
 }
 
-TEST(Polygon, ComparisonOperator) {
+TEST(Polygon, EqualsComparisonOperator) {
     EXPECT_EQ(Polygon::square(Point(0, 0), 1), Polygon::square(Point(0, 0), 1));
     EXPECT_FALSE(Polygon::square(Point(0, 0), 1) == Polygon::square(Point(0, 0), 2));
     EXPECT_FALSE(Polygon::square(Point(0, 0), 1) == Polygon::square(Point(0, 1), 1));
     EXPECT_FALSE(Polygon::square(Point(0, 0), 1) == Polygon::square(Point(1, 0), 1));
     EXPECT_FALSE(Polygon::square(Point(0, 0), 1) == Polygon::square(Point(1, 1), 1));
+}
+
+TEST(Polygon, LowerThanComparisonOperator) {
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 1) < Polygon::square(Point(0, 0), 1));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 1) < Polygon::square(Point(0, 1), 1));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 1) < Polygon::square(Point(1, 0), 1));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 1) < Polygon::square(Point(1, 1), 1));
+
+    EXPECT_FALSE(Polygon::square(Point(0, 1), 1) < Polygon::square(Point(0, 0), 1));
+    EXPECT_FALSE(Polygon::square(Point(0, 1), 1) < Polygon::square(Point(0, 1), 1));
+    EXPECT_TRUE(Polygon::square(Point(0, 1), 1) < Polygon::square(Point(1, 0), 1));
+    EXPECT_TRUE(Polygon::square(Point(0, 1), 1) < Polygon::square(Point(1, 1), 1));
+
+    EXPECT_FALSE(Polygon::square(Point(1, 0), 1) < Polygon::square(Point(0, 0), 1));
+    EXPECT_FALSE(Polygon::square(Point(1, 0), 1) < Polygon::square(Point(0, 1), 1));
+    EXPECT_FALSE(Polygon::square(Point(1, 0), 1) < Polygon::square(Point(1, 0), 1));
+    EXPECT_TRUE(Polygon::square(Point(1, 0), 1) < Polygon::square(Point(1, 1), 1));
+
+    EXPECT_FALSE(Polygon::square(Point(1, 1), 1) < Polygon::square(Point(0, 0), 1));
+    EXPECT_FALSE(Polygon::square(Point(1, 1), 1) < Polygon::square(Point(0, 1), 1));
+    EXPECT_FALSE(Polygon::square(Point(1, 1), 1) < Polygon::square(Point(1, 0), 1));
+    EXPECT_FALSE(Polygon::square(Point(1, 1), 1) < Polygon::square(Point(1, 1), 1));
 }
 
 TEST(Polygon, VectorSumOperator) {

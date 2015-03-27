@@ -581,6 +581,10 @@ bool Polygon::operator==(const Polygon& other) const {
     return (polygon_equals(_polygon, other._polygon)) ? true : false;
 }
 
+bool Polygon::operator<(const Polygon& other) const {
+    return (polygon_lt(_polygon, other._polygon)) ? true : false;
+}
+
 void Polygon::operator+=(const Vector& vector) {
     polygon_translate(_polygon, vector._vector);
 }
