@@ -835,6 +835,26 @@ int polygon_equals(CGPolygon polygon1, CGPolygon polygon2) {
     return 1;
 }
 
+int polygon_lt(CGPolygon polygon1, CGPolygon polygon2) {
+    ADTList vertices1 = polygon_vertices(polygon1);
+    ADTList vertices2 = polygon_vertices(polygon2);
+    CGPoint min1, min2;
+    for (ADTListItem it = list_head(vertices1); it; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        if (it == list_head(vertices1) || point_lt(vertex, min1))
+            min1 = vertex;
+    }
+    for (ADTListItem it = list_head(vertices2); it; it = list_next(it)) {
+        CGPoint vertex = (CGPoint) list_value(it);
+        if (it == list_head(vertices2) || point_lt(vertex, min2))
+            min2 = vertex;
+    }
+    int lt = point_lt(min1, min2);
+    list_full_release(vertices1, (void (*)(void *)) point_release);
+    list_full_release(vertices2, (void (*)(void *)) point_release);
+    return lt;
+}
+
 CGPolygon polygon_dup(CGPolygon polygon) {
     CGPolygon dup = (CGPolygon) memalloc(sizeof(*dup));
     dup->vertices = list_new();

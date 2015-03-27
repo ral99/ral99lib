@@ -399,6 +399,9 @@ void polygon_release(CGPolygon polygon);
 /* Return 1 if polygon1 is equal to polygon2. 0, otherwise. */
 int polygon_equals(CGPolygon polygon1, CGPolygon polygon2);
 
+/* Return 1 if polygon1 is lower than polygon2. 0, otherwise. */
+int polygon_lt(CGPolygon polygon1, CGPolygon polygon2);
+
 /* Return a copy of polygon. */
 CGPolygon polygon_dup(CGPolygon polygon);
 
