@@ -350,6 +350,9 @@ double point_distance_to_triangle(CGPoint point, CGTriangle triangle) {
     double dist = double_min(point_distance_to_segment(point, segment1),
                              double_min(point_distance_to_segment(point, segment2),
                                         point_distance_to_segment(point, segment3)));
+    segment_release(segment1);
+    segment_release(segment2);
+    segment_release(segment3);
     return (!point_is_in_triangle(point, triangle)) ? dist : -dist;
 }
 
