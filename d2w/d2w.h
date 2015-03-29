@@ -159,10 +159,11 @@ class Body {
         std::set<Body*> contactingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const;
 
         // Return a set of pairs of ids of polygons of this and another contacting body.
-        //std::set<std::pair<std::string, std::string>> contactWith(const Body& other);
+        std::set<std::pair<std::string, std::string>> contactWith(const Body& other);
 
-        // Return a set of ids of polygons of another body in contact with the specified polygon of this body.
-        //std::set<std::string> contactWith(const std::string& polygonId, const Body& other);
+        // Return a set of ids of polygons of another body in contact with the specified polygon of this body or raise an exception if
+        // if is invalid.
+        std::set<std::string> contactWith(const std::string& polygonId, const Body& other);
 };
 
 class World {

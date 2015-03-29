@@ -648,66 +648,50 @@ TEST_F(D2WTest, BodyContactingDynamicTaggedBodies) {
     EXPECT_ANY_THROW(body->contactingDynamicTaggedBodies("triangle", "consonant"));
 }
 
-/*
-TEST(Body, ContactWithBody) {
-    std::set<std::string> polygonContact;
-    std::set<std::pair<std::string, std::string>> contact;
-    World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 1);
-    Body *body = world->createBody(Point(0, 0));
+TEST_F(D2WTest, BodyContactWithBody) {
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     body->addPolygon("square", Polygon::square(Point(5, 0), 1));
 
-    Body *bodyA = world->createBody(Point(0, 0));
+    Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyA->addPolygon("triangle", Polygon::triangle(Point(0, 1), Point(1, 0), Point(0, 0)));
     bodyA->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
-    contact = body->contactWith(*bodyA);
+    std::set<std::pair<std::string, std::string>> contact = body->contactWith(*bodyA);
     EXPECT_EQ(1, contact.size());
     EXPECT_NE(contact.end(), contact.find(std::make_pair("rectangle", "rectangle")));
-    polygonContact = body->contactWith("rectangle", *bodyA);
+    std::set<std::string> polygonContact = body->contactWith("rectangle", *bodyA);
     EXPECT_EQ(1, polygonContact.size());
     EXPECT_NE(polygonContact.end(), polygonContact.find("rectangle"));
     polygonContact = body->contactWith("square", *bodyA);
     EXPECT_EQ(0, polygonContact.size());
+    EXPECT_ANY_THROW(body->contactWith("triangle", *bodyA));
 
-    Body *bodyB = world->createBody(Point(0, 0));
-    bodyB->addPolygon("triangle", Polygon::triangle(Point(5, 0), Point(5, 1), Point(6, 0)));
-    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
-    contact = body->collisionWith(*bodyB);
-    EXPECT_EQ(1, contact.size());
-    EXPECT_NE(contact.end(), contact.find(std::make_pair("rectangle", "rectangle")));
-    polygonContact = body->collisionWith("rectangle", *bodyB);
-    EXPECT_EQ(1, polygonContact.size());
-    EXPECT_NE(polygonContact.end(), polygonContact.find("rectangle"));
-    polygonContact = body->collisionWith("square", *bodyB);
-    EXPECT_EQ(0, polygonContact.size());
-
-    Body *bodyC = world->createBody(Point(0, 0));
-    bodyC->addPolygon("triangle", Polygon::triangle(Point(4, 0), Point(4, 1), Point(5, 0)));
-    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
-    contact = body->collisionWith(*bodyC);
+    Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyB->addPolygon("triangle", Polygon::triangle(Point(1, 0), Point(2, 0), Point(1, 1)));
+    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(3, 0), 2, 1));
+    contact = body->contactWith(*bodyB);
     EXPECT_EQ(2, contact.size());
-    EXPECT_NE(contact.end(), contact.find(std::make_pair("rectangle", "rectangle")));
-    EXPECT_NE(contact.end(), contact.find(std::make_pair("square", "triangle")));
-    polygonContact = body->collisionWith("rectangle", *bodyC);
-    EXPECT_EQ(1, polygonContact.size());
-    EXPECT_NE(polygonContact.end(), polygonContact.find("rectangle"));
-    polygonContact = body->collisionWith("square", *bodyC);
+    EXPECT_NE(contact.end(), contact.find(std::make_pair("rectangle", "triangle")));
+    EXPECT_NE(contact.end(), contact.find(std::make_pair("square", "rectangle")));
+    polygonContact = body->contactWith("rectangle", *bodyB);
     EXPECT_EQ(1, polygonContact.size());
     EXPECT_NE(polygonContact.end(), polygonContact.find("triangle"));
+    polygonContact = body->contactWith("square", *bodyB);
+    EXPECT_EQ(1, polygonContact.size());
+    EXPECT_NE(polygonContact.end(), polygonContact.find("rectangle"));
+    EXPECT_ANY_THROW(body->contactWith("triangle", *bodyB));
 
-    Body *bodyD = world->createBody(Point(0, 0));
-    bodyD->addPolygon("triangle", Polygon::triangle(Point(5, 0), Point(5, 1), Point(6, 0)));
-    bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 2, 1));
-    contact = body->collisionWith(*bodyD);
+    Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyC->addPolygon("triangle", Polygon::triangle(Point(2, 0), Point(3, 0), Point(2, 1)));
+    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(3, 0), 1, 2));
+    contact = body->contactWith(*bodyC);
     EXPECT_EQ(0, contact.size());
-    polygonContact = body->collisionWith("rectangle", *bodyD);
+    polygonContact = body->contactWith("rectangle", *bodyC);
     EXPECT_EQ(0, polygonContact.size());
-    polygonContact = body->collisionWith("square", *bodyD);
+    polygonContact = body->contactWith("square", *bodyC);
     EXPECT_EQ(0, polygonContact.size());
-
-    delete world;
+    EXPECT_ANY_THROW(body->contactWith("triangle", *bodyC));
 }
-*/
 
 // ::: World :::
 

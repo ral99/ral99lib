@@ -374,17 +374,25 @@ std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& polygonId
     return contactingDynamicTaggedBodies;
 }
 
-/*
 std::set<std::pair<std::string, std::string>> Body::contactWith(const Body& other) {
-    // TODO
-    return std::set<std::pair<std::string, std::string>>();
+    std::set<std::pair<std::string, std::string>> contact;
+    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
+        for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
+            if (it->second.isInContactWith(jt->second))
+                contact.insert(std::make_pair(it->first, jt->first));
+    return contact;
 }
 
 std::set<std::string> Body::contactWith(const std::string& polygonId, const Body& other) {
-    // TODO
-    return std::set<std::string>();
+    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
+    if (it == _polygons.end())
+        throw std::invalid_argument("Polygon id is invalid.");
+    std::set<std::string> contact;
+    for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
+        if (it->second.isInContactWith(jt->second))
+            contact.insert(jt->first);
+    return contact;
 }
-*/
 
 // ::: World :::
 
