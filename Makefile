@@ -18,6 +18,7 @@ STR_PATH							= str/str
 CG_PATH								= cg/cg
 COLLISION_PATH						= cg/collision/collision
 CGPP_PATH							= cgpp/cgpp
+D2W_PATH							= d2w/d2w
 ADDRESS_PATH						= net/address/address
 MESSAGE_PATH						= net/message/message
 SOCK_PATH							= net/sock/sock
@@ -70,6 +71,7 @@ CPPHEADERS	= $(MEM_PATH).h \
 			  $(CG_PATH).h \
 			  $(COLLISION_PATH).h \
 			  $(CGPP_PATH).h \
+			  $(D2W_PATH).h \
 
 CPPFILES	= $(MEM_PATH).c \
 			  $(NUM_PATH).c \
@@ -79,6 +81,7 @@ CPPFILES	= $(MEM_PATH).c \
 			  $(CG_PATH).c \
 			  $(COLLISION_PATH).c \
 			  $(CGPP_PATH).cpp \
+			  $(D2W_PATH).cpp \
 
 TESTS		= $(MEM_PATH)_test \
 			  $(NUM_PATH)_test \
@@ -88,6 +91,7 @@ TESTS		= $(MEM_PATH)_test \
 			  $(CG_PATH)_test \
 			  $(COLLISION_PATH)_test \
 			  $(CGPP_PATH)_test \
+			  $(D2W_PATH)_test \
 			  $(ADDRESS_PATH)_test \
 			  $(MESSAGE_PATH)_test \
 			  $(SOCK_PATH)_test \
@@ -128,6 +132,9 @@ $(COLLISION_PATH)_test: $(COLLISION_PATH)_test.c $(CFILES) $(CHEADERS)
 	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
 
 $(CGPP_PATH)_test: $(CGPP_PATH)_test.cpp $(CPPFILES) $(CPPHEADERS)
+	$(GPP) $(CPPFLAGS) $(GTEST_FLAGS) -o $@ $< $(CPPFILES) $(GTEST_LIB) $(LDFLAGS)
+
+$(D2W_PATH)_test: $(D2W_PATH)_test.cpp $(CPPFILES) $(CPPHEADERS)
 	$(GPP) $(CPPFLAGS) $(GTEST_FLAGS) -o $@ $< $(CPPFILES) $(GTEST_LIB) $(LDFLAGS)
 
 $(ADDRESS_PATH)_test: $(ADDRESS_PATH)_test.c $(CFILES) $(CHEADERS)
