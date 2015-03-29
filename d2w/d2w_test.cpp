@@ -860,7 +860,7 @@ TEST_F(D2WTest, WorldBodiesOnWindow) {
     body4->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *body5 = world->createBody(Point(4, 4), Angle::radians(0), true);
     body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
-    Body *emptyBody = world->createBody(Point(1, 1), Angle::radians(0), true);
+    world->createBody(Point(1, 1), Angle::radians(0), true);
     std::set<Body*> bodiesOnWindow = world->bodiesOnWindow();
     EXPECT_EQ(3, bodiesOnWindow.size());
     EXPECT_NE(bodiesOnWindow.end(), bodiesOnWindow.find(body1));
