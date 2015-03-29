@@ -602,40 +602,53 @@ TEST_F(D2WTest, BodyContactingDynamicBodies) {
     EXPECT_ANY_THROW(body->contactingDynamicBodies("triangle"));
 }
 
-/*
-TEST(Body, ContactingTaggedBodies) {
-    std::set<Body*> bodies;
-    World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 1);
-    Body *body = world->createBody(Point(0, 0));
+TEST_F(D2WTest, BodyContactingDynamicTaggedBodies) {
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     body->addPolygon("square", Polygon::square(Point(5, 0), 1));
-    Body *bodyA = world->createBody(Point(0, 0));
-    bodyA->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
-    Body *bodyB = world->createBody(Point(0, 0));
-    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(0, 1), 1, 2));
-    Body *bodyC = world->createBody(Point(0, 0));
-    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
-    Body *bodyD = world->createBody(Point(0, 0));
-    bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 2, 1));
-    Body *bodyE = world->createBody(Point(0, 0));
-    bodyE->addPolygon("rectangle", Polygon::rectangle(Point(5, 0), 1, 2));
-    bodyA->addTag("tag");
-    bodyC->addTag("tag");
+    Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), false);
+    bodyA->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
+    bodyA->addTag("vowel");
+    Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
+    bodyB->addTag("consonant");
+    Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
+    bodyC->addTag("consonant");
+    Body *bodyD = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 1), 2, 1));
+    bodyD->addTag("consonant");
+    Body *bodyE = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyE->addPolygon("rectangle", Polygon::rectangle(Point(3, 0), 2, 1));
+    bodyE->addTag("vowel");
 
-    bodies = body->contactingTaggedBodies("tag");
+    std::set<Body*> bodies = body->contactingDynamicTaggedBodies("consonant");
     EXPECT_EQ(1, bodies.size());
-    EXPECT_NE(bodies.end(), bodies.find(bodyC));
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
 
-    bodies = body->contactingTaggedBodies("rectangle", "tag");
+    bodies = body->contactingDynamicTaggedBodies("vowel");
     EXPECT_EQ(1, bodies.size());
-    EXPECT_NE(bodies.end(), bodies.find(bodyC));
+    EXPECT_NE(bodies.end(), bodies.find(bodyE));
 
-    bodies = body->contactingTaggedBodies("square", "tag");
+    bodies = body->contactingDynamicTaggedBodies("rectangle", "consonant");
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+
+    bodies = body->contactingDynamicTaggedBodies("rectangle", "vowel");
     EXPECT_EQ(0, bodies.size());
 
-    delete world;
+    bodies = body->contactingDynamicTaggedBodies("square", "consonant");
+    EXPECT_EQ(0, bodies.size());
+
+    bodies = body->contactingDynamicTaggedBodies("square", "vowel");
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyE));
+
+    EXPECT_ANY_THROW(body->contactingDynamicTaggedBodies("triangle", "vowel"));
+    EXPECT_ANY_THROW(body->contactingDynamicTaggedBodies("triangle", "consonant"));
 }
 
+/*
 TEST(Body, ContactWithBody) {
     std::set<std::string> polygonContact;
     std::set<std::pair<std::string, std::string>> contact;
