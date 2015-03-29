@@ -314,12 +314,25 @@ std::set<std::string> Body::collisionWith(const std::string& polygonId, const Bo
     return collision;
 }
 
-/*
 bool Body::isInContactWith(const Body& other) {
-    // TODO
-    return true;
+    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
+        for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
+            if (it->second.isInContactWith(jt->second))
+                return true;
+    return false;
 }
 
+bool Body::isInContactWith(const std::string& polygonId, const Body& other) const {
+    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
+    if (it == _polygons.end())
+        throw std::invalid_argument("Polygon id is invalid.");
+    for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
+        if (it->second.isInContactWith(jt->second))
+            return true;
+    return false;
+}
+
+/*
 std::set<Body*> Body::contactingBodies() const {
     // TODO
     return std::set<Body*>();

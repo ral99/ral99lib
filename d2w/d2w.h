@@ -140,7 +140,11 @@ class Body {
         std::set<std::string> collisionWith(const std::string& polygonId, const Body& other) const;
 
         // Return true if this body is in contact with another body. false, otherwise.
-        //bool isInContactWith(const Body& other);
+        bool isInContactWith(const Body& other);
+
+        // Return true if the specified polygon of this body is in contact with another body or raise an exception if id is invalid.
+        // false, otherwise.
+        bool isInContactWith(const std::string& polygonId, const Body& other) const;
 
         // Return dynamic bodies in contact with this body.
         //std::set<Body*> contactingDynamicBodies() const;

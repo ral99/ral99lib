@@ -537,31 +537,41 @@ TEST_F(D2WTest, BodyCollisionWithBody) {
     EXPECT_ANY_THROW(body->collisionWith("triangle", *bodyD));
 }
 
-/*
-TEST(Body, IsInContactWithPolygon) {
-    World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 1);
-    Body *body = world->createBody(Point(0, 0));
+TEST_F(D2WTest, BodyIsInContactWithPolygon) {
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
+    body->addPolygon("square", Polygon::square(Point(5, 0), 1));
 
-    Body *bodyA = world->createBody(Point(0, 0));
+    Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyA->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     EXPECT_FALSE(body->isInContactWith(*bodyA));
+    EXPECT_FALSE(body->isInContactWith("rectangle", *bodyA));
+    EXPECT_FALSE(body->isInContactWith("square", *bodyA));
+    EXPECT_ANY_THROW(body->isInContactWith("triangle", *bodyA));
 
-    Body *bodyB = world->createBody(Point(0, 0));
-    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(0, 1), 1, 2));
+    Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(2, 0), 2, 1));
     EXPECT_FALSE(body->isInContactWith(*bodyB));
+    EXPECT_FALSE(body->isInContactWith("rectangle", *bodyB));
+    EXPECT_FALSE(body->isInContactWith("square", *bodyB));
+    EXPECT_ANY_THROW(body->isInContactWith("triangle", *bodyB));
 
-    Body *bodyC = world->createBody(Point(0, 0));
-    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
+    Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 4, 1));
     EXPECT_TRUE(body->isInContactWith(*bodyC));
+    EXPECT_TRUE(body->isInContactWith("rectangle", *bodyC));
+    EXPECT_TRUE(body->isInContactWith("square", *bodyC));
+    EXPECT_ANY_THROW(body->isInContactWith("triangle", *bodyC));
 
-    Body *bodyD = world->createBody(Point(0, 0));
-    bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 2, 1));
-    EXPECT_FALSE(body->isInContactWith(*bodyD));
-
-    delete world;
+    Body *bodyD = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 5, 1));
+    EXPECT_TRUE(body->isInContactWith(*bodyD));
+    EXPECT_FALSE(body->isInContactWith("rectangle", *bodyD));
+    EXPECT_TRUE(body->isInContactWith("square", *bodyD));
+    EXPECT_ANY_THROW(body->isInContactWith("triangle", *bodyD));
 }
 
+/*
 TEST(Body, ContactingBodies) {
     std::set<Body*> bodies;
     World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 1);
