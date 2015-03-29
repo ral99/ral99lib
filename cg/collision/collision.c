@@ -56,19 +56,25 @@ int polygon_is_in_contact_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
     ADTList axes2 = polygon_perpendicular_axes(polygon2);
     list_extend(axes, axes1);
     list_extend(axes, axes2);
-    int is_in_contact = 0;
-    for (ADTListItem it = list_head(axes); it && !is_in_contact; it = list_next(it)) {
+    int is_in_contact = 1;
+    for (ADTListItem it = list_head(axes); it && is_in_contact; it = list_next(it)) {
         CGVector axis = (CGVector) list_value(it);
+        if (double_lt(polygon_max_projection_on_axis(polygon1, axis) -
+                      polygon_min_projection_on_axis(polygon2, axis), 0))
+            is_in_contact = 0;
+        if (double_gt(polygon_min_projection_on_axis(polygon1, axis) -
+                      polygon_max_projection_on_axis(polygon2, axis), 0))
+            is_in_contact = 0;
         if (double_equals(polygon_max_projection_on_axis(polygon1, axis),
                           polygon_min_projection_on_axis(polygon2, axis)) ||
             double_equals(polygon_min_projection_on_axis(polygon1, axis),
                           polygon_max_projection_on_axis(polygon2, axis)))
-            is_in_contact = 1;
+            is_in_contact = 2;
     }
     list_release(axes);
     list_full_release(axes1, (void (*)(void *)) vector_release);
     list_full_release(axes2, (void (*)(void *)) vector_release);
-    return is_in_contact;
+    return (is_in_contact == 2) ? 1 : 0;
 }
 
 int polygon_is_colliding_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
