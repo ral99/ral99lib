@@ -571,38 +571,38 @@ TEST_F(D2WTest, BodyIsInContactWithPolygon) {
     EXPECT_ANY_THROW(body->isInContactWith("triangle", *bodyD));
 }
 
-/*
-TEST(Body, ContactingBodies) {
-    std::set<Body*> bodies;
-    World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 1);
-    Body *body = world->createBody(Point(0, 0));
+TEST_F(D2WTest, BodyContactingDynamicBodies) {
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     body->addPolygon("square", Polygon::square(Point(5, 0), 1));
-    Body *bodyA = world->createBody(Point(0, 0));
-    bodyA->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
-    Body *bodyB = world->createBody(Point(0, 0));
-    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(0, 1), 1, 2));
-    Body *bodyC = world->createBody(Point(0, 0));
-    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
-    Body *bodyD = world->createBody(Point(0, 0));
+    Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), false);
+    bodyA->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
+    Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyB->addPolygon("rectangle", Polygon::rectangle(Point(0, 2), 1, 2));
+    Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyC->addPolygon("rectangle", Polygon::rectangle(Point(3, 0), 2, 1));
+    Body *bodyD = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 2, 1));
-    Body *bodyE = world->createBody(Point(0, 0));
+    Body *bodyE = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyE->addPolygon("rectangle", Polygon::rectangle(Point(5, 0), 1, 2));
 
-    bodies = body->contactingBodies();
+    std::set<Body*> bodies = body->contactingDynamicBodies();
+    EXPECT_EQ(2, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyC));
+
+    bodies = body->contactingDynamicBodies("rectangle");
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+
+    bodies = body->contactingDynamicBodies("square");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyC));
 
-    bodies = body->contactingBodies("rectangle");
-    EXPECT_EQ(1, bodies.size());
-    EXPECT_NE(bodies.end(), bodies.find(bodyC));
-
-    bodies = body->contactingBodies("square");
-    EXPECT_EQ(0, bodies.size());
-
-    delete world;
+    EXPECT_ANY_THROW(body->contactingDynamicBodies("triangle"));
 }
 
+/*
 TEST(Body, ContactingTaggedBodies) {
     std::set<Body*> bodies;
     World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 1);

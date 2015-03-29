@@ -314,7 +314,7 @@ std::set<std::string> Body::collisionWith(const std::string& polygonId, const Bo
     return collision;
 }
 
-bool Body::isInContactWith(const Body& other) {
+bool Body::isInContactWith(const Body& other) const {
     for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
         for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
             if (it->second.isInContactWith(jt->second))
@@ -332,17 +332,28 @@ bool Body::isInContactWith(const std::string& polygonId, const Body& other) cons
     return false;
 }
 
+std::set<Body*> Body::contactingDynamicBodies() const {
+    std::set<Body*> contactingDynamicBodies;
+    std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
+    for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
+        if (isInContactWith(**it))
+            contactingDynamicBodies.insert(*it);
+    return contactingDynamicBodies;
+}
+
+std::set<Body*> Body::contactingDynamicBodies(const std::string& polygonId) const {
+    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
+    if (it == _polygons.end())
+        throw std::invalid_argument("Polygon id is invalid.");
+    std::set<Body*> contactingDynamicBodies;
+    std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
+    for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
+        if (isInContactWith(polygonId, **it))
+            contactingDynamicBodies.insert(*it);
+    return contactingDynamicBodies;
+}
+
 /*
-std::set<Body*> Body::contactingBodies() const {
-    // TODO
-    return std::set<Body*>();
-}
-
-std::set<Body*> Body::contactingBodies(const std::string& polygonId) const {
-    // TODO
-    return std::set<Body*>();
-}
-
 std::set<Body*> Body::contactingTaggedBodies(const std::string& tag) const {
     // TODO
     return std::set<Body*>();
