@@ -785,7 +785,7 @@ TEST_F(D2WTest, WorldCreateBody) {
     EXPECT_EQ(Angle::radians(0), emptyBody->rotation());
     EXPECT_TRUE(emptyBody->isDynamic());
     std::set<Body*> bodies = world->bodies();
-    EXPECT_EQ(0, bodies.size());
+    EXPECT_EQ(1, bodies.size());
 
     Body *body = world->createBody(Point(1, 1), Angle::radians(M_PI), false);
     body->addPolygon("square", Polygon::square(Point(0, 0), 1));
@@ -793,7 +793,7 @@ TEST_F(D2WTest, WorldCreateBody) {
     EXPECT_EQ(Angle::radians(M_PI), body->rotation());
     EXPECT_FALSE(body->isDynamic());
     bodies = world->bodies();
-    EXPECT_EQ(1, bodies.size());
+    EXPECT_EQ(2, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(body));
 }
 
@@ -835,11 +835,13 @@ TEST_F(D2WTest, WorldBodies) {
     bodyB->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyC->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *emptyBody = world->createBody(Point(0, 0), Angle::radians(0), true);
     std::set<Body*> bodies = world->bodies();
-    EXPECT_EQ(3, bodies.size());
+    EXPECT_EQ(4, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyA));
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
     EXPECT_NE(bodies.end(), bodies.find(bodyC));
+    EXPECT_NE(bodies.end(), bodies.find(emptyBody));
 }
 
 TEST_F(D2WTest, WorldBodiesOnWindow) {
@@ -858,6 +860,7 @@ TEST_F(D2WTest, WorldBodiesOnWindow) {
     body4->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *body5 = world->createBody(Point(4, 4), Angle::radians(0), true);
     body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *emptyBody = world->createBody(Point(1, 1), Angle::radians(0), true);
     std::set<Body*> bodiesOnWindow = world->bodiesOnWindow();
     EXPECT_EQ(3, bodiesOnWindow.size());
     EXPECT_NE(bodiesOnWindow.end(), bodiesOnWindow.find(body1));
@@ -875,10 +878,17 @@ TEST_F(D2WTest, WorldTaggedBodies) {
     Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyC->addTag("consonant");
     bodyC->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *emptyBody = world->createBody(Point(0, 0), Angle::radians(0), true);
+    emptyBody->addTag("empty");
+    
     std::set<Body*> taggedBodies = world->taggedBodies("consonant");
     EXPECT_EQ(2, taggedBodies.size());
     EXPECT_NE(taggedBodies.end(), taggedBodies.find(bodyB));
     EXPECT_NE(taggedBodies.end(), taggedBodies.find(bodyC));
+
+    taggedBodies = world->taggedBodies("empty");
+    EXPECT_EQ(1, taggedBodies.size());
+    EXPECT_NE(taggedBodies.end(), taggedBodies.find(emptyBody));
 }
 
 TEST_F(D2WTest, WorldTaggedBodiesOnWindow) {

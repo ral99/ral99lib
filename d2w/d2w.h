@@ -175,6 +175,7 @@ class World {
         Angle *_windowRotation;
         double _windowWidth;
         double _windowHeight;
+        std::set<Body*> _bodies;
         std::map<std::pair<int, int>, std::set<Body*>> _bodyIndex;
         int _bodyIndexRange;
 

@@ -94,7 +94,6 @@ void Body::removePolygon(const std::string& polygonId) {
 void Body::clearPolygons() {
     _world->removeBodyFromIndex(*this);
     _polygons.clear();
-    _world->addBodyToIndex(*this);
 }
 
 Polygon Body::polygon(const std::string& polygonId) const {
@@ -494,11 +493,13 @@ Body* World::createBody(const Point& center, const Angle& rotation, const bool i
     body->_center = new Point(center);
     body->_rotation = new Angle(rotation);
     body->_dynamic = isDynamic;
+    _bodies.insert(body);
     return body;
 }
 
 void World::removeBody(Body& body) {
     removeBodyFromIndex(body);
+    _bodies.erase(&body);
     delete &body;
 }
 
@@ -509,18 +510,14 @@ void World::removeTaggedBodies(const std::string& tag) {
 }
 
 void World::clearBodies() {
-    std::set<Body*> bodies = this->bodies();
-    for (std::set<Body*>::iterator it = bodies.begin(); it != bodies.end(); it++)
+    for (std::set<Body*>::iterator it = _bodies.begin(); it != _bodies.end(); it++)
         delete *it;
+    _bodies.clear();
     _bodyIndex.clear();
 }
 
 std::set<Body*> World::bodies() const {
-    std::set<Body*> bodies;
-    for (std::map<std::pair<int, int>, std::set<Body*>>::const_iterator it = _bodyIndex.begin(); it != _bodyIndex.end(); it++)
-        for (std::set<Body*>::iterator jt = it->second.begin(); jt != it->second.end(); jt++)
-            bodies.insert(*jt);
-    return bodies;
+    return _bodies;
 }
 
 std::set<Body*> World::bodiesOnWindow() const {
@@ -554,10 +551,9 @@ std::set<Body*> World::bodiesOnWindow() const {
 
 std::set<Body*> World::taggedBodies(const std::string& tag) const {
     std::set<Body*> taggedBodies;
-    for (std::map<std::pair<int, int>, std::set<Body*>>::const_iterator it = _bodyIndex.begin(); it != _bodyIndex.end(); it++)
-        for (std::set<Body*>::iterator jt = it->second.begin(); jt != it->second.end(); jt++)
-            if ((*jt)->hasTag(tag))
-                taggedBodies.insert(*jt);
+    for (std::set<Body*>::const_iterator it = _bodies.begin(); it != _bodies.end(); it++)
+        if ((*it)->hasTag(tag))
+            taggedBodies.insert(*it);
     return taggedBodies;
 }
 
