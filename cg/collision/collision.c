@@ -168,10 +168,12 @@ CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVect
                 if (point_is_in_segment(intersection, edge)) {
                     CGVector tv = vector_from_point_to_point(vertex, intersection);
                     CGAngle angle = vector_angle_to(axis, tv);
-                    if (angle != NULL && double_equals(angle_in_radians(angle), 0) &&
-                        double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
-                        vector_release(mtv);
-                        mtv = vector_dup(tv);
+                    if (angle != NULL) {
+                        if (double_equals(angle_in_radians(angle), 0) &&
+                            double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
+                            vector_release(mtv);
+                            mtv = vector_dup(tv);
+                        }
                         angle_release(angle);
                     }
                     vector_release(tv);
@@ -197,16 +199,20 @@ CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVect
                 CGAngle angle1 = vector_angle_to(axis, tv1);
                 CGVector tv2 = vector_from_point_to_point(vertex, edge->b);
                 CGAngle angle2 = vector_angle_to(axis, tv2);
-                if (angle1 != NULL && double_equals(angle_in_radians(angle1), M_PI) &&
-                    double_gt(vector_magnitude(tv1), vector_magnitude(mtv))) {
-                    vector_release(mtv);
-                    mtv = vector_dup(tv1);
+                if (angle1 != NULL) {
+                    if (double_equals(angle_in_radians(angle1), M_PI) &&
+                        double_gt(vector_magnitude(tv1), vector_magnitude(mtv))) {
+                        vector_release(mtv);
+                        mtv = vector_dup(tv1);
+                    }
                     angle_release(angle1);
                 }
-                if (angle2 != NULL && double_equals(angle_in_radians(angle2), M_PI) &&
-                    double_gt(vector_magnitude(tv2), vector_magnitude(mtv))) {
-                    vector_release(mtv);
-                    mtv = vector_dup(tv2);
+                if (angle2 != NULL) {
+                    if (double_equals(angle_in_radians(angle2), M_PI) &&
+                        double_gt(vector_magnitude(tv2), vector_magnitude(mtv))) {
+                        vector_release(mtv);
+                        mtv = vector_dup(tv2);
+                    }
                     angle_release(angle2);
                 }
                 vector_release(tv1);
@@ -216,10 +222,12 @@ CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVect
                 if (point_is_in_segment(intersection, edge)) {
                     CGVector tv = vector_from_point_to_point(vertex, intersection);
                     CGAngle angle = vector_angle_to(axis, tv);
-                    if (angle != NULL && double_equals(angle_in_radians(angle), M_PI) &&
-                        double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
-                        vector_release(mtv);
-                        mtv = vector_dup(tv);
+                    if (angle != NULL) {
+                        if (double_equals(angle_in_radians(angle), M_PI) &&
+                            double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
+                            vector_release(mtv);
+                            mtv = vector_dup(tv);
+                        }
                         angle_release(angle);
                     }
                     vector_release(tv);
