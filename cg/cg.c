@@ -194,7 +194,6 @@ double vector_dot(CGVector vector1, CGVector vector2) {
 }
 
 CGAngle vector_angle_to(CGVector vector1, CGVector vector2) {
-    CGAngle angle;
     double dot = vector_dot(vector1, vector2);
     double magnitude1 = vector_magnitude(vector1);
     double magnitude2 = vector_magnitude(vector2);
@@ -207,10 +206,8 @@ CGAngle vector_angle_to(CGVector vector1, CGVector vector2) {
     vector_normalize(vector1_dup);
     vector_normalize(vector2_dup);
     vector_rotate(vector1_dup, angle_between);
-    if (vector_equals(vector1_dup, vector2_dup))
-        angle = angle_dup(angle_between);
-    else
-        angle = angle_dup(replementary_angle);
+    CGAngle angle = (vector_equals(vector1_dup, vector2_dup))
+                    ? angle_dup(angle_between) : angle_dup(replementary_angle);
     angle_release(angle_between);
     angle_release(replementary_angle);
     vector_release(vector1_dup);
