@@ -7,8 +7,6 @@
 
 #include "cgpp/cgpp.h"
 
-using namespace CG;
-
 namespace D2W {
 
 class Body;
@@ -19,10 +17,10 @@ class Body {
 
     private:
         World *_world;
-        Point *_center;
-        Angle *_rotation;
+        CG::Point *_center;
+        CG::Angle *_rotation;
         bool _dynamic;
-        std::map<std::string, Polygon> _polygons;
+        std::map<std::string, CG::Polygon> _polygons;
         std::set<std::string> _tags;
 
         // Constructor and destructor.
@@ -35,29 +33,29 @@ class Body {
 
     public:
         // Body translation operator.
-        void operator+=(const Vector& vector);
-        void operator-=(const Vector& vector);
+        void operator+=(const CG::Vector& vector);
+        void operator-=(const CG::Vector& vector);
 
         // Body rotation around its center.
-        void operator%=(const Angle& angle);
+        void operator%=(const CG::Angle& angle);
 
         // Set body center.
-        void setCenter(const Point& center);
+        void setCenter(const CG::Point& center);
 
         // Return body center.
-        Point center() const;
+        CG::Point center() const;
 
         // Return body center on world window coordinates system.
-        Point centerOnWindowCoordinates() const;
+        CG::Point centerOnWindowCoordinates() const;
 
         // Set body rotation.
-        void setRotation(const Angle& rotation);
+        void setRotation(const CG::Angle& rotation);
 
         // Return body rotation.
-        Angle rotation() const;
+        CG::Angle rotation() const;
 
         // Return body rotation on world window coordinates system.
-        Angle rotationOnWindowCoordinates() const;
+        CG::Angle rotationOnWindowCoordinates() const;
 
         // Set body dynamic mode.
         void setIsDynamic(const bool isDynamic);
@@ -66,7 +64,7 @@ class Body {
         bool isDynamic() const;
 
         // Add or replace polygon identified by a string to body.
-        void addPolygon(const std::string& polygonId, const Polygon& polygon);
+        void addPolygon(const std::string& polygonId, const CG::Polygon& polygon);
 
         // Remove the specified polygon from body or raise an exception if id is invalid.
         void removePolygon(const std::string& polygonId);
@@ -75,16 +73,16 @@ class Body {
         void clearPolygons();
 
         // Return the specified polygon of this body or raise an exception if id is invalid.
-        Polygon polygon(const std::string& polygonId) const;
+        CG::Polygon polygon(const std::string& polygonId) const;
 
         // Return the specified polygon of this body on world window coordinates system or raise an exception if id is invalid.
-        Polygon polygonOnWindowCoordinates(const std::string& polygonId) const;
+        CG::Polygon polygonOnWindowCoordinates(const std::string& polygonId) const;
 
         // Return body polygons.
-        std::set<Polygon> polygons() const;
+        std::set<CG::Polygon> polygons() const;
 
         // Return body polygons on world window coordinates system.
-        std::set<Polygon> polygonsOnWindowCoordinates() const;
+        std::set<CG::Polygon> polygonsOnWindowCoordinates() const;
 
         // Add tag to body.
         void addTag(const std::string& tag);
@@ -171,8 +169,8 @@ class World {
 
     private:
         static World *_instance;
-        Point *_windowCenter;
-        Angle *_windowRotation;
+        CG::Point *_windowCenter;
+        CG::Angle *_windowRotation;
         double _windowWidth;
         double _windowHeight;
         std::set<Body*> _bodies;
@@ -195,29 +193,30 @@ class World {
     public:
         // Singleton factory.
         static World* getInstance();
-        static World* getInstance(const Point& winCenter, const Angle& winRotation, double winWidth, double winHeight, int bodyIndex);
+        static World* getInstance(const CG::Point& winCenter, const CG::Angle& winRotation, double winWidth, double winHeight,
+                                  int bodyIndex);
 
         // Destructor.
         ~World();
 
         // Window translation operator.
-        void operator+=(const Vector& vector);
-        void operator-=(const Vector& vector);
+        void operator+=(const CG::Vector& vector);
+        void operator-=(const CG::Vector& vector);
 
         // Window rotation around its center operator.
-        void operator%=(const Angle& angle);
+        void operator%=(const CG::Angle& angle);
 
         // Set window center.
-        void setWindowCenter(const Point& windowCenter);
+        void setWindowCenter(const CG::Point& windowCenter);
 
         // Return window center.
-        Point windowCenter() const;
+        CG::Point windowCenter() const;
 
         // Set window rotation.
-        void setWindowRotation(const Angle& windowRotation);
+        void setWindowRotation(const CG::Angle& windowRotation);
 
         // Return window rotation.
-        Angle windowRotation() const;
+        CG::Angle windowRotation() const;
 
         // Set window width.
         void setWindowWidth(double windowWidth);
@@ -232,7 +231,7 @@ class World {
         double windowHeight() const;
 
         // Return a pointer to a new body.
-        Body* createBody(const Point& center, const Angle& rotation, const bool isDynamic);
+        Body* createBody(const CG::Point& center, const CG::Angle& rotation, const bool isDynamic);
 
         // Destroy body.
         void removeBody(Body& body);
