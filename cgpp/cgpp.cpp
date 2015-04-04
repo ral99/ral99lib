@@ -629,13 +629,13 @@ Vector Polygon::minimumTranslationVectorFrom(const Polygon& other, const Vector&
     return vector;
 }
 
-std::set<Point> Polygon::vertices() const {
-    std::set<Point> vertices;
+std::vector<Point> Polygon::vertices() const {
+    std::vector<Point> vertices;
     ADTList cgvertices = polygon_vertices(_polygon);
     for (ADTListItem it = list_head(cgvertices); it; it = list_next(it)) {
         Point vertex;
         vertex._point = (CGPoint) list_value(it);
-        vertices.insert(vertex);
+        vertices.push_back(vertex);
     }
     list_release(cgvertices);
     return vertices;

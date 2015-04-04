@@ -2,6 +2,7 @@
 #define __CGPP__
 
 #include <set>
+#include <vector>
 
 #include "cg/cg.h"
 #include "cg/collision/collision.h"
@@ -389,7 +390,7 @@ class Polygon {
         Vector minimumTranslationVectorFrom(const Polygon& other, const Vector& axis);
 
         // Return polygon vertices.
-        std::set<Point> vertices() const;
+        std::vector<Point> vertices() const;
 
         // Return polygon edges.
         std::set<Segment> edges() const;

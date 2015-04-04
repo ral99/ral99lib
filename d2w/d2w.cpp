@@ -150,9 +150,9 @@ bool Body::hasTag(const std::string& tag) const {
 std::set<std::pair<int, int>> Body::indexQuadrants() const { 
     std::set<std::pair<int, int>> indexQuadrants;
     for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++) {
-        std::set<Point> vertices = it->second.vertices();
+        std::vector<Point> vertices = it->second.vertices();
         double minX, maxX, minY, maxY;
-        for (std::set<Point>::iterator jt = vertices.begin(); jt != vertices.end(); jt++) {
+        for (std::vector<Point>::iterator jt = vertices.begin(); jt != vertices.end(); jt++) {
             if (jt == vertices.begin() || (double_lt(jt->x(), minX)))
                 minX = jt->x();
             if (jt == vertices.begin() || (double_gt(jt->x(), maxX)))

@@ -845,13 +845,18 @@ TEST(Triangle, Area) {
 // ::: Polygon :::
 
 TEST(Polygon, SetOfVerticesConstructor) {
-    std::set<Point> vertices;
-    vertices.insert(Point(0, 0));
-    vertices.insert(Point(1, 0));
-    vertices.insert(Point(1, 1));
-    vertices.insert(Point(0, 1));
-    Polygon polygon(vertices);
-    EXPECT_EQ(vertices, polygon.vertices());
+    std::set<Point> vertexSet;
+    std::vector<Point> vertexList;
+    vertexSet.insert(Point(0, 1));
+    vertexList.push_back(Point(0, 0));
+    vertexSet.insert(Point(1, 1));
+    vertexList.push_back(Point(1, 0));
+    vertexSet.insert(Point(1, 0));
+    vertexList.push_back(Point(1, 1));
+    vertexSet.insert(Point(0, 0));
+    vertexList.push_back(Point(0, 1));
+    Polygon polygon(vertexSet);
+    EXPECT_EQ(vertexList, polygon.vertices());
 
     EXPECT_ANY_THROW(Polygon(std::set<Point>()));
 }
@@ -869,12 +874,12 @@ TEST(Polygon, CopyStructConstructor) {
 }
 
 TEST(Polygon, TriangleConstructor) {
-    std::set<Point> vertices;
-    vertices.insert(Point(0, 0));
-    vertices.insert(Point(1, 0));
-    vertices.insert(Point(0, 1));
+    std::vector<Point> vertexList;
+    vertexList.push_back(Point(0, 0));
+    vertexList.push_back(Point(1, 0));
+    vertexList.push_back(Point(0, 1));
     Polygon polygon = Polygon::triangle(Point(0, 0), Point(0, 1), Point(1, 0));
-    EXPECT_EQ(vertices, polygon.vertices());
+    EXPECT_EQ(vertexList, polygon.vertices());
 
     EXPECT_ANY_THROW(Polygon::triangle(Point(0, 0), Point(1, 0), Point(2, 0)));
     EXPECT_ANY_THROW(Polygon::triangle(Point(0, 0), Point(1, 0), Point(1, 0)));
@@ -882,38 +887,38 @@ TEST(Polygon, TriangleConstructor) {
 }
 
 TEST(Polygon, RectangleConstructor) {
-    std::set<Point> vertices;
-    vertices.insert(Point(0, 0));
-    vertices.insert(Point(2, 0));
-    vertices.insert(Point(2, 1));
-    vertices.insert(Point(0, 1));
+    std::vector<Point> vertexList;
+    vertexList.push_back(Point(0, 0));
+    vertexList.push_back(Point(2, 0));
+    vertexList.push_back(Point(2, 1));
+    vertexList.push_back(Point(0, 1));
     Polygon polygon = Polygon::rectangle(Point(0, 0), 2, 1);
-    EXPECT_EQ(vertices, polygon.vertices());
+    EXPECT_EQ(vertexList, polygon.vertices());
 
     EXPECT_ANY_THROW(Polygon::rectangle(Point(0, 0), 0, 1));
     EXPECT_ANY_THROW(Polygon::rectangle(Point(0, 0), 1, 0));
 }
 
 TEST(Polygon, SquareConstructor) {
-    std::set<Point> vertices;
-    vertices.insert(Point(0, 0));
-    vertices.insert(Point(1, 0));
-    vertices.insert(Point(1, 1));
-    vertices.insert(Point(0, 1));
+    std::vector<Point> vertexList;
+    vertexList.push_back(Point(0, 0));
+    vertexList.push_back(Point(1, 0));
+    vertexList.push_back(Point(1, 1));
+    vertexList.push_back(Point(0, 1));
     Polygon polygon = Polygon::square(Point(0, 0), 1);
-    EXPECT_EQ(vertices, polygon.vertices());
+    EXPECT_EQ(vertexList, polygon.vertices());
 
     EXPECT_ANY_THROW(Polygon::square(Point(0, 0), 0));
 }
 
 TEST(Polygon, CircleConstructor) {
-    std::set<Point> vertices;
-    vertices.insert(Point(1, 0));
-    vertices.insert(Point(2, 1));
-    vertices.insert(Point(1, 2));
-    vertices.insert(Point(0, 1));
+    std::vector<Point> vertexList;
+    vertexList.push_back(Point(1, 0));
+    vertexList.push_back(Point(2, 1));
+    vertexList.push_back(Point(1, 2));
+    vertexList.push_back(Point(0, 1));
     Polygon polygon = Polygon::circle(Point(1, 1), 1, 4);
-    EXPECT_EQ(vertices, polygon.vertices());
+    EXPECT_EQ(vertexList, polygon.vertices());
 
     EXPECT_ANY_THROW(Polygon::circle(Point(1, 1), -1, 4));
     EXPECT_ANY_THROW(Polygon::circle(Point(1, 1), 0, 4));
@@ -1117,12 +1122,12 @@ TEST(Polygon, MinimumTranslationVectorFromPolygon) {
 }
 
 TEST(Polygon, Vertices) {
-    std::set<Point> vertices;
-    vertices.insert(Point(0, 0));
-    vertices.insert(Point(1, 0));
-    vertices.insert(Point(1, 1));
-    vertices.insert(Point(0, 1));
-    EXPECT_EQ(vertices, Polygon::square(Point(0, 0), 1).vertices());
+    std::vector<Point> vertexList;
+    vertexList.push_back(Point(0, 0));
+    vertexList.push_back(Point(1, 0));
+    vertexList.push_back(Point(1, 1));
+    vertexList.push_back(Point(0, 1));
+    EXPECT_EQ(vertexList, Polygon::square(Point(0, 0), 1).vertices());
 }
 
 TEST(Polygon, Edges) {
