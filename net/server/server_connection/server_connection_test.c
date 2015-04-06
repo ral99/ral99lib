@@ -16,7 +16,7 @@ static void test_accept_server_connection_1() {
     NETConnection connected = connection_connect(address);
     sleep(1);
     NETServerConnection server_connection = accept_server_connection(server);
-    g_assert_cmpint(strlen(server_connection->id), ==, SERVER_CONNECTION_ID_LENGTH);
+    g_assert_cmpint((int) strlen(server_connection->id), ==, SERVER_CONNECTION_ID_LENGTH);
     g_assert_cmpint(connection_is_on(server_connection->connection), ==, 1);
     server_connection_release(server_connection);
     connection_release(connected);

@@ -60,7 +60,7 @@ char *list_to_str(ADTList list, char *(*to_str)(void *)) {
 
 ADTList list_from_str(char *str, void *(*from_str)(char *)) {
     ADTList list = list_new();
-    int len = strlen(str);
+    int len = (int) strlen(str);
     for (int i = 0, escape = 0, start = 0; i <= len; i++) {
         if ((str[i] == ',' && !escape) || (i == len && len > 0)) {
             char *substr = str_substr(str, start, i - start);

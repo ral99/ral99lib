@@ -10,7 +10,7 @@ int str_equals(char *str1, char *str2) {
 }
 
 char *str_dup(char *str) {
-    return strcpy((char *) memalloc(strlen(str) + 1), str);
+    return strcpy((char *) memalloc((int) strlen(str) + 1), str);
 }
 
 char *str_random(int len) {
@@ -35,11 +35,12 @@ char *str_substr(char *str, int start, int len) {
 }
 
 char *str_cat(char *str1, char *str2) {
-    return strcat(strcpy((char *) memalloc(strlen(str1) + strlen(str2) + 1), str1), str2);
+    return strcat(strcpy((char *) memalloc((int) strlen(str1) + (int) strlen(str2) + 1), str1),
+                  str2);
 }
 
 char *str_reverse(char *str) {
-    int len = strlen(str);
+    int len = (int) strlen(str);
     char *reversed = (char *) memalloc(len + 1);
     for (int i = 0; i < len; i++)
         reversed[i] = str[len - i - 1];
@@ -49,8 +50,8 @@ char *str_reverse(char *str) {
 
 char *str_escape(char *str, char *escape) {
     int k = 0;
-    int len = strlen(str);
-    int escape_len = strlen(escape);
+    int len = (int) strlen(str);
+    int escape_len = (int) strlen(escape);
     char *escaped = (char *) memalloc(2 * len + 1);
     for (int i = 0; i < len; i++) {
         int add_backslash = 0;
@@ -69,7 +70,7 @@ char *str_escape(char *str, char *escape) {
 
 char *str_unescape(char *str) {
     int k = 0;
-    int len = strlen(str);
+    int len = (int) strlen(str);
     char *unescaped = (char *) memalloc(len + 1);
     for (int i = 0, escaped = 0; i < len; i++) {
         if (str[i] == '\\' && !escaped)
@@ -84,8 +85,8 @@ char *str_unescape(char *str) {
 }
 
 int str_find(char *str, char *pat) {
-    int len = strlen(str);
-    int pat_len = strlen(pat);
+    int len = (int) strlen(str);
+    int pat_len = (int) strlen(pat);
     for (int i = 0, j = 0; i < len; i++) {
         if (str[i] == pat[j]) {
             j++;
@@ -99,7 +100,7 @@ int str_find(char *str, char *pat) {
 }
 
 char *str_join(ADTList strs, char *sep) {
-    int len = (list_max(strs, (int (*)(void *)) strlen) + strlen(sep)) * list_size(strs);
+    int len = (list_max(strs, (int (*)(void *)) strlen) + (int) strlen(sep)) * list_size(strs);
     char *join = (char *) memalloc(len + 1);
     join[0] = 0;
     for (ADTListItem it = list_head(strs); it; it = list_next(it)) {
@@ -113,8 +114,8 @@ char *str_join(ADTList strs, char *sep) {
 ADTList str_split(char *str, char *sep) {
     int index;
     int start = 0;
-    int len = strlen(str);
-    int sep_len = strlen(sep);
+    int len = (int) strlen(str);
+    int sep_len = (int) strlen(sep);
     ADTList list = list_new();
     while ((index = str_find(str + start, sep)) >= 0) {
         list_append(list, str_substr(str, start, index));

@@ -40,7 +40,7 @@ char *double_to_str(double x, int decimal_positions) {
     char buf[32];
     sprintf(format, "%%.%dlf", decimal_positions);
     sprintf(buf, format, x);
-    return strcpy((char *) memalloc(strlen(buf) + 1), buf);
+    return strcpy((char *) memalloc((int) strlen(buf) + 1), buf);
 }
 
 double double_from_str(char *str) {
@@ -86,7 +86,7 @@ uint64_t uint64_lcm(int a, int b) {
 char *int_to_str(int x) {
     char buf[32];
     sprintf(buf, "%d", x);
-    return strcpy((char *) memalloc(strlen(buf) + 1), buf);
+    return strcpy((char *) memalloc((int) strlen(buf) + 1), buf);
 }
 
 int int_from_str(char *str) {

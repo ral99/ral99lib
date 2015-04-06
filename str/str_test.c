@@ -40,7 +40,7 @@ static void test_str_random_1() {
 static void test_str_random_2() {
     int len = 32;
     char *str = str_random(len);
-    g_assert_cmpint(strlen(str), ==, len);
+    g_assert_cmpint((int) strlen(str), ==, len);
     for (int i = 0; i < len; i++)
         g_assert((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' && str[i] <= 'z') ||
                  (str[i] >= 'A' && str[i] <= 'Z'));

@@ -106,7 +106,7 @@ void sock_turn_off(NETSock sock) {
 }
 
 int sock_send(NETSock sock, char *text) {
-    int nbytes = strlen(text);
+    int nbytes = (int) strlen(text);
     #ifdef __APPLE__
     int status = send(sock->fd, text, nbytes, 0);
     #else
