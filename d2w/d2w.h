@@ -96,6 +96,9 @@ class Body {
         // Return true if body has the specified tag. false, otherwise.
         bool hasTag(const std::string& tag) const;
 
+        // Return true if body is on window. false, otherwise.
+        bool isOnWindow() const;
+
         // Return the index quadrants in which the polygons of this body are on.
         std::set<std::pair<int, int>> indexQuadrants() const;
 
@@ -229,6 +232,9 @@ class World {
 
         // Return window height.
         double windowHeight() const;
+
+        // Return window polygon.
+        CG::Polygon windowPolygon() const;
 
         // Return a pointer to a new body.
         Body* createBody(const CG::Point& center, const CG::Angle& rotation, const bool isDynamic);

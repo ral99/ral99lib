@@ -1,3 +1,4 @@
+#include <math.h>
 #include <utility>
 
 #include "d2w/d2w.h"
@@ -214,6 +215,34 @@ TEST_F(D2WTest, BodyHasTag) {
     body->addTag("tag");
     EXPECT_TRUE(body->hasTag("tag"));
     EXPECT_FALSE(body->hasTag("gat"));
+}
+
+TEST_F(D2WTest, BodyIsOnWindow) {
+    world->setWindowCenter(Point(sqrt(2) / 2, sqrt(2) / 2));
+    world->setWindowRotation(Angle::radians(M_PI / 4));
+    world->setWindowWidth(1);
+    world->setWindowHeight(1);
+    world->setBodyIndexRange(1);
+
+    Body *body1 = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body1->addPolygon("square", Polygon::square(Point(0, 0), 0.1));
+    EXPECT_FALSE(body1->isOnWindow());
+
+    Body *body2 = world->createBody(Point(sqrt(2) - 0.1, 0), Angle::radians(0), true);
+    body2->addPolygon("square", Polygon::square(Point(0, 0), 0.1));
+    EXPECT_FALSE(body2->isOnWindow());
+
+    Body *body3 = world->createBody(Point(0, sqrt(2) - 0.1), Angle::radians(0), true);
+    body3->addPolygon("square", Polygon::square(Point(0, 0), 0.1));
+    EXPECT_FALSE(body3->isOnWindow());
+
+    Body *body4 = world->createBody(Point(sqrt(2) - 0.1, sqrt(2) - 0.1), Angle::radians(0), true);
+    body4->addPolygon("square", Polygon::square(Point(0, 0), 0.1));
+    EXPECT_FALSE(body4->isOnWindow());
+
+    Body *body5 = world->createBody(Point(sqrt(2) / 2, sqrt(2) / 2), Angle::radians(0), true);
+    body5->addPolygon("square", Polygon::square(Point(0, 0), 0.1));
+    EXPECT_TRUE(body5->isOnWindow());
 }
 
 TEST_F(D2WTest, BodyIndexQuadrants) {
@@ -779,6 +808,19 @@ TEST_F(D2WTest, WorldWindowHeight) {
     EXPECT_EQ(600, world->windowHeight());
 }
 
+TEST_F(D2WTest, WorldWindowPolygon) {
+    world->setWindowCenter(Point(sqrt(2) / 2, sqrt(2) / 2));
+    world->setWindowRotation(Angle::radians(M_PI / 4));
+    world->setWindowWidth(1);
+    world->setWindowHeight(1);
+    std::set<Point> rhombusVertices;
+    rhombusVertices.insert(Point(0, sqrt(2) / 2));
+    rhombusVertices.insert(Point(sqrt(2) / 2, 0));
+    rhombusVertices.insert(Point(sqrt(2) / 2, sqrt(2)));
+    rhombusVertices.insert(Point(sqrt(2), sqrt(2) / 2));
+    EXPECT_EQ(Polygon(rhombusVertices), world->windowPolygon());
+}
+
 TEST_F(D2WTest, WorldCreateBody) {
     Body *emptyBody = world->createBody(Point(0, 0), Angle::radians(0), true);
     EXPECT_EQ(Point(0, 0), emptyBody->center());
@@ -862,10 +904,9 @@ TEST_F(D2WTest, WorldBodiesOnWindow) {
     body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
     world->createBody(Point(1, 1), Angle::radians(0), true);
     std::set<Body*> bodiesOnWindow = world->bodiesOnWindow();
-    EXPECT_EQ(3, bodiesOnWindow.size());
+    EXPECT_EQ(2, bodiesOnWindow.size());
     EXPECT_NE(bodiesOnWindow.end(), bodiesOnWindow.find(body1));
     EXPECT_NE(bodiesOnWindow.end(), bodiesOnWindow.find(body2));
-    EXPECT_NE(bodiesOnWindow.end(), bodiesOnWindow.find(body3));
 }
 
 TEST_F(D2WTest, WorldTaggedBodies) {

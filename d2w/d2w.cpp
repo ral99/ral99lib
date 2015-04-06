@@ -147,6 +147,14 @@ bool Body::hasTag(const std::string& tag) const {
     return _tags.find(tag) != _tags.end();
 }
 
+bool Body::isOnWindow() const {
+    Polygon windowPolygon = _world->windowPolygon();
+    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
+        if (it->second.isCollidingWith(windowPolygon))
+            return true;
+    return false;
+}
+
 std::set<std::pair<int, int>> Body::indexQuadrants() const { 
     std::set<std::pair<int, int>> indexQuadrants;
     for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++) {
@@ -487,6 +495,12 @@ double World::windowHeight() const {
     return _windowHeight;
 }
 
+Polygon World::windowPolygon() const {
+    Polygon polygon = Polygon::rectangle(*_windowCenter - Vector(_windowWidth / 2, _windowHeight / 2), _windowWidth, _windowHeight);
+    polygon.rotateAround(*_windowCenter, *_windowRotation);
+    return polygon;
+}
+
 Body* World::createBody(const Point& center, const Angle& rotation, const bool isDynamic) {
     Body *body = new Body;
     body->_world = this;
@@ -521,7 +535,7 @@ std::set<Body*> World::bodies() const {
 }
 
 std::set<Body*> World::bodiesOnWindow() const {
-    std::set<Body*> bodiesOnWindow;
+    std::set<Body*> bodiesNearWindow;
     std::vector<Point> windowCorners;
     windowCorners.push_back(*_windowCenter + Vector(_windowWidth / 2, _windowHeight / 2));
     windowCorners.push_back(*_windowCenter + Vector(_windowWidth / 2, -_windowHeight / 2));
@@ -544,8 +558,12 @@ std::set<Body*> World::bodiesOnWindow() const {
             std::map<std::pair<int, int>, std::set<Body*>>::const_iterator jt = _bodyIndex.find(std::make_pair(i, j));
             if (jt != _bodyIndex.end())
                 for (std::set<Body*>::iterator kt = jt->second.begin(); kt != jt->second.end(); kt++)
-                    bodiesOnWindow.insert(*kt);
+                    bodiesNearWindow.insert(*kt);
         }
+    std::set<Body*> bodiesOnWindow;
+    for (std::set<Body*>::iterator it = bodiesNearWindow.begin(); it != bodiesNearWindow.end(); it++)
+        if ((*it)->isOnWindow())
+            bodiesOnWindow.insert(*it);
     return bodiesOnWindow;
 }
 
@@ -558,7 +576,7 @@ std::set<Body*> World::taggedBodies(const std::string& tag) const {
 }
 
 std::set<Body*> World::taggedBodiesOnWindow(const std::string& tag) const {
-    std::set<Body*> bodiesOnWindow;
+    std::set<Body*> taggedBodiesNearWindow;
     std::vector<Point> windowCorners;
     windowCorners.push_back(*_windowCenter + Vector(_windowWidth / 2, _windowHeight / 2));
     windowCorners.push_back(*_windowCenter + Vector(_windowWidth / 2, -_windowHeight / 2));
@@ -582,9 +600,13 @@ std::set<Body*> World::taggedBodiesOnWindow(const std::string& tag) const {
             if (jt != _bodyIndex.end())
                 for (std::set<Body*>::iterator kt = jt->second.begin(); kt != jt->second.end(); kt++)
                     if ((*kt)->hasTag(tag))
-                        bodiesOnWindow.insert(*kt);
+                        taggedBodiesNearWindow.insert(*kt);
         }
-    return bodiesOnWindow;
+    std::set<Body*> taggedBodiesOnWindow;
+    for (std::set<Body*>::iterator it = taggedBodiesNearWindow.begin(); it != taggedBodiesNearWindow.end(); it++)
+        if ((*it)->isOnWindow())
+            taggedBodiesOnWindow.insert(*it);
+    return taggedBodiesOnWindow;
 }
 
 void World::setBodyIndexRange(int bodyIndexRange) {
