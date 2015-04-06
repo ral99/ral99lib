@@ -18,8 +18,9 @@ def merge(modules, filename, extension):
         header_files.append(os.path.join(module, module_header_file))
         source_files.append(os.path.join(module, module_source_file))
 
-    # remove comments, merge includes and write to a single header file
+    # remove comments, merge includes and typedefs and write to a single header file
     header_includes = set([])
+    header_typedefs = []
     header_lines = []
     for header_file in header_files:
         in_comment = False
@@ -35,6 +36,8 @@ def merge(modules, filename, extension):
                     continue
                 if line.lstrip().startswith('#include <'):
                     header_includes.add(line.strip())
+                elif line.lstrip().startswith('typedef '):
+                    header_typedefs.append(line.strip())
                 elif not header_lines or line.strip() or header_lines[-1].strip():
                     header_lines.append(line)
             elif line.rstrip().endswith('*/'):
@@ -44,6 +47,9 @@ def merge(modules, filename, extension):
     merged_header.write('#define __%s__\n\n' % filename.upper())
     for header_include in sorted(list(header_includes)):
         merged_header.write('%s\n' % header_include)
+    merged_header.write('\n')
+    for header_typedef in header_typedefs:
+        merged_header.write('%s\n' % header_typedef)
     merged_header.write('\n')
     for header_line in header_lines:
         merged_header.write('%s' % header_line)
