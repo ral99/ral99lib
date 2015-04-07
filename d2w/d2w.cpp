@@ -170,8 +170,8 @@ std::set<std::pair<int, int>> Body::indexQuadrants() const {
             if (jt == vertices.begin() || (double_gt(jt->y(), maxY)))
                 maxY = jt->y();
         } 
-        for (int i = minX / _world->_bodyIndexRange; i <= maxX / _world->_bodyIndexRange; i++)
-            for (int j = minY / _world->_bodyIndexRange; j <= maxY / _world->_bodyIndexRange; j++)
+        for (int i = (int) (minX / _world->_bodyIndexRange); i <= (int) (maxX / _world->_bodyIndexRange); i++)
+            for (int j = (int) (minY / _world->_bodyIndexRange); j <= (int) (maxY / _world->_bodyIndexRange); j++)
                 indexQuadrants.insert(std::make_pair(i, j));
     }
     return indexQuadrants;
@@ -553,8 +553,8 @@ std::set<Body*> World::bodiesOnWindow() const {
         if (it == windowCorners.begin() || double_gt(it->y(), windowMaxY))
             windowMaxY = it->y();
     }
-    for (int i = windowMinX / _bodyIndexRange; i <= windowMaxX / _bodyIndexRange; i++)
-        for (int j = windowMinY / _bodyIndexRange; j <= windowMaxY / _bodyIndexRange; j++) {
+    for (int i = (int) (windowMinX / _bodyIndexRange); i <= (int) (windowMaxX / _bodyIndexRange); i++)
+        for (int j = (int) (windowMinY / _bodyIndexRange); j <= (int) (windowMaxY / _bodyIndexRange); j++) {
             std::map<std::pair<int, int>, std::set<Body*>>::const_iterator jt = _bodyIndex.find(std::make_pair(i, j));
             if (jt != _bodyIndex.end())
                 for (std::set<Body*>::iterator kt = jt->second.begin(); kt != jt->second.end(); kt++)
@@ -594,8 +594,8 @@ std::set<Body*> World::taggedBodiesOnWindow(const std::string& tag) const {
         if (it == windowCorners.begin() || double_gt(it->y(), windowMaxY))
             windowMaxY = it->y();
     }
-    for (int i = windowMinX / _bodyIndexRange; i <= windowMaxX / _bodyIndexRange; i++)
-        for (int j = windowMinY / _bodyIndexRange; j <= windowMaxY / _bodyIndexRange; j++) {
+    for (int i = (int) (windowMinX / _bodyIndexRange); i <= (int) (windowMaxX / _bodyIndexRange); i++)
+        for (int j = (int) (windowMinY / _bodyIndexRange); j <= (int) (windowMaxY / _bodyIndexRange); j++) {
             std::map<std::pair<int, int>, std::set<Body*>>::const_iterator jt = _bodyIndex.find(std::make_pair(i, j));
             if (jt != _bodyIndex.end())
                 for (std::set<Body*>::iterator kt = jt->second.begin(); kt != jt->second.end(); kt++)
