@@ -886,6 +886,30 @@ TEST_F(D2WTest, WorldBodies) {
     EXPECT_NE(bodies.end(), bodies.find(emptyBody));
 }
 
+TEST_F(D2WTest, WorldBodiesNearWindow) {
+    world->setWindowCenter(Point(1, 1));
+    world->setWindowRotation(Angle::radians(0));
+    world->setWindowWidth(2);
+    world->setWindowHeight(2);
+    world->setBodyIndexRange(1);
+    Body *body1 = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body1->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
+    body2->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *body3 = world->createBody(Point(2, 2), Angle::radians(0), true);
+    body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *body4 = world->createBody(Point(3, 3), Angle::radians(0), true);
+    body4->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    Body *body5 = world->createBody(Point(4, 4), Angle::radians(0), true);
+    body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    world->createBody(Point(1, 1), Angle::radians(0), true);
+    std::set<Body*> bodiesNearWindow = world->bodiesNearWindow();
+    EXPECT_EQ(3, bodiesNearWindow.size());
+    EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(body1));
+    EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(body2));
+    EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(body3));
+}
+
 TEST_F(D2WTest, WorldBodiesOnWindow) {
     world->setWindowCenter(Point(1, 1));
     world->setWindowRotation(Angle::radians(0));
@@ -930,6 +954,33 @@ TEST_F(D2WTest, WorldTaggedBodies) {
     taggedBodies = world->taggedBodies("empty");
     EXPECT_EQ(1, taggedBodies.size());
     EXPECT_NE(taggedBodies.end(), taggedBodies.find(emptyBody));
+}
+
+TEST_F(D2WTest, WorldTaggedBodiesNearWindow) {
+    world->setWindowCenter(Point(1, 1));
+    world->setWindowRotation(Angle::radians(0));
+    world->setWindowWidth(2);
+    world->setWindowHeight(2);
+    world->setBodyIndexRange(1);
+    Body *body1 = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body1->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    body1->addTag("odd");
+    Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
+    body2->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    body2->addTag("even");
+    Body *body3 = world->createBody(Point(2, 2), Angle::radians(0), true);
+    body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    body3->addTag("odd");
+    Body *body4 = world->createBody(Point(3, 3), Angle::radians(0), true);
+    body4->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    body4->addTag("even");
+    Body *body5 = world->createBody(Point(4, 4), Angle::radians(0), true);
+    body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    body5->addTag("odd");
+    std::set<Body*> taggedBodiesNearWindow = world->taggedBodiesNearWindow("odd");
+    EXPECT_EQ(2, taggedBodiesNearWindow.size());
+    EXPECT_NE(taggedBodiesNearWindow.end(), taggedBodiesNearWindow.find(body1));
+    EXPECT_NE(taggedBodiesNearWindow.end(), taggedBodiesNearWindow.find(body3));
 }
 
 TEST_F(D2WTest, WorldTaggedBodiesOnWindow) {
