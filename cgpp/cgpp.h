@@ -131,6 +131,7 @@ class Vector {
         void operator*=(double k);
 
         // Vector rotation operator.
+        Vector operator%(const Angle& angle) const;
         void operator%=(const Angle& angle);
 
         // Normalize vector.

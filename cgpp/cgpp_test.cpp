@@ -197,7 +197,14 @@ TEST(Vector, UnaryMultiplyOperator) {
     EXPECT_EQ(Vector(2, 4), vector);
 }
 
-TEST(Vector, RotationOperator) {
+TEST(Vector, BinaryRotationOperator) {
+    EXPECT_EQ(Vector(0, 1), Vector(1, 0) % Angle::radians(M_PI / 2));
+    EXPECT_EQ(Vector(-1, 0), Vector(1, 0) % Angle::radians(M_PI));
+    EXPECT_EQ(Vector(0, -1), Vector(1, 0) % Angle::radians(3 * M_PI / 2));
+    EXPECT_EQ(Vector(1, 0), Vector(1, 0) % Angle::radians(2 * M_PI));
+}
+
+TEST(Vector, UnaryRotationOperator) {
     Vector vector(1, 0);
 
     vector %= Angle::radians(0);

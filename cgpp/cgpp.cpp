@@ -186,6 +186,12 @@ void Vector::operator*=(double k) {
     vector_multiply(_vector, k);
 }
 
+Vector Vector::operator%(const Angle& angle) const {
+    Vector vector(_vector);
+    vector_rotate(vector._vector, angle._angle);
+    return vector;
+}
+
 void Vector::operator%=(const Angle& angle) {
     vector_rotate(_vector, angle._angle);
 }
