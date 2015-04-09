@@ -136,6 +136,9 @@ class Vector {
         // Normalize vector.
         void normalize();
 
+        // Return the normalized vector.
+        Vector normalized();
+
         // Return vector x component.
         double x() const;
 

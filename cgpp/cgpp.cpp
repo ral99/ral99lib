@@ -194,6 +194,12 @@ void Vector::normalize() {
     vector_normalize(_vector);
 }
 
+Vector Vector::normalized() {
+    Vector vector(_vector);
+    vector_normalize(vector._vector);
+    return vector;
+}
+
 double Vector::x() const {
     return vector_x(_vector);
 }

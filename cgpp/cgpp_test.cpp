@@ -238,6 +238,14 @@ TEST(Vector, Normalize) {
     EXPECT_EQ(Vector(sqrt(2) / 2, sqrt(2) / 2), vector5);
 }
 
+TEST(Vector, Normalized) {
+    EXPECT_EQ(Vector(1, 0), Vector(1, 0).normalized());
+    EXPECT_EQ(Vector(1, 0), Vector(5, 0).normalized());
+    EXPECT_EQ(Vector(0, 1), Vector(0, 1).normalized());
+    EXPECT_EQ(Vector(0, 1), Vector(0, 5).normalized());
+    EXPECT_EQ(Vector(sqrt(2) / 2, sqrt(2) / 2), Vector(1, 1).normalized());
+}
+
 TEST(Vector, X) {
     EXPECT_DOUBLE_EQ(1, Vector(1, 2).x());
 }
