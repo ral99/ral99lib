@@ -357,6 +357,16 @@ TEST_F(D2WTest, BodyNeighbourTaggedBodies) {
     for (int i = 0; i <= 4; i++)
         EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][i]));
     world->removeBody(*body2);
+
+    Body *body3 = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    std::set<std::string> tags;
+    tags.insert("firstColumn");
+    tags.insert("zero");
+    bodies = body3->neighbourTaggedBodies(tags);
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
+    world->removeBody(*body3);
 }
 
 TEST_F(D2WTest, BodyNeighbourDynamicTaggedBodies) {
@@ -384,6 +394,16 @@ TEST_F(D2WTest, BodyNeighbourDynamicTaggedBodies) {
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
     world->removeBody(*body2);
+
+    Body *body3 = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    std::set<std::string> tags;
+    tags.insert("firstColumn");
+    tags.insert("zero");
+    bodies = body3->neighbourDynamicTaggedBodies(tags);
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
+    world->removeBody(*body3);
 }
 
 TEST_F(D2WTest, BodyIsCollidingWithBody) {
@@ -480,6 +500,10 @@ TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
     bodyE->addPolygon("rectangle", Polygon::rectangle(Point(5, 0), 1, 2));
     bodyE->addTag("vowel");
 
+    std::set<std::string> tags;
+    tags.insert("consonant");
+    tags.insert("vowel");
+
     std::set<Body*> bodies = body->collidingDynamicTaggedBodies("consonant");
     EXPECT_EQ(2, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
@@ -488,6 +512,9 @@ TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
     bodies = body->collidingDynamicTaggedBodies("vowel");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyE));
+
+    bodies = body->collidingDynamicTaggedBodies(tags);
+    EXPECT_EQ(0, bodies.size());
 
     bodies = body->collidingDynamicTaggedBodies("rectangle", "consonant");
     EXPECT_EQ(2, bodies.size());
@@ -503,6 +530,12 @@ TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
     bodies = body->collidingDynamicTaggedBodies("square", "vowel");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyE));
+
+    bodies = body->collidingDynamicTaggedBodies("rectangle", tags);
+    EXPECT_EQ(0, bodies.size());
+
+    bodies = body->collidingDynamicTaggedBodies("square", tags);
+    EXPECT_EQ(0, bodies.size());
 
     EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", "vowel"));
     EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", "consonant"));
@@ -651,6 +684,10 @@ TEST_F(D2WTest, BodyContactingDynamicTaggedBodies) {
     bodyE->addPolygon("rectangle", Polygon::rectangle(Point(3, 0), 2, 1));
     bodyE->addTag("vowel");
 
+    std::set<std::string> tags;
+    tags.insert("consonant");
+    tags.insert("vowel");
+
     std::set<Body*> bodies = body->contactingDynamicTaggedBodies("consonant");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
@@ -658,6 +695,9 @@ TEST_F(D2WTest, BodyContactingDynamicTaggedBodies) {
     bodies = body->contactingDynamicTaggedBodies("vowel");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyE));
+
+    bodies = body->contactingDynamicTaggedBodies(tags);
+    EXPECT_EQ(0, bodies.size());
 
     bodies = body->contactingDynamicTaggedBodies("rectangle", "consonant");
     EXPECT_EQ(1, bodies.size());
@@ -672,6 +712,12 @@ TEST_F(D2WTest, BodyContactingDynamicTaggedBodies) {
     bodies = body->contactingDynamicTaggedBodies("square", "vowel");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyE));
+
+    bodies = body->contactingDynamicTaggedBodies("rectangle", tags);
+    EXPECT_EQ(0, bodies.size());
+
+    bodies = body->contactingDynamicTaggedBodies("square", tags);
+    EXPECT_EQ(0, bodies.size());
 
     EXPECT_ANY_THROW(body->contactingDynamicTaggedBodies("triangle", "vowel"));
     EXPECT_ANY_THROW(body->contactingDynamicTaggedBodies("triangle", "consonant"));
@@ -837,14 +883,35 @@ TEST_F(D2WTest, WorldRemoveTaggedBodies) {
     Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyA->addPolygon("square", Polygon::square(Point(0, 0), 1));
     bodyA->addTag("vowel");
+    bodyA->addTag("a");
     Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyB->addPolygon("square", Polygon::square(Point(0, 0), 1));
     bodyB->addTag("consonant");
+    bodyB->addTag("b");
     Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyC->addPolygon("square", Polygon::square(Point(0, 0), 1));
     bodyC->addTag("consonant");
+    bodyC->addTag("c");
+    Body *bodyD = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyD->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    bodyD->addTag("consonant");
+    bodyD->addTag("d");
+    Body *bodyE = world->createBody(Point(0, 0), Angle::radians(0), true);
+    bodyE->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    bodyE->addTag("vowel");
+    bodyE->addTag("e");
+
     world->removeTaggedBodies("consonant");
     std::set<Body*> bodies = world->bodies();
+    EXPECT_EQ(2, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyA));
+    EXPECT_NE(bodies.end(), bodies.find(bodyE));
+    
+    std::set<std::string> tags;
+    tags.insert("vowel");
+    tags.insert("e");
+    world->removeTaggedBodies(tags);
+    bodies = world->bodies();
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyA));
 }
@@ -923,16 +990,19 @@ TEST_F(D2WTest, WorldBodiesOnWindow) {
 TEST_F(D2WTest, WorldTaggedBodies) {
     Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyA->addTag("vowel");
+    bodyA->addTag("a");
     bodyA->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyB->addTag("consonant");
+    bodyB->addTag("b");
     bodyB->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyC->addTag("consonant");
+    bodyC->addTag("c");
     bodyC->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *emptyBody = world->createBody(Point(0, 0), Angle::radians(0), true);
     emptyBody->addTag("empty");
-    
+ 
     std::set<Body*> taggedBodies = world->taggedBodies("consonant");
     EXPECT_EQ(2, taggedBodies.size());
     EXPECT_NE(taggedBodies.end(), taggedBodies.find(bodyB));
@@ -941,6 +1011,13 @@ TEST_F(D2WTest, WorldTaggedBodies) {
     taggedBodies = world->taggedBodies("empty");
     EXPECT_EQ(1, taggedBodies.size());
     EXPECT_NE(taggedBodies.end(), taggedBodies.find(emptyBody));
+
+    std::set<std::string> tags;
+    tags.insert("consonant");
+    tags.insert("c");
+    taggedBodies = world->taggedBodies(tags);
+    EXPECT_EQ(1, taggedBodies.size());
+    EXPECT_NE(taggedBodies.end(), taggedBodies.find(bodyC));
 }
 
 TEST_F(D2WTest, WorldTaggedBodiesNearWindow) {

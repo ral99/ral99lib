@@ -216,6 +216,12 @@ std::set<Body*> Body::neighbourDynamicBodies() const {
 }
 
 std::set<Body*> Body::neighbourTaggedBodies(const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return neighbourTaggedBodies(tags);
+}
+
+std::set<Body*> Body::neighbourTaggedBodies(const std::set<std::string>& tags) const {
     std::set<Body*> neighbourTaggedBodies; 
     for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)
         for (int i = -1; i <= 1; i++)
@@ -224,13 +230,25 @@ std::set<Body*> Body::neighbourTaggedBodies(const std::string& tag) const {
                 bodies = _world->_bodyIndex.find(std::make_pair(it->first + i, it->second + j));
                 if (bodies != _world->_bodyIndex.end())
                     for (std::set<Body*>::iterator jt = bodies->second.begin(); jt != bodies->second.end(); jt++)
-                        if (*jt != this && (*jt)->hasTag(tag))
-                            neighbourTaggedBodies.insert(*jt);
+                        if (*jt != this) {
+                            std::set<std::string>::iterator kt;
+                            for (kt = tags.begin(); kt != tags.end(); kt++)
+                                if (!(*jt)->hasTag(*kt))
+                                    break;
+                            if (kt == tags.end())
+                                neighbourTaggedBodies.insert(*jt);
+                        }
             }
     return neighbourTaggedBodies;
 }
 
 std::set<Body*> Body::neighbourDynamicTaggedBodies(const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return neighbourDynamicTaggedBodies(tags);
+}
+
+std::set<Body*> Body::neighbourDynamicTaggedBodies(const std::set<std::string>& tags) const {
     std::set<Body*> neighbourDynamicTaggedBodies; 
     for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)
         for (int i = -1; i <= 1; i++)
@@ -239,8 +257,14 @@ std::set<Body*> Body::neighbourDynamicTaggedBodies(const std::string& tag) const
                 bodies = _world->_bodyIndex.find(std::make_pair(it->first + i, it->second + j));
                 if (bodies != _world->_bodyIndex.end())
                     for (std::set<Body*>::iterator jt = bodies->second.begin(); jt != bodies->second.end(); jt++)
-                        if (*jt != this && (*jt)->isDynamic() && (*jt)->hasTag(tag))
-                            neighbourDynamicTaggedBodies.insert(*jt);
+                        if (*jt != this && (*jt)->isDynamic()) {
+                            std::set<std::string>::iterator kt;
+                            for (kt = tags.begin(); kt != tags.end(); kt++)
+                                if (!(*jt)->hasTag(*kt))
+                                    break;
+                            if (kt == tags.end())
+                                neighbourDynamicTaggedBodies.insert(*jt);
+                        }
             }
     return neighbourDynamicTaggedBodies;
 }
@@ -285,8 +309,14 @@ std::set<Body*> Body::collidingDynamicBodies(const std::string& polygonId) const
 }
 
 std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return collidingDynamicTaggedBodies(tags);
+}
+
+std::set<Body*> Body::collidingDynamicTaggedBodies(const std::set<std::string>& tags) const {
     std::set<Body*> collidingDynamicTaggedBodies;
-    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tag);
+    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
     for (std::set<Body*>::iterator it = neighbourDynamicTaggedBodies.begin(); it != neighbourDynamicTaggedBodies.end(); it++)
         if (isCollidingWith(**it))
             collidingDynamicTaggedBodies.insert(*it);
@@ -294,11 +324,17 @@ std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& tag) const
 }
 
 std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return collidingDynamicTaggedBodies(polygonId, tags);
+}
+
+std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const {
     std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
     if (it == _polygons.end())
         throw std::invalid_argument("Polygon id is invalid.");
     std::set<Body*> collidingDynamicTaggedBodies;
-    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tag);
+    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
     for (std::set<Body*>::iterator jt = neighbourDynamicTaggedBodies.begin(); jt != neighbourDynamicTaggedBodies.end(); jt++)
         if (isCollidingWith(polygonId, **jt))
             collidingDynamicTaggedBodies.insert(*jt);
@@ -365,8 +401,14 @@ std::set<Body*> Body::contactingDynamicBodies(const std::string& polygonId) cons
 }
 
 std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return contactingDynamicTaggedBodies(tags);
+}
+
+std::set<Body*> Body::contactingDynamicTaggedBodies(const std::set<std::string>& tags) const {
     std::set<Body*> contactingDynamicTaggedBodies;
-    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tag);
+    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
     for (std::set<Body*>::iterator it = neighbourDynamicTaggedBodies.begin(); it != neighbourDynamicTaggedBodies.end(); it++)
         if (isInContactWith(**it))
             contactingDynamicTaggedBodies.insert(*it);
@@ -374,11 +416,17 @@ std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& tag) cons
 }
 
 std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return contactingDynamicTaggedBodies(polygonId, tags);
+}
+
+std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const {
     std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
     if (it == _polygons.end())
         throw std::invalid_argument("Polygon id is invalid.");
     std::set<Body*> contactingDynamicTaggedBodies;
-    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tag);
+    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
     for (std::set<Body*>::iterator jt = neighbourDynamicTaggedBodies.begin(); jt != neighbourDynamicTaggedBodies.end(); jt++)
         if (isInContactWith(polygonId, **jt))
             contactingDynamicTaggedBodies.insert(*jt);
@@ -506,7 +554,13 @@ void World::removeBody(Body& body) {
 }
 
 void World::removeTaggedBodies(const std::string& tag) {
-    std::set<Body*> taggedBodies = this->taggedBodies(tag);
+    std::set<std::string> tags;
+    tags.insert(tag);
+    removeTaggedBodies(tags);
+}
+
+void World::removeTaggedBodies(const std::set<std::string>& tags) {
+    std::set<Body*> taggedBodies = this->taggedBodies(tags);
     for (std::set<Body*>::iterator it = taggedBodies.begin(); it != taggedBodies.end(); it++)
         removeBody(**it);
 }
@@ -561,10 +615,21 @@ std::set<Body*> World::bodiesOnWindow() const {
 }
 
 std::set<Body*> World::taggedBodies(const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return taggedBodies(tags);
+}
+
+std::set<Body*> World::taggedBodies(const std::set<std::string>& tags) const {
     std::set<Body*> taggedBodies;
-    for (std::set<Body*>::const_iterator it = _bodies.begin(); it != _bodies.end(); it++)
-        if ((*it)->hasTag(tag))
+    for (std::set<Body*>::const_iterator it = _bodies.begin(); it != _bodies.end(); it++) {
+        std::set<std::string>::const_iterator jt;
+        for (jt = tags.begin(); jt != tags.end(); jt++)
+            if (!(*it)->hasTag(*jt))
+                break;
+        if (jt == tags.end())
             taggedBodies.insert(*it);
+    }
     return taggedBodies;
 }
 

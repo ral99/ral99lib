@@ -116,8 +116,14 @@ class Body {
         // Return tagged bodies near this body using index quadrants.
         std::set<Body*> neighbourTaggedBodies(const std::string& tag) const;
 
+        // Return tagged bodies near this body using index quadrants.
+        std::set<Body*> neighbourTaggedBodies(const std::set<std::string>& tags) const;
+
         // Return dynamic tagged bodies near this body using index quadrants.
         std::set<Body*> neighbourDynamicTaggedBodies(const std::string& tag) const;
+
+        // Return dynamic tagged bodies near this body using index quadrants.
+        std::set<Body*> neighbourDynamicTaggedBodies(const std::set<std::string>& tags) const;
 
         // Return true if this body is colliding with another body. false, otherwise.
         bool isCollidingWith(const Body& other) const;
@@ -135,8 +141,14 @@ class Body {
         // Return dynamic tagged bodies colliding with this body.
         std::set<Body*> collidingDynamicTaggedBodies(const std::string& tag) const;
 
+        // Return dynamic tagged bodies colliding with this body.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::set<std::string>& tags) const;
+
         // Return dynamic tagged bodies colliding with the specified polygon of this body or raise an exception if id is invalid.
         std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const;
+
+        // Return dynamic tagged bodies colliding with the specified polygon of this body or raise an exception if id is invalid.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const;
 
         // Return a set of pairs of ids of polygons of this and another colliding body.
         std::set<std::pair<std::string, std::string>> collisionWith(const Body& other) const;
@@ -161,8 +173,14 @@ class Body {
         // Return dynamic tagged bodies in contact with this body.
         std::set<Body*> contactingDynamicTaggedBodies(const std::string& tag) const;
 
+        // Return dynamic tagged bodies in contact with this body.
+        std::set<Body*> contactingDynamicTaggedBodies(const std::set<std::string>& tags) const;
+
         // Return dynamic tagged bodies in contact with the specified polygon of this body or raise an exception if id is invalid.
         std::set<Body*> contactingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const;
+
+        // Return dynamic tagged bodies in contact with the specified polygon of this body or raise an exception if id is invalid.
+        std::set<Body*> contactingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const;
 
         // Return a set of pairs of ids of polygons of this and another contacting body.
         std::set<std::pair<std::string, std::string>> contactWith(const Body& other);
@@ -245,6 +263,9 @@ class World {
         // Destroy tagged bodies.
         void removeTaggedBodies(const std::string& tag);
 
+        // Destroy tagged bodies.
+        void removeTaggedBodies(const std::set<std::string>& tags);
+
         // Destroy all bodies.
         void clearBodies();
 
@@ -259,6 +280,9 @@ class World {
 
         // Return tagged bodies.
         std::set<Body*> taggedBodies(const std::string& tag) const;
+
+        // Return tagged bodies.
+        std::set<Body*> taggedBodies(const std::set<std::string>& tags) const;
 
         // Return tagged bodies near window.
         std::set<Body*> taggedBodiesNearWindow(const std::string& tag) const;
