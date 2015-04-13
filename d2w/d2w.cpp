@@ -15,11 +15,33 @@ Body::~Body() {
     delete _rotation;
 }
 
+void Body::refreshIndexQuadrants() {
+    _indexQuadrants.clear();
+    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++) {
+        std::vector<Point> vertices = it->second.vertices();
+        double minX, maxX, minY, maxY;
+        for (std::vector<Point>::iterator jt = vertices.begin(); jt != vertices.end(); jt++) {
+            if (jt == vertices.begin() || (double_lt(jt->x(), minX)))
+                minX = jt->x();
+            if (jt == vertices.begin() || (double_gt(jt->x(), maxX)))
+                maxX = jt->x();
+            if (jt == vertices.begin() || (double_lt(jt->y(), minY)))
+                minY = jt->y();
+            if (jt == vertices.begin() || (double_gt(jt->y(), maxY)))
+                maxY = jt->y();
+        } 
+        for (int i = (int) (minX / _world->_bodyIndexRange); i <= (int) (maxX / _world->_bodyIndexRange); i++)
+            for (int j = (int) (minY / _world->_bodyIndexRange); j <= (int) (maxY / _world->_bodyIndexRange); j++)
+                _indexQuadrants.push_back(std::make_pair(i, j));
+    }
+}
+
 void Body::operator+=(const Vector& vector) {  
     _world->removeBodyFromIndex(*this);
     *_center += vector;
     for (std::map<std::string, Polygon>::iterator it = _polygons.begin(); it != _polygons.end(); it++)
         it->second += vector;
+    refreshIndexQuadrants();
     _world->addBodyToIndex(*this);
 }
 
@@ -32,6 +54,7 @@ void Body::operator%=(const Angle& angle) {
     *_rotation += angle;
     for (std::map<std::string, Polygon>::iterator it = _polygons.begin(); it != _polygons.end(); it++)
         it->second.rotateAround(*_center, angle);
+    refreshIndexQuadrants();
     _world->addBodyToIndex(*this);
 }
 
@@ -79,6 +102,7 @@ void Body::addPolygon(const std::string& polygonId, const Polygon& polygon) {
     if (it != _polygons.end())
         _polygons.erase(it);
     _polygons.insert(std::make_pair(polygonId, polygonCopy));
+    refreshIndexQuadrants();
     _world->addBodyToIndex(*this);
 }
 
@@ -88,12 +112,14 @@ void Body::removePolygon(const std::string& polygonId) {
     if (it == _polygons.end())
         throw std::invalid_argument("Polygon id is invalid.");
     _polygons.erase(it);
+    refreshIndexQuadrants();
     _world->addBodyToIndex(*this);
 }
 
 void Body::clearPolygons() {
     _world->removeBodyFromIndex(*this);
     _polygons.clear();
+    _indexQuadrants.clear();
 }
 
 Polygon Body::polygon(const std::string& polygonId) const {
@@ -155,32 +181,13 @@ bool Body::isOnWindow() const {
     return false;
 }
 
-std::set<std::pair<int, int>> Body::indexQuadrants() const { 
-    std::set<std::pair<int, int>> indexQuadrants;
-    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++) {
-        std::vector<Point> vertices = it->second.vertices();
-        double minX, maxX, minY, maxY;
-        for (std::vector<Point>::iterator jt = vertices.begin(); jt != vertices.end(); jt++) {
-            if (jt == vertices.begin() || (double_lt(jt->x(), minX)))
-                minX = jt->x();
-            if (jt == vertices.begin() || (double_gt(jt->x(), maxX)))
-                maxX = jt->x();
-            if (jt == vertices.begin() || (double_lt(jt->y(), minY)))
-                minY = jt->y();
-            if (jt == vertices.begin() || (double_gt(jt->y(), maxY)))
-                maxY = jt->y();
-        } 
-        for (int i = (int) (minX / _world->_bodyIndexRange); i <= (int) (maxX / _world->_bodyIndexRange); i++)
-            for (int j = (int) (minY / _world->_bodyIndexRange); j <= (int) (maxY / _world->_bodyIndexRange); j++)
-                indexQuadrants.insert(std::make_pair(i, j));
-    }
-    return indexQuadrants;
+std::vector<std::pair<int, int>> Body::indexQuadrants() const { 
+    return _indexQuadrants;
 }
 
 std::set<Body*> Body::neighbourBodies() const {
     std::set<Body*> neighbourBodies; 
-    std::set<std::pair<int, int>> indexQuadrants = this->indexQuadrants();
-    for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++)
+    for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)
         for (int i = -1; i <= 1; i++)
             for (int j = -1; j <= 1; j++) {
                 std::map<std::pair<int, int>, std::set<Body*>>::iterator bodies;
@@ -195,8 +202,7 @@ std::set<Body*> Body::neighbourBodies() const {
 
 std::set<Body*> Body::neighbourDynamicBodies() const {
     std::set<Body*> neighbourDynamicBodies; 
-    std::set<std::pair<int, int>> indexQuadrants = this->indexQuadrants();
-    for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++)
+    for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)
         for (int i = -1; i <= 1; i++)
             for (int j = -1; j <= 1; j++) {
                 std::map<std::pair<int, int>, std::set<Body*>>::iterator bodies;
@@ -211,8 +217,7 @@ std::set<Body*> Body::neighbourDynamicBodies() const {
 
 std::set<Body*> Body::neighbourTaggedBodies(const std::string& tag) const {
     std::set<Body*> neighbourTaggedBodies; 
-    std::set<std::pair<int, int>> indexQuadrants = this->indexQuadrants();
-    for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++)
+    for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)
         for (int i = -1; i <= 1; i++)
             for (int j = -1; j <= 1; j++) {
                 std::map<std::pair<int, int>, std::set<Body*>>::iterator bodies;
@@ -227,8 +232,7 @@ std::set<Body*> Body::neighbourTaggedBodies(const std::string& tag) const {
 
 std::set<Body*> Body::neighbourDynamicTaggedBodies(const std::string& tag) const {
     std::set<Body*> neighbourDynamicTaggedBodies; 
-    std::set<std::pair<int, int>> indexQuadrants = this->indexQuadrants();
-    for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++)
+    for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)
         for (int i = -1; i <= 1; i++)
             for (int j = -1; j <= 1; j++) {
                 std::map<std::pair<int, int>, std::set<Body*>>::iterator bodies;
@@ -404,17 +408,14 @@ std::set<std::string> Body::contactWith(const std::string& polygonId, const Body
 // ::: World :::
 
 void World::removeBodyFromIndex(Body& body) {
-    std::set<std::pair<int, int>> indexQuadrants = body.indexQuadrants();
-    for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++) {
+    for (std::vector<std::pair<int, int>>::iterator it = body._indexQuadrants.begin(); it != body._indexQuadrants.end(); it++) {
         std::map<std::pair<int, int>, std::set<Body*>>::iterator jt = _bodyIndex.find(*it);
-        if (jt != _bodyIndex.end())
-            jt->second.erase(&body);
+        jt->second.erase(&body);
     }
 }
 
 void World::addBodyToIndex(Body& body) {
-    std::set<std::pair<int, int>> indexQuadrants = body.indexQuadrants();
-    for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++) {
+    for (std::vector<std::pair<int, int>>::iterator it = body._indexQuadrants.begin(); it != body._indexQuadrants.end(); it++) {
         std::map<std::pair<int, int>, std::set<Body*>>::iterator jt = _bodyIndex.find(*it);
         if (jt == _bodyIndex.end()) {
             _bodyIndex.insert(std::make_pair(*it, std::set<Body*>()));

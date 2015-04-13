@@ -4,6 +4,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <vector>
 
 #include "cgpp/cgpp.h"
 
@@ -22,6 +23,7 @@ class Body {
         bool _dynamic;
         std::map<std::string, CG::Polygon> _polygons;
         std::set<std::string> _tags;
+        std::vector<std::pair<int, int>> _indexQuadrants;
 
         // Constructor and destructor.
         Body() {}
@@ -30,6 +32,9 @@ class Body {
         // Delete copy constructor and assignment operator.
         Body(const Body& other) = delete;
         Body& operator=(const Body& other) = delete;
+
+        // Refresh body index quadrants.
+        void refreshIndexQuadrants();
 
     public:
         // Body translation operator.
@@ -100,7 +105,7 @@ class Body {
         bool isOnWindow() const;
 
         // Return the index quadrants in which the polygons of this body are on.
-        std::set<std::pair<int, int>> indexQuadrants() const;
+        std::vector<std::pair<int, int>> indexQuadrants() const;
 
         // Return bodies near this body using index quadrants.
         std::set<Body*> neighbourBodies() const;
