@@ -12,7 +12,7 @@ class D2WTest : public ::testing::Test {
         World *world;
 
         virtual void SetUp() {
-            world = World::getInstance(Point(0, 0), Angle::radians(0), 0, 0, 1);
+            world = new World(Point(0, 0), Angle::radians(0), 0, 0, 1);
         }
 
         virtual void TearDown() {
@@ -724,21 +724,8 @@ TEST_F(D2WTest, BodyContactWithBody) {
 
 // ::: World :::
 
-TEST(World, GetInstance) {
-    EXPECT_ANY_THROW(World::getInstance());
-    EXPECT_TRUE(World::getInstance(Point(1, 1), Angle::radians(1), 1025, 769, 65) != NULL);
-    EXPECT_TRUE(World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 64) != NULL);
-    EXPECT_EQ(World::getInstance(), World::getInstance());
-    EXPECT_EQ(Point(0, 0), World::getInstance()->windowCenter());
-    EXPECT_EQ(Angle::radians(0), World::getInstance()->windowRotation());
-    EXPECT_EQ(1024, World::getInstance()->windowWidth());
-    EXPECT_EQ(768, World::getInstance()->windowHeight());
-    EXPECT_EQ(64, World::getInstance()->bodyIndexRange());
-    delete World::getInstance();
-}
-
 TEST(World, Destructor) {
-    World *world = World::getInstance(Point(0, 0), Angle::radians(0), 1024, 768, 64);
+    World *world = new World(Point(0, 0), Angle::radians(0), 1024, 768, 64);
     Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("square", Polygon::square(Point(0, 0), 1));
     delete world;

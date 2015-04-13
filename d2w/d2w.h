@@ -171,7 +171,6 @@ class World {
     friend class Body;
 
     private:
-        static World *_instance;
         CG::Point *_windowCenter;
         CG::Angle *_windowRotation;
         double _windowWidth;
@@ -180,9 +179,9 @@ class World {
         std::map<std::pair<int, int>, std::set<Body*>> _bodyIndex;
         int _bodyIndexRange;
 
-        // Constructor.
+        // Default constructor
         World() {}
-        
+  
         // Remove body from index.
         void removeBodyFromIndex(Body& body);
 
@@ -194,12 +193,8 @@ class World {
         World& operator=(const World& other) = delete;
 
     public:
-        // Singleton factory.
-        static World* getInstance();
-        static World* getInstance(const CG::Point& winCenter, const CG::Angle& winRotation, double winWidth, double winHeight,
-                                  int bodyIndex);
-
-        // Destructor.
+        // Constructor and destructor.
+        World(const CG::Point& winCenter, const CG::Angle& winRotation, double winWidth, double winHeight, int bodyIndexRange);
         ~World();
 
         // Window translation operator.

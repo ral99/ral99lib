@@ -403,8 +403,6 @@ std::set<std::string> Body::contactWith(const std::string& polygonId, const Body
 
 // ::: World :::
 
-World* World::_instance = NULL;
-
 void World::removeBodyFromIndex(Body& body) {
     std::set<std::pair<int, int>> indexQuadrants = body.indexQuadrants();
     for (std::set<std::pair<int, int>>::iterator it = indexQuadrants.begin(); it != indexQuadrants.end(); it++) {
@@ -426,29 +424,18 @@ void World::addBodyToIndex(Body& body) {
     }
 }
 
-World* World::getInstance() {
-    if (_instance == NULL)
-        throw std::invalid_argument("There is no World instance.");
-    return _instance;
-}
-
-World* World::getInstance(const Point& winCenter, const Angle& winRotation, double winWidth, double winHeight, int bodyIndexRange) {
-    if (_instance != NULL)
-        delete _instance;
-    _instance = new World;
-    _instance->_windowCenter = new Point(winCenter);
-    _instance->_windowRotation = new Angle(winRotation);
-    _instance->_windowWidth = winWidth;
-    _instance->_windowHeight = winHeight;
-    _instance->_bodyIndexRange = bodyIndexRange;
-    return _instance;
+World::World(const Point& winCenter, const Angle& winRotation, double winWidth, double winHeight, int bodyIndexRange) {
+    _windowCenter = new Point(winCenter);
+    _windowRotation = new Angle(winRotation);
+    _windowWidth = winWidth;
+    _windowHeight = winHeight;
+    _bodyIndexRange = bodyIndexRange;
 }
 
 World::~World() {
     clearBodies();
     delete _windowCenter;
     delete _windowRotation;
-    _instance = NULL;
 }
 
 void World::operator+=(const Vector& vector) {
