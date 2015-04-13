@@ -997,8 +997,21 @@ TEST_F(D2WTest, WorldTaggedBodiesOnWindow) {
 }
 
 TEST_F(D2WTest, WorldSetBodyIndexRange) {
-    world->setBodyIndexRange(128);
-    EXPECT_EQ(128, world->bodyIndexRange());
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body->addPolygon("square", Polygon::square(Point(0, 0), 1));
+
+    world->setBodyIndexRange(1);
+    std::vector<std::pair<int, int>> indexQuadrants = body->indexQuadrants();
+    EXPECT_EQ(4, indexQuadrants.size());
+    EXPECT_EQ(std::make_pair(0, 0), indexQuadrants[0]);
+    EXPECT_EQ(std::make_pair(0, 1), indexQuadrants[1]);
+    EXPECT_EQ(std::make_pair(1, 0), indexQuadrants[2]);
+    EXPECT_EQ(std::make_pair(1, 1), indexQuadrants[3]);
+
+    world->setBodyIndexRange(2);
+    indexQuadrants = body->indexQuadrants();
+    EXPECT_EQ(1, indexQuadrants.size());
+    EXPECT_EQ(std::make_pair(0, 0), indexQuadrants[0]);
 }
 
 TEST_F(D2WTest, WorldBodyIndexRange) {

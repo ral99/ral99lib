@@ -609,6 +609,11 @@ std::set<Body*> World::taggedBodiesOnWindow(const std::string& tag) const {
 
 void World::setBodyIndexRange(int bodyIndexRange) {
     _bodyIndexRange = bodyIndexRange;
+    for (std::set<Body*>::iterator it = _bodies.begin(); it != _bodies.end(); it++) {
+        removeBodyFromIndex(**it);
+        (*it)->refreshIndexQuadrants();
+        addBodyToIndex(**it);
+    }
 }
 
 int World::bodyIndexRange() const {
