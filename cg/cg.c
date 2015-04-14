@@ -560,11 +560,8 @@ int segment_equals(CGSegment segment1, CGSegment segment2) {
 
 int segment_lt(CGSegment segment1, CGSegment segment2) {
     CGPoint minPoint1 = point_lt(segment1->a, segment1->b) ? segment1->a : segment1->b;
-    CGPoint maxPoint1 = point_lt(segment1->a, segment1->b) ? segment1->b : segment1->a;
     CGPoint minPoint2 = point_lt(segment2->a, segment2->b) ? segment2->a : segment2->b;
-    CGPoint maxPoint2 = point_lt(segment2->a, segment2->b) ? segment2->b : segment2->a;
-    return (point_lt(minPoint1, minPoint2) ||
-            (point_equals(minPoint1, minPoint2) && point_lt(maxPoint1, maxPoint2))) ? 1 : 0;
+    return point_lt(minPoint1, minPoint2);
 }
 
 CGSegment segment_dup(CGSegment segment) {
