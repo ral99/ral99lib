@@ -714,6 +714,10 @@ bool Circle::operator==(const Circle& other) const {
     return (circle_equals(_circle, other._circle) == 1) ? true : false;
 }
 
+bool Circle::operator<(const Circle& other) const {
+    return (circle_lt(_circle, other._circle) == 1) ? true : false;
+}
+
 void Circle::operator+=(const Vector& vector) {
     circle_translate(_circle, vector._vector);
 }

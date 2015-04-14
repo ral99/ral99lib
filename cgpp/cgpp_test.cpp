@@ -1227,6 +1227,12 @@ TEST(Circle, ComparisonOperator) {
     EXPECT_FALSE(Circle(Point(1, 1), 1) == Circle(Point(1, 1), 2));
 }
 
+TEST(Circle, LowerThanComparisonOperator) {
+    EXPECT_FALSE(Circle(Point(1, 1), 1) < Circle(Point(1, 1), 1));
+    EXPECT_FALSE(Circle(Point(2, 1), 2) < Circle(Point(1, 1), 1));
+    EXPECT_TRUE(Circle(Point(1, 1), 2) < Circle(Point(1, 1), 1));
+}
+
 TEST(Circle, VectorSumOperator) {
     Circle circle(Point(1, 2), 3);
     circle += Vector(1, 2);

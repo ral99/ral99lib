@@ -427,8 +427,9 @@ class Circle {
         // Circle assignment operator.
         Circle& operator=(const Circle& other);
 
-        // Circle comparison operator.
+        // Circle comparison operators.
         bool operator==(const Circle& other) const;
+        bool operator<(const Circle& other) const;
 
         // Circle translation operator.
         void operator+=(const Vector& vector);
