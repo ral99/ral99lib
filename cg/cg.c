@@ -559,9 +559,9 @@ int segment_equals(CGSegment segment1, CGSegment segment2) {
 }
 
 int segment_lt(CGSegment segment1, CGSegment segment2) {
-    CGPoint minPoint1 = point_lt(segment1->a, segment1->b) ? segment1->a : segment1->b;
-    CGPoint minPoint2 = point_lt(segment2->a, segment2->b) ? segment2->a : segment2->b;
-    return point_lt(minPoint1, minPoint2);
+    CGPoint min_point1 = point_lt(segment1->a, segment1->b) ? segment1->a : segment1->b;
+    CGPoint min_point2 = point_lt(segment2->a, segment2->b) ? segment2->a : segment2->b;
+    return point_lt(min_point1, min_point2);
 }
 
 CGSegment segment_dup(CGSegment segment) {
@@ -651,11 +651,11 @@ int triangle_equals(CGTriangle triangle1, CGTriangle triangle2) {
 }
 
 int triangle_lt(CGTriangle triangle1, CGTriangle triangle2) {
-    CGPoint minPoint1 = point_lt(triangle1->a, triangle1->b) ? triangle1->a : triangle1->b;
-    minPoint1 = point_lt(minPoint1, triangle1->c) ? minPoint1 : triangle1->c;
-    CGPoint minPoint2 = point_lt(triangle2->a, triangle2->b) ? triangle2->a : triangle2->b;
-    minPoint2 = point_lt(minPoint2, triangle2->c) ? minPoint2 : triangle2->c;
-    return point_lt(minPoint1, minPoint2);
+    CGPoint min_point1 = point_lt(triangle1->a, triangle1->b) ? triangle1->a : triangle1->b;
+    min_point1 = point_lt(min_point1, triangle1->c) ? min_point1 : triangle1->c;
+    CGPoint min_point2 = point_lt(triangle2->a, triangle2->b) ? triangle2->a : triangle2->b;
+    min_point2 = point_lt(min_point2, triangle2->c) ? min_point2 : triangle2->c;
+    return point_lt(min_point1, min_point2);
 }
 
 CGTriangle triangle_dup(CGTriangle triangle) {
