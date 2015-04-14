@@ -116,13 +116,13 @@ int vector_lt(CGVector vector1, CGVector vector2) {
     CGVector base_vector = vector_new(1, 0);
     CGAngle angle1 = vector_angle_to(base_vector, vector1);
     CGAngle angle2 = vector_angle_to(base_vector, vector2);
-    int ret = (angle1 && angle2) ? angle_lt(angle1, angle2) : 0;
+    int lt = (angle1 && angle2) ? angle_lt(angle1, angle2) : 0;
     vector_release(base_vector);
     if (angle1)
         angle_release(angle1);
     if (angle2)
         angle_release(angle2);
-    return ret;
+    return lt;
 }
 
 CGVector vector_dup(CGVector vector) {
