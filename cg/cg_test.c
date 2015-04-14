@@ -3116,6 +3116,45 @@ static void test_circle_equals_3() {
     circle_release(circle2);
 }
 
+static void test_circle_lt_1() {
+    CGPoint center1 = point_new(1, 1);
+    CGPoint center2 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 1);
+    CGCircle circle2 = circle_new(center2, 1);
+    g_assert_cmpint(circle_lt(circle1, circle2), ==, 0);
+    g_assert_cmpint(circle_lt(circle2, circle1), ==, 0);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_lt_2() {
+    CGPoint center1 = point_new(2, 1);
+    CGPoint center2 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 2);
+    CGCircle circle2 = circle_new(center2, 1);
+    g_assert_cmpint(circle_lt(circle1, circle2), ==, 0);
+    g_assert_cmpint(circle_lt(circle2, circle1), ==, 0);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
+static void test_circle_lt_3() {
+    CGPoint center1 = point_new(1, 1);
+    CGPoint center2 = point_new(1, 1);
+    CGCircle circle1 = circle_new(center1, 2);
+    CGCircle circle2 = circle_new(center2, 1);
+    g_assert_cmpint(circle_lt(circle1, circle2), ==, 1);
+    g_assert_cmpint(circle_lt(circle2, circle1), ==, 0);
+    point_release(center1);
+    point_release(center2);
+    circle_release(circle1);
+    circle_release(circle2);
+}
+
 static void test_circle_dup_1() {
     CGPoint center = point_new(1, 2);
     CGCircle circle = circle_new(center, 3);
@@ -3502,6 +3541,9 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/circle_equals", test_circle_equals_1);
     g_test_add_func("/gc/circle_equals", test_circle_equals_2);
     g_test_add_func("/gc/circle_equals", test_circle_equals_3);
+    g_test_add_func("/gc/circle_lt", test_circle_lt_1);
+    g_test_add_func("/gc/circle_lt", test_circle_lt_2);
+    g_test_add_func("/gc/circle_lt", test_circle_lt_3);
     g_test_add_func("/gc/circle_dup", test_circle_dup_1);
     g_test_add_func("/gc/circle_to_str", test_circle_to_str_1);
     g_test_add_func("/gc/circle_center", test_circle_center_1);

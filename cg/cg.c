@@ -970,6 +970,15 @@ int circle_equals(CGCircle circle1, CGCircle circle2) {
     return 0;
 }
 
+int circle_lt(CGCircle circle1, CGCircle circle2) {
+    CGPoint min_point1 = point_new(point_x(circle1->center) - circle1->radius, point_y(circle1->center));
+    CGPoint min_point2 = point_new(point_x(circle2->center) - circle2->radius, point_y(circle2->center));
+    int lt = point_lt(min_point1, min_point2);
+    point_release(min_point1);
+    point_release(min_point2);
+    return lt;
+}
+
 CGCircle circle_dup(CGCircle circle) {
     CGCircle dup = (CGCircle) memalloc(sizeof(*dup));
     dup->center = point_dup(circle->center);

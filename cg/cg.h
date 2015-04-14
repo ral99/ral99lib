@@ -442,6 +442,9 @@ void circle_release(CGCircle circle);
 /* Return 1 if circle1 is equal to circle2. 0, otherwise. */
 int circle_equals(CGCircle circle1, CGCircle circle2);
 
+/* Return 1 if circle1 is lower than circle2. 0, otherwise. */
+int circle_lt(CGCircle circle1, CGCircle circle2);
+
 /* Return a copy of circle. */
 CGCircle circle_dup(CGCircle circle);
 
