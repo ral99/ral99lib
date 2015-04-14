@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdexcept>
+#include <stdlib.h>
 
 #include "cgpp/cgpp.h"
 #include "num/num.h"
@@ -95,6 +96,13 @@ void Angle::operator+=(const Angle& other) {
 
 void Angle::operator-=(const Angle& other) {
     angle_subtract(_angle, other._angle);
+}
+
+std::string Angle::toString(int decimalPositions) const {
+    char *cstr = angle_to_str(_angle, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
 }
 
 double Angle::radians() const {

@@ -106,6 +106,11 @@ TEST(Angle, UnarySubtractOperator) {
     EXPECT_EQ(Angle::radians(3 * M_PI / 4), angle);
 }
 
+TEST(Angle, ToString) {
+    EXPECT_EQ("<< Angle: 3.14 >>", Angle::radians(M_PI).toString(2));
+    EXPECT_EQ("<< Angle: 3.14 >>", Angle::degrees(180).toString(2));
+}
+
 TEST(Angle, Radians) {
     EXPECT_DOUBLE_EQ(M_PI, Angle::radians(M_PI).radians());
     EXPECT_DOUBLE_EQ(M_PI, Angle::degrees(180).radians());

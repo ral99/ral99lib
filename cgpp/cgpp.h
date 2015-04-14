@@ -2,6 +2,7 @@
 #define __CGPP__
 
 #include <set>
+#include <string>
 #include <vector>
 
 #include "cg/cg.h"
@@ -86,6 +87,9 @@ class Angle {
         Angle operator-(const Angle& other) const;
         void operator+=(const Angle& other);
         void operator-=(const Angle& other);
+
+        // String representation of angle.
+        std::string toString(int decimalPositions) const;
 
         // Return angle in radians.
         double radians() const;
