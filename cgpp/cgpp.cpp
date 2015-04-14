@@ -334,6 +334,13 @@ void Point::operator%=(const Angle& angle) {
     point_release(cgorigin);
 }
 
+std::string Point::toString(int decimalPositions) const {
+    char *cstr = point_to_str(_point, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
+}
+
 double Point::x() const {
     return point_x(_point);
 }

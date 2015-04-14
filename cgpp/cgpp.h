@@ -209,6 +209,9 @@ class Point {
         // Point rotation around origin operator.
         void operator%=(const Angle& angle);
 
+        // String representation of point.
+        std::string toString(int decimalPositions) const;
+
         // Return point x component.
         double x() const;
 

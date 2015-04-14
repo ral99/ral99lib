@@ -425,6 +425,10 @@ TEST(Point, RotationOperator) {
     EXPECT_EQ(Point(sqrt(2) / 2, sqrt(2) / 2), point);
 }
 
+TEST(Point, ToString) {
+    EXPECT_EQ("<< Point: (1.00, 2.00) >>", Point(1, 2).toString(2));
+}
+
 TEST(Point, X) {
     EXPECT_DOUBLE_EQ(1, Point(1, 2).x());
 }
