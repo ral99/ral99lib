@@ -650,6 +650,14 @@ int triangle_equals(CGTriangle triangle1, CGTriangle triangle2) {
     return 0;
 }
 
+int triangle_lt(CGTriangle triangle1, CGTriangle triangle2) {
+    CGPoint minPoint1 = point_lt(triangle1->a, triangle1->b) ? triangle1->a : triangle1->b;
+    minPoint1 = point_lt(minPoint1, triangle1->c) ? minPoint1 : triangle1->c;
+    CGPoint minPoint2 = point_lt(triangle2->a, triangle2->b) ? triangle2->a : triangle2->b;
+    minPoint2 = point_lt(minPoint2, triangle2->c) ? minPoint2 : triangle2->c;
+    return point_lt(minPoint1, minPoint2);
+}
+
 CGTriangle triangle_dup(CGTriangle triangle) {
     return triangle_new(triangle->a, triangle->b, triangle->c);
 }

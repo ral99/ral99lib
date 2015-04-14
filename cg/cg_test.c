@@ -2256,6 +2256,44 @@ static void test_triangle_equals_2() {
     point_release(c);
 }
 
+static void test_triangle_lt_1() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGPoint d = point_new(1, 1);
+    CGTriangle triangle1 = triangle_new(a, b, c);
+    CGTriangle triangle2 = triangle_new(a, b, d);
+    g_assert_cmpint(triangle_lt(triangle1, triangle1), ==, 0);
+    g_assert_cmpint(triangle_lt(triangle1, triangle2), ==, 0);
+    g_assert_cmpint(triangle_lt(triangle2, triangle1), ==, 0);
+    g_assert_cmpint(triangle_lt(triangle2, triangle2), ==, 0);
+    triangle_release(triangle1);
+    triangle_release(triangle2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
+static void test_triangle_lt_2() {
+    CGPoint a = point_new(0, 0);
+    CGPoint b = point_new(1, 0);
+    CGPoint c = point_new(0, 1);
+    CGPoint d = point_new(1, 1);
+    CGTriangle triangle1 = triangle_new(a, b, c);
+    CGTriangle triangle2 = triangle_new(b, c, d);
+    g_assert_cmpint(triangle_lt(triangle1, triangle1), ==, 0);
+    g_assert_cmpint(triangle_lt(triangle1, triangle2), ==, 1);
+    g_assert_cmpint(triangle_lt(triangle2, triangle1), ==, 0);
+    g_assert_cmpint(triangle_lt(triangle2, triangle2), ==, 0);
+    triangle_release(triangle1);
+    triangle_release(triangle2);
+    point_release(a);
+    point_release(b);
+    point_release(c);
+    point_release(d);
+}
+
 static void test_triangle_dup_1() {
     CGPoint a = point_new(0, 0);
     CGPoint b = point_new(1, 0);
@@ -3406,6 +3444,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/triangle_release", test_triangle_release_1);
     g_test_add_func("/gc/triangle_equals", test_triangle_equals_1);
     g_test_add_func("/gc/triangle_equals", test_triangle_equals_2);
+    g_test_add_func("/gc/triangle_lt", test_triangle_lt_1);
+    g_test_add_func("/gc/triangle_lt", test_triangle_lt_2);
     g_test_add_func("/gc/triangle_dup", test_triangle_dup_1);
     g_test_add_func("/gc/triangle_to_str", test_triangle_to_str_1);
     g_test_add_func("/gc/triangle_a", test_triangle_a_1);

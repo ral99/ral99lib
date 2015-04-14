@@ -347,6 +347,9 @@ void triangle_release(CGTriangle triangle);
 /* Return 1 if triangle1 is equal to triangle2. 0, otherwise. */
 int triangle_equals(CGTriangle triangle1, CGTriangle triangle2);
 
+/* Return 1 if triangle1 is lower than triangle2. 0, otherwise. */
+int triangle_lt(CGTriangle triangle1, CGTriangle triangle2);
+
 /* Return a copy of triangle. */
 CGTriangle triangle_dup(CGTriangle triangle);
 
