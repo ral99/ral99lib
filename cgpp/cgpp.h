@@ -189,7 +189,7 @@ class Point {
         // Point assignment operator.
         Point& operator=(const Point& other);
 
-        // Point comparison operator.
+        // Point comparison operators.
         bool operator==(const Point& other) const;
         bool operator<(const Point& other) const;
 
@@ -264,7 +264,7 @@ class Segment {
         // Segment assignment operator.
         Segment& operator=(const Segment& other);
 
-        // Segment comparison operator.
+        // Segment comparison operators.
         bool operator==(const Segment& other) const;
         bool operator<(const Segment& other) const;
 
@@ -312,6 +312,7 @@ class Triangle {
 
         // Triangle comparison operator.
         bool operator==(const Triangle& other) const;
+        bool operator<(const Triangle& other) const;
 
         // Triangle translation operator.
         void operator+=(const Vector& vector);

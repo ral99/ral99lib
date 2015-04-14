@@ -50,7 +50,7 @@ TEST(Angle, ComparisonOperator) {
     EXPECT_FALSE(Angle::radians(M_PI) == Angle::radians(0));
 }
 
-TEST(Angle, LowerThanOperator) {
+TEST(Angle, LowerThanComparisonOperator) {
     EXPECT_FALSE(Angle::radians(M_PI / 2) < Angle::radians(M_PI / 4));
     EXPECT_FALSE(Angle::radians(M_PI / 2) < Angle::radians(M_PI / 2));
     EXPECT_TRUE(Angle::radians(M_PI / 2) < Angle::radians(M_PI));
@@ -154,7 +154,7 @@ TEST(Vector, ComparisonOperator) {
     EXPECT_FALSE(Vector(1, 2) == Vector(3, 2));
 }
 
-TEST(Vector, LowerThanOperator) {
+TEST(Vector, LowerThanComparisonOperator) {
     EXPECT_FALSE(Vector(1, 0) < Vector(1, 0));
     EXPECT_TRUE(Vector(1, 0) < Vector(0, 1));
     EXPECT_TRUE(Vector(1, 0) < Vector(-1, 0));
@@ -798,6 +798,15 @@ TEST(Triangle, ComparisonOperator) {
               Triangle(Point(1, 0), Point(0, 1), Point(0, 0)));
     EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) ==
                  Triangle(Point(1, 1), Point(0, 1), Point(0, 0)));
+}
+
+TEST(Triangle, LowerThanComparisonOperator) {
+    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) <
+                 Triangle(Point(0, 0), Point(1, 0), Point(0, 1)));
+    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) <
+                 Triangle(Point(0, 0), Point(1, 0), Point(1, 1)));
+    EXPECT_TRUE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) <
+                Triangle(Point(1, 0), Point(0, 1), Point(1, 1)));
 }
 
 TEST(Triangle, VectorSumOperator) {

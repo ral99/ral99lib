@@ -483,6 +483,10 @@ bool Triangle::operator==(const Triangle& other) const {
     return (triangle_equals(_triangle, other._triangle)) ? true : false;
 }
 
+bool Triangle::operator<(const Triangle& other) const {
+    return (triangle_lt(_triangle, other._triangle)) ? true : false;
+}
+
 void Triangle::operator+=(const Vector& vector) {
     triangle_translate(_triangle, vector._vector);
 }
