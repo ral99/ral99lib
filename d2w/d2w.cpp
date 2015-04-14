@@ -11,6 +11,7 @@ using namespace CG;
 // ::: Body :::
 
 Body::~Body() {
+    _world->removeBody(*this);
     delete _center;
     delete _rotation;
 }
@@ -473,6 +474,11 @@ void World::addBodyToIndex(Body& body) {
     }
 }
 
+void World::removeBody(Body& body) {
+    removeBodyFromIndex(body);
+    _bodies.erase(&body);
+}
+
 World::World(const Point& winCenter, const Angle& winRotation, double winWidth, double winHeight, int bodyIndexRange) {
     _windowCenter = new Point(winCenter);
     _windowRotation = new Angle(winRotation);
@@ -547,12 +553,6 @@ Body* World::createBody(const Point& center, const Angle& rotation, const bool i
     return body;
 }
 
-void World::removeBody(Body& body) {
-    removeBodyFromIndex(body);
-    _bodies.erase(&body);
-    delete &body;
-}
-
 void World::removeTaggedBodies(const std::string& tag) {
     std::set<std::string> tags;
     tags.insert(tag);
@@ -562,14 +562,13 @@ void World::removeTaggedBodies(const std::string& tag) {
 void World::removeTaggedBodies(const std::set<std::string>& tags) {
     std::set<Body*> taggedBodies = this->taggedBodies(tags);
     for (std::set<Body*>::iterator it = taggedBodies.begin(); it != taggedBodies.end(); it++)
-        removeBody(**it);
+        delete *it;
 }
 
 void World::clearBodies() {
-    for (std::set<Body*>::iterator it = _bodies.begin(); it != _bodies.end(); it++)
+    std::set<Body*> bodies = _bodies;
+    for (std::set<Body*>::iterator it = bodies.begin(); it != bodies.end(); it++)
         delete *it;
-    _bodies.clear();
-    _bodyIndex.clear();
 }
 
 std::set<Body*> World::bodies() const {

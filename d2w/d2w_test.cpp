@@ -22,6 +22,12 @@ class D2WTest : public ::testing::Test {
 
 // ::: Body :::
 
+TEST_F(D2WTest, BodyDestructor) {
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    delete body;
+}
+
 TEST_F(D2WTest, BodyUnarySumOperator) {
     Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("square", Polygon::square(Point(0, 0), 1));
@@ -287,7 +293,7 @@ TEST_F(D2WTest, BodyNeighbourBodies) {
     for (int i = 0; i <= 2; i++)
         for (int j = 0; j <= 2; j++)
             EXPECT_NE(bodies.end(), bodies.find(bodyGrid[i][j]));
-    world->removeBody(*body1);
+    delete body1;
 
     Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
     body2->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
@@ -296,7 +302,7 @@ TEST_F(D2WTest, BodyNeighbourBodies) {
     for (int i = 0; i <= 3; i++)
         for (int j = 0; j <= 4; j++)
             EXPECT_NE(bodies.end(), bodies.find(bodyGrid[i][j]));
-    world->removeBody(*body2);
+    delete body2;
 }
 
 TEST_F(D2WTest, BodyNeighbourDynamicBodies) {
@@ -318,7 +324,7 @@ TEST_F(D2WTest, BodyNeighbourDynamicBodies) {
     for (int i = 1; i <= 2; i++)
         for (int j = 0; j <= 2; j++)
             EXPECT_NE(bodies.end(), bodies.find(bodyGrid[i][j]));
-    world->removeBody(*body1);
+    delete body1;
 
     Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
     body2->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
@@ -327,7 +333,7 @@ TEST_F(D2WTest, BodyNeighbourDynamicBodies) {
     for (int i = 1; i <= 3; i++)
         for (int j = 0; j <= 4; j++)
             EXPECT_NE(bodies.end(), bodies.find(bodyGrid[i][j]));
-    world->removeBody(*body2);
+    delete body2;
 }
 
 TEST_F(D2WTest, BodyNeighbourTaggedBodies) {
@@ -348,7 +354,7 @@ TEST_F(D2WTest, BodyNeighbourTaggedBodies) {
     EXPECT_EQ(3, bodies.size());
     for (int i = 0; i <= 2; i++)
         EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][i]));
-    world->removeBody(*body1);
+    delete body1;
 
     Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
     body2->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
@@ -356,7 +362,7 @@ TEST_F(D2WTest, BodyNeighbourTaggedBodies) {
     EXPECT_EQ(5, bodies.size());
     for (int i = 0; i <= 4; i++)
         EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][i]));
-    world->removeBody(*body2);
+    delete body2;
 
     Body *body3 = world->createBody(Point(0, 0), Angle::radians(0), true);
     body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
@@ -366,7 +372,7 @@ TEST_F(D2WTest, BodyNeighbourTaggedBodies) {
     bodies = body3->neighbourTaggedBodies(tags);
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
-    world->removeBody(*body3);
+    delete body3;
 }
 
 TEST_F(D2WTest, BodyNeighbourDynamicTaggedBodies) {
@@ -386,14 +392,14 @@ TEST_F(D2WTest, BodyNeighbourDynamicTaggedBodies) {
     std::set<Body*> bodies = body1->neighbourDynamicTaggedBodies("zero");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
-    world->removeBody(*body1);
+    delete body1;
 
     Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
     body2->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     bodies = body2->neighbourDynamicTaggedBodies("zero");
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
-    world->removeBody(*body2);
+    delete body2;
 
     Body *body3 = world->createBody(Point(0, 0), Angle::radians(0), true);
     body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
@@ -403,7 +409,7 @@ TEST_F(D2WTest, BodyNeighbourDynamicTaggedBodies) {
     bodies = body3->neighbourDynamicTaggedBodies(tags);
     EXPECT_EQ(1, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyGrid[0][0]));
-    world->removeBody(*body3);
+    delete body3;
 }
 
 TEST_F(D2WTest, BodyIsCollidingWithBody) {
@@ -870,13 +876,6 @@ TEST_F(D2WTest, WorldCreateBody) {
     bodies = world->bodies();
     EXPECT_EQ(2, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(body));
-}
-
-TEST_F(D2WTest, WorldRemoveBody) {
-    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
-    body->addPolygon("square", Polygon::square(Point(0, 0), 1));
-    world->removeBody(*body);
-    EXPECT_EQ(0, world->bodies().size());
 }
 
 TEST_F(D2WTest, WorldRemoveTaggedBodies) {

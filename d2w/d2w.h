@@ -25,9 +25,8 @@ class Body {
         std::set<std::string> _tags;
         std::vector<std::pair<int, int>> _indexQuadrants;
 
-        // Constructor and destructor.
+        // Constructor.
         Body() {}
-        ~Body();
 
         // Delete copy constructor and assignment operator.
         Body(const Body& other) = delete;
@@ -37,6 +36,9 @@ class Body {
         void refreshIndexQuadrants();
 
     public:
+        // Destructor.
+        ~Body();
+
         // Body translation operator.
         void operator+=(const CG::Vector& vector);
         void operator-=(const CG::Vector& vector);
@@ -211,6 +213,9 @@ class World {
         // Add body to index.
         void addBodyToIndex(Body& body);
 
+        // Remove body from world.
+        void removeBody(Body &body);
+
         // Delete copy constructor and assignment operator.
         World(const World& other) = delete;
         World& operator=(const World& other) = delete;
@@ -256,9 +261,6 @@ class World {
 
         // Return a pointer to a new body.
         Body* createBody(const CG::Point& center, const CG::Angle& rotation, const bool isDynamic);
-
-        // Destroy body.
-        void removeBody(Body& body);
 
         // Destroy tagged bodies.
         void removeTaggedBodies(const std::string& tag);
