@@ -775,6 +775,13 @@ void Circle::operator%=(const Angle& angle) {
     point_release(cgorigin);
 }
 
+std::string Circle::toString(int decimalPositions) const {
+    char *cstr = circle_to_str(_circle, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
+}
+
 void Circle::rotateAround(const Point& center, const Angle& angle) {
     circle_rotate_around(_circle, center._point, angle._angle);
 }

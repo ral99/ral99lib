@@ -457,6 +457,9 @@ class Circle {
         // Circle rotation around origin.
         void operator%=(const Angle& angle);
 
+        // String representation of circle.
+        std::string toString(int decimalPositions) const;
+
         // Rotate circle around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 

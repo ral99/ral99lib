@@ -1289,6 +1289,10 @@ TEST(Circle, RotationOperator) {
     EXPECT_EQ(Circle(Point(1, 1), 1), circle);
 }
 
+TEST(Circle, ToString) {
+    EXPECT_EQ("<< Circle: (1.00, 2.00); 3.00 >>", Circle(Point(1, 2), 3).toString(2));
+}
+
 TEST(Circle, RotateAround) {
     Circle circle(Point(1, 1), 1);
 
