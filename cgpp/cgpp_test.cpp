@@ -723,6 +723,11 @@ TEST(Segment, RotationOperator) {
     EXPECT_EQ(Segment(Point(0, 0), Point(0, sqrt(2))), segment);
 }
 
+TEST(Segment, ToString) {
+    EXPECT_EQ("<< Segment: (1.00, 2.00); (3.00, 4.00) >>",
+              Segment(Point(1, 2), Point(3, 4)).toString(2));
+}
+
 TEST(Segment, RotateAround) {
     Segment segment(Point(0, 0), Point(1, 1));
 

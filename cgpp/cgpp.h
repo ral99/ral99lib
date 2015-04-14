@@ -285,6 +285,9 @@ class Segment {
         // Segment rotation around origin operator.
         void operator%=(const Angle& angle);
 
+        // String representation of segment.
+        std::string toString(int decimalPositions) const;
+
         // Rotate segment around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 

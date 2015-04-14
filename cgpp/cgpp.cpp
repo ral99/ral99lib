@@ -449,6 +449,13 @@ void Segment::operator%=(const Angle& angle) {
     point_release(cgorigin);
 }
 
+std::string Segment::toString(int decimalPositions) const {
+    char *cstr = segment_to_str(_segment, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
+}
+
 void Segment::rotateAround(const Point& center, const Angle& angle) {
     segment_rotate_around(_segment, center._point, angle._angle);
 }
