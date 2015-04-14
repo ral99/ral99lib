@@ -208,6 +208,13 @@ void Vector::operator%=(const Angle& angle) {
     vector_rotate(_vector, angle._angle);
 }
 
+std::string Vector::toString(int decimalPositions) const {
+    char *cstr = vector_to_str(_vector, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
+}
+
 void Vector::normalize() {
     vector_normalize(_vector);
 }

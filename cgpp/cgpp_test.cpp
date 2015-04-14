@@ -247,6 +247,10 @@ TEST(Vector, UnaryRotationOperator) {
     EXPECT_EQ(Vector(sqrt(2) / 2, sqrt(2) / 2), vector);
 }
 
+TEST(Vector, ToString) {
+    ASSERT_EQ("<< Vector: (1.00, 2.00) >>", Vector(1, 2).toString(2));
+}
+
 TEST(Vector, Normalize) {
     Vector vector1(1, 0);
     vector1.normalize();

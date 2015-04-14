@@ -124,7 +124,7 @@ class Vector {
         // Vector comparison operators.
         bool operator==(const Vector& other) const;
         bool operator<(const Vector& other) const;
-        
+         
         // Vector arithmetic operators.
         Vector operator+() const;
         Vector operator-() const;
@@ -138,6 +138,9 @@ class Vector {
         // Vector rotation operator.
         Vector operator%(const Angle& angle) const;
         void operator%=(const Angle& angle);
+
+        // String representation of vector.
+        std::string toString(int decimalPositions) const;
 
         // Normalize vector.
         void normalize();
