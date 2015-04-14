@@ -334,6 +334,9 @@ class Triangle {
         // Triangle rotation around origin operator.
         void operator%=(const Angle& angle);
 
+        // String representation of triangle.
+        std::string toString(int decimalPositions) const;
+
         // Rotate triangle around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 

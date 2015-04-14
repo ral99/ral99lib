@@ -530,6 +530,13 @@ void Triangle::operator%=(const Angle& angle) {
     point_release(cgorigin);
 }
 
+std::string Triangle::toString(int decimalPositions) const {
+    char *cstr = triangle_to_str(_triangle, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
+}
+
 void Triangle::rotateAround(const Point& center, const Angle& angle) {
     triangle_rotate_around(_triangle, center._point, angle._angle);
 }

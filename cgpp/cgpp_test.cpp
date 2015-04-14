@@ -859,6 +859,11 @@ TEST(Triangle, RotationOperator) {
               Point(sqrt(2) / 2, sqrt(2) / 2)), triangle);
 }
 
+TEST(Triangle, ToString) {
+    EXPECT_EQ("<< Triangle: (0.00, 0.00); (1.00, 0.00); (0.00, 1.00) >>",
+              Triangle(Point(0, 0), Point(1, 0), Point(0, 1)).toString(2));
+}
+
 TEST(Triangle, RotateAround) {
     Triangle triangle(Point(0, 0), Point(0, 1), Point(1, 0));
 
