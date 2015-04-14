@@ -148,6 +148,9 @@ void vector_release(CGVector vector);
 /* Return 1 if vector1 is equal to vector2. 0, otherwise. */
 int vector_equals(CGVector vector1, CGVector vector2);
 
+/* Return 1 if vector1 is lower than vector2. 0, otherwise. */
+int vector_lt(CGVector vector1, CGVector vector2);
+
 /* Return a copy of vector. */
 CGVector vector_dup(CGVector vector);
 

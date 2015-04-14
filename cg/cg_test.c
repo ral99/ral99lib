@@ -327,6 +327,60 @@ static void test_vector_equals_4() {
     vector_release(vector2);
 }
 
+static void test_vector_lt_1() {
+    CGVector vector1 = vector_new(1, 1);
+    CGVector vector2 = vector_new(1, 1);
+    g_assert_cmpint(vector_lt(vector1, vector2), ==, 0);
+    g_assert_cmpint(vector_lt(vector2, vector1), ==, 0);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_lt_2() {
+    CGVector vector1 = vector_new(1, 0);
+    CGVector vector2 = vector_new(0, 1);
+    g_assert_cmpint(vector_lt(vector1, vector2), ==, 1);
+    g_assert_cmpint(vector_lt(vector2, vector1), ==, 0);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_lt_3() {
+    CGVector vector1 = vector_new(0, 1);
+    CGVector vector2 = vector_new(-1, 0);
+    g_assert_cmpint(vector_lt(vector1, vector2), ==, 1);
+    g_assert_cmpint(vector_lt(vector2, vector1), ==, 0);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_lt_4() {
+    CGVector vector1 = vector_new(-1, 0);
+    CGVector vector2 = vector_new(0, -1);
+    g_assert_cmpint(vector_lt(vector1, vector2), ==, 1);
+    g_assert_cmpint(vector_lt(vector2, vector1), ==, 0);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_lt_5() {
+    CGVector vector1 = vector_new(0, -1);
+    CGVector vector2 = vector_new(1, 0);
+    g_assert_cmpint(vector_lt(vector1, vector2), ==, 0);
+    g_assert_cmpint(vector_lt(vector2, vector1), ==, 1);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
+static void test_vector_lt_6() {
+    CGVector vector1 = vector_new(0, 0);
+    CGVector vector2 = vector_new(1, 0);
+    g_assert_cmpint(vector_lt(vector1, vector2), ==, 0);
+    g_assert_cmpint(vector_lt(vector2, vector1), ==, 0);
+    vector_release(vector1);
+    vector_release(vector2);
+}
+
 static void test_vector_dup_1() {
     CGVector vector = vector_new(2, 3);
     CGVector dup = vector_dup(vector);
@@ -3206,6 +3260,12 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/vector_equals", test_vector_equals_2);
     g_test_add_func("/gc/vector_equals", test_vector_equals_3);
     g_test_add_func("/gc/vector_equals", test_vector_equals_4);
+    g_test_add_func("/gc/vector_lt", test_vector_lt_1);
+    g_test_add_func("/gc/vector_lt", test_vector_lt_2);
+    g_test_add_func("/gc/vector_lt", test_vector_lt_3);
+    g_test_add_func("/gc/vector_lt", test_vector_lt_4);
+    g_test_add_func("/gc/vector_lt", test_vector_lt_5);
+    g_test_add_func("/gc/vector_lt", test_vector_lt_6);
     g_test_add_func("/gc/vector_dup", test_vector_dup_1);
     g_test_add_func("/gc/vector_to_str", test_vector_to_str_1);
     g_test_add_func("/gc/vector_x", test_vector_x_1);
