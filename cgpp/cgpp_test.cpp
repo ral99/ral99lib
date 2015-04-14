@@ -154,6 +154,25 @@ TEST(Vector, ComparisonOperator) {
     EXPECT_FALSE(Vector(1, 2) == Vector(3, 2));
 }
 
+TEST(Vector, LowerThanOperator) {
+    EXPECT_FALSE(Vector(1, 0) < Vector(1, 0));
+    EXPECT_TRUE(Vector(1, 0) < Vector(0, 1));
+    EXPECT_TRUE(Vector(1, 0) < Vector(-1, 0));
+    EXPECT_TRUE(Vector(1, 0) < Vector(0, -1));
+    EXPECT_FALSE(Vector(0, 1) < Vector(1, 0));
+    EXPECT_FALSE(Vector(0, 1) < Vector(0, 1));
+    EXPECT_TRUE(Vector(0, 1) < Vector(-1, 0));
+    EXPECT_TRUE(Vector(0, 1) < Vector(0, -1));
+    EXPECT_FALSE(Vector(-1, 0) < Vector(1, 0));
+    EXPECT_FALSE(Vector(-1, 0) < Vector(0, 1));
+    EXPECT_FALSE(Vector(-1, 0) < Vector(-1, 0));
+    EXPECT_TRUE(Vector(-1, 0) < Vector(0, -1));
+    EXPECT_FALSE(Vector(0, -1) < Vector(1, 0));
+    EXPECT_FALSE(Vector(0, -1) < Vector(0, 1));
+    EXPECT_FALSE(Vector(0, -1) < Vector(-1, 0));
+    EXPECT_FALSE(Vector(0, -1) < Vector(0, -1));
+}
+
 TEST(Vector, UnaryPositiveOperator) {
     Vector vector = +Vector(1, 2);
     EXPECT_EQ(Vector(1, 2), vector);

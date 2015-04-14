@@ -117,8 +117,9 @@ class Vector {
         // Vector assignment operator.
         Vector& operator=(const Vector& other);
 
-        // Vector comparison operator.
+        // Vector comparison operators.
         bool operator==(const Vector& other) const;
+        bool operator<(const Vector& other) const;
         
         // Vector arithmetic operators.
         Vector operator+() const;

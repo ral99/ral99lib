@@ -145,6 +145,10 @@ bool Vector::operator==(const Vector& other) const {
     return (vector_equals(_vector, other._vector)) ? true : false;
 }
 
+bool Vector::operator<(const Vector& other) const {
+    return (vector_lt(_vector, other._vector)) ? true : false;
+}
+
 Vector Vector::operator+() const {
     Vector vector(_vector);
     return vector;
