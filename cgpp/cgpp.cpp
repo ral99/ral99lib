@@ -655,6 +655,13 @@ void Polygon::operator%=(const Angle& angle) {
     point_release(cgorigin);
 }
 
+std::string Polygon::toString(int decimalPositions) const {
+    char *cstr = polygon_to_str(_polygon, decimalPositions);
+    std::string str(cstr);
+    free(cstr);
+    return str;
+}
+
 void Polygon::rotateAround(const Point& center, const Angle& angle) {
     polygon_rotate_around(_polygon, center._point, angle._angle);
 }

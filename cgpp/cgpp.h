@@ -394,6 +394,9 @@ class Polygon {
         // Polygon rotation around origin operator.
         void operator%=(const Angle& angle);
 
+        // String representation of polygon.
+        std::string toString(int decimalPositions) const;
+
         // Rotate polygon around a center point.
         void rotateAround(const Point& center, const Angle& angle);
 

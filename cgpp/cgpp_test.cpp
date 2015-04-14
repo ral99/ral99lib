@@ -1058,6 +1058,11 @@ TEST(Polygon, RotationOperator) {
     EXPECT_EQ(Polygon::square(Point(0, 0), 1), polygon);
 }
 
+TEST(Polygon, ToString) {
+    EXPECT_EQ("<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>",
+              Polygon::square(Point(0, 0), 1).toString(0));
+}
+
 TEST(Polygon, RotateAround) {
     Polygon polygon = Polygon::square(Point(0, 0), 1);
 
