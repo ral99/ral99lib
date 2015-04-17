@@ -535,6 +535,7 @@ TEST_F(D2WTest, BodyCollidingDynamicBodies) {
     EXPECT_NE(bodies.end(), bodies.find(bodyE));
 
     EXPECT_ANY_THROW(body->collidingDynamicBodies("triangle"));
+    EXPECT_ANY_THROW(body->collidingDynamicBodies("triangle", 0));
 }
 
 TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
@@ -544,27 +545,52 @@ TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
     Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), false);
     bodyA->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     bodyA->addTag("vowel");
+    bodyA->addTag("a");
     Body *bodyB = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyB->addPolygon("rectangle", Polygon::rectangle(Point(0, 1), 1, 2));
     bodyB->addTag("consonant");
+    bodyB->addTag("b");
     Body *bodyC = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyC->addPolygon("rectangle", Polygon::rectangle(Point(1, 0), 1, 2));
     bodyC->addTag("consonant");
+    bodyC->addTag("c");
     Body *bodyD = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 2, 1));
     bodyD->addTag("consonant");
+    bodyD->addTag("d");
     Body *bodyE = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyE->addPolygon("rectangle", Polygon::rectangle(Point(5, 0), 1, 2));
     bodyE->addTag("vowel");
+    bodyE->addTag("e");
+    Body *bodyF = world->createBody(Point(0, 1), Angle::radians(0), true);
+    bodyF->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
+    bodyF->addTag("consonant");
+    bodyF->addTag("f");
 
     std::set<std::string> tags;
     tags.insert("consonant");
     tags.insert("vowel");
 
+    std::set<std::string> consonantF;
+    consonantF.insert("consonant");
+    consonantF.insert("f");
+
     std::set<Body*> bodies = body->collidingDynamicTaggedBodies("consonant");
+    EXPECT_EQ(3, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyD));
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
+    bodies = body->collidingDynamicTaggedBodies("consonant", 0);
     EXPECT_EQ(2, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
     EXPECT_NE(bodies.end(), bodies.find(bodyD));
+
+    bodies = body->collidingDynamicTaggedBodies("consonant", 1);
+    EXPECT_EQ(3, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyD));
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
 
     bodies = body->collidingDynamicTaggedBodies("vowel");
     EXPECT_EQ(1, bodies.size());
@@ -573,10 +599,33 @@ TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
     bodies = body->collidingDynamicTaggedBodies(tags);
     EXPECT_EQ(0, bodies.size());
 
+    bodies = body->collidingDynamicTaggedBodies(consonantF);
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
+    bodies = body->collidingDynamicTaggedBodies(consonantF, 0);
+    EXPECT_EQ(0, bodies.size());
+
+    bodies = body->collidingDynamicTaggedBodies(consonantF, 1);
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
     bodies = body->collidingDynamicTaggedBodies("rectangle", "consonant");
+    EXPECT_EQ(3, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyD));
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
+    bodies = body->collidingDynamicTaggedBodies("rectangle", "consonant", 0);
     EXPECT_EQ(2, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
     EXPECT_NE(bodies.end(), bodies.find(bodyD));
+
+    bodies = body->collidingDynamicTaggedBodies("rectangle", "consonant", 1);
+    EXPECT_EQ(3, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyD));
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
 
     bodies = body->collidingDynamicTaggedBodies("rectangle", "vowel");
     EXPECT_EQ(0, bodies.size());
@@ -591,11 +640,26 @@ TEST_F(D2WTest, BodyCollidingDynamicTaggedBodies) {
     bodies = body->collidingDynamicTaggedBodies("rectangle", tags);
     EXPECT_EQ(0, bodies.size());
 
+    bodies = body->collidingDynamicTaggedBodies("rectangle", consonantF);
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
+    bodies = body->collidingDynamicTaggedBodies("rectangle", consonantF, 0);
+    EXPECT_EQ(0, bodies.size());
+    
+    bodies = body->collidingDynamicTaggedBodies("rectangle", consonantF, 1);
+    EXPECT_EQ(1, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
     bodies = body->collidingDynamicTaggedBodies("square", tags);
     EXPECT_EQ(0, bodies.size());
 
     EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", "vowel"));
+    EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", "vowel", 0));
     EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", "consonant"));
+    EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", "consonant", 0));
+    EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", tags));
+    EXPECT_ANY_THROW(body->collidingDynamicTaggedBodies("triangle", tags, 0));
 }
 
 TEST_F(D2WTest, BodyCollisionWithBody) {

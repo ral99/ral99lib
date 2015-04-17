@@ -167,14 +167,41 @@ class Body {
         // Return dynamic tagged bodies colliding with this body.
         std::set<Body*> collidingDynamicTaggedBodies(const std::string& tag) const;
 
+        // Return dynamic tagged bodies colliding with this body which the distance between their
+        // centers is lower than maxDistance.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::string& tag, float maxDistance) const;
+
         // Return dynamic tagged bodies colliding with this body.
         std::set<Body*> collidingDynamicTaggedBodies(const std::set<std::string>& tags) const;
 
-        // Return dynamic tagged bodies colliding with the specified polygon of this body or raise an exception if id is invalid.
-        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const;
+        // Return dynamic tagged bodies colliding with this body which the distance between their
+        // centers is lower than maxDistance.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::set<std::string>& tags,
+                                                     float maxDistance) const;
 
-        // Return dynamic tagged bodies colliding with the specified polygon of this body or raise an exception if id is invalid.
-        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const;
+        // Return dynamic tagged bodies colliding with the specified polygon of this body or raise
+        // an exception if id is invalid.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId,
+                                                     const std::string& tag) const;
+
+        // Return dynamic tagged bodies colliding with the specified polygon of this body which the
+        // distance between their centers is lower than maxDistance or raise an exception if id is
+        // invalid.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId,
+                                                     const std::string& tag,
+                                                     float maxDistance) const;
+
+        // Return dynamic tagged bodies colliding with the specified polygon of this body or raise
+        // an exception if id is invalid.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId,
+                                                     const std::set<std::string>& tags) const;
+
+        // Return dynamic tagged bodies colliding with the specified polygon of this body which the
+        // distance between their centers is lower than maxDistance or raise an exception if id is
+        // invalid.
+        std::set<Body*> collidingDynamicTaggedBodies(const std::string& polygonId,
+                                                     const std::set<std::string>& tags,
+                                                     float maxDistance) const;
 
         // Return a set of pairs of ids of polygons of this and another colliding body.
         std::set<std::pair<std::string, std::string>> collisionWith(const Body& other) const;

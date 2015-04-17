@@ -350,11 +350,28 @@ std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& tag) const
     return collidingDynamicTaggedBodies(tags);
 }
 
+std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& tag,
+                                                   float maxDistance) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return collidingDynamicTaggedBodies(tags, maxDistance);
+}
+
 std::set<Body*> Body::collidingDynamicTaggedBodies(const std::set<std::string>& tags) const {
     std::set<Body*> collidingDynamicTaggedBodies;
     std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
     for (std::set<Body*>::iterator it = neighbourDynamicTaggedBodies.begin(); it != neighbourDynamicTaggedBodies.end(); it++)
         if (isCollidingWith(**it))
+            collidingDynamicTaggedBodies.insert(*it);
+    return collidingDynamicTaggedBodies;
+}
+
+std::set<Body*> Body::collidingDynamicTaggedBodies(const std::set<std::string>& tags,
+                                                   float maxDistance) const {
+    std::set<Body*> collidingDynamicTaggedBodies;
+    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
+    for (std::set<Body*>::iterator it = neighbourDynamicTaggedBodies.begin(); it != neighbourDynamicTaggedBodies.end(); it++)
+        if (isCollidingWith(**it, maxDistance))
             collidingDynamicTaggedBodies.insert(*it);
     return collidingDynamicTaggedBodies;
 }
@@ -365,6 +382,14 @@ std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId,
     return collidingDynamicTaggedBodies(polygonId, tags);
 }
 
+std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId,
+                                                   const std::string& tag,
+                                                   float maxDistance) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return collidingDynamicTaggedBodies(polygonId, tags, maxDistance);
+}
+
 std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const {
     std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
     if (it == _polygons.end())
@@ -373,6 +398,20 @@ std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId,
     std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
     for (std::set<Body*>::iterator jt = neighbourDynamicTaggedBodies.begin(); jt != neighbourDynamicTaggedBodies.end(); jt++)
         if (isCollidingWith(polygonId, **jt))
+            collidingDynamicTaggedBodies.insert(*jt);
+    return collidingDynamicTaggedBodies;
+}
+
+std::set<Body*> Body::collidingDynamicTaggedBodies(const std::string& polygonId,
+                                                   const std::set<std::string>& tags,
+                                                   float maxDistance) const {
+    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
+    if (it == _polygons.end())
+        throw std::invalid_argument("Polygon id is invalid.");
+    std::set<Body*> collidingDynamicTaggedBodies;
+    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
+    for (std::set<Body*>::iterator jt = neighbourDynamicTaggedBodies.begin(); jt != neighbourDynamicTaggedBodies.end(); jt++)
+        if (isCollidingWith(polygonId, **jt, maxDistance))
             collidingDynamicTaggedBodies.insert(*jt);
     return collidingDynamicTaggedBodies;
 }
