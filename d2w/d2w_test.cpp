@@ -438,22 +438,40 @@ TEST_F(D2WTest, BodyIsCollidingWithBody) {
     Body *bodyA = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyA->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     EXPECT_TRUE(body->isCollidingWith(*bodyA));
+    EXPECT_TRUE(body->isCollidingWith(*bodyA, 0));
+    EXPECT_TRUE(body->isCollidingWith(*bodyA, 1));
     EXPECT_TRUE(body->isCollidingWith("rectangle", *bodyA));
+    EXPECT_TRUE(body->isCollidingWith("rectangle", *bodyA, 0));
+    EXPECT_TRUE(body->isCollidingWith("rectangle", *bodyA, 1));
     EXPECT_FALSE(body->isCollidingWith("square", *bodyA));
+    EXPECT_FALSE(body->isCollidingWith("square", *bodyA, 0));
+    EXPECT_FALSE(body->isCollidingWith("square", *bodyA, 1));
     EXPECT_ANY_THROW(body->isCollidingWith("triangle", *bodyA));
 
     Body *bodyB = world->createBody(Point(0, 1), Angle::radians(0), false);
     bodyB->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     EXPECT_TRUE(body->isCollidingWith(*bodyB));
+    EXPECT_FALSE(body->isCollidingWith(*bodyB, 0));
+    EXPECT_TRUE(body->isCollidingWith(*bodyB, 1));
     EXPECT_TRUE(body->isCollidingWith("rectangle", *bodyB));
+    EXPECT_FALSE(body->isCollidingWith("rectangle", *bodyB, 0));
+    EXPECT_TRUE(body->isCollidingWith("rectangle", *bodyB, 1));
     EXPECT_FALSE(body->isCollidingWith("square", *bodyB));
+    EXPECT_FALSE(body->isCollidingWith("square", *bodyB, 0));
+    EXPECT_FALSE(body->isCollidingWith("square", *bodyB, 1));
     EXPECT_ANY_THROW(body->isCollidingWith("triangle", *bodyB));
 
     Body *bodyC = world->createBody(Point(1, 0), Angle::radians(0), true);
     bodyC->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
     EXPECT_FALSE(body->isCollidingWith(*bodyC));
+    EXPECT_FALSE(body->isCollidingWith(*bodyC, 0));
+    EXPECT_FALSE(body->isCollidingWith(*bodyC, 1));
     EXPECT_FALSE(body->isCollidingWith("rectangle", *bodyC));
+    EXPECT_FALSE(body->isCollidingWith("rectangle", *bodyC, 0));
+    EXPECT_FALSE(body->isCollidingWith("rectangle", *bodyC, 1));
     EXPECT_FALSE(body->isCollidingWith("square", *bodyC));
+    EXPECT_FALSE(body->isCollidingWith("square", *bodyC, 0));
+    EXPECT_FALSE(body->isCollidingWith("square", *bodyC, 1));
     EXPECT_ANY_THROW(body->isCollidingWith("triangle", *bodyC));
 
     Body *bodyD = world->createBody(Point(0, 0), Angle::radians(0), false);

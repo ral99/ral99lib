@@ -186,7 +186,7 @@ std::vector<std::pair<int, int>> Body::indexQuadrants() const {
     return _indexQuadrants;
 }
 
-double Body::distanceTo(const Body& other) {
+double Body::distanceTo(const Body& other) const {
     return _center->distanceTo(*other._center);
 }
 
@@ -282,6 +282,10 @@ bool Body::isCollidingWith(const Body& other) const {
     return false;
 }
 
+bool Body::isCollidingWith(const Body& other, float maxDistance) const {
+    return double_gt(distanceTo(other), maxDistance) ? false : isCollidingWith(other);
+}
+
 bool Body::isCollidingWith(const std::string& polygonId, const Body& other) const {
     std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
     if (it == _polygons.end())
@@ -290,6 +294,11 @@ bool Body::isCollidingWith(const std::string& polygonId, const Body& other) cons
         if (it->second.isCollidingWith(jt->second))
             return true;
     return false;
+}
+
+bool Body::isCollidingWith(const std::string& polygonId, const Body& other,
+                           float maxDistance) const {
+    return double_gt(distanceTo(other), maxDistance) ? false : isCollidingWith(polygonId, other);
 }
 
 std::set<Body*> Body::collidingDynamicBodies() const {

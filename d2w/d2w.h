@@ -110,7 +110,7 @@ class Body {
         std::vector<std::pair<int, int>> indexQuadrants() const;
 
         // Return the distace between the center of the bodies.
-        double distanceTo(const Body& other);
+        double distanceTo(const Body& other) const;
 
         // Return bodies near this body using index quadrants.
         std::set<Body*> neighbourBodies() const;
@@ -133,9 +133,19 @@ class Body {
         // Return true if this body is colliding with another body. false, otherwise.
         bool isCollidingWith(const Body& other) const;
 
-        // Return true if the specified polygon of this body is colliding with another body or raise an exception if id is invalid.
-        // false, otherwise.
+        // Return true if this body is colliding with another body. false, otherwise or if the
+        // distance between the centers of the bodies is greater than maxDistance.
+        bool isCollidingWith(const Body& other, float maxDistance) const;
+
+        // Return true if the specified polygon of this body is colliding with another body or raise
+        // an exception if id is invalid. false, otherwise.
         bool isCollidingWith(const std::string& polygonId, const Body& other) const;
+
+        // Return true if the specified polygon of this body is colliding with another body or raise
+        // an exception if id is invalid. false, otherwise or if the distance between the centers of
+        // the bodies is greater than maxDistance.
+        bool isCollidingWith(const std::string& polygonId, const Body& other,
+                             float maxDistance) const;
 
         // Return dynamic bodies colliding with this body.
         std::set<Body*> collidingDynamicBodies() const;
