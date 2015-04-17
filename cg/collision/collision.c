@@ -59,16 +59,12 @@ int polygon_is_in_contact_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
     int is_in_contact = 1;
     for (ADTListItem it = list_head(axes); it && is_in_contact; it = list_next(it)) {
         CGVector axis = (CGVector) list_value(it);
-        if (double_lt(polygon_max_projection_on_axis(polygon1, axis) -
-                      polygon_min_projection_on_axis(polygon2, axis), 0))
+        if (double_lt(polygon_max_projection_on_axis(polygon1, axis) - polygon_min_projection_on_axis(polygon2, axis), 0))
             is_in_contact = 0;
-        if (double_gt(polygon_min_projection_on_axis(polygon1, axis) -
-                      polygon_max_projection_on_axis(polygon2, axis), 0))
+        if (double_gt(polygon_min_projection_on_axis(polygon1, axis) - polygon_max_projection_on_axis(polygon2, axis), 0))
             is_in_contact = 0;
-        if (double_equals(polygon_max_projection_on_axis(polygon1, axis),
-                          polygon_min_projection_on_axis(polygon2, axis)) ||
-            double_equals(polygon_min_projection_on_axis(polygon1, axis),
-                          polygon_max_projection_on_axis(polygon2, axis)))
+        if (double_equals(polygon_max_projection_on_axis(polygon1, axis), polygon_min_projection_on_axis(polygon2, axis)) ||
+            double_equals(polygon_min_projection_on_axis(polygon1, axis), polygon_max_projection_on_axis(polygon2, axis)))
             is_in_contact = 2;
     }
     list_release(axes);
@@ -86,11 +82,9 @@ int polygon_is_colliding_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
     int is_colliding = 1;
     for (ADTListItem it = list_head(axes); it && is_colliding; it = list_next(it)) {
         CGVector axis = (CGVector) list_value(it);
-        if (double_lte(polygon_max_projection_on_axis(polygon1, axis) -
-                       polygon_min_projection_on_axis(polygon2, axis), 0))
+        if (double_lte(polygon_max_projection_on_axis(polygon1, axis) - polygon_min_projection_on_axis(polygon2, axis), 0))
             is_colliding = 0;
-        if (double_gte(polygon_min_projection_on_axis(polygon1, axis) -
-                       polygon_max_projection_on_axis(polygon2, axis), 0))
+        if (double_gte(polygon_min_projection_on_axis(polygon1, axis) - polygon_max_projection_on_axis(polygon2, axis), 0))
             is_colliding = 0;
     }
     list_release(axes);
@@ -169,8 +163,7 @@ CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVect
                     CGVector tv = vector_from_point_to_point(vertex, intersection);
                     CGAngle angle = vector_angle_to(axis, tv);
                     if (angle != NULL) {
-                        if (double_equals(angle_in_radians(angle), 0) &&
-                            double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
+                        if (double_equals(angle_in_radians(angle), 0) && double_gt(vector_magnitude(tv), vector_magnitude(mtv))) {
                             vector_release(mtv);
                             mtv = vector_dup(tv);
                         }
@@ -200,16 +193,14 @@ CGVector polygon_mtv_from_polygon(CGPolygon polygon1, CGPolygon polygon2, CGVect
                 CGVector tv2 = vector_from_point_to_point(vertex, edge->b);
                 CGAngle angle2 = vector_angle_to(axis, tv2);
                 if (angle1 != NULL) {
-                    if (double_equals(angle_in_radians(angle1), M_PI) &&
-                        double_gt(vector_magnitude(tv1), vector_magnitude(mtv))) {
+                    if (double_equals(angle_in_radians(angle1), M_PI) && double_gt(vector_magnitude(tv1), vector_magnitude(mtv))) {
                         vector_release(mtv);
                         mtv = vector_dup(tv1);
                     }
                     angle_release(angle1);
                 }
                 if (angle2 != NULL) {
-                    if (double_equals(angle_in_radians(angle2), M_PI) &&
-                        double_gt(vector_magnitude(tv2), vector_magnitude(mtv))) {
+                    if (double_equals(angle_in_radians(angle2), M_PI) && double_gt(vector_magnitude(tv2), vector_magnitude(mtv))) {
                         vector_release(mtv);
                         mtv = vector_dup(tv2);
                     }

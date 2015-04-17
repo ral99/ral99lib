@@ -675,57 +675,32 @@ static void test_polygon_mtv_from_polygon_18() {
 
 int main(int argc, char *argv[]) {
     g_test_init(&argc, &argv, NULL);
-    g_test_add_func("/gc/polygon_min_projection_on_axis",
-                    test_polygon_min_projection_on_axis_1);
-    g_test_add_func("/gc/polygon_min_projection_on_axis",
-                    test_polygon_min_projection_on_axis_2);
-    g_test_add_func("/gc/polygon_max_projection_on_axis",
-                    test_polygon_max_projection_on_axis_1);
-    g_test_add_func("/gc/polygon_max_projection_on_axis",
-                    test_polygon_max_projection_on_axis_2);
+    g_test_add_func("/gc/polygon_min_projection_on_axis", test_polygon_min_projection_on_axis_1);
+    g_test_add_func("/gc/polygon_min_projection_on_axis", test_polygon_min_projection_on_axis_2);
+    g_test_add_func("/gc/polygon_max_projection_on_axis", test_polygon_max_projection_on_axis_1);
+    g_test_add_func("/gc/polygon_max_projection_on_axis", test_polygon_max_projection_on_axis_2);
     g_test_add_func("/gc/polygon_perpendicular_axes", test_polygon_perpendicular_axes_1);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_1);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_2);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_3);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_4);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_5);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_6);
-    g_test_add_func("/gc/polygon_is_in_contact_with_polygon",
-                    test_polygon_is_in_contact_with_polygon_7);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_1);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_2);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_3);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_4);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_5);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_6);
-    g_test_add_func("/gc/polygon_is_colliding_with_polygon",
-                    test_polygon_is_colliding_with_polygon_7);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_1);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_2);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_3);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_4);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_5);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_6);
-    g_test_add_func("/gc/polygon_point_of_contact_with_polygon",
-                    test_polygon_point_of_contact_with_polygon_7);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_1);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_2);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_3);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_4);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_5);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_6);
+    g_test_add_func("/gc/polygon_is_in_contact_with_polygon", test_polygon_is_in_contact_with_polygon_7);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_1);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_2);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_3);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_4);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_5);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_6);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_7);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_1);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_2);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_3);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_4);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_5);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_6);
+    g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_7);
     g_test_add_func("/gc/polygon_mtv_from_polygon", test_polygon_mtv_from_polygon_1);
     g_test_add_func("/gc/polygon_mtv_from_polygon", test_polygon_mtv_from_polygon_2);
     g_test_add_func("/gc/polygon_mtv_from_polygon", test_polygon_mtv_from_polygon_3);
