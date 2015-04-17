@@ -748,7 +748,13 @@ std::set<Body*> World::taggedBodiesNearWindow(const std::set<std::string>& tags)
 }
 
 std::set<Body*> World::taggedBodiesOnWindow(const std::string& tag) const {
-    std::set<Body*> taggedBodiesNearWindow = this->taggedBodiesNearWindow(tag);
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return taggedBodiesOnWindow(tags);
+}
+
+std::set<Body*> World::taggedBodiesOnWindow(const std::set<std::string>& tags) const {
+    std::set<Body*> taggedBodiesNearWindow = this->taggedBodiesNearWindow(tags);
     std::set<Body*> taggedBodiesOnWindow;
     for (std::set<Body*>::iterator it = taggedBodiesNearWindow.begin(); it != taggedBodiesNearWindow.end(); it++)
         if ((*it)->isOnWindow())

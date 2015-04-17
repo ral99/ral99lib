@@ -346,6 +346,9 @@ class World {
         // Return tagged bodies on window.
         std::set<Body*> taggedBodiesOnWindow(const std::string& tag) const;
 
+        // Return tagged bodies on window.
+        std::set<Body*> taggedBodiesOnWindow(const std::set<std::string>& tags) const;
+
         // Set body index range.
         void setBodyIndexRange(int bodyIndexRange);
 
