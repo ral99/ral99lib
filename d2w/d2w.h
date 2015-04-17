@@ -150,8 +150,19 @@ class Body {
         // Return dynamic bodies colliding with this body.
         std::set<Body*> collidingDynamicBodies() const;
 
-        // Return dynamic bodies colliding with the specified polygon of this body or raise an exception if id is invalid.
+        // Return dynamic bodies colliding with this body which the distance between their centers
+        // is lower than maxDistance.
+        std::set<Body*> collidingDynamicBodies(float maxDistance) const;
+
+        // Return dynamic bodies colliding with the specified polygon of this body or raise an
+        // exception if id is invalid.
         std::set<Body*> collidingDynamicBodies(const std::string& polygonId) const;
+
+        // Return dynamic bodies colliding with the specified polygon of this body which the
+        // distance between their centers is lower than maxDistance or raise an exception if id is
+        // invalid.
+        std::set<Body*> collidingDynamicBodies(const std::string& polygonId,
+                                               float maxDistance) const;
 
         // Return dynamic tagged bodies colliding with this body.
         std::set<Body*> collidingDynamicTaggedBodies(const std::string& tag) const;

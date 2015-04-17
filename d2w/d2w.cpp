@@ -310,6 +310,15 @@ std::set<Body*> Body::collidingDynamicBodies() const {
     return collidingDynamicBodies;
 }
 
+std::set<Body*> Body::collidingDynamicBodies(float maxDistance) const {
+    std::set<Body*> collidingDynamicBodies;
+    std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
+    for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
+        if (isCollidingWith(**it, maxDistance))
+            collidingDynamicBodies.insert(*it);
+    return collidingDynamicBodies;
+}
+
 std::set<Body*> Body::collidingDynamicBodies(const std::string& polygonId) const {
     std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
     if (it == _polygons.end())
@@ -318,6 +327,19 @@ std::set<Body*> Body::collidingDynamicBodies(const std::string& polygonId) const
     std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
     for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
         if (isCollidingWith(polygonId, **it))
+            collidingDynamicBodies.insert(*it);
+    return collidingDynamicBodies;
+}
+
+std::set<Body*> Body::collidingDynamicBodies(const std::string& polygonId,
+                                             float maxDistance) const {
+    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
+    if (it == _polygons.end())
+        throw std::invalid_argument("Polygon id is invalid.");
+    std::set<Body*> collidingDynamicBodies;
+    std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
+    for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
+        if (isCollidingWith(polygonId, **it, maxDistance))
             collidingDynamicBodies.insert(*it);
     return collidingDynamicBodies;
 }

@@ -503,14 +503,29 @@ TEST_F(D2WTest, BodyCollidingDynamicBodies) {
     bodyD->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 2, 1));
     Body *bodyE = world->createBody(Point(0, 0), Angle::radians(0), true);
     bodyE->addPolygon("rectangle", Polygon::rectangle(Point(5, 0), 1, 2));
+    Body *bodyF = world->createBody(Point(0, 1), Angle::radians(0), true);
+    bodyF->addPolygon("rectangle", Polygon::rectangle(Point(0, 0), 1, 2));
 
     std::set<Body*> bodies = body->collidingDynamicBodies();
+    EXPECT_EQ(4, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyD));
+    EXPECT_NE(bodies.end(), bodies.find(bodyE));
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
+    bodies = body->collidingDynamicBodies(0);
     EXPECT_EQ(3, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
     EXPECT_NE(bodies.end(), bodies.find(bodyD));
     EXPECT_NE(bodies.end(), bodies.find(bodyE));
 
     bodies = body->collidingDynamicBodies("rectangle");
+    EXPECT_EQ(3, bodies.size());
+    EXPECT_NE(bodies.end(), bodies.find(bodyB));
+    EXPECT_NE(bodies.end(), bodies.find(bodyD));
+    EXPECT_NE(bodies.end(), bodies.find(bodyF));
+
+    bodies = body->collidingDynamicBodies("rectangle", 0);
     EXPECT_EQ(2, bodies.size());
     EXPECT_NE(bodies.end(), bodies.find(bodyB));
     EXPECT_NE(bodies.end(), bodies.find(bodyD));
