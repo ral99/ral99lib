@@ -186,6 +186,10 @@ std::vector<std::pair<int, int>> Body::indexQuadrants() const {
     return _indexQuadrants;
 }
 
+double Body::distanceTo(const Body& other) {
+    return _center->distanceTo(*other._center);
+}
+
 std::set<Body*> Body::neighbourBodies() const {
     std::set<Body*> neighbourBodies; 
     for (std::vector<std::pair<int, int>>::const_iterator it = _indexQuadrants.begin(); it != _indexQuadrants.end(); it++)

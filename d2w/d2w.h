@@ -109,6 +109,9 @@ class Body {
         // Return the index quadrants in which the polygons of this body are on.
         std::vector<std::pair<int, int>> indexQuadrants() const;
 
+        // Return the distace between the center of the bodies.
+        double distanceTo(const Body& other);
+
         // Return bodies near this body using index quadrants.
         std::set<Body*> neighbourBodies() const;
 

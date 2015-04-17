@@ -274,6 +274,24 @@ TEST_F(D2WTest, BodyIndexQuadrants) {
     EXPECT_EQ(0, emptyBody->indexQuadrants().size());
 }
 
+TEST_F(D2WTest, BodyDistanceTo) {
+    Body *body1 = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body1->addPolygon("circle", Polygon::square(Point(0, 0), 1));
+    Body *body2 = world->createBody(Point(1, 0), Angle::radians(0), true);
+    body2->addPolygon("circle", Polygon::square(Point(0, 0), 1));
+    Body *body3 = world->createBody(Point(1, 1), Angle::radians(0), true);
+    body3->addPolygon("circle", Polygon::square(Point(0, 0), 1));
+    EXPECT_EQ(0, body1->distanceTo(*body1));
+    EXPECT_EQ(1, body1->distanceTo(*body2));
+    EXPECT_EQ(sqrt(2), body1->distanceTo(*body3));
+    EXPECT_EQ(1, body2->distanceTo(*body1));
+    EXPECT_EQ(0, body2->distanceTo(*body2));
+    EXPECT_EQ(1, body2->distanceTo(*body3));
+    EXPECT_EQ(sqrt(2), body3->distanceTo(*body1));
+    EXPECT_EQ(1, body3->distanceTo(*body2));
+    EXPECT_EQ(0, body3->distanceTo(*body3));
+}
+
 TEST_F(D2WTest, BodyNeighbourBodies) {
     Body *bodyGrid[6][6];
     for (int i = 0; i <= 5; i++) {
