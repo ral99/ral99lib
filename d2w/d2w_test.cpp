@@ -1046,21 +1046,34 @@ TEST_F(D2WTest, WorldTaggedBodiesNearWindow) {
     Body *body1 = world->createBody(Point(0, 0), Angle::radians(0), true);
     body1->addPolygon("square", Polygon::square(Point(0, 0), 1));
     body1->addTag("odd");
+    body1->addTag("1");
     Body *body2 = world->createBody(Point(1, 1), Angle::radians(0), true);
     body2->addPolygon("square", Polygon::square(Point(0, 0), 1));
     body2->addTag("even");
+    body2->addTag("2");
     Body *body3 = world->createBody(Point(2, 2), Angle::radians(0), true);
     body3->addPolygon("square", Polygon::square(Point(0, 0), 1));
     body3->addTag("odd");
+    body3->addTag("3");
     Body *body4 = world->createBody(Point(3, 3), Angle::radians(0), true);
     body4->addPolygon("square", Polygon::square(Point(0, 0), 1));
     body4->addTag("even");
+    body4->addTag("4");
     Body *body5 = world->createBody(Point(4, 4), Angle::radians(0), true);
     body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
     body5->addTag("odd");
+    body5->addTag("5");
+
     std::set<Body*> taggedBodiesNearWindow = world->taggedBodiesNearWindow("odd");
     EXPECT_EQ(2, taggedBodiesNearWindow.size());
     EXPECT_NE(taggedBodiesNearWindow.end(), taggedBodiesNearWindow.find(body1));
+    EXPECT_NE(taggedBodiesNearWindow.end(), taggedBodiesNearWindow.find(body3));
+
+    std::set<std::string> tags;
+    tags.insert("odd");
+    tags.insert("3");
+    taggedBodiesNearWindow = world->taggedBodiesNearWindow(tags);
+    EXPECT_EQ(1, taggedBodiesNearWindow.size());
     EXPECT_NE(taggedBodiesNearWindow.end(), taggedBodiesNearWindow.find(body3));
 }
 

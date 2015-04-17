@@ -292,6 +292,9 @@ class World {
         // Return tagged bodies near window.
         std::set<Body*> taggedBodiesNearWindow(const std::string& tag) const;
 
+        // Return tagged bodies near window.
+        std::set<Body*> taggedBodiesNearWindow(const std::set<std::string>& tags) const;
+
         // Return tagged bodies on window.
         std::set<Body*> taggedBodiesOnWindow(const std::string& tag) const;
 

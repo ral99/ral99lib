@@ -637,6 +637,12 @@ std::set<Body*> World::taggedBodies(const std::set<std::string>& tags) const {
 }
 
 std::set<Body*> World::taggedBodiesNearWindow(const std::string& tag) const {
+    std::set<std::string> tags;
+    tags.insert(tag);
+    return taggedBodiesNearWindow(tags);
+}
+
+std::set<Body*> World::taggedBodiesNearWindow(const std::set<std::string>& tags) const {
     std::set<Body*> taggedBodiesNearWindow;
     std::vector<Point> windowCorners;
     windowCorners.push_back(*_windowCenter + Vector(_windowWidth / 2, _windowHeight / 2));
@@ -659,9 +665,14 @@ std::set<Body*> World::taggedBodiesNearWindow(const std::string& tag) const {
         for (int j = (int) (windowMinY / _bodyIndexRange); j <= (int) (windowMaxY / _bodyIndexRange); j++) {
             std::map<std::pair<int, int>, std::set<Body*>>::const_iterator jt = _bodyIndex.find(std::make_pair(i, j));
             if (jt != _bodyIndex.end())
-                for (std::set<Body*>::iterator kt = jt->second.begin(); kt != jt->second.end(); kt++)
-                    if ((*kt)->hasTag(tag))
+                for (std::set<Body*>::iterator kt = jt->second.begin(); kt != jt->second.end(); kt++) {
+                    std::set<std::string>::const_iterator lt;
+                    for (lt = tags.begin(); lt != tags.end(); lt++)
+                        if (!(*kt)->hasTag(*lt))
+                            break;
+                    if (lt == tags.end())
                         taggedBodiesNearWindow.insert(*kt);
+                }
         }
     return taggedBodiesNearWindow;
 }
