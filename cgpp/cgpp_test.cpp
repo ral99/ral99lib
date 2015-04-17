@@ -498,77 +498,31 @@ TEST(Point, DistanceToSegment) {
 }
 
 TEST(Point, DistanceToTriangle) {
-    EXPECT_DOUBLE_EQ(
-        0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        0, Point(3, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        0, Point(1, 3).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        0, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        0, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        0, Point(2, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(0, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(1, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(0, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(2, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
-    EXPECT_DOUBLE_EQ(
-        -0.5, Point(1.5, 1.5).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3)))
-    );
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(3, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 3).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(0, Point(2, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 2).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(1, Point(2, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
+    EXPECT_DOUBLE_EQ(-0.5, Point(1.5, 1.5).distanceTo(Triangle(Point(1, 1), Point(3, 1), Point(1, 3))));
 
-    EXPECT_DOUBLE_EQ(
-        0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
-    EXPECT_DOUBLE_EQ(
-        0, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(0, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(1, 0).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(1, 3).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
-    EXPECT_DOUBLE_EQ(
-        sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2)))
-    );
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
+    EXPECT_DOUBLE_EQ(0, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(0, 1).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 0).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 3).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(1, 2), Point(1, 2))));
 
-    EXPECT_DOUBLE_EQ(
-        0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1)))
-    );
-    EXPECT_DOUBLE_EQ(
-        1, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1)))
-    );
-    EXPECT_DOUBLE_EQ(
-        sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1)))
-    );
+    EXPECT_DOUBLE_EQ(0, Point(1, 1).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1))));
+    EXPECT_DOUBLE_EQ(1, Point(1, 2).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1))));
+    EXPECT_DOUBLE_EQ(1, Point(2, 1).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1))));
+    EXPECT_DOUBLE_EQ(sqrt(2), Point(0, 0).distanceTo(Triangle(Point(1, 1), Point(1, 1), Point(1, 1))));
 }
 
 TEST(Point, DistanceToPolygon) {
@@ -724,8 +678,7 @@ TEST(Segment, RotationOperator) {
 }
 
 TEST(Segment, ToString) {
-    EXPECT_EQ("<< Segment: (1.00, 2.00); (3.00, 4.00) >>",
-              Segment(Point(1, 2), Point(3, 4)).toString(2));
+    EXPECT_EQ("<< Segment: (1.00, 2.00); (3.00, 4.00) >>", Segment(Point(1, 2), Point(3, 4)).toString(2));
 }
 
 TEST(Segment, RotateAround) {
@@ -776,8 +729,7 @@ TEST(Triangle, TripleOfCoincidentPointsConstructor) {
 }
 
 TEST(Triangle, CopyConstructor) {
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Triangle(Point(0, 0), Point(1, 0), Point(0, 1))));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Triangle(Point(0, 0), Point(1, 0), Point(0, 1))));
 }
 
 TEST(Triangle, CopyStructConstructor) {
@@ -802,29 +754,19 @@ TEST(Triangle, AssignmentOperator) {
 }
 
 TEST(Triangle, ComparisonOperator) { 
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Point(0, 0), Point(1, 0), Point(0, 1)));
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Point(0, 0), Point(0, 1), Point(1, 0)));
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Point(0, 1), Point(0, 0), Point(1, 0)));
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Point(0, 1), Point(1, 0), Point(0, 0)));
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Point(1, 0), Point(0, 0), Point(0, 1)));
-    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)),
-              Triangle(Point(1, 0), Point(0, 1), Point(0, 0)));
-    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) ==
-                 Triangle(Point(1, 1), Point(0, 1), Point(0, 0)));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Point(0, 0), Point(1, 0), Point(0, 1)));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Point(0, 0), Point(0, 1), Point(1, 0)));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Point(0, 1), Point(0, 0), Point(1, 0)));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Point(0, 1), Point(1, 0), Point(0, 0)));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Point(1, 0), Point(0, 0), Point(0, 1)));
+    EXPECT_EQ(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)), Triangle(Point(1, 0), Point(0, 1), Point(0, 0)));
+    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) == Triangle(Point(1, 1), Point(0, 1), Point(0, 0)));
 }
 
 TEST(Triangle, LowerThanComparisonOperator) {
-    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) <
-                 Triangle(Point(0, 0), Point(1, 0), Point(0, 1)));
-    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) <
-                 Triangle(Point(0, 0), Point(1, 0), Point(1, 1)));
-    EXPECT_TRUE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) <
-                Triangle(Point(1, 0), Point(0, 1), Point(1, 1)));
+    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) < Triangle(Point(0, 0), Point(1, 0), Point(0, 1)));
+    EXPECT_FALSE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) < Triangle(Point(0, 0), Point(1, 0), Point(1, 1)));
+    EXPECT_TRUE(Triangle(Point(0, 0), Point(1, 0), Point(0, 1)) < Triangle(Point(1, 0), Point(0, 1), Point(1, 1)));
 }
 
 TEST(Triangle, VectorSumOperator) {
@@ -855,8 +797,7 @@ TEST(Triangle, RotationOperator) {
     EXPECT_EQ(Triangle(Point(0, 0), Point(0, 1), Point(1, 0)), triangle);
 
     triangle %= Angle::radians(M_PI / 4);
-    EXPECT_EQ(Triangle(Point(0, 0), Point(-sqrt(2) / 2, sqrt(2) / 2),
-              Point(sqrt(2) / 2, sqrt(2) / 2)), triangle);
+    EXPECT_EQ(Triangle(Point(0, 0), Point(-sqrt(2) / 2, sqrt(2) / 2), Point(sqrt(2) / 2, sqrt(2) / 2)), triangle);
 }
 
 TEST(Triangle, ToString) {
@@ -1059,8 +1000,7 @@ TEST(Polygon, RotationOperator) {
 }
 
 TEST(Polygon, ToString) {
-    EXPECT_EQ("<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>",
-              Polygon::square(Point(0, 0), 1).toString(0));
+    EXPECT_EQ("<< Polygon: (0, 0); (1, 0); (1, 1); (0, 1) >>", Polygon::square(Point(0, 0), 1).toString(0));
 }
 
 TEST(Polygon, RotateAround) {
@@ -1080,39 +1020,17 @@ TEST(Polygon, RotateAround) {
 }
 
 TEST(Polygon, IsInContactWithPolygon) {
-    EXPECT_FALSE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, 0), 2))
-    );
-    EXPECT_FALSE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(1, 0), 2))
-    );
-    EXPECT_FALSE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(3, 0), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, 0), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, 2), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, 2), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, 2), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, 0), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, -2), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, -2), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, -2), 2))
-    );
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, 0), 2)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(1, 0), 2)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(3, 0), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, 0), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, 2), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, 2), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, 2), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, 0), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(-2, -2), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(0, -2), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isInContactWith(Polygon::square(Point(2, -2), 2)));
 }
 
 TEST(Polygon, PointOfContactWithPolygon) {
@@ -1154,18 +1072,10 @@ TEST(Polygon, PointOfContactWithPolygon) {
 }
 
 TEST(Polygon, IsCollidingWithPolygon) {
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(0, 0), 2))
-    );
-    EXPECT_TRUE(
-        Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(1, 0), 2))
-    );
-    EXPECT_FALSE(
-        Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(2, 0), 2))
-    );
-    EXPECT_FALSE(
-        Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(3, 0), 2))
-    );
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(0, 0), 2)));
+    EXPECT_TRUE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(1, 0), 2)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(2, 0), 2)));
+    EXPECT_FALSE(Polygon::square(Point(0, 0), 2).isCollidingWith(Polygon::square(Point(3, 0), 2)));
 }
 
 TEST(Polygon, MinimumTranslationVectorFromPolygon) {

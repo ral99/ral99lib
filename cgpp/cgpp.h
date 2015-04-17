@@ -8,13 +8,12 @@
 #include "cg/cg.h"
 #include "cg/collision/collision.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// DESIGN NOTES ////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////// DESIGN NOTES //////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // => Angle:
-//    Represents angle values. Positive angles represent left angles, negative angles represent
-//    right angles.
+//    Represents angle values. Positive angles represent left angles, negative angles represent right angles.
 //
 // => Vector:
 //    Represents vectors in a two-dimensional space.
@@ -23,22 +22,19 @@
 //    Represents points in a two-dimensional space.
 //
 // => Segment:
-//    Represents a line segment in a two-dimensional space. A Segment is defined by any two
-//    points.
+//    Represents a line segment in a two-dimensional space. A Segment is defined by any two points.
 //
 // => Triangle:
-//    Represents a triangle in a two-dimensional space. A Triangle is defined by any three
-//    points.
+//    Represents a triangle in a two-dimensional space. A Triangle is defined by any three points.
 //
 // => Polygon:
-//    Represents a convex polygon in a two-dimensional space. A Polygon does not have three
-//    collinear points or any two coincident points.
+//    Represents a convex polygon in a two-dimensional space. A Polygon does not have three collinear points or any two
+//    coincident points.
 //
 // => Circle:
-//    Represents a circle in a two-dimensional space. A Circle is defined by a center point
-//    and a positive radius.
+//    Represents a circle in a two-dimensional space. A Circle is defined by a center point and a positive radius.
 //
-///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace CG {
 
@@ -154,12 +150,10 @@ class Vector {
         // Return vector y component.
         double y() const;
 
-        // Return a normalized perpendicular vector using the right hand rule or raise an
-        // exception if it is a null vector.
+        // Return a normalized perpendicular vector using the right hand rule or raise an exception if it is a null vector.
         Vector rightPerpendicularAxis() const;
 
-        // Return a normalized perpendicular vector using the left hand rule or raise an
-        // exception if it is a null vector.
+        // Return a normalized perpendicular vector using the left hand rule or raise an exception if it is a null vector.
         Vector leftPerpendicularAxis() const;
 
         // Return vector magnitude.
@@ -168,8 +162,7 @@ class Vector {
         // Return the dot product between this and another vector.
         double dot(const Vector& other) const;
 
-        // Return angle from this to another vector or raise an exception if one or both
-        // vectors are null vectors.
+        // Return angle from this to another vector or raise an exception if one or both vectors are null vectors.
         Angle angleTo(const Vector& other) const;
 };
 
@@ -349,8 +342,8 @@ class Triangle {
         // Return triangle third vertex.
         Point c() const;
 
-        // Return 1 if triangle is in counter-clockwise orientation. -1, if in clockwise
-        // orientation. 0, if vertices are collinear.
+        // Return 1 if triangle is in counter-clockwise orientation. -1, if in clockwise orientation. 0, if vertices are
+        // collinear.
         int orientation() const;
 
         // Return triangle area.
@@ -403,15 +396,14 @@ class Polygon {
         // Return true if polygon is in contact with another polygon. false, otherwise.
         bool isInContactWith(const Polygon& other) const;
 
-        // Return the point of contact between this and another polygon, or NULL if they are
-        // not in contact.
+        // Return the point of contact between this and another polygon, or NULL if they are not in contact.
         Point* pointOfContactWith(const Polygon& other) const;
 
         // Return true if polygon is colliding with another polygon. false, otherwise.
         bool isCollidingWith(const Polygon& other) const;
 
-        // Return the minimum translation vector of this polygon from another one in the given
-        // direction, or raise an exception if axis is a null vector.
+        // Return the minimum translation vector of this polygon from another one in the given direction, or raise an exception if
+        // axis is a null vector.
         Vector minimumTranslationVectorFrom(const Polygon& other, const Vector& axis);
 
         // Return polygon vertices.
