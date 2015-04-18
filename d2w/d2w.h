@@ -194,20 +194,6 @@ class Body {
         // Return a set of ids of polygons of another body colliding with the specified polygon of this body or raise an
         // exception if if is invalid.
         std::set<std::string> collisionWith(const std::string& polygonId, const Body& other) const;
-
-        // Return true if this body is in contact with another body. false, otherwise.
-        bool isInContactWith(const Body& other) const;
-
-        // Return true if the specified polygon of this body is in contact with another body or raise an exception if id is
-        // invalid. false, otherwise.
-        bool isInContactWith(const std::string& polygonId, const Body& other) const;
-
-        // Return a set of pairs of ids of polygons of this and another contacting body.
-        std::set<std::pair<std::string, std::string>> contactWith(const Body& other);
-
-        // Return a set of ids of polygons of another body in contact with the specified polygon of this body or raise an
-        // exception if is invalid.
-        std::set<std::string> contactWith(const std::string& polygonId, const Body& other);
 };
 
 class World {

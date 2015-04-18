@@ -430,44 +430,6 @@ std::set<std::string> Body::collisionWith(const std::string& polygonId, const Bo
     return collision;
 }
 
-bool Body::isInContactWith(const Body& other) const {
-    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
-        for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
-            if (it->second.isInContactWith(jt->second))
-                return true;
-    return false;
-}
-
-bool Body::isInContactWith(const std::string& polygonId, const Body& other) const {
-    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
-    if (it == _polygons.end())
-        throw std::invalid_argument("Polygon id is invalid.");
-    for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
-        if (it->second.isInContactWith(jt->second))
-            return true;
-    return false;
-}
-
-std::set<std::pair<std::string, std::string>> Body::contactWith(const Body& other) {
-    std::set<std::pair<std::string, std::string>> contact;
-    for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
-        for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
-            if (it->second.isInContactWith(jt->second))
-                contact.insert(std::make_pair(it->first, jt->first));
-    return contact;
-}
-
-std::set<std::string> Body::contactWith(const std::string& polygonId, const Body& other) {
-    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
-    if (it == _polygons.end())
-        throw std::invalid_argument("Polygon id is invalid.");
-    std::set<std::string> contact;
-    for (std::map<std::string, Polygon>::const_iterator jt = other._polygons.begin(); jt != other._polygons.end(); jt++)
-        if (it->second.isInContactWith(jt->second))
-            contact.insert(jt->first);
-    return contact;
-}
-
 // ::: World :::
 
 void World::removeBodyFromIndex(Body& body) {
