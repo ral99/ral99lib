@@ -202,26 +202,6 @@ class Body {
         // invalid. false, otherwise.
         bool isInContactWith(const std::string& polygonId, const Body& other) const;
 
-        // Return dynamic bodies in contact with this body.
-        std::set<Body*> contactingDynamicBodies() const;
-
-        // Return dynamic bodies in contact with the specified polygon of this body or raise an exception if id is invalid.
-        std::set<Body*> contactingDynamicBodies(const std::string& polygonId) const;
-
-        // Return dynamic tagged bodies in contact with this body.
-        std::set<Body*> contactingDynamicTaggedBodies(const std::string& tag) const;
-
-        // Return dynamic tagged bodies in contact with this body.
-        std::set<Body*> contactingDynamicTaggedBodies(const std::set<std::string>& tags) const;
-
-        // Return dynamic tagged bodies in contact with the specified polygon of this body or raise an exception if id is
-        // invalid.
-        std::set<Body*> contactingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const;
-
-        // Return dynamic tagged bodies in contact with the specified polygon of this body or raise an exception if id is
-        // invalid.
-        std::set<Body*> contactingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const;
-
         // Return a set of pairs of ids of polygons of this and another contacting body.
         std::set<std::pair<std::string, std::string>> contactWith(const Body& other);
 

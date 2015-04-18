@@ -448,60 +448,6 @@ bool Body::isInContactWith(const std::string& polygonId, const Body& other) cons
     return false;
 }
 
-std::set<Body*> Body::contactingDynamicBodies() const {
-    std::set<Body*> contactingDynamicBodies;
-    std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
-    for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
-        if (isInContactWith(**it))
-            contactingDynamicBodies.insert(*it);
-    return contactingDynamicBodies;
-}
-
-std::set<Body*> Body::contactingDynamicBodies(const std::string& polygonId) const {
-    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
-    if (it == _polygons.end())
-        throw std::invalid_argument("Polygon id is invalid.");
-    std::set<Body*> contactingDynamicBodies;
-    std::set<Body*> neighbourDynamicBodies = this->neighbourDynamicBodies();
-    for (std::set<Body*>::iterator it = neighbourDynamicBodies.begin(); it != neighbourDynamicBodies.end(); it++)
-        if (isInContactWith(polygonId, **it))
-            contactingDynamicBodies.insert(*it);
-    return contactingDynamicBodies;
-}
-
-std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& tag) const {
-    std::set<std::string> tags;
-    tags.insert(tag);
-    return contactingDynamicTaggedBodies(tags);
-}
-
-std::set<Body*> Body::contactingDynamicTaggedBodies(const std::set<std::string>& tags) const {
-    std::set<Body*> contactingDynamicTaggedBodies;
-    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
-    for (std::set<Body*>::iterator it = neighbourDynamicTaggedBodies.begin(); it != neighbourDynamicTaggedBodies.end(); it++)
-        if (isInContactWith(**it))
-            contactingDynamicTaggedBodies.insert(*it);
-    return contactingDynamicTaggedBodies;
-}
-
-std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& polygonId, const std::string& tag) const {
-    std::set<std::string> tags;
-    tags.insert(tag);
-    return contactingDynamicTaggedBodies(polygonId, tags);
-}
-
-std::set<Body*> Body::contactingDynamicTaggedBodies(const std::string& polygonId, const std::set<std::string>& tags) const {
-    std::map<std::string, Polygon>::const_iterator it = _polygons.find(polygonId);
-    if (it == _polygons.end())
-        throw std::invalid_argument("Polygon id is invalid.");
-    std::set<Body*> contactingDynamicTaggedBodies;
-    std::set<Body*> neighbourDynamicTaggedBodies = this->neighbourDynamicTaggedBodies(tags);
-    for (std::set<Body*>::iterator jt = neighbourDynamicTaggedBodies.begin(); jt != neighbourDynamicTaggedBodies.end(); jt++)
-        if (isInContactWith(polygonId, **jt))
-            contactingDynamicTaggedBodies.insert(*jt);
-    return contactingDynamicTaggedBodies;
-}
-
 std::set<std::pair<std::string, std::string>> Body::contactWith(const Body& other) {
     std::set<std::pair<std::string, std::string>> contact;
     for (std::map<std::string, Polygon>::const_iterator it = _polygons.begin(); it != _polygons.end(); it++)
