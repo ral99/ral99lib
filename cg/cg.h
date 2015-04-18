@@ -7,13 +7,12 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-/**********************************************************************************************
- **************************************** DESIGN NOTES ****************************************
- **********************************************************************************************
+/*********************************************************************************************************************************
+ ********************************************************* DESIGN NOTES **********************************************************
+ *********************************************************************************************************************************
 
  => CGAngle:
-    Represents angle values. Positive angles represent left angles, negative angles represent
-    right angles.
+    Represents angle values. Positive angles represent left angles, negative angles represent right angles.
 
  => CGVector:
     Represents vectors in a two-dimensional space.
@@ -25,22 +24,19 @@
     Represents lines in a two-dimensional space. A CGLine is defined by two distinct points.
 
  => CGSegment:
-    Represents a line segment in a two-dimensional space. A CGSegment is defined by any two
-    points.
+    Represents a line segment in a two-dimensional space. A CGSegment is defined by any two points.
 
  => CGTriangle:
-    Represents a triangle in a two-dimensional space. A CGTriangle is defined by any three
-    points.
+    Represents a triangle in a two-dimensional space. A CGTriangle is defined by any three points.
 
  => CGPolygon:
-    Represents a convex polygon in a two-dimensional space. A CGPolygon does not have three
-    collinear points or any two coincident points.
+    Represents a convex polygon in a two-dimensional space. A CGPolygon does not have three collinear points or any two coincident
+    points.
 
  => CGCircle:
-    Represents a circle in a two-dimensional space. A CGCircle is defined by a center point
-    and a positive radius.
+    Represents a circle in a two-dimensional space. A CGCircle is defined by a center point and a positive radius.
 
- *********************************************************************************************/
+ ********************************************************************************************************************************/
 
 typedef struct _CGAngle *CGAngle;
 struct _CGAngle {
@@ -83,9 +79,9 @@ struct _CGCircle {
     double radius;
 };
 
-/**********************************************************************************************
- ******************************************* CGAngle ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ************************************************************ CGAngle ************************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new angle specified in radians. */
 CGAngle angle_in_radians_new(double rad);
@@ -129,9 +125,9 @@ void angle_sum(CGAngle angle1, CGAngle angle2);
 /* Subtract angle2 from angle1. */
 void angle_subtract(CGAngle angle1, CGAngle angle2);
 
-/**********************************************************************************************
- ****************************************** CGVector ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ****************************************** CGVector *****************************************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new vector. */
 CGVector vector_new(double x, double y);
@@ -163,12 +159,10 @@ double vector_x(CGVector vector);
 /* Return vector y component. */
 double vector_y(CGVector vector);
 
-/* Return a normalized perpendicular vector using the right hand rule, or NULL if it is a null
- * vector. */
+/* Return a normalized perpendicular vector using the right hand rule, or NULL if it is a null vector. */
 CGVector vector_right_perpendicular_axis(CGVector vector);
 
-/* Return a normalized perpendicular vector using the left hand rule, or NULL if it is a null
- * vector. */
+/* Return a normalized perpendicular vector using the left hand rule, or NULL if it is a null vector. */
 CGVector vector_left_perpendicular_axis(CGVector vector);
 
 /* Normalize vector. */
@@ -192,16 +186,15 @@ double vector_magnitude(CGVector vector);
 /* Return the dot product between two vectors. */
 double vector_dot(CGVector vector1, CGVector vector2);
 
-/* Return the angle from vector1 to vector2, or NULL if one or both vectors are null
- * vectors. */
+/* Return the angle from vector1 to vector2, or NULL if one or both vectors are null vectors. */
 CGAngle vector_angle_to(CGVector vector1, CGVector vector2);
 
 /* Rotate vector. */
 void vector_rotate(CGVector vector, CGAngle angle);
 
-/**********************************************************************************************
- ******************************************* CGPoint ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ************************************************************ CGPoint ************************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new point. */
 CGPoint point_new(double x, double y);
@@ -245,16 +238,13 @@ double point_distance_to_line(CGPoint point, CGLine line);
 /* Return the distance from a point to a segment. */
 double point_distance_to_segment(CGPoint point, CGSegment segment);
 
-/* Return the distance from a point to a triangle. Points inside triangle return a negative
- * value. */
+/* Return the distance from a point to a triangle. Points inside triangle return a negative value. */
 double point_distance_to_triangle(CGPoint point, CGTriangle triangle);
 
-/* Return the distance from a point to a polygon. Points inside polygon return a negative
- * value. */
+/* Return the distance from a point to a polygon. Points inside polygon return a negative value. */
 double point_distance_to_polygon(CGPoint point, CGPolygon polygon);
 
-/* Return the distance from a point to a circle. Points inside circle return a negative
- * value. */
+/* Return the distance from a point to a circle. Points inside circle return a negative value. */
 double point_distance_to_circle(CGPoint point, CGCircle circle);
 
 /* Return 1 if point is in line. 0, otherwise. */
@@ -272,9 +262,9 @@ int point_is_in_polygon(CGPoint point, CGPolygon polygon);
 /* Return 1 if point is in circle. 0, otherwise. */
 int point_is_in_circle(CGPoint point, CGCircle circle);
 
-/**********************************************************************************************
- ******************************************* CGLine *******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ************************************************************ CGLine *************************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new line, or NULL if points are equal. */
 CGLine line_new(CGPoint a, CGPoint b);
@@ -297,9 +287,9 @@ CGLine line_perpendicular(CGLine line, CGPoint point);
 /* Return the point of intersection between two lines, or NULL if lines are parallel. */
 CGPoint line_intersection(CGLine line1, CGLine line2);
 
-/**********************************************************************************************
- ****************************************** CGSegment *****************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ *********************************************************** CGSegment ***********************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new segment. */
 CGSegment segment_new(CGPoint a, CGPoint b);
@@ -334,9 +324,9 @@ void segment_rotate_around(CGSegment segment, CGPoint center, CGAngle angle);
 /* Return segment length. */
 double segment_length(CGSegment segment);
 
-/**********************************************************************************************
- ***************************************** CGTriangle *****************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ***************************************** CGTriangle ****************************************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new triangle. */
 CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c);
@@ -371,19 +361,18 @@ void triangle_translate(CGTriangle triangle, CGVector vector);
 /* Rotate triangle around a center point. */
 void triangle_rotate_around(CGTriangle triangle, CGPoint center, CGAngle angle);
 
-/* Return 1 if triangle is in counter-clockwise orientation. -1, if in clockwise orientation.
- * 0, if vertices are collinear. */
+/* Return 1 if triangle is in counter-clockwise orientation. -1, if in clockwise orientation. 0, if vertices are collinear. */
 int triangle_orientation(CGTriangle triangle);
 
 /* Return triangle area. */
 double triangle_area(CGTriangle triangle);
 
-/**********************************************************************************************
- ****************************************** CGPolygon *****************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ *********************************************************** CGPolygon ***********************************************************
+ ********************************************************************************************************************************/
 
-/* Return a new polygon, or NULL if there are less than three vertices, or if polygon is
- * not convex, or if there are coincident vertices, or if there are 3 collinear vertices. */
+/* Return a new polygon, or NULL if there are less than three vertices, or if polygon is not convex, or if there are coincident
+ * vertices, or if there are 3 collinear vertices. */
 CGPolygon polygon_new(ADTList vertices);
 
 /* Return a new triangle polygon, or NULL if two or more points are coincidents. */
@@ -395,8 +384,7 @@ CGPolygon polygon_new_rectangle(CGPoint lower_left, double width, double height)
 /* Return a new square polygon, or NULL if side is equal to 0. */
 CGPolygon polygon_new_square(CGPoint lower_left, double side);
 
-/* Return a new circle polygon, or NULL if radius is lower than or equal to 0, or if n_vertices
- * is lower than 4. */
+/* Return a new circle polygon, or NULL if radius is lower than or equal to 0, or if n_vertices is lower than 4. */
 CGPolygon polygon_new_circle(CGPoint center, double radius, int n_vertices);
 
 /* Free the memory used by polygon. */
@@ -429,9 +417,9 @@ void polygon_rotate_around(CGPolygon polygon, CGPoint center, CGAngle angle);
 /* Return polygon area. */
 double polygon_area(CGPolygon polygon);
 
-/**********************************************************************************************
- ****************************************** CGCircle ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ *********************************************************** CGCircle ************************************************************
+ ********************************************************************************************************************************/
 
 /* Return a new circle, or NULL if radius is lower than or equal to 0. */
 CGCircle circle_new(CGPoint center, double radius);

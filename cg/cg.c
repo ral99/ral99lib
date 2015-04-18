@@ -8,9 +8,9 @@
 #include "num/num.h"
 #include "str/str.h"
 
-/**********************************************************************************************
- ******************************************* CGAngle ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ************************************************************ CGAngle ************************************************************
+ ********************************************************************************************************************************/
 
 CGAngle angle_in_radians_new(double rad) {
     CGAngle angle = (CGAngle) memalloc(sizeof(*angle));
@@ -83,9 +83,9 @@ void angle_subtract(CGAngle angle1, CGAngle angle2) {
         angle1->rad += 2 * M_PI;
 }
 
-/**********************************************************************************************
- ****************************************** CGVector ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ****************************************** CGVector *****************************************************************************
+ ********************************************************************************************************************************/
 
 CGVector vector_new(double x, double y) {
     CGVector vector = (CGVector) memalloc(sizeof(*vector));
@@ -219,8 +219,7 @@ CGAngle vector_angle_to(CGVector vector1, CGVector vector2) {
     vector_normalize(vector1_dup);
     vector_normalize(vector2_dup);
     vector_rotate(vector1_dup, angle_between);
-    CGAngle angle = (vector_equals(vector1_dup, vector2_dup))
-                    ? angle_dup(angle_between) : angle_dup(replementary_angle);
+    CGAngle angle = (vector_equals(vector1_dup, vector2_dup)) ? angle_dup(angle_between) : angle_dup(replementary_angle);
     angle_release(angle_between);
     angle_release(replementary_angle);
     vector_release(vector1_dup);
@@ -235,9 +234,9 @@ void vector_rotate(CGVector vector, CGAngle angle) {
     vector->y = vector_x * sin(angle->rad) + vector_y * cos(angle->rad);
 }
 
-/**********************************************************************************************
- ******************************************* CGPoint ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ************************************************************ CGPoint ************************************************************
+ ********************************************************************************************************************************/
 
 CGPoint point_new(double x, double y) {
     CGPoint point = (CGPoint) memalloc(sizeof(*point));
@@ -332,8 +331,7 @@ double point_distance_to_line(CGPoint point, CGLine line) {
     normalized_line->w /= normalized_line_divisor;
     normalized_line->x /= normalized_line_divisor;
     normalized_line->y /= normalized_line_divisor;
-    double dist = fabs(normalized_point->w * normalized_line->w +
-                       normalized_point->x * normalized_line->x +
+    double dist = fabs(normalized_point->w * normalized_line->w + normalized_point->x * normalized_line->x +
                        normalized_point->y * normalized_line->y);
     line_release(normalized_line);
     point_release(normalized_point);
@@ -341,8 +339,7 @@ double point_distance_to_line(CGPoint point, CGLine line) {
 }
 
 double point_distance_to_segment(CGPoint point, CGSegment segment) {
-    double dist = double_min(point_distance_to_point(point, segment->a),
-                             point_distance_to_point(point, segment->b));
+    double dist = double_min(point_distance_to_point(point, segment->a), point_distance_to_point(point, segment->b));
     if (!point_equals(segment->a, segment->b)) {
         CGLine segment_line = line_new(segment->a, segment->b);
         CGLine perpendicular_segment_line = line_perpendicular(segment_line, point);
@@ -361,8 +358,7 @@ double point_distance_to_triangle(CGPoint point, CGTriangle triangle) {
     CGSegment segment2 = segment_new(triangle->b, triangle->c);
     CGSegment segment3 = segment_new(triangle->c, triangle->a);
     double dist = double_min(point_distance_to_segment(point, segment1),
-                             double_min(point_distance_to_segment(point, segment2),
-                                        point_distance_to_segment(point, segment3)));
+                             double_min(point_distance_to_segment(point, segment2), point_distance_to_segment(point, segment3)));
     segment_release(segment1);
     segment_release(segment2);
     segment_release(segment3);
@@ -393,14 +389,10 @@ int point_is_in_line(CGPoint point, CGLine line) {
 
 int point_is_in_segment(CGPoint point, CGSegment segment) {
     int is_in = 0;
-    double min_x = (double_lt(point_x(segment->a), point_x(segment->b)))
-                   ? point_x(segment->a) : point_x(segment->b);
-    double max_x = (double_gt(point_x(segment->a), point_x(segment->b)))
-                   ? point_x(segment->a) : point_x(segment->b);
-    double min_y = (double_lt(point_y(segment->a), point_y(segment->b)))
-                   ? point_y(segment->a) : point_y(segment->b);
-    double max_y = (double_gt(point_y(segment->a), point_y(segment->b)))
-                   ? point_y(segment->a) : point_y(segment->b);
+    double min_x = (double_lt(point_x(segment->a), point_x(segment->b))) ? point_x(segment->a) : point_x(segment->b);
+    double max_x = (double_gt(point_x(segment->a), point_x(segment->b))) ? point_x(segment->a) : point_x(segment->b);
+    double min_y = (double_lt(point_y(segment->a), point_y(segment->b))) ? point_y(segment->a) : point_y(segment->b);
+    double max_y = (double_gt(point_y(segment->a), point_y(segment->b))) ? point_y(segment->a) : point_y(segment->b);
     CGLine line = line_new(segment->a, segment->b);
     if (line != NULL) {
         if (point_is_in_line(point, line) && double_gte(point_x(point), min_x) &&
@@ -409,8 +401,8 @@ int point_is_in_segment(CGPoint point, CGSegment segment) {
             is_in = 1;
         line_release(line);
     }
-    else if (point_equals(point, segment->a))
-            is_in = 1;
+    else
+        is_in = point_equals(point, segment->a);
     return is_in;
 }
 
@@ -422,15 +414,10 @@ int point_is_in_triangle(CGPoint point, CGTriangle triangle) {
     CGSegment segment1 = segment_new(triangle->a, triangle->b);
     CGSegment segment2 = segment_new(triangle->b, triangle->c);
     CGSegment segment3 = segment_new(triangle->c, triangle->a);
-    if ((triangle_orientation(triangle1) == 1 &&
-         triangle_orientation(triangle2) == 1 &&
-         triangle_orientation(triangle3) == 1) ||
-        (triangle_orientation(triangle1) == -1 &&
-         triangle_orientation(triangle2) == -1 &&
+    if ((triangle_orientation(triangle1) == 1 && triangle_orientation(triangle2) == 1 && triangle_orientation(triangle3) == 1) ||
+        (triangle_orientation(triangle1) == -1 && triangle_orientation(triangle2) == -1 &&
          triangle_orientation(triangle3) == -1) ||
-        (point_is_in_segment(point, segment1) ||
-         point_is_in_segment(point, segment2) ||
-         point_is_in_segment(point, segment3)))
+        (point_is_in_segment(point, segment1) || point_is_in_segment(point, segment2) || point_is_in_segment(point, segment3)))
         is_in = 1;
     triangle_release(triangle1);
     triangle_release(triangle2);
@@ -469,9 +456,9 @@ int point_is_in_circle(CGPoint point, CGCircle circle) {
     return (double_lte(point_distance_to_point(point, circle->center), circle->radius));
 }
 
-/**********************************************************************************************
- ******************************************* CGLine *******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ************************************************************ CGLine *************************************************************
+ ********************************************************************************************************************************/
 
 CGLine line_new(CGPoint a, CGPoint b) {
     if (point_equals(a, b))
@@ -488,8 +475,7 @@ void line_release(CGLine line) {
 }
 
 int line_equals(CGLine line1, CGLine line2) {
-    return (double_equals(line1->x / line1->w, line2->x / line2->w) &&
-            double_equals(line1->y / line1->w, line2->y / line2->w));
+    return (double_equals(line1->x / line1->w, line2->x / line2->w) && double_equals(line1->y / line1->w, line2->y / line2->w));
 }
 
 CGLine line_dup(CGLine line) {
@@ -534,9 +520,9 @@ CGPoint line_intersection(CGLine line1, CGLine line2) {
     return intersection;
 }
 
-/**********************************************************************************************
- ****************************************** CGSegment *****************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ *********************************************************** CGSegment ***********************************************************
+ ********************************************************************************************************************************/
 
 CGSegment segment_new(CGPoint a, CGPoint b) {
     CGSegment segment = (CGSegment) memalloc(sizeof(*segment));
@@ -552,10 +538,8 @@ void segment_release(CGSegment segment) {
 }
 
 int segment_equals(CGSegment segment1, CGSegment segment2) {
-    return ((point_equals(segment1->a, segment2->a) &&
-             point_equals(segment1->b, segment2->b)) ||
-            (point_equals(segment1->a, segment2->b) &&
-             point_equals(segment1->b, segment2->a))) ? 1 : 0;
+    return ((point_equals(segment1->a, segment2->a) && point_equals(segment1->b, segment2->b)) ||
+            (point_equals(segment1->a, segment2->b) && point_equals(segment1->b, segment2->a))) ? 1 : 0;
 }
 
 int segment_lt(CGSegment segment1, CGSegment segment2) {
@@ -608,9 +592,9 @@ double segment_length(CGSegment segment) {
     return sqrt(x_dist * x_dist + y_dist * y_dist);
 }
 
-/**********************************************************************************************
- ***************************************** CGTriangle *****************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ ********************************************************** CGTriangle ***********************************************************
+ ********************************************************************************************************************************/
 
 CGTriangle triangle_new(CGPoint a, CGPoint b, CGPoint c) {
     CGTriangle triangle = (CGTriangle) memalloc(sizeof(*triangle));
@@ -628,23 +612,17 @@ void triangle_release(CGTriangle triangle) {
 }
 
 int triangle_equals(CGTriangle triangle1, CGTriangle triangle2) {
-    if ((point_equals(triangle1->a, triangle2->a) &&
-         point_equals(triangle1->b, triangle2->b) &&
+    if ((point_equals(triangle1->a, triangle2->a) && point_equals(triangle1->b, triangle2->b) &&
          point_equals(triangle1->c, triangle2->c)) ||
-        (point_equals(triangle1->a, triangle2->a) &&
-         point_equals(triangle1->b, triangle2->c) &&
+        (point_equals(triangle1->a, triangle2->a) && point_equals(triangle1->b, triangle2->c) &&
          point_equals(triangle1->c, triangle2->b)) ||
-        (point_equals(triangle1->a, triangle2->b) &&
-         point_equals(triangle1->b, triangle2->a) &&
+        (point_equals(triangle1->a, triangle2->b) && point_equals(triangle1->b, triangle2->a) &&
          point_equals(triangle1->c, triangle2->c)) ||
-        (point_equals(triangle1->a, triangle2->b) &&
-         point_equals(triangle1->b, triangle2->c) &&
+        (point_equals(triangle1->a, triangle2->b) && point_equals(triangle1->b, triangle2->c) &&
          point_equals(triangle1->c, triangle2->a)) ||
-        (point_equals(triangle1->a, triangle2->c) &&
-         point_equals(triangle1->b, triangle2->a) &&
+        (point_equals(triangle1->a, triangle2->c) && point_equals(triangle1->b, triangle2->a) &&
          point_equals(triangle1->c, triangle2->b)) ||
-        (point_equals(triangle1->a, triangle2->c) &&
-         point_equals(triangle1->b, triangle2->b) &&
+        (point_equals(triangle1->a, triangle2->c) && point_equals(triangle1->b, triangle2->b) &&
          point_equals(triangle1->c, triangle2->a)))
         return 1;
     return 0;
@@ -725,9 +703,9 @@ double triangle_area(CGTriangle triangle) {
                 triangle->a->x * triangle->b->w * triangle->c->y) / 2;
 }
 
-/**********************************************************************************************
- ****************************************** CGPolygon *****************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ *********************************************************** CGPolygon ***********************************************************
+ ********************************************************************************************************************************/
 
 CGPolygon polygon_new(ADTList vertices) {
     int n_vertices = list_size(vertices);
@@ -740,8 +718,7 @@ CGPolygon polygon_new(ADTList vertices) {
     for (ADTListItem it = list_head(vertices); it; it = list_next(it)) {
         CGPoint vertex = (CGPoint) list_value(it);
         if (!base_vertex || double_lt(point_y(vertex), point_y(base_vertex)) ||
-            (double_equals(point_y(vertex), point_y(base_vertex)) &&
-             double_lt(point_x(vertex), point_x(base_vertex))))
+            (double_equals(point_y(vertex), point_y(base_vertex)) && double_lt(point_x(vertex), point_x(base_vertex))))
             base_vertex = vertex;
     }
     list_append(polygon->vertices, point_dup(base_vertex));
@@ -945,9 +922,9 @@ double polygon_area(CGPolygon polygon) {
     return fabs(area) / 2;
 }
 
-/**********************************************************************************************
- ****************************************** CGCircle ******************************************
- *********************************************************************************************/
+/*********************************************************************************************************************************
+ *********************************************************** CGCircle ************************************************************
+ ********************************************************************************************************************************/
 
 CGCircle circle_new(CGPoint center, double radius) {
     if (double_lte(radius, 0))
@@ -964,8 +941,7 @@ void circle_release(CGCircle circle) {
 }
 
 int circle_equals(CGCircle circle1, CGCircle circle2) {
-    if (point_equals(circle1->center, circle2->center) &&
-        double_equals(circle1->radius, circle2->radius))
+    if (point_equals(circle1->center, circle2->center) && double_equals(circle1->radius, circle2->radius))
         return 1;
     return 0;
 }
@@ -1027,3 +1003,4 @@ void circle_rotate_around(CGCircle circle, CGPoint center, CGAngle angle) {
 double circle_area(CGCircle circle) {
     return (M_PI * circle->radius * circle->radius);
 }
+
