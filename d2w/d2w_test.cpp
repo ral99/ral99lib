@@ -257,21 +257,23 @@ TEST_F(D2WTest, BodyIndexQuadrants) {
     Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("square", Polygon::square(Point(0, 0), 1));
     body->addPolygon("rectangle", Polygon::rectangle(Point(4, 0), 2, 1));
-    std::vector<std::pair<int, int>> indexQuadrants = body->indexQuadrants();
+    std::set<std::pair<int, int>> indexQuadrants = body->indexQuadrants();
     EXPECT_EQ(10, indexQuadrants.size());
-    EXPECT_EQ(std::make_pair(4, 0), indexQuadrants[0]);
-    EXPECT_EQ(std::make_pair(4, 1), indexQuadrants[1]);
-    EXPECT_EQ(std::make_pair(5, 0), indexQuadrants[2]);
-    EXPECT_EQ(std::make_pair(5, 1), indexQuadrants[3]);
-    EXPECT_EQ(std::make_pair(6, 0), indexQuadrants[4]);
-    EXPECT_EQ(std::make_pair(6, 1), indexQuadrants[5]);
-    EXPECT_EQ(std::make_pair(0, 0), indexQuadrants[6]);
-    EXPECT_EQ(std::make_pair(0, 1), indexQuadrants[7]);
-    EXPECT_EQ(std::make_pair(1, 0), indexQuadrants[8]);
-    EXPECT_EQ(std::make_pair(1, 1), indexQuadrants[9]);
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(4, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(4, 1)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(5, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(5, 1)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(6, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(6, 1)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(0, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(0, 1)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(1, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(1, 1)));
 
     Body *emptyBody = world->createBody(Point(0, 0), Angle::radians(0), true);
-    EXPECT_EQ(0, emptyBody->indexQuadrants().size());
+    indexQuadrants = emptyBody->indexQuadrants();
+    EXPECT_EQ(1, indexQuadrants.size());
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(0, 0)));
 }
 
 TEST_F(D2WTest, BodyDistanceTo) {
@@ -901,12 +903,13 @@ TEST_F(D2WTest, WorldBodiesNearWindow) {
     body4->addPolygon("square", Polygon::square(Point(0, 0), 1));
     Body *body5 = world->createBody(Point(4, 4), Angle::radians(0), true);
     body5->addPolygon("square", Polygon::square(Point(0, 0), 1));
-    world->createBody(Point(1, 1), Angle::radians(0), true);
+    Body *emptyBody = world->createBody(Point(1, 1), Angle::radians(0), true);
     std::set<Body*> bodiesNearWindow = world->bodiesNearWindow();
-    EXPECT_EQ(3, bodiesNearWindow.size());
+    EXPECT_EQ(4, bodiesNearWindow.size());
     EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(body1));
     EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(body2));
     EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(body3));
+    EXPECT_NE(bodiesNearWindow.end(), bodiesNearWindow.find(emptyBody));
 }
 
 TEST_F(D2WTest, WorldBodiesOnWindow) {
@@ -1054,17 +1057,17 @@ TEST_F(D2WTest, WorldSetBodyIndexRange) {
     body->addPolygon("square", Polygon::square(Point(0, 0), 1));
 
     world->setBodyIndexRange(1);
-    std::vector<std::pair<int, int>> indexQuadrants = body->indexQuadrants();
+    std::set<std::pair<int, int>> indexQuadrants = body->indexQuadrants();
     EXPECT_EQ(4, indexQuadrants.size());
-    EXPECT_EQ(std::make_pair(0, 0), indexQuadrants[0]);
-    EXPECT_EQ(std::make_pair(0, 1), indexQuadrants[1]);
-    EXPECT_EQ(std::make_pair(1, 0), indexQuadrants[2]);
-    EXPECT_EQ(std::make_pair(1, 1), indexQuadrants[3]);
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(0, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(0, 1)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(1, 0)));
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(1, 1)));
 
     world->setBodyIndexRange(2);
     indexQuadrants = body->indexQuadrants();
     EXPECT_EQ(1, indexQuadrants.size());
-    EXPECT_EQ(std::make_pair(0, 0), indexQuadrants[0]);
+    EXPECT_NE(indexQuadrants.end(), indexQuadrants.find(std::make_pair(0, 0)));
 }
 
 TEST_F(D2WTest, WorldBodyIndexRange) {
