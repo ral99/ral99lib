@@ -212,7 +212,12 @@ CGAngle vector_angle_to(CGVector vector1, CGVector vector2) {
     double magnitude2 = vector_magnitude(vector2);
     if (double_equals(magnitude1 * magnitude2, 0))
         return NULL;
-    CGAngle angle_between = angle_in_radians_new(acos(dot / (magnitude1 * magnitude2)));
+    double cos = dot / (magnitude1 * magnitude2);
+    if (double_gte(cos, 1))
+        cos = 1;
+    if (double_lte(cos, -1))
+        cos = -1;
+    CGAngle angle_between = angle_in_radians_new(acos(cos));
     CGAngle replementary_angle = angle_in_radians_new(2 * M_PI - angle_between->rad);
     CGVector vector1_dup = vector_dup(vector1);
     CGVector vector2_dup = vector_dup(vector2);
