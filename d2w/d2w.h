@@ -262,6 +262,9 @@ class World {
         // Return window polygon.
         CG::Polygon windowPolygon() const;
 
+        // Rotate window around a point.
+        void rotateAround(const CG::Point& point, const CG::Angle& angle);
+
         // Return a pointer to a new body.
         Body* createBody(const CG::Point& center, const CG::Angle& rotation, const bool isDynamic);
 

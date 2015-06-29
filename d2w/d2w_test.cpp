@@ -808,6 +808,17 @@ TEST_F(D2WTest, WorldWindowPolygon) {
     EXPECT_EQ(Polygon(rhombusVertices), world->windowPolygon());
 }
 
+TEST_F(D2WTest, WorldRotateAround) {
+    world->rotateAround(Point(1, 0), Angle::degrees(90));
+    EXPECT_EQ(Point(1, -1), world->windowCenter());
+    world->rotateAround(Point(1, 0), Angle::degrees(90));
+    EXPECT_EQ(Point(2, 0), world->windowCenter());
+    world->rotateAround(Point(1, 0), Angle::degrees(90));
+    EXPECT_EQ(Point(1, 1), world->windowCenter());
+    world->rotateAround(Point(1, 0), Angle::degrees(90));
+    EXPECT_EQ(Point(0, 0), world->windowCenter());
+}
+
 TEST_F(D2WTest, WorldCreateBody) {
     Body *emptyBody = world->createBody(Point(0, 0), Angle::radians(0), true);
     EXPECT_EQ(Point(0, 0), emptyBody->center());

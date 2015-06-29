@@ -523,6 +523,10 @@ Polygon World::windowPolygon() const {
     return polygon;
 }
 
+void World::rotateAround(const Point& point, const Angle& angle) {
+    _windowCenter->rotateAround(point, angle);
+}
+
 Body* World::createBody(const Point& center, const Angle& rotation, const bool isDynamic) {
     Body *body = new Body;
     body->_world = this;
