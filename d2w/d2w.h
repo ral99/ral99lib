@@ -45,6 +45,9 @@ class Body {
         // Body rotation around its center.
         void operator%=(const CG::Angle& angle);
 
+        // Body translation for small vectors that does not refresh body index.
+        void vibrate(const CG::Vector& vector);
+
         // Set body center.
         void setCenter(const CG::Point& center);
 

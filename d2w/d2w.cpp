@@ -61,6 +61,12 @@ void Body::operator%=(const Angle& angle) {
     _world->addBodyToIndex(*this);
 }
 
+void Body::vibrate(const CG::Vector& vector) {
+    *_center += vector;
+    for (std::map<std::string, Polygon>::iterator it = _polygons.begin(); it != _polygons.end(); it++)
+        it->second += vector;
+}
+
 void Body::setCenter(const Point& center) {
     *this += Vector(*_center, center);
 }

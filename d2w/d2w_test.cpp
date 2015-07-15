@@ -59,6 +59,14 @@ TEST_F(D2WTest, BodyUnaryRotationOperator) {
     EXPECT_EQ(Polygon::square(Point(1, 1), 1), body->polygon("square"));
 }
 
+TEST_F(D2WTest, BodyVibrate) {
+    Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
+    body->addPolygon("square", Polygon::square(Point(0, 0), 1));
+    body->vibrate(Vector(1, 2));
+    EXPECT_EQ(Point(1, 2), body->center());
+    EXPECT_EQ(Polygon::square(Point(1, 2), 1), body->polygon("square"));
+}
+
 TEST_F(D2WTest, BodySetCenter) {
     Body *body = world->createBody(Point(0, 0), Angle::radians(0), true);
     body->addPolygon("square", Polygon::square(Point(0, 0), 1));
