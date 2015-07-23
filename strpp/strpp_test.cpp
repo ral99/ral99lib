@@ -36,10 +36,11 @@ TEST(Str, Split) {
     splitted = split("", " ");
     EXPECT_EQ(0, int(splitted.size()));
 
-    splitted = split("", ",");
-    EXPECT_EQ(0, int(splitted.size()));
-    
     splitted = split(" ", "");
+    EXPECT_EQ(" ", splitted[0]);
+    EXPECT_EQ(1, int(splitted.size()));
+
+    splitted = split(" ", ",");
     EXPECT_EQ(" ", splitted[0]);
     EXPECT_EQ(1, int(splitted.size()));
 
