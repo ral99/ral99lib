@@ -10,5 +10,6 @@ mem         -- Memory management functions in C.
 net         -- Network structures and functions in C.
 num         -- Numeric functions in C.
 str         -- String manipulation routines in C.
+strpp       -- C++ wrapper of string functions.
 merge.py    -- Python script to merge header and source files from modules and
                generate compressed header and source files.
