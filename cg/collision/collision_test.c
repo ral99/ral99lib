@@ -259,6 +259,34 @@ static void test_polygon_is_colliding_with_polygon_7() {
     polygon_release(polygon2);
 }
 
+static void test_polygon_is_colliding_with_polygon_8() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 3);
+    CGPoint lower_left2 = point_new(1, 1);
+    CGPolygon polygon2 = polygon_new_square(lower_left2, 1);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 1);
+    point_release(lower_left1);
+    point_release(lower_left2);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+}
+
+static void test_polygon_is_colliding_with_polygon_9() {
+    CGPoint lower_left1 = point_new(0, 0);
+    CGPolygon polygon1 = polygon_new_square(lower_left1, 3);
+    ADTList vertices2 = list_new();
+    list_append(vertices2, point_new(1, 1.5));
+    list_append(vertices2, point_new(1.5, 1));
+    list_append(vertices2, point_new(1.5, 2));
+    list_append(vertices2, point_new(2, 1.5));
+    CGPolygon polygon2 = polygon_new(vertices2);
+    g_assert_cmpint(polygon_is_colliding_with_polygon(polygon1, polygon2), ==, 1);
+    point_release(lower_left1);
+    polygon_release(polygon1);
+    polygon_release(polygon2);
+    list_full_release(vertices2, (void (*)(void *)) point_release);
+}
+
 static void test_polygon_point_of_contact_with_polygon_1() {
     CGPoint lower_left1 = point_new(0, 0);
     CGPolygon polygon1 = polygon_new_square(lower_left1, 2);
@@ -694,6 +722,8 @@ int main(int argc, char *argv[]) {
     g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_5);
     g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_6);
     g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_7);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_8);
+    g_test_add_func("/gc/polygon_is_colliding_with_polygon", test_polygon_is_colliding_with_polygon_9);
     g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_1);
     g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_2);
     g_test_add_func("/gc/polygon_point_of_contact_with_polygon", test_polygon_point_of_contact_with_polygon_3);

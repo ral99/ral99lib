@@ -82,9 +82,8 @@ int polygon_is_colliding_with_polygon(CGPolygon polygon1, CGPolygon polygon2) {
     int is_colliding = 1;
     for (ADTListItem it = list_head(axes); it && is_colliding; it = list_next(it)) {
         CGVector axis = (CGVector) list_value(it);
-        if (double_lte(polygon_max_projection_on_axis(polygon1, axis) - polygon_min_projection_on_axis(polygon2, axis), 0))
-            is_colliding = 0;
-        if (double_gte(polygon_min_projection_on_axis(polygon1, axis) - polygon_max_projection_on_axis(polygon2, axis), 0))
+        if (double_gte((polygon_max_projection_on_axis(polygon1, axis) - polygon_min_projection_on_axis(polygon2, axis)) *
+                       (polygon_min_projection_on_axis(polygon1, axis) - polygon_max_projection_on_axis(polygon2, axis)), 0))
             is_colliding = 0;
     }
     list_release(axes);
