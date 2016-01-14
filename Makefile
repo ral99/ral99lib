@@ -8,6 +8,7 @@ GLIB_LIB	= `pkg-config --libs glib-2.0`
 GPP			= g++
 CPPFLAGS	= -Wall -ansi -pedantic -I. -std=c++11
 GTEST_FLAGS	= -isystem gtest/include -pthread
+#GTEST_LIB	= gtest/gtest_main_mac.a
 GTEST_LIB	= gtest/gtest_main.a
 
 MEM_PATH							= mem/mem
@@ -18,6 +19,7 @@ STR_PATH							= str/str
 CG_PATH								= cg/cg
 COLLISION_PATH						= cg/collision/collision
 CGPP_PATH							= cgpp/cgpp
+STRPP_PATH							= strpp/strpp
 D2W_PATH							= d2w/d2w
 ADDRESS_PATH						= net/address/address
 MESSAGE_PATH						= net/message/message
@@ -71,6 +73,7 @@ CPPHEADERS	= $(MEM_PATH).h \
 			  $(CG_PATH).h \
 			  $(COLLISION_PATH).h \
 			  $(CGPP_PATH).h \
+			  $(STRPP_PATH).h \
 			  $(D2W_PATH).h \
 
 CPPFILES	= $(MEM_PATH).c \
@@ -81,6 +84,7 @@ CPPFILES	= $(MEM_PATH).c \
 			  $(CG_PATH).c \
 			  $(COLLISION_PATH).c \
 			  $(CGPP_PATH).cpp \
+			  $(STRPP_PATH).cpp \
 			  $(D2W_PATH).cpp \
 
 TESTS		= $(MEM_PATH)_test \
@@ -91,6 +95,7 @@ TESTS		= $(MEM_PATH)_test \
 			  $(CG_PATH)_test \
 			  $(COLLISION_PATH)_test \
 			  $(CGPP_PATH)_test \
+			  $(STRPP_PATH)_test \
 			  $(D2W_PATH)_test \
 			  $(ADDRESS_PATH)_test \
 			  $(MESSAGE_PATH)_test \
@@ -132,6 +137,9 @@ $(COLLISION_PATH)_test: $(COLLISION_PATH)_test.c $(CFILES) $(CHEADERS)
 	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
 
 $(CGPP_PATH)_test: $(CGPP_PATH)_test.cpp $(CPPFILES) $(CPPHEADERS)
+	$(GPP) $(CPPFLAGS) $(GTEST_FLAGS) -o $@ $< $(CPPFILES) $(GTEST_LIB) $(LDFLAGS)
+
+$(STRPP_PATH)_test: $(STRPP_PATH)_test.cpp $(STRPPFILES) $(STRPPHEADERS)
 	$(GPP) $(CPPFLAGS) $(GTEST_FLAGS) -o $@ $< $(CPPFILES) $(GTEST_LIB) $(LDFLAGS)
 
 $(D2W_PATH)_test: $(D2W_PATH)_test.cpp $(CPPFILES) $(CPPHEADERS)
