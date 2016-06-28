@@ -21,15 +21,6 @@ COLLISION_PATH						= cg/collision/collision
 CGPP_PATH							= cgpp/cgpp
 STRPP_PATH							= strpp/strpp
 D2W_PATH							= d2w/d2w
-ADDRESS_PATH						= net/address/address
-MESSAGE_PATH						= net/message/message
-SOCK_PATH							= net/sock/sock
-CONNECTION_PATH						= net/connection/connection
-SERVER_CONNECTION_PATH				= net/server/server_connection/server_connection
-SERVER_PATH							= net/server/server/server
-CLIENT_CONNECTION_PATH				= net/client/client_connection/client_connection
-CLIENT_PATH							= net/client/client/client
-NETWORK_PATH						= net/network/network
 
 CHEADERS	= $(MEM_PATH).h \
 			  $(NUM_PATH).h \
@@ -38,15 +29,6 @@ CHEADERS	= $(MEM_PATH).h \
 			  $(STR_PATH).h \
 			  $(CG_PATH).h \
 			  $(COLLISION_PATH).h \
-			  $(ADDRESS_PATH).h \
-			  $(MESSAGE_PATH).h \
-			  $(SOCK_PATH).h \
-			  $(CONNECTION_PATH).h \
-			  $(SERVER_CONNECTION_PATH).h \
-			  $(SERVER_PATH).h \
-			  $(CLIENT_CONNECTION_PATH).h \
-			  $(CLIENT_PATH).h \
-			  $(NETWORK_PATH).h \
 
 CFILES		= $(MEM_PATH).c \
 			  $(NUM_PATH).c \
@@ -55,15 +37,6 @@ CFILES		= $(MEM_PATH).c \
 			  $(STR_PATH).c \
 			  $(CG_PATH).c \
 			  $(COLLISION_PATH).c \
-			  $(ADDRESS_PATH).c \
-			  $(MESSAGE_PATH).c \
-			  $(SOCK_PATH).c \
-			  $(CONNECTION_PATH).c \
-			  $(SERVER_CONNECTION_PATH).c \
-			  $(SERVER_PATH).c \
-			  $(CLIENT_CONNECTION_PATH).c \
-			  $(CLIENT_PATH).c \
-			  $(NETWORK_PATH).c \
 
 CPPHEADERS	= $(MEM_PATH).h \
 			  $(NUM_PATH).h \
@@ -97,15 +70,6 @@ TESTS		= $(MEM_PATH)_test \
 			  $(CGPP_PATH)_test \
 			  $(STRPP_PATH)_test \
 			  $(D2W_PATH)_test \
-			  $(ADDRESS_PATH)_test \
-			  $(MESSAGE_PATH)_test \
-			  $(SOCK_PATH)_test \
-			  $(CONNECTION_PATH)_test \
-			  $(SERVER_CONNECTION_PATH)_test \
-			  $(SERVER_PATH)_test \
-			  $(CLIENT_CONNECTION_PATH)_test \
-			  $(CLIENT_PATH)_test \
-			  $(NETWORK_PATH)_test \
 
 all: test clean
 
@@ -144,30 +108,3 @@ $(STRPP_PATH)_test: $(STRPP_PATH)_test.cpp $(STRPPFILES) $(STRPPHEADERS)
 
 $(D2W_PATH)_test: $(D2W_PATH)_test.cpp $(CPPFILES) $(CPPHEADERS)
 	$(GPP) $(CPPFLAGS) $(GTEST_FLAGS) -o $@ $< $(CPPFILES) $(GTEST_LIB) $(LDFLAGS)
-
-$(ADDRESS_PATH)_test: $(ADDRESS_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(MESSAGE_PATH)_test: $(MESSAGE_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(SOCK_PATH)_test: $(SOCK_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(CONNECTION_PATH)_test: $(CONNECTION_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(SERVER_CONNECTION_PATH)_test: $(SERVER_CONNECTION_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(SERVER_PATH)_test: $(SERVER_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(CLIENT_CONNECTION_PATH)_test: $(CLIENT_CONNECTION_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(CLIENT_PATH)_test: $(CLIENT_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
-
-$(NETWORK_PATH)_test: $(NETWORK_PATH)_test.c $(CFILES) $(CHEADERS)
-	$(GCC) $(CFLAGS) $(GLIB_FLAGS) -o $@ $< $(CFILES) $(GLIB_LIB) $(LDFLAGS)
